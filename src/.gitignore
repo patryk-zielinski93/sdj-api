@@ -1,0 +1,6 @@
+*.js
+*.js.map
+node_modules
+public/tracks/*
+!public/tracks/10-sec-of-silence.mp3
+config.ts

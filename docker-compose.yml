@@ -1,0 +1,100 @@
+version: '3.6'
+services:
+  slack_dj_nginx_proxy:
+    container_name: ${NGINX_PROXY_CONTAINER_NAME}
+    build:
+      dockerfile: Dockerfile
+      context: ./containers/nginx-proxy
+    ports:
+      - '80:80'
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - streaming
+      - frontend
+      - backend
+
+  slack_dj_redis:
+    container_name: ${REDIS_CONTAINER_NAME}
+    volumes:
+      - ./data/redis:/data
+    image: redis:alpine
+    networks:
+      backend:
+        aliases:
+          - redis
+      streaming:
+        aliases:
+          - redis
+
+  slack_dj_db:
+    container_name: ${DB_CONTAINER_NAME}
+    image: mariadb
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./data/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      backend:
+        aliases:
+          - database
+
+  slack_dj_icecast:
+    container_name: ${ICECAST_CONTAINER_NAME}
+    build:
+      dockerfile: Dockerfile
+      context: ./containers/icecast
+    environment:
+      - VIRTUAL_HOST=${ICECAST_URL}
+      - VIRUTAL_PORT=8000
+    networks:
+      streaming:
+        aliases:
+          - icecast
+
+  slack_dj_ices:
+    container_name: ${ICES_CONTAINER_NAME}
+    build:
+      dockerfile: Dockerfile
+      context: ./containers/ices
+    volumes:
+      - ./src/public/tracks:/tracks
+    depends_on:
+      - slack_dj_redis
+      - slack_dj_icecast
+    networks:
+      streaming:
+        aliases:
+          - ices
+
+  slack_dj_backend:
+    container_name: ${BACKEND_CONTAINER_NAME}
+    build:
+      dockerfile: Dockerfile
+      context: ./
+      args:
+        - LOCAL_USER_ID=${LOCAL_USER_ID}
+    volumes:
+      - ./:/app
+    environment:
+      - VIRTUAL_HOST=${BACKEND_URL}
+      - VIRTUAL_PORT=8888
+      - LOCAL_USER_ID=${LOCAL_USER_ID}
+    networks:
+      backend:
+        aliases:
+          - backend
+
+networks:
+  streaming:
+    driver: 'bridge'
+
+  frontend:
+    driver: 'bridge'
+
+  backend:
+    driver: 'bridge'
