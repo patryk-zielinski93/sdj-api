@@ -1,16 +1,23 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Track } from './track.model';
+import { User } from './user.model';
 
 @Entity()
 export class QueuedTrack {
-  @Column('varchar', {
-    length: 100
-  })
-  addedBy: string;
+  @Column('datetime')
+  addedAt: Date;
+  @ManyToOne(type => User)
+  @JoinColumn()
+  addedBy: User;
   @PrimaryGeneratedColumn()
   id?: number;
   @Column('int')
   order: number;
+  @Column('datetime', {
+    nullable: true,
+    default: null
+  })
+  playedAt: Date;
   @ManyToOne(type => Track)
   @JoinColumn()
   track: Track;

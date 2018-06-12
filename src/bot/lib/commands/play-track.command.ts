@@ -83,6 +83,7 @@ export class PlayTrackCommand implements Command {
     const connection = await DbService.getConnectionPromise();
     const queuedTrackRepository = connection.getRepository(QueuedTrack);
     const queuedTrack = new QueuedTrack();
+    queuedTrack.addedAt = new Date();
     queuedTrack.addedBy = message.user;
     queuedTrack.order = 0;
     queuedTrack.track = track;

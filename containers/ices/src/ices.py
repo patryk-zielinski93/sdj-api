@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import redis
+import time
 
 # This is just a skeleton, something for you to start with.
 r = None
@@ -27,15 +28,16 @@ def ices_shutdown():
 def ices_get_next():
     global silence
     print 'Executing get_next() function...'
-    next_song = r.get('next_song')
     r.publish('getNext', 'getNext')
+    time.sleep(1)
+    next_song = r.get('next_song')
     return next_song if next_song else silence
 
 # This function, if defined, returns the string you'd like used
 # as metadata (ie for title streaming) for the current song. You may
 # return null to indicate that the file comment should be used.
-# def ices_get_metadata():
-#    return 'Artist - Title (Label, Year)'
+def ices_get_metadata():
+   return None
 
 
 # Function used to put the current line number of

@@ -1,3 +1,6 @@
+import { from } from 'rxjs/internal/observable/from';
+import { map, switchMap } from 'rxjs/operators';
+import { User } from '../../entities/user.model';
 import { DbService } from '../../services/db.service';
 import { Mp3Service } from '../../services/mp3.service';
 import { SlackService } from '../../services/slack.service';
@@ -48,19 +51,66 @@ export class Bot {
       return;
     }
 
-    const command = message.text.split(' ');
-    const commands = this.commands[command[0]];
+    DbService.getRepository(User).pipe(
+      switchMap(repository => {
+        return from(repository.findOne({ id: message.user })).pipe(
+          map(user => {
+            return {
+              repository: repository,
+              user: user
+            };
+          })
+        );
+      })
+    ).subscribe(async data => {
+      const userRepository = data.repository;
+      let user = data.user;
+      let userProfile: any;
 
-    if (commands && commands.length) {
-      commands.forEach(c => {
-        c.handler(command, message).catch(e => {
+      if (!data.user) {
+        try {
+          userProfile = await this.slack.web.users.info({
+            user: message.user
+          });
+          userProfile = userProfile.user;
+
+          if (!userProfile) {
+            return;
+          }
+        } catch (e) {
           console.log(e);
-          this.sendErrorMessage(message.channel);
+          return;
+        }
+
+        user = new User();
+        user.id = message.user;
+        user.name = userProfile.name;
+        user.displayName = userProfile.profile.display_name;
+        user.realName = userProfile.profile.real_name;
+        user.image192 = userProfile.profile.image_192;
+        user.image24 = userProfile.profile.image_24;
+        user.image32 = userProfile.profile.image_32;
+        user.image48 = userProfile.profile.image_48;
+        user.image512 = userProfile.profile.image_512;
+        user.image72 = userProfile.profile.image_72;
+
+        await userRepository.save(user);
+      }
+
+      const command = message.text.split(' ');
+      const commands = this.commands[command[0]];
+
+      if (commands && commands.length) {
+        commands.forEach(c => {
+          c.handler(command, message).catch(e => {
+            this.sendErrorMessage(message.channel);
+          });
         });
-      });
-    } else {
-      this.slack.rtm.sendMessage(this.getHelpMessage(message.user), message.channel);
-    }
+      } else {
+        this.slack.rtm.sendMessage(this.getHelpMessage(message.user), message.channel);
+      }
+
+    });
   }
 
   start(): void {
