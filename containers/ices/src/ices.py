@@ -30,7 +30,7 @@ def ices_get_next():
     print 'Executing get_next() function...'
     r.publish('getNext', 'getNext')
     time.sleep(1)
-    next_song = r.get('next_song')
+    next_song = '/tracks/' + r.get('next_song') + '.mp3'
     return next_song if next_song else silence
 
 # This function, if defined, returns the string you'd like used

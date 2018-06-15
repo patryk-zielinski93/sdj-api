@@ -43,11 +43,11 @@ sub.on('message', (channel, message) => {
     if (queuedTrack) {
       count = 0;
       sio.of('/').emit('play_dj', queuedTrack);
-      client.set('next_song', `/tracks/${queuedTrack.track.id}.mp3`);
+      client.set('next_song', queuedTrack.track.id);
       playlist.updateQueuedTrackPlayedAt(queuedTrack).subscribe();
     } else {
       count = count + 1;
-      client.set('next_song', '/tracks/10-sec-of-silence.mp3');
+      client.set('next_song', '10-sec-of-silence');
       if (count > 3) {
         sio.of('/').emit('play_radio');
       }

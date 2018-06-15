@@ -29,6 +29,11 @@ export class DbService {
     );
   }
 
+  static async getRepositoryPromise<Entity>(target: ObjectType<Entity> | EntitySchema<Entity> | string): Promise<Repository<Entity>> {
+    const connection = await DbService.getConnectionPromise();
+    return connection.getRepository(target);
+  }
+
   /**
    * Create DB connection or return existing connection.
    * @returns {Observable<Connection>}
