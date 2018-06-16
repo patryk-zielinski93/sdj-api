@@ -12,7 +12,7 @@ silence = '/tracks/10-sec-of-silence.mp3'
 def ices_init():
     global r, silence
     r = redis.StrictRedis(host='redis', port=6379, db=0)
-    r.set('next_song', silence)
+    r.set('next_song', '10-sec-of-silence')
     return 1
 
 
@@ -30,8 +30,9 @@ def ices_get_next():
     print 'Executing get_next() function...'
     r.publish('getNext', 'getNext')
     time.sleep(1)
-    next_song = '/tracks/' + r.get('next_song') + '.mp3'
-    return next_song if next_song else silence
+    song_id = r.get('next_song')
+    next_song = '/tracks/' + song_id + '.mp3'
+    return next_song if song_id else silence
 
 # This function, if defined, returns the string you'd like used
 # as metadata (ie for title streaming) for the current song. You may

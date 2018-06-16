@@ -1,6 +1,7 @@
 import * as querystring from 'querystring';
 import * as requestPromise from 'request-promise-native';
 import * as url from 'url';
+import * as parseIsoDuration from 'parse-iso-duration';
 import { appConfig } from '../../../config';
 import { QueuedTrack } from '../../../entities/queued-track.model';
 import { Track } from '../../../entities/track.model';
@@ -38,6 +39,10 @@ export class PlayTrackCommand implements Command {
 
     if (!metadata) {
       throw new YoutubeIdError(`Id '${id}' is invalid or there was issue with fetching Youtube API.`);
+    }
+
+    if (parseIsoDuration(metadata.contentDetails.duration) > 7 * 60 * 1000) {
+      throw new Error('video too long');
     }
 
     const connection = await DbService.getConnectionPromise();
