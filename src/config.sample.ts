@@ -14,5 +14,6 @@ export const appConfig = {
   tracks: {
     directory: path.join(__dirname, 'public', 'tracks'),
     normalizationDb: 92
-  }
+  },
+  queuedTracksPerUser: 3
 };

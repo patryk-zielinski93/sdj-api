@@ -20,9 +20,10 @@ export class PlaylistService {
         const queuedTrackRepository = connection.getRepository(QueuedTrack);
         return fromPromise(
           queuedTrackRepository.createQueryBuilder('queuedTrack')
-            .addSelect('max(queuedTrack.id)')
+            // .addSelect('max(queuedTrack.id)')
             .leftJoinAndSelect('queuedTrack.track', 'track')
             .andWhere('queuedTrack.playedAt IS NULL')
+            .orderBy('queuedTrack.order, queuedTrack.id', 'ASC')
             .getOne()
         );
       })

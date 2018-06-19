@@ -79,16 +79,21 @@ export class Mp3Service {
   private getDuration(filePath: string): Observable<string> {
     const sub = new Subject<string>();
 
-    exec(`mp3info -p "%S" ${filePath}`,
-      (err, stdout, stderr) => {
-        if (err) {
-          sub.error(err);
-        } else {
-          sub.next(stdout);
-        }
+    try {
+      exec(`mp3info -p "%S" ${filePath}`,
+        (err, stdout, stderr) => {
+          if (err) {
+            sub.error(err);
+          } else {
+            sub.next(stdout);
+          }
 
-        sub.complete();
-      });
+          sub.complete();
+        });
+    } catch (e) {
+      sub.error(e);
+      sub.complete();
+    }
 
     return sub;
   }

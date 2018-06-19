@@ -7,6 +7,7 @@ import 'reflect-metadata';
 import { initializeBot } from './bot';
 import { DbService } from './services/db.service';
 import { PlaylistService } from './services/playlist.service';
+import { SocketIoo } from './sio';
 
 const playlist = PlaylistService.getInstance();
 
@@ -15,6 +16,7 @@ const app = express();
 const server = new http.Server(app);
 app.use(bodyParser.json());
 const sio = socketIo(server);
+SocketIoo.sio = sio;
 
 /*app.get('/next', (req, res) => {
   playlist.getNext().subscribe(queuedTrack => {

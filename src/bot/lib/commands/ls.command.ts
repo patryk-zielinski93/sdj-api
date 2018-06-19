@@ -5,7 +5,7 @@ import { SlackService } from '../../../services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 export class LsCommand implements Command {
-  description = '- podejrzyj zakolejkowane utwory';
+  description = '- obczaj listę utworów';
   redisClient = redis.createClient({
     host: 'redis'
   });
@@ -32,6 +32,7 @@ export class LsCommand implements Command {
         .leftJoinAndSelect('queuedTrack.track', 'track')
         .leftJoinAndSelect('queuedTrack.addedBy', 'user')
         .andWhere('queuedTrack.playedAt IS NULL')
+        .orderBy('queuedTrack.order, queuedTrack.id', 'ASC')
         .getMany();
 
       let msg = '';
@@ -48,12 +49,12 @@ export class LsCommand implements Command {
           .getOne();
 
         if (currentTrack) {
-          msg += `Teraz gram: ${currentTrack.track.title}, dodane przez ${currentTrack.addedBy.realName}\n`;
+          msg += `Teraz gram: ${currentTrack.track.title}, dodane przez ${currentTrack.addedBy.realName}` + (currentTrack.randomized ? ' (rand)' : '') + '\n';
         }
       }
 
       queuedTracks.forEach((queuedTrack, index) => {
-        msg += `${index + 1}. ${queuedTrack.track.title}, dodane przez ${queuedTrack.addedBy.realName}\n`;
+        msg += `${index + 1}. ${queuedTrack.track.title}, dodane przez ${queuedTrack.addedBy.realName}` + (queuedTrack.randomized ? ' (rand)' : '') + '\n';
       });
 
       if (!msg.length) {

@@ -1,7 +1,7 @@
+import * as parseIsoDuration from 'parse-iso-duration';
 import * as querystring from 'querystring';
 import * as requestPromise from 'request-promise-native';
 import * as url from 'url';
-import * as parseIsoDuration from 'parse-iso-duration';
 import { appConfig } from '../../../config';
 import { QueuedTrack } from '../../../entities/queued-track.model';
 import { Track } from '../../../entities/track.model';
@@ -14,16 +14,30 @@ import { Command } from '../interfaces/command.iterface';
 import { VideoMetadata } from '../interfaces/video-metadata.interface';
 
 export class PlayTrackCommand implements Command {
-  description = '`[youtubeUrl]` - jeżeli chcesz żebym zapuścił Twoją pioseneczkę, koniecznie wypróbuj to polecenie.';
+  description = '`[youtubeUrl]` - jeżeli chcesz żebym zapuścił Twoją pioseneczkę, koniecznie wypróbuj to polecenie';
   type = 'play';
   private mp3 = Mp3Service.getInstance();
 
   async handler(command: string[], message: any): Promise<any> {
+    const connection = await DbService.getConnectionPromise();
+    const queuedTrackRepository = connection.getRepository(QueuedTrack);
+    const queuedTracksCount = await queuedTrackRepository.createQueryBuilder('queuedTrack')
+      .where('queuedTrack.playedAt IS NULL')
+      .andWhere('queuedTrack.addedById = :userId')
+      .setParameters({ userId: message.user })
+      .getCount();
+
+    if (queuedTracksCount >= appConfig.queuedTracksPerUser) {
+      const slack = SlackService.getInstance();
+      slack.rtm.sendMessage(`Masz przekroczony limit ${appConfig.queuedTracksPerUser} zakolejkowanych utworów.`, message.channel);
+      throw new Error('zakolejkowane');
+    }
+
     const id = this.extractVideoIdFromYoutubeUrl(command[1].slice(1, -1));
     if (!id) {
       throw new Error('invalid url');
     }
-    const connection = await DbService.getConnectionPromise();
+
     const trackRepository = connection.getRepository(Track);
     const track = await trackRepository.findOne(id);
 
@@ -42,6 +56,11 @@ export class PlayTrackCommand implements Command {
 
     if (!metadata) {
       throw new YoutubeIdError(`Id '${id}' is invalid or there was issue with fetching Youtube API.`);
+    }
+
+    if (metadata.contentDetails && metadata.contentDetails.regionRestriction &&
+      metadata.contentDetails.regionRestriction.blocked.indexOf('PL') !== -1) {
+      throw new Error('blocked');
     }
 
     if (parseIsoDuration(metadata.contentDetails.duration) > 7 * 60 * 1000) {

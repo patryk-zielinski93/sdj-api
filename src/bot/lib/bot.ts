@@ -35,7 +35,7 @@ export class Bot {
   }
 
   getHelpMessage(user: string): string {
-    let helpMsg = `Cześć <@${user}>! Coś źle mi wstukujesz :(. Łap listę poleceń!\n\n`;
+    let helpMsg = `Cześć <@${user}>! Łap listę poleceń!\n\n`;
 
     Object.keys(this.commands).forEach((key) => {
       this.commands[key].forEach(command => {
@@ -99,6 +99,10 @@ export class Bot {
 
       const command = message.text.split(' ');
       const commands = this.commands[command[0]];
+
+      if (command[0] === 'help') {
+        this.slack.rtm.sendMessage(this.getHelpMessage(message.user), message.channel);
+      }
 
       if (commands && commands.length) {
         commands.forEach(c => {

@@ -21,4 +21,8 @@ export class QueuedTrack {
   @ManyToOne(type => Track)
   @JoinColumn()
   track: Track;
+  @Column({
+    default: false
+  })
+  randomized: boolean;
 }
