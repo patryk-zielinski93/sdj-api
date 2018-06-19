@@ -42,6 +42,8 @@ export class LsCommand implements Command {
           .leftJoinAndSelect('queuedTrack.track', 'track')
           .leftJoinAndSelect('queuedTrack.addedBy', 'user')
           .where('queuedTrack.trackId = :trackId')
+          .andWhere('queuedTrack.playedAt IS NOT NULL')
+          .orderBy('queuedTrack.playedAt', 'DESC')
           .setParameter('trackId', currentTrackId)
           .getOne();
 

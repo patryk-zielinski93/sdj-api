@@ -19,37 +19,39 @@
 <div>
     Slack DJ:
     <audio id="dj" controls>
-        <source src="http://radio-stream.local/dj" type="audio/mpeg">
+        <source src="http://radio-stream.local/dj" type="audio/mpeg" autoplay>
         Your browser does not support the audio element.
     </audio>
 </div>
 <div>
     Open fm:
     <audio id="open" controls>
-        <source src="http://stream.open.fm/109" type="audio/mpeg">
+        <source src="http://stream.open.fm/109" type="audio/mpeg" autoplay>
         Your browser does not support the audio element.
     </audio>
 </div>
 <script>
   'use strict';
-  var dj = document.getElementById('dj');
-  var open = document.getElementById('open');
-  dj.play();
-  open.play();
 
   var socket = io.connect('http://localhost:8888');
   socket.on('play_dj', function(data) {
     var dj = document.getElementById('dj');
     var open = document.getElementById('open');
-      open.pause();
-      dj.play();
+    open.pause();
+    if (dj.paused) {
+      dj.load();
+    }
+    dj.play();
   });
 
   socket.on('play_radio', function(data) {
     var dj = document.getElementById('dj');
     var open = document.getElementById('open');
-      dj.pause();
-      open.play();
+    dj.pause();
+    if (open.paused) {
+      open.load();
+    }
+    open.play();
 
   });
 </script>

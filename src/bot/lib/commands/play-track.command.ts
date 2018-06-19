@@ -20,6 +20,9 @@ export class PlayTrackCommand implements Command {
 
   async handler(command: string[], message: any): Promise<any> {
     const id = this.extractVideoIdFromYoutubeUrl(command[1].slice(1, -1));
+    if (!id) {
+      throw new Error('invalid url');
+    }
     const connection = await DbService.getConnectionPromise();
     const trackRepository = connection.getRepository(Track);
     const track = await trackRepository.findOne(id);

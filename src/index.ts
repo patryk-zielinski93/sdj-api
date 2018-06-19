@@ -48,7 +48,7 @@ sub.on('message', (channel, message) => {
     } else {
       count = count + 1;
       client.set('next_song', '10-sec-of-silence');
-      if (count > 3) {
+      if (count > 1) {
         sio.of('/').emit('play_radio');
       }
     }

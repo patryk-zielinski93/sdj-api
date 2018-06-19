@@ -107,7 +107,7 @@ export class Bot {
           });
         });
       } else {
-        this.slack.rtm.sendMessage(this.getHelpMessage(message.user), message.channel);
+        // this.slack.rtm.sendMessage(this.getHelpMessage(message.user), message.channel);
       }
 
     });
