@@ -11,24 +11,27 @@ import { SocketIoo } from './sio';
 
 const playlist = PlaylistService.getInstance();
 
-
 const app = express();
 const server = new http.Server(app);
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/public'));
 const sio = socketIo(server);
 SocketIoo.sio = sio;
 
-/*app.get('/next', (req, res) => {
-  playlist.getNext().subscribe(queuedTrack => {
-    if (queuedTrack) {
-      res.send(`/tracks/${queuedTrack.track.id}.mp3`);
-      playlist.removeQueuedTrack(queuedTrack).subscribe();
-    } else {
-      res.send('/tracks/10-sec-of-silence.mp3');
-    }
-  });
-});*/
+// app.get('/next', (req, res) => {
+//   playlist.getNext().subscribe(queuedTrack => {
+//     if (queuedTrack) {
+//       res.send(`/tracks/${queuedTrack.track.id}.mp3`);
+//       playlist.removeQueuedTrack(queuedTrack).subscribe();
+//     } else {
+//       res.send('/tracks/10-sec-of-silence.mp3');
+//     }
+//   });
+// });
 
+app.get('/', function(req, res) {
+  res.render('index');
+});
 
 const client = redis.createClient({
   host: 'redis'
