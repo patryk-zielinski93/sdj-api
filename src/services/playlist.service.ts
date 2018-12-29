@@ -30,6 +30,12 @@ export class PlaylistService {
     );
   }
 
+  removeQueuedTrack(queuedTrack: QueuedTrack): Observable<QueuedTrack> {
+    return DbService.getRepository(QueuedTrack).pipe(
+      switchMap(repository => fromPromise(repository.remove(queuedTrack)))
+    );
+  }
+
   /**
    * Update playedAt in database to current or provided time
    * @param {QueuedTrack} queuedTrack

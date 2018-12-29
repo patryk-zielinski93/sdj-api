@@ -107,6 +107,7 @@ export class Bot {
       if (commands && commands.length) {
         commands.forEach(c => {
           c.handler(command, message).catch(e => {
+            console.log(e.message);
             this.sendErrorMessage(message.channel);
           });
         });

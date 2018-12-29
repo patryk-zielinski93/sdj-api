@@ -9,3 +9,5 @@
 #####3. Create [slack token](https://api.slack.com/custom-integrations/legacy-tokens)
 #####4. Put it to ./src/config.ts
 #####5. Run `docker-compose up`
+
+``` kill -s SIGUSR1 1 - next song```
