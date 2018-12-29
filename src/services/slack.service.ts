@@ -1,5 +1,5 @@
 import { RTMClient, WebClient } from '@slack/client';
-import { appConfig } from '../config';
+import { connectionConfig } from '../configs/connection.config';
 
 export class SlackService {
   private static instance: SlackService;
@@ -19,8 +19,8 @@ export class SlackService {
   }
 
   private constructor() {
-    this._rtm = new RTMClient(appConfig.slack.token);
-    this._web = new WebClient(appConfig.slack.token);
+    this._rtm = new RTMClient(connectionConfig.slack.token);
+    this._web = new WebClient(connectionConfig.slack.token);
     this._rtm.start({});
   }
 }

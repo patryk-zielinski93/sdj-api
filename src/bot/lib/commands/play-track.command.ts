@@ -2,7 +2,8 @@ import * as parseIsoDuration from 'parse-iso-duration';
 import * as querystring from 'querystring';
 import * as requestPromise from 'request-promise-native';
 import * as url from 'url';
-import { appConfig } from '../../../config';
+import { appConfig } from '../../../configs/app.config';
+import { connectionConfig } from '../../../configs/connection.config';
 import { QueuedTrack } from '../../../entities/queued-track.model';
 import { Track } from '../../../entities/track.model';
 import { TrackStatus } from '../../../enums/track-status.enum';
@@ -50,7 +51,7 @@ export class PlayTrackCommand implements Command {
 
   private async addNewTrack(message: any, id: string): Promise<void> {
     const res = await requestPromise.get(
-      `https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails,snippet&key=${appConfig.youtube.apiKey}`
+      `https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails,snippet&key=${connectionConfig.youtube.apiKey}`
     );
     const metadata: VideoMetadata = JSON.parse(res).items[0];
 

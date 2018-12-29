@@ -5,6 +5,7 @@ import * as socketIo from 'socket.io';
 import * as http from 'http';
 import 'reflect-metadata';
 import { initializeBot } from './bot';
+import { connectionConfig } from './configs/connection.config';
 import { DbService } from './services/db.service';
 import { PlaylistService } from './services/playlist.service';
 import { SocketIoo } from './sio';
@@ -27,6 +28,11 @@ app.get('/next', (req, res) => {
       res.send('/tracks/10-sec-of-silence.mp3');
     }
   });
+});
+
+app.get('/ices', (req, res) => {
+  http.get(`http://${connectionConfig.ices.host}:${connectionConfig.ices.port}`);
+  res.sendStatus(204);
 });
 
 app.get('/', function(req, res) {

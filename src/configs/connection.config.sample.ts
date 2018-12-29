@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-export const appConfig = {
+export const connectionConfig = {
   youtube: {
     apiKey: 'xxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
   },
@@ -14,6 +14,5 @@ export const appConfig = {
   tracks: {
     directory: path.join(__dirname, 'public', 'tracks'),
     normalizationDb: 92
-  },
-  queuedTracksPerUser: 3
+  }
 };

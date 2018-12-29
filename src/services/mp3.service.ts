@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
 import { finalize, switchMap } from 'rxjs/operators';
 import * as ytdl from 'youtube-dl';
-import { appConfig } from '../config';
+import { connectionConfig } from '../configs/connection.config';
 
 export class Mp3Service {
   private static instance: Mp3Service;
@@ -48,7 +48,7 @@ export class Mp3Service {
    */
   private download(id: string): Observable<string> {
     const sub = new Subject<string>();
-    let filePath = path.join(appConfig.tracks.directory, id);
+    let filePath = path.join(connectionConfig.tracks.directory, id);
 
     ytdl.exec(`https://www.youtube.com/watch?v=${id}`, [
       '--restrict-filenames',
@@ -106,7 +106,7 @@ export class Mp3Service {
   private normalize(filePath: string): Observable<void> {
     const sub = new Subject<void>();
 
-    exec(`mp3gain -c -p -r -d ${appConfig.tracks.normalizationDb - 89} ${filePath} && \\
+    exec(`mp3gain -c -p -r -d ${connectionConfig.tracks.normalizationDb - 89} ${filePath} && \\
 sox ${filePath} ${filePath}.temp.mp3 silence 1 0.1 1% reverse silence 1 0.1 1% reverse && \\
 rm ${filePath} && \\
 mv ${filePath}.temp.mp3 ${filePath}

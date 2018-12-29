@@ -1,4 +1,5 @@
-import { appConfig } from '../../../config';
+import { appConfig } from '../../../configs/app.config';
+import { connectionConfig } from '../../../configs/connection.config';
 import { QueuedTrack } from '../../../entities/queued-track.model';
 import { Track } from '../../../entities/track.model';
 import { DbService } from '../../../services/db.service';

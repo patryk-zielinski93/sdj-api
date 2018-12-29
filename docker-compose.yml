@@ -70,6 +70,9 @@ services:
       streaming:
         aliases:
           - ices
+      backend:
+        aliases:
+          - ices
 
   slack_dj_backend:
     container_name: ${BACKEND_CONTAINER_NAME}
