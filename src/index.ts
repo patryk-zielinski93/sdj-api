@@ -7,6 +7,7 @@ import 'reflect-metadata';
 import { initializeBot } from './bot';
 import { connectionConfig } from './configs/connection.config';
 import { DbService } from './services/db.service';
+import { IcesService } from './services/ices.service';
 import { PlaylistService } from './services/playlist.service';
 import { SocketIoo } from './sio';
 
@@ -31,7 +32,7 @@ app.get('/next', (req, res) => {
 });
 
 app.get('/ices', (req, res) => {
-  http.get(`http://${connectionConfig.ices.host}:${connectionConfig.ices.port}`);
+  IcesService.nextSong();
   res.sendStatus(204);
 });
 

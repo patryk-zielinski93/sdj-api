@@ -6,7 +6,7 @@ import { SocketIoo } from '../../../sio';
 import { Command } from '../interfaces/command.iterface';
 
 export class PozdroCommand implements Command {
-  description = '- wyślij pozdro swoim ziomeczkom (może też być dla mamy)';
+  description = 'wyślij pozdro swoim ziomeczkom (może też być dla mamy)';
   type = 'pozdro';
 
   async handler(command: string[], message: any): Promise<any> {

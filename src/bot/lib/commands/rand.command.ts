@@ -7,7 +7,7 @@ import { SlackService } from '../../../services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 export class RandCommand implements Command {
-  description = ' - wylosuję pioseneczkę i dodam do listy utworów';
+  description = 'wylosuję pioseneczkę i dodam do listy utworów';
   type = 'rand';
 
   async handler(command: string[], message: any): Promise<any> {

@@ -60,6 +60,7 @@ export class PlayTrackCommand implements Command {
     }
 
     if (metadata.contentDetails && metadata.contentDetails.regionRestriction &&
+      metadata.contentDetails.regionRestriction.blocked &&
       metadata.contentDetails.regionRestriction.blocked.indexOf('PL') !== -1) {
       throw new Error('blocked');
     }

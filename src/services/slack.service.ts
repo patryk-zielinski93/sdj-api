@@ -2,6 +2,7 @@ import { RTMClient, WebClient } from '@slack/client';
 import { connectionConfig } from '../configs/connection.config';
 
 export class SlackService {
+  static readonly unlikeIcon = ':-1:';
   private static instance: SlackService;
   private readonly _rtm: RTMClient;
   private readonly _web: WebClient;

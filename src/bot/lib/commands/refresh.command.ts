@@ -7,7 +7,7 @@ import { SlackService } from '../../../services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 export class RefreshCommand implements Command {
-  description = ' - zagram pioseneczkę, która była grana najdawniej';
+  description = 'zagram pioseneczkę, która była grana najdawniej';
   type = 'refresh';
 
   async handler(command: string[], message: any): Promise<any> {

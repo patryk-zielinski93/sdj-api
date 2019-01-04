@@ -5,6 +5,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { finalize, switchMap } from 'rxjs/operators';
 import * as ytdl from 'youtube-dl';
 import { connectionConfig } from '../configs/connection.config';
+import { pathConfig } from '../configs/path.config';
 
 export class Mp3Service {
   private static instance: Mp3Service;
@@ -48,7 +49,7 @@ export class Mp3Service {
    */
   private download(id: string): Observable<string> {
     const sub = new Subject<string>();
-    let filePath = path.join(connectionConfig.tracks.directory, id);
+    let filePath = path.join(pathConfig.tracks, id);
 
     ytdl.exec(`https://www.youtube.com/watch?v=${id}`, [
       '--restrict-filenames',

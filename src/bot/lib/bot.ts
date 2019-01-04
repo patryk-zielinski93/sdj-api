@@ -1,7 +1,11 @@
 import { from } from 'rxjs/internal/observable/from';
 import { map, switchMap } from 'rxjs/operators';
+import { appConfig } from '../../configs/app.config';
+import { QueuedTrack } from '../../entities/queued-track.model';
+import { Unlike } from '../../entities/unlike.model';
 import { User } from '../../entities/user.model';
 import { DbService } from '../../services/db.service';
+import { IcesService } from '../../services/ices.service';
 import { Mp3Service } from '../../services/mp3.service';
 import { SlackService } from '../../services/slack.service';
 import { Command } from './interfaces/command.iterface';
@@ -39,7 +43,17 @@ export class Bot {
 
     Object.keys(this.commands).forEach((key) => {
       this.commands[key].forEach(command => {
-        helpMsg += `\`${command.type}\` ${command.description}\n`;
+        const typeEmiticon = command.type.startsWith(':');
+        if (!typeEmiticon) {
+          helpMsg += `\``;
+        }
+
+        helpMsg += `${command.type}`;
+        if (!typeEmiticon) {
+          helpMsg += `\``;
+        }
+
+        helpMsg += ` - ${command.description}\n`;
       });
     });
 

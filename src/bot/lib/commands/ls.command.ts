@@ -5,7 +5,7 @@ import { SlackService } from '../../../services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 export class LsCommand implements Command {
-  description = '- obczaj listę utworów';
+  description = 'obczaj listę utworów';
   redisClient = redis.createClient({
     host: 'redis'
   });
