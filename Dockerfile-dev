@@ -12,7 +12,6 @@ RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/dow
     && rm /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu
 
-RUN npm install -g 'nodemon@^1.17.5' 'typescript@2.7.2' 'forever'
 RUN mkdir -p /app
 
 COPY ./docker /var/docker
