@@ -1,13 +1,16 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
-import * as redis from 'redis';
-import * as socketIo from 'socket.io';
+import * as fs from 'fs';
 import * as http from 'http';
+import * as redis from 'redis';
 import 'reflect-metadata';
+import * as socketIo from 'socket.io';
 import { initializeBot } from './bot';
-import { connectionConfig } from './configs/connection.config';
+import { pathConfig } from './configs/path.config';
+import { Track } from './entities/track.model';
 import { DbService } from './services/db.service';
 import { IcesService } from './services/ices.service';
+import { Mp3Service } from './services/mp3.service';
 import { PlaylistService } from './services/playlist.service';
 import { SocketIoo } from './sio';
 
@@ -50,7 +53,7 @@ const sub = redis.createClient({
 let count = 0;
 
 sub.on('message', (channel, message) => {
-  playlist.getNext().subscribe(queuedTrack => {
+  playlist.getNext().subscribe(async queuedTrack => {
     console.log(channel, message);
     if (queuedTrack) {
       count = 0;
@@ -58,10 +61,23 @@ sub.on('message', (channel, message) => {
       client.set('next_song', queuedTrack.track.id);
       playlist.updateQueuedTrackPlayedAt(queuedTrack).subscribe();
     } else {
-      count = count + 1;
-      client.set('next_song', '10-sec-of-silence');
-      if (count > 1) {
-        sio.of('/').emit('play_radio');
+      const connection = await DbService.getConnectionPromise();
+      const trackRepository = connection.getRepository(Track);
+      const randTrack = await trackRepository.createQueryBuilder('track')
+        .orderBy('RAND()')
+        .getOne();
+      if (randTrack) {
+        if (!fs.existsSync(pathConfig.tracks + '/' + randTrack.id + '.mp3')) {
+          const mp3 = Mp3Service.getInstance();
+          await mp3.downloadAndNormalize(randTrack.id);
+        }
+        client.set('next_song', randTrack.id);
+      } else {
+        count = count + 1;
+        client.set('next_song', '10-sec-of-silence');
+        if (count > 1) {
+          sio.of('/').emit('play_radio');
+        }
       }
     }
   });
