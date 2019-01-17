@@ -8,7 +8,6 @@ export class AppController {
   @Get()
   @Render('index.hbs')
   getHello(): any {
-    console.log('elo')
     return { message: 'Hello world!' };
   }
 }
