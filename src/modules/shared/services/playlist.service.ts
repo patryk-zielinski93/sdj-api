@@ -1,17 +1,14 @@
+import { Injectable } from '@nestjs/common';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { Observable } from 'rxjs/internal/Observable';
 import { switchMap } from 'rxjs/operators';
-import { QueuedTrack } from '../entities/queued-track.model';
+import { QueuedTrack } from '../../../entities/queued-track.model';
 import { DbService } from './db.service';
 
+@Injectable()
 export class PlaylistService {
-  private static instance: PlaylistService;
 
-  static getInstance(): PlaylistService {
-    return this.instance || (this.instance = new this());
-  }
-
-  private constructor() {
+  constructor(private db: DbService) {
   }
 
   getNext(): Observable<QueuedTrack | undefined> {

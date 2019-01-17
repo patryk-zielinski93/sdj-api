@@ -1,11 +1,13 @@
-import { appConfig } from '../../../configs/app.config';
-import { QueuedTrack } from '../../../entities/queued-track.model';
-import { Unlike } from '../../../entities/unlike.model';
-import { User } from '../../../entities/user.model';
-import { DbService } from '../../../services/db.service';
-import { IcesService } from '../../../services/ices.service';
+import { Injectable } from '@nestjs/common';
+import { appConfig } from '../../../../../configs/app.config';
+import { QueuedTrack } from '../../../../../entities/queued-track.model';
+import { Unlike } from '../../../../../entities/unlike.model';
+import { User } from '../../../../../entities/user.model';
+import { DbService } from '../../../../shared/services/db.service';
+import { IcesService } from '../../../../shared/services/ices.service';
 import { Command } from '../interfaces/command.iterface';
 
+@Injectable()
 export class VoteForNextSongCommand implements Command {
   description = 'Vote to skip that song';
   type = ':-1:';

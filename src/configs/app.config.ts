@@ -1,4 +1,4 @@
 export const appConfig = {
-  nextSongVoteQuantity: 2,
+  nextSongVoteQuantity: 1,
   queuedTracksPerUser: 3
 };

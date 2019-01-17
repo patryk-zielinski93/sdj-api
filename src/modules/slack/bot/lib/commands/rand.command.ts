@@ -1,14 +1,19 @@
-import { appConfig } from '../../../configs/app.config';
-import { connectionConfig } from '../../../configs/connection.config';
-import { QueuedTrack } from '../../../entities/queued-track.model';
-import { Track } from '../../../entities/track.model';
-import { DbService } from '../../../services/db.service';
-import { SlackService } from '../../../services/slack.service';
+import { Injectable } from '@nestjs/common';
+import { appConfig } from '../../../../../configs/app.config';
+import { connectionConfig } from '../../../../../configs/connection.config';
+import { QueuedTrack } from '../../../../../entities/queued-track.model';
+import { Track } from '../../../../../entities/track.model';
+import { DbService } from '../../../../shared/services/db.service';
+import { SlackService } from '../../../../shared/services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
+@Injectable()
 export class RandCommand implements Command {
   description = 'wylosuję pioseneczkę i dodam do listy utworów';
   type = 'rand';
+
+  constructor(private slack: SlackService) {
+  }
 
   async handler(command: string[], message: any): Promise<any> {
     const connection = await DbService.getConnectionPromise();
@@ -21,8 +26,7 @@ export class RandCommand implements Command {
       .getCount();
 
     if (queuedTracksCount >= appConfig.queuedTracksPerUser) {
-      const slack = SlackService.getInstance();
-      slack.rtm.sendMessage(`Osiągnąłeś limit ${appConfig.queuedTracksPerUser} zakolejkowanych utworów.`, message.channel);
+      this.slack.rtm.sendMessage(`Osiągnąłeś limit ${appConfig.queuedTracksPerUser} zakolejkowanych utworów.`, message.channel);
       throw new Error('zakolejkowane');
     }
 
@@ -48,6 +52,6 @@ export class RandCommand implements Command {
     queuedTrack.randomized = true;
 
     await queuedTrackRepository.save(queuedTrack);
-    SlackService.getInstance().rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
+    this.slack.rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
   }
 }

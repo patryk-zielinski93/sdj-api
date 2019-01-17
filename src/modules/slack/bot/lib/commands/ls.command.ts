@@ -1,15 +1,20 @@
+import { Injectable } from '@nestjs/common';
 import * as redis from 'redis';
-import { QueuedTrack } from '../../../entities/queued-track.model';
-import { DbService } from '../../../services/db.service';
-import { SlackService } from '../../../services/slack.service';
+import { QueuedTrack } from '../../../../../entities/queued-track.model';
+import { DbService } from '../../../../shared/services/db.service';
+import { SlackService } from '../../../../shared/services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
+@Injectable()
 export class LsCommand implements Command {
   description = 'obczaj listę utworów';
   redisClient = redis.createClient({
     host: 'redis'
   });
   type = 'ls';
+
+  constructor(private slack: SlackService) {
+  }
 
   getCurrentTrackId(): Promise<string | undefined> {
     return new Promise<string | undefined>((resolve, reject) => {
@@ -25,8 +30,6 @@ export class LsCommand implements Command {
   }
 
   async handler(command: string[], message: any): Promise<any> {
-    const slack = SlackService.getInstance();
-
     DbService.getRepository(QueuedTrack).subscribe(async queuedTrackRepository => {
       const queuedTracks = await queuedTrackRepository.createQueryBuilder('queuedTrack')
         .leftJoinAndSelect('queuedTrack.track', 'track')
@@ -58,9 +61,9 @@ export class LsCommand implements Command {
       });
 
       if (!msg.length) {
-        slack.rtm.sendMessage('Brak utworów na liście.', message.channel);
+        this.slack.rtm.sendMessage('Brak utworów na liście.', message.channel);
       } else {
-        slack.rtm.sendMessage(msg, message.channel);
+        this.slack.rtm.sendMessage(msg, message.channel);
       }
 
     });

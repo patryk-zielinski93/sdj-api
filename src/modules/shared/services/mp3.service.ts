@@ -1,21 +1,18 @@
+import { Injectable } from '@nestjs/common';
 import { exec } from 'child_process';
 import * as path from 'path';
 import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
 import { finalize, switchMap } from 'rxjs/operators';
 import * as ytdl from 'youtube-dl';
-import { connectionConfig } from '../configs/connection.config';
-import { pathConfig } from '../configs/path.config';
+import { connectionConfig } from '../../../configs/connection.config';
+import { pathConfig } from '../../../configs/path.config';
 
+@Injectable()
 export class Mp3Service {
-  private static instance: Mp3Service;
   private inProgress: { [key: string]: Observable<string> } = {};
 
-  static getInstance(): Mp3Service {
-    return this.instance || (this.instance = new this());
-  }
-
-  private constructor() {
+  constructor() {
   }
 
   /**

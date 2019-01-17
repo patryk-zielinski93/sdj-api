@@ -1,13 +1,31 @@
 import { Controller, Get, Render } from '@nestjs/common';
-import { AppService } from './app.service';
+import { IcesService } from './modules/shared/services/ices.service';
+import { PlaylistService } from './modules/shared/services/playlist.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private playlist: PlaylistService) {
+  }
 
   @Get()
   @Render('index.hbs')
-  getHello(): any {
-    return { message: 'Hello world!' };
+  appView(): any {
+  }
+
+  @Get('ices')
+  nexSong(): any {
+    IcesService.nextSong();
+  }
+
+  @Get('next')
+  removeNextSong(): any {
+    this.playlist.getNext().subscribe(queuedTrack => {
+      if (queuedTrack) {
+        this.playlist.removeQueuedTrack(queuedTrack).subscribe();
+        return `/tracks/${queuedTrack.track.id}.mp3`;
+      } else {
+        return '/tracks/10-sec-of-silence.mp3';
+      }
+    });
   }
 }

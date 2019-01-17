@@ -1,23 +1,27 @@
+import { Injectable } from '@nestjs/common';
 import * as parseIsoDuration from 'parse-iso-duration';
 import * as querystring from 'querystring';
 import * as requestPromise from 'request-promise-native';
 import * as url from 'url';
-import { appConfig } from '../../../configs/app.config';
-import { connectionConfig } from '../../../configs/connection.config';
-import { QueuedTrack } from '../../../entities/queued-track.model';
-import { Track } from '../../../entities/track.model';
-import { TrackStatus } from '../../../enums/track-status.enum';
-import { DbService } from '../../../services/db.service';
-import { Mp3Service } from '../../../services/mp3.service';
-import { SlackService } from '../../../services/slack.service';
+import { appConfig } from '../../../../../configs/app.config';
+import { connectionConfig } from '../../../../../configs/connection.config';
+import { QueuedTrack } from '../../../../../entities/queued-track.model';
+import { Track } from '../../../../../entities/track.model';
+import { TrackStatus } from '../../../../../enums/track-status.enum';
+import { DbService } from '../../../../shared/services/db.service';
+import { Mp3Service } from '../../../../shared/services/mp3.service';
+import { SlackService } from '../../../../shared/services/slack.service';
 import { YoutubeIdError } from '../errors/youtube-id.error';
 import { Command } from '../interfaces/command.iterface';
 import { VideoMetadata } from '../interfaces/video-metadata.interface';
 
+@Injectable()
 export class PlayTrackCommand implements Command {
   description = '`[youtubeUrl]` - jeżeli chcesz żebym zapuścił Twoją pioseneczkę, koniecznie wypróbuj to polecenie';
   type = 'play';
-  private mp3 = Mp3Service.getInstance();
+
+  constructor(private mp3: Mp3Service, private slack: SlackService) {
+  }
 
   async handler(command: string[], message: any): Promise<any> {
     const connection = await DbService.getConnectionPromise();
@@ -29,8 +33,7 @@ export class PlayTrackCommand implements Command {
       .getCount();
 
     if (queuedTracksCount >= appConfig.queuedTracksPerUser) {
-      const slack = SlackService.getInstance();
-      slack.rtm.sendMessage(`Masz przekroczony limit ${appConfig.queuedTracksPerUser} zakolejkowanych utworów.`, message.channel);
+      this.slack.rtm.sendMessage(`Masz przekroczony limit ${appConfig.queuedTracksPerUser} zakolejkowanych utworów.`, message.channel);
       throw new Error('zakolejkowane');
     }
 
@@ -118,6 +121,6 @@ export class PlayTrackCommand implements Command {
     queuedTrack.track = track;
 
     await queuedTrackRepository.save(queuedTrack);
-    SlackService.getInstance().rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
+    this.slack.rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
   }
 }

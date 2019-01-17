@@ -1,31 +1,43 @@
+import { Injectable } from '@nestjs/common';
 import { from } from 'rxjs/internal/observable/from';
 import { map, switchMap } from 'rxjs/operators';
-import { appConfig } from '../../configs/app.config';
-import { QueuedTrack } from '../../entities/queued-track.model';
-import { Unlike } from '../../entities/unlike.model';
-import { User } from '../../entities/user.model';
-import { DbService } from '../../services/db.service';
-import { IcesService } from '../../services/ices.service';
-import { Mp3Service } from '../../services/mp3.service';
-import { SlackService } from '../../services/slack.service';
+import { User } from '../../../../entities/user.model';
+import { DbService } from '../../../shared/services/db.service';
+import { Mp3Service } from '../../../shared/services/mp3.service';
+import { SlackService } from '../../../shared/services/slack.service';
+import { CleanShitCommand } from './commands/clean-shit.command';
+import { LsCommand } from './commands/ls.command';
+import { PlayTrackCommand } from './commands/play-track.command';
+import { PozdroCommand } from './commands/pozdro.command';
+import { RandCommand } from './commands/rand.command';
+import { RefreshCommand } from './commands/refresh.command';
+import { VoteForNextSongCommand } from './commands/vote-for-next-song.command';
 import { Command } from './interfaces/command.iterface';
 
+@Injectable()
 export class Bot {
-  private static instance: Bot;
   private commands: { [key: string]: Command[] } = {};
-  private db: DbService;
-  private mp3: Mp3Service;
-  private slack: SlackService;
 
-  static getInstance(): Bot {
-    return this.instance || (this.instance = new this());
+  constructor(
+    private db: DbService,
+    private mp3: Mp3Service,
+    private slack: SlackService,
+    cleanC: CleanShitCommand,
+    lsC: LsCommand,
+    playtrackC: PlayTrackCommand,
+    pozdroC: PozdroCommand,
+    randC: RandCommand,
+    refreshC: RefreshCommand,
+    voteC: VoteForNextSongCommand
+  ) {
+    this.handleMessage = this.handleMessage.bind(this);
+    this.init(cleanC, lsC, playtrackC, pozdroC, randC, refreshC, voteC);
   }
 
-  private constructor() {
-    this.db = DbService;
-    this.mp3 = Mp3Service.getInstance();
-    this.slack = SlackService.getInstance();
-    this.handleMessage = this.handleMessage.bind(this);
+  init(...commands) {
+    const addCommand = this.addCommand.bind(this);
+    commands.forEach(addCommand);
+    this.start();
   }
 
   addCommand(command: Command): void {

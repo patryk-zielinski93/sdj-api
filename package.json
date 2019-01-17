@@ -37,6 +37,7 @@
   "dependencies": {
     "@nestjs/common": "^5.4.0",
     "@nestjs/core": "^5.4.0",
+    "@nestjs/websockets": "^5.6.2",
     "@slack/client": "^4.3.1",
     "@slack/events-api": "^1.0.1",
     "@types/request": "^2.47.0",
