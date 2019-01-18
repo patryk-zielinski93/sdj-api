@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
 import { appConfig } from '../../../../../configs/app.config';
-import { connectionConfig } from '../../../../../configs/connection.config';
-import { QueuedTrack } from '../../../../../entities/queued-track.model';
-import { Track } from '../../../../../entities/track.model';
+import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track.model';
+import { Track } from '../../../../shared/modules/db/entities/track.model';
+import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
+import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
 import { DbService } from '../../../../shared/services/db.service';
 import { SlackService } from '../../../../shared/services/slack.service';
 import { Command } from '../interfaces/command.iterface';
@@ -12,14 +15,17 @@ export class RefreshCommand implements Command {
   description = 'zagram pioseneczkę, która była grana najdawniej';
   type = 'refresh';
 
-  constructor(private slack: SlackService) {
+  constructor(
+    private readonly connection: Connection,
+    private slack: SlackService,
+    @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
+    @InjectRepository(TrackRepository) private trackRepository: TrackRepository
+  ) {
   }
 
   async handler(command: string[], message: any): Promise<any> {
-    const connection = await DbService.getConnectionPromise();
 
-    const queuedTrackRepository = connection.getRepository(QueuedTrack);
-    const queuedTracksCount = await queuedTrackRepository.createQueryBuilder('queuedTrack')
+    const queuedTracksCount = await this.queuedTrackRepository.createQueryBuilder('queuedTrack')
       .where('queuedTrack.playedAt IS NULL')
       .andWhere('queuedTrack.addedById = :userId')
       .setParameters({ userId: message.user })
@@ -30,11 +36,11 @@ export class RefreshCommand implements Command {
       throw new Error('zakolejkowane');
     }
 
-    const groupedTracksQuery = queuedTrackRepository.createQueryBuilder()
+    const groupedTracksQuery = this.queuedTrackRepository.createQueryBuilder()
       .select('trackId, MAX(addedAt) as addedAt')
       .groupBy('trackId');
 
-    const oldestTrack = await connection.createQueryBuilder()
+    const oldestTrack = await this.connection.createQueryBuilder()
       .select('*')
       .from(`(${groupedTracksQuery.getQuery()})`, 'latest')
       .orderBy('latest.addedAt', 'ASC')
@@ -43,8 +49,7 @@ export class RefreshCommand implements Command {
 
     if (oldestTrack[0] && oldestTrack[0].trackId) {
       const trackId = oldestTrack[0].trackId;
-      const trackRepository = connection.getRepository(Track);
-      const refreshTrack = await trackRepository.findOne(trackId);
+      const refreshTrack = await this.trackRepository.findOne(trackId);
       if (refreshTrack) {
         this.queueTrack(message, refreshTrack);
       }
@@ -52,8 +57,6 @@ export class RefreshCommand implements Command {
   }
 
   private async queueTrack(message: any, track: Track): Promise<void> {
-    const connection = await DbService.getConnectionPromise();
-    const queuedTrackRepository = connection.getRepository(QueuedTrack);
     const queuedTrack = new QueuedTrack();
     queuedTrack.addedAt = new Date();
     queuedTrack.addedBy = message.user;
@@ -61,7 +64,7 @@ export class RefreshCommand implements Command {
     queuedTrack.track = track;
     queuedTrack.randomized = true;
 
-    await queuedTrackRepository.save(queuedTrack);
+    await this.queuedTrackRepository.save(queuedTrack);
     this.slack.rtm.sendMessage(`Odświeżamy! Dodałem ${track.title} do playlisty :)`, message.channel);
   }
 }

@@ -3,7 +3,7 @@ import { QueuedTrack } from './queued-track.model';
 import { User } from './user.model';
 
 @Entity()
-export class Unlike {
+export class Vote {
   @Column('datetime')
   addedAt: Date;
   @ManyToOne(type => User)
@@ -14,9 +14,12 @@ export class Unlike {
   @ManyToOne(type => QueuedTrack)
   @JoinColumn()
   track: QueuedTrack;
+  @Column('int')
+  value: number;
 
-  constructor(addedBy: User, track: QueuedTrack) {
+  constructor(addedBy: User, track: QueuedTrack, value: number) {
     this.addedBy = addedBy;
     this.track = track;
+    this.value = value;
   }
 }

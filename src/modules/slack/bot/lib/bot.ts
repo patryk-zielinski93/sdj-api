@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { from } from 'rxjs/internal/observable/from';
-import { map, switchMap } from 'rxjs/operators';
-import { User } from '../../../../entities/user.model';
+import { User } from '../../../shared/modules/db/entities/user.model';
+import { UserRepository } from '../../../shared/modules/db/repositories/user.repository';
 import { DbService } from '../../../shared/services/db.service';
 import { Mp3Service } from '../../../shared/services/mp3.service';
 import { SlackService } from '../../../shared/services/slack.service';
@@ -19,9 +18,9 @@ export class Bot {
   private commands: { [key: string]: Command[] } = {};
 
   constructor(
-    private db: DbService,
     private mp3: Mp3Service,
     private slack: SlackService,
+    private userRepository: UserRepository,
     cleanC: CleanShitCommand,
     lsC: LsCommand,
     playtrackC: PlayTrackCommand,
@@ -77,23 +76,11 @@ export class Bot {
       return;
     }
 
-    DbService.getRepository(User).pipe(
-      switchMap(repository => {
-        return from(repository.findOne({ id: message.user })).pipe(
-          map(user => {
-            return {
-              repository: repository,
-              user: user
-            };
-          })
-        );
-      })
-    ).subscribe(async data => {
-      const userRepository = data.repository;
-      let user = data.user;
+    this.userRepository.findOne(message.user)
+      .then(async (user: User) => {
       let userProfile: any;
 
-      if (!data.user) {
+        if (!user) {
         try {
           userProfile = await this.slack.web.users.info({
             user: message.user
@@ -120,7 +107,7 @@ export class Bot {
         user.image512 = userProfile.profile.image_512;
         user.image72 = userProfile.profile.image_72;
 
-        await userRepository.save(user);
+          await this.userRepository.save(user);
       }
 
       const command = message.text.split(' ');

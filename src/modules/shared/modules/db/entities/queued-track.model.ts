@@ -10,7 +10,7 @@ export class QueuedTrack {
   @JoinColumn()
   addedBy: User;
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
   @Column('int')
   order: number;
   @Column('datetime', {

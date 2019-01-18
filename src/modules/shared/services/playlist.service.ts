@@ -1,36 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { Observable } from 'rxjs/internal/Observable';
-import { switchMap } from 'rxjs/operators';
-import { QueuedTrack } from '../../../entities/queued-track.model';
+import { QueuedTrack } from '../modules/db/entities/queued-track.model';
+import { QueuedTrackRepository } from '../modules/db/repositories/queued-track.repository';
 import { DbService } from './db.service';
 
 @Injectable()
 export class PlaylistService {
 
-  constructor(private db: DbService) {
+  constructor(@InjectRepository(QueuedTrackRepository)
+              private queuedTrackRepository: QueuedTrackRepository) {
   }
 
   getNext(): Observable<QueuedTrack | undefined> {
-    return DbService.getConnection().pipe(
-      switchMap(connection => {
-        const queuedTrackRepository = connection.getRepository(QueuedTrack);
-        return fromPromise(
-          queuedTrackRepository.createQueryBuilder('queuedTrack')
-            // .addSelect('max(queuedTrack.id)')
-            .leftJoinAndSelect('queuedTrack.track', 'track')
-            .andWhere('queuedTrack.playedAt IS NULL')
-            .orderBy('queuedTrack.order, queuedTrack.id', 'ASC')
-            .getOne()
-        );
-      })
+    return fromPromise(
+      this.queuedTrackRepository.getNextSongToPlay()
     );
   }
 
-  removeQueuedTrack(queuedTrack: QueuedTrack): Observable<QueuedTrack> {
-    return DbService.getRepository(QueuedTrack).pipe(
-      switchMap(repository => fromPromise(repository.remove(queuedTrack)))
-    );
+  removeQueuedTrack(queuedTrack: QueuedTrack): Promise<QueuedTrack> {
+    return this.queuedTrackRepository.remove(queuedTrack);
   }
 
   /**
@@ -39,11 +29,9 @@ export class PlaylistService {
    * @param {Date} [playedAt]
    * @returns {Observable<QueuedTrack>}
    */
-  updateQueuedTrackPlayedAt(queuedTrack: QueuedTrack, playedAt?: Date): Observable<QueuedTrack> {
+  updateQueuedTrackPlayedAt(queuedTrack: QueuedTrack, playedAt?: Date): Promise<QueuedTrack> {
     queuedTrack.playedAt = playedAt || new Date();
 
-    return DbService.getRepository(QueuedTrack).pipe(
-      switchMap(repository => fromPromise(repository.save(queuedTrack)))
-    );
+    return this.queuedTrackRepository.save(queuedTrack);
   }
 }

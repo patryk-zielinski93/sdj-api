@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import * as parseIsoDuration from 'parse-iso-duration';
 import * as querystring from 'querystring';
@@ -7,9 +8,11 @@ import * as url from 'url';
 import { appConfig } from '../../../../../configs/app.config';
 import { connectionConfig } from '../../../../../configs/connection.config';
 import { pathConfig } from '../../../../../configs/path.config';
-import { QueuedTrack } from '../../../../../entities/queued-track.model';
-import { Track } from '../../../../../entities/track.model';
 import { TrackStatus } from '../../../../../enums/track-status.enum';
+import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track.model';
+import { Track } from '../../../../shared/modules/db/entities/track.model';
+import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
+import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
 import { DbService } from '../../../../shared/services/db.service';
 import { Mp3Service } from '../../../../shared/services/mp3.service';
 import { SlackService } from '../../../../shared/services/slack.service';
@@ -22,17 +25,16 @@ export class PlayTrackCommand implements Command {
   description = '`[youtubeUrl]` - jeżeli chcesz żebym zapuścił Twoją pioseneczkę, koniecznie wypróbuj to polecenie';
   type = 'play';
 
-  constructor(private mp3: Mp3Service, private slack: SlackService) {
+  constructor(
+    private mp3: Mp3Service,
+    private slack: SlackService,
+    @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
+    @InjectRepository(TrackRepository) private trackRepository: TrackRepository
+  ) {
   }
 
   async handler(command: string[], message: any): Promise<any> {
-    const connection = await DbService.getConnectionPromise();
-    const queuedTrackRepository = connection.getRepository(QueuedTrack);
-    const queuedTracksCount = await queuedTrackRepository.createQueryBuilder('queuedTrack')
-      .where('queuedTrack.playedAt IS NULL')
-      .andWhere('queuedTrack.addedById = :userId')
-      .setParameters({ userId: message.user })
-      .getCount();
+    const queuedTracksCount = await this.queuedTrackRepository.countTracksInQueueFromUser(message.user);
 
     if (queuedTracksCount >= appConfig.queuedTracksPerUser) {
       this.slack.rtm.sendMessage(`Masz przekroczony limit ${appConfig.queuedTracksPerUser} zakolejkowanych utworów.`, message.channel);
@@ -44,8 +46,7 @@ export class PlayTrackCommand implements Command {
       throw new Error('invalid url');
     }
 
-    const trackRepository = connection.getRepository(Track);
-    const track = await trackRepository.findOne(id);
+    const track = await this.trackRepository.findOne(id);
 
     if (track) {
       if (fs.existsSync(pathConfig.tracks + '/' + track.id + '.mp3')) {
@@ -79,15 +80,13 @@ export class PlayTrackCommand implements Command {
       throw new Error('video too long');
     }
 
-    const connection = await DbService.getConnectionPromise();
-    const trackRepository = connection.getRepository(Track);
     const track = this.prepareTrack(metadata);
-    await trackRepository.save(track);
+    await this.trackRepository.save(track);
 
     this.mp3.downloadAndNormalize(id).subscribe(async duration => {
       track.duration = parseInt(duration, 10);
       track.createdAt = new Date();
-      await trackRepository.save(track);
+      this.trackRepository.save(track);
       await this.queueTrack(message, track);
     });
   }
@@ -119,15 +118,13 @@ export class PlayTrackCommand implements Command {
   }
 
   private async queueTrack(message: any, track: Track): Promise<void> {
-    const connection = await DbService.getConnectionPromise();
-    const queuedTrackRepository = connection.getRepository(QueuedTrack);
     const queuedTrack = new QueuedTrack();
     queuedTrack.addedAt = new Date();
     queuedTrack.addedBy = message.user;
     queuedTrack.order = 0;
     queuedTrack.track = track;
 
-    await queuedTrackRepository.save(queuedTrack);
+    await this.queuedTrackRepository.save(queuedTrack);
     this.slack.rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
   }
 }

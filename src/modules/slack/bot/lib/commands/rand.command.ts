@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import { appConfig } from '../../../../../configs/app.config';
 import { pathConfig } from '../../../../../configs/path.config';
-import { QueuedTrack } from '../../../../../entities/queued-track.model';
-import { Track } from '../../../../../entities/track.model';
+import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track.model';
+import { Track } from '../../../../shared/modules/db/entities/track.model';
+import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
+import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
 import { DbService } from '../../../../shared/services/db.service';
 import { Mp3Service } from '../../../../shared/services/mp3.service';
 import { SlackService } from '../../../../shared/services/slack.service';
@@ -14,26 +17,22 @@ export class RandCommand implements Command {
   description = 'wylosuję pioseneczkę i dodam do listy utworów';
   type = 'rand';
 
-  constructor(private mp3: Mp3Service, private slack: SlackService) {
+  constructor(private mp3: Mp3Service,
+              private slack: SlackService,
+              @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
+              @InjectRepository(TrackRepository) private trackRepository: TrackRepository
+  ) {
   }
 
   async handler(command: string[], message: any): Promise<any> {
-    const connection = await DbService.getConnectionPromise();
-
-    const queuedTrackRepository = connection.getRepository(QueuedTrack);
-    const queuedTracksCount = await queuedTrackRepository.createQueryBuilder('queuedTrack')
-      .where('queuedTrack.playedAt IS NULL')
-      .andWhere('queuedTrack.addedById = :userId')
-      .setParameters({ userId: message.user })
-      .getCount();
+    const queuedTracksCount = await this.queuedTrackRepository.countTracksInQueueFromUser(message.user);
 
     if (queuedTracksCount >= appConfig.queuedTracksPerUser) {
       this.slack.rtm.sendMessage(`Osiągnąłeś limit ${appConfig.queuedTracksPerUser} zakolejkowanych utworów.`, message.channel);
       throw new Error('zakolejkowane');
     }
 
-    const trackRepository = connection.getRepository(Track);
-    const randTrack = await trackRepository.createQueryBuilder('track')
+    const randTrack = await this.trackRepository.createQueryBuilder('track')
       .orderBy('RAND()')
       .getOne();
 
@@ -46,8 +45,6 @@ export class RandCommand implements Command {
   }
 
   private async queueTrack(message: any, track: Track): Promise<void> {
-    const connection = await DbService.getConnectionPromise();
-    const queuedTrackRepository = connection.getRepository(QueuedTrack);
     const queuedTrack = new QueuedTrack();
     queuedTrack.addedAt = new Date();
     queuedTrack.addedBy = message.user;
@@ -55,7 +52,7 @@ export class RandCommand implements Command {
     queuedTrack.track = track;
     queuedTrack.randomized = true;
 
-    await queuedTrackRepository.save(queuedTrack);
+    await this.queuedTrackRepository.save(queuedTrack);
     this.slack.rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
   }
 }

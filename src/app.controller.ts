@@ -21,7 +21,7 @@ export class AppController {
   removeNextSong(): any {
     this.playlist.getNext().subscribe(queuedTrack => {
       if (queuedTrack) {
-        this.playlist.removeQueuedTrack(queuedTrack).subscribe();
+        this.playlist.removeQueuedTrack(queuedTrack);
         return `/tracks/${queuedTrack.track.id}.mp3`;
       } else {
         return '/tracks/10-sec-of-silence.mp3';

@@ -2,5 +2,6 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/db/most-played.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/db/slack_dj_queued_track.sql" dialect="MariaDB" />
   </component>
 </project>

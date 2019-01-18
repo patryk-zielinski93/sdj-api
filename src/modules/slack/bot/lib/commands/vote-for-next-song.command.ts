@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '../../../../../configs/app.config';
-import { QueuedTrack } from '../../../../../entities/queued-track.model';
-import { Unlike } from '../../../../../entities/unlike.model';
-import { User } from '../../../../../entities/user.model';
+import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track.model';
+import { User } from '../../../../shared/modules/db/entities/user.model';
+import { Vote } from '../../../../shared/modules/db/entities/vote.model';
+import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
+import { UserRepository } from '../../../../shared/modules/db/repositories/user.repository';
+import { VoteRepository } from '../../../../shared/modules/db/repositories/vote.repository';
 import { DbService } from '../../../../shared/services/db.service';
 import { IcesService } from '../../../../shared/services/ices.service';
 import { Command } from '../interfaces/command.iterface';
@@ -12,43 +16,31 @@ export class VoteForNextSongCommand implements Command {
   description = 'Vote to skip that song';
   type = ':-1:';
 
+  constructor(@InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
+              @InjectRepository(UserRepository) private userRepository: UserRepository,
+              @InjectRepository(VoteRepository) private voteRepository: VoteRepository) {
+  }
+
   async handler(command: string[], message: any): Promise<any> {
     const userId = message.user;
-    const connection = await DbService.getConnectionPromise();
-    const user = await connection.getRepository(User).findOne(userId);
-    const unlikeRepository = connection.getRepository(Unlike);
-    const currentTrackInQueue = <QueuedTrack>await connection.getRepository(QueuedTrack)
-      .createQueryBuilder('queuedTrack')
-      .where('queuedTrack.playedAt IS NOT NULL')
-      .limit(1)
-      .orderBy('addedAt', 'DESC')
-      .getOne();
+    const user = await this.userRepository.findOne(userId);
+    const currentTrackInQueue = <QueuedTrack>await this.queuedTrackRepository.getCurrentTrack();
 
-    const unlikesCountFromUser = await unlikeRepository
-      .createQueryBuilder('unlike')
-      .where('unlike.addedBy.id = :userId')
-      .setParameter('userId', userId)
-      .andWhere('unlike.track.id = :trackId')
-      .setParameter('trackId', currentTrackInQueue.id)
-      .getCount();
+    const unlikesCountFromUser = await this.voteRepository.countUnlikesFromUserToQueuedTrack(currentTrackInQueue.id, userId);
 
     if (unlikesCountFromUser > 0) {
       return;
     }
 
-    const unlikesCount = await unlikeRepository
-      .createQueryBuilder('unlike')
-      .andWhere('unlike.track.id = :trackId')
-      .setParameter('trackId', currentTrackInQueue.id)
-      .getCount();
+    const unlikesCount = await this.voteRepository.countUnlinksForQueuedTrack(currentTrackInQueue.id);
 
     if (unlikesCount + 1 >= appConfig.nextSongVoteQuantity) {
       IcesService.nextSong();
     }
 
-    const unlike = new Unlike(<User>user, currentTrackInQueue);
+    const unlike = new Vote(<User>user, currentTrackInQueue, -1);
     unlike.addedAt = new Date();
-    unlikeRepository.save(unlike);
+    this.voteRepository.save(unlike);
   };
 
 }

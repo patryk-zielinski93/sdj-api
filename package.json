@@ -37,6 +37,7 @@
   "dependencies": {
     "@nestjs/common": "^5.4.0",
     "@nestjs/core": "^5.4.0",
+    "@nestjs/typeorm": "^5.2.2",
     "@nestjs/websockets": "^5.6.2",
     "@slack/client": "^4.3.1",
     "@slack/events-api": "^1.0.1",
@@ -46,7 +47,7 @@
     "express": "^4.16.3",
     "handlebars": "^4.0.11",
     "hbs": "^4.0.1",
-    "mysql": "^2.15.0",
+    "mysql": "^2.16.0",
     "parse-iso-duration": "^1.0.0",
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.12",
@@ -55,7 +56,7 @@
     "rimraf": "^2.6.2",
     "rxjs": "^6.2.2",
     "socket.io": "^2.1.1",
-    "typeorm": "^0.2.6",
+    "typeorm": "^0.2.11",
     "typescript": "^3.0.1",
     "youtube-dl": "^1.12.2"
   }

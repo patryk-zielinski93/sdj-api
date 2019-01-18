@@ -1,9 +1,7 @@
 import { OnGatewayConnection, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { QueuedTrack } from '../../entities/queued-track.model';
-import { PlaylistService } from '../shared/services/playlist.service';
-import * as redis from 'redis';
+import { QueuedTrack } from '../shared/modules/db/entities/queued-track.model';
 import { WebSocketService } from './services/web-socket.service';
 
 @WebSocketGateway()
