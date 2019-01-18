@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import * as fs from 'fs';
 import * as parseIsoDuration from 'parse-iso-duration';
 import * as querystring from 'querystring';
 import * as requestPromise from 'request-promise-native';
 import * as url from 'url';
 import { appConfig } from '../../../../../configs/app.config';
 import { connectionConfig } from '../../../../../configs/connection.config';
+import { pathConfig } from '../../../configs/path.config';
 import { QueuedTrack } from '../../../../../entities/queued-track.model';
 import { Track } from '../../../../../entities/track.model';
 import { TrackStatus } from '../../../../../enums/track-status.enum';
@@ -46,7 +48,12 @@ export class PlayTrackCommand implements Command {
     const track = await trackRepository.findOne(id);
 
     if (track) {
-      return this.queueTrack(message, track);
+      if (fs.existsSync(pathConfig.tracks + '/' + track.id + '.mp3')) {
+        return this.queueTrack(message, track);
+      } else {
+        await this.mp3.downloadAndNormalize(track.id);
+        return this.queueTrack(message, track);
+      }
     }
 
     return this.addNewTrack(message, id);
