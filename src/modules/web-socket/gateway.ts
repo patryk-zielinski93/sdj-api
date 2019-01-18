@@ -1,6 +1,6 @@
 import { OnGatewayConnection, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { concatMap, delay, filter } from 'rxjs/operators';
 import { QueuedTrack } from '../shared/modules/db/entities/queued-track.model';
 import { WebSocketService } from './services/web-socket.service';
 
@@ -20,7 +20,7 @@ export class Gateway implements OnGatewayConnection, OnGatewayInit {
     this.service.playRadio
       .subscribe(() => {
         this.server.of('/').emit('play_radio');
-      })
+      });
   }
 
   handleConnection(client, ...args: any[]): any {
@@ -28,6 +28,14 @@ export class Gateway implements OnGatewayConnection, OnGatewayInit {
 
   @SubscribeMessage('events')
   findAll(client, data): Observable<WsResponse<number>> {
-    return from([1, 2, 3]).pipe(map(item => ({ event: 'events', data: item })));
+    return from([1, 2, 3])
+      .pipe(
+        concatMap(x => of({ event: 'events', data: x })
+          .pipe(
+            filter(x => x.data !== 2),
+            delay(2000)
+          )
+        )
+      );
   }
 }

@@ -2,7 +2,7 @@
   "name": "sdj-backend",
   "version": "1.0.0",
   "description": "Slack DJ backend",
-  "main": "index.js",
+  "main": "./src/main.ts",
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
     "compile": "tsc -p ./tsconfig.json",
@@ -10,7 +10,6 @@
     "start": "ts-node src/main.ts",
     "start:dev": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
-    "start:dist": "forever start ./src/index.js",
     "test": "mocha src/**/*.spec.js -R spec --bail",
     "test:debug": "mocha --inspect-brk=0.0.0.0:58587 src/**/*.spec.js",
     "test:cov": "istanbul cover --dir ./coverage node_modules/mocha/bin/_mocha -- src/**/*.spec.js -R spec --bail && npm run test:remap",

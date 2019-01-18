@@ -13,8 +13,10 @@ export class LsCommand implements Command {
   });
   type = 'ls';
 
-  constructor(private slack: SlackService,
-              @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository) {
+  constructor(
+    private slack: SlackService,
+    @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository
+  ) {
   }
 
   // TODo add to redis repository
