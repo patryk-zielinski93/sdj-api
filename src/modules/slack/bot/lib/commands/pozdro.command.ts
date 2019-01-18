@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../../../shared/modules/db/repositories/user.repository';
-import { DbService } from '../../../../shared/services/db.service';
 import { Gateway } from '../../../../web-socket/gateway';
 import { Command } from '../interfaces/command.iterface';
 

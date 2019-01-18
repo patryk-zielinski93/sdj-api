@@ -4,7 +4,6 @@ import { fromPromise } from 'rxjs/internal-compatibility';
 import { Observable } from 'rxjs/internal/Observable';
 import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 import { QueuedTrackRepository } from '../modules/db/repositories/queued-track.repository';
-import { DbService } from './db.service';
 
 @Injectable()
 export class PlaylistService {

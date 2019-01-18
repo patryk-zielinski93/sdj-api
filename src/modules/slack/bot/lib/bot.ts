@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../../../shared/modules/db/entities/user.model';
 import { UserRepository } from '../../../shared/modules/db/repositories/user.repository';
-import { DbService } from '../../../shared/services/db.service';
 import { Mp3Service } from '../../../shared/services/mp3.service';
 import { SlackService } from '../../../shared/services/slack.service';
 import { CleanShitCommand } from './commands/clean-shit.command';

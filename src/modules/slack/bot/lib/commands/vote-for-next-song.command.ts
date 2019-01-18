@@ -7,7 +7,6 @@ import { Vote } from '../../../../shared/modules/db/entities/vote.model';
 import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
 import { UserRepository } from '../../../../shared/modules/db/repositories/user.repository';
 import { VoteRepository } from '../../../../shared/modules/db/repositories/vote.repository';
-import { DbService } from '../../../../shared/services/db.service';
 import { IcesService } from '../../../../shared/services/ices.service';
 import { Command } from '../interfaces/command.iterface';
 

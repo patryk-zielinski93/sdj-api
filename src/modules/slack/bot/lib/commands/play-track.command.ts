@@ -13,7 +13,6 @@ import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track
 import { Track } from '../../../../shared/modules/db/entities/track.model';
 import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
-import { DbService } from '../../../../shared/services/db.service';
 import { Mp3Service } from '../../../../shared/services/mp3.service';
 import { SlackService } from '../../../../shared/services/slack.service';
 import { YoutubeIdError } from '../errors/youtube-id.error';
