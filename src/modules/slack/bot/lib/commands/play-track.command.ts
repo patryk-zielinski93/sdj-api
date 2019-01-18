@@ -6,7 +6,7 @@ import * as requestPromise from 'request-promise-native';
 import * as url from 'url';
 import { appConfig } from '../../../../../configs/app.config';
 import { connectionConfig } from '../../../../../configs/connection.config';
-import { pathConfig } from '../../../configs/path.config';
+import { pathConfig } from '../../../../../configs/path.config';
 import { QueuedTrack } from '../../../../../entities/queued-track.model';
 import { Track } from '../../../../../entities/track.model';
 import { TrackStatus } from '../../../../../enums/track-status.enum';

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import { appConfig } from '../../../../../configs/app.config';
-import { connectionConfig } from '../../../../../configs/connection.config';
 import { pathConfig } from '../../../../../configs/path.config';
 import { QueuedTrack } from '../../../../../entities/queued-track.model';
 import { Track } from '../../../../../entities/track.model';
