@@ -8,7 +8,7 @@ import * as url from 'url';
 import { appConfig } from '../../../../../configs/app.config';
 import { connectionConfig } from '../../../../../configs/connection.config';
 import { pathConfig } from '../../../../../configs/path.config';
-import { TrackStatus } from '../../../../../enums/track-status.enum';
+import { TrackStatus } from '../../../../shared/enums/track-status.enum';
 import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track.model';
 import { Track } from '../../../../shared/modules/db/entities/track.model';
 import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
