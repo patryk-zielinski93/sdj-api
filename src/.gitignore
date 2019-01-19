@@ -2,3 +2,4 @@ node_modules
 public/tracks/*
 !public/tracks/10-sec-of-silence.mp3
 configs/connection.config.ts
+configs/app.config.ts

@@ -1,5 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { QueuedTrack } from '../entities/queued-track.model';
+import { Track } from '../entities/track.model';
+import { User } from '../entities/user.model';
 
 @EntityRepository(QueuedTrack)
 export class QueuedTrackRepository extends Repository<QueuedTrack> {
@@ -41,12 +43,23 @@ export class QueuedTrackRepository extends Repository<QueuedTrack> {
       .getOne();
   }
 
-  getNextSongToPlay(): Promise<QueuedTrack | undefined> {
+  getNextSongInQueue(): Promise<QueuedTrack | undefined> {
     return this.createQueryBuilder('queuedTrack')
     // .addSelect('max(queuedTrack.id)')
       .leftJoinAndSelect('queuedTrack.track', 'track')
       .andWhere('queuedTrack.playedAt IS NULL')
       .orderBy('queuedTrack.order, queuedTrack.id', 'ASC')
       .getOne();
+  }
+
+  queueTrack(track: Track, randomized = false, user?: User): Promise<QueuedTrack> {
+    const queuedTrack = new QueuedTrack();
+    queuedTrack.addedAt = new Date();
+    queuedTrack.addedBy = user || null;
+    queuedTrack.order = 0;
+    queuedTrack.track = track;
+    queuedTrack.randomized = randomized;
+
+    return this.save(queuedTrack);
   }
 }

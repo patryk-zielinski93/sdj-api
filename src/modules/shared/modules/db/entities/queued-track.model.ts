@@ -8,7 +8,7 @@ export class QueuedTrack {
   addedAt: Date;
   @ManyToOne(type => User)
   @JoinColumn()
-  addedBy: User;
+  addedBy: User | null;
   @PrimaryGeneratedColumn()
   id: number;
   @Column('int')

@@ -40,6 +40,7 @@
     "@nestjs/websockets": "^5.6.2",
     "@slack/client": "^4.3.1",
     "@slack/events-api": "^1.0.1",
+    "@types/redis": "^2.8.10",
     "@types/request": "^2.47.0",
     "@types/request-promise-native": "^1.0.15",
     "body-parser": "^1.18.3",

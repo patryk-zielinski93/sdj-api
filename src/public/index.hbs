@@ -220,8 +220,10 @@
     socket.on('connect', function() {
         console.log('Connected');
         socket.emit('events', { test: 'test' });
-        socket.emit('identity', 0, (response) = > console.log('Identity:', response);
-    )
+        socket.emit('identity', 0, function(response) {
+                    console.log('Identity:', response);
+                }
+        )
         ;
     });
     socket.on('events', function(data) {
@@ -234,7 +236,6 @@
         console.log('Disconnected');
     });
 
-
     socket.on('play_dj', function(data) {
         var dj = document.getElementById('dj');
         var open = document.getElementById('open');
@@ -245,11 +246,13 @@
         dj.play();
     });
 
-    socket.on('connect', function () {
+    socket.on('connect', function() {
         console.log('Connected');
 
         socket.emit('events', { test: 'test' });
-        socket.emit('identity', 0, function(response){ console.log('Identity:', response)});
+        socket.emit('identity', 0, function(response) {
+            console.log('Identity:', response);
+        });
     });
     socket.on('play_radio', function(data) {
         var dj = document.getElementById('dj');

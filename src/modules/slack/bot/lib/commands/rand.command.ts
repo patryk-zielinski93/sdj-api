@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import { appConfig } from '../../../../../configs/app.config';
 import { pathConfig } from '../../../../../configs/path.config';
-import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track.model';
 import { Track } from '../../../../shared/modules/db/entities/track.model';
 import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
@@ -31,9 +30,7 @@ export class RandCommand implements Command {
       throw new Error('zakolejkowane');
     }
 
-    const randTrack = await this.trackRepository.createQueryBuilder('track')
-      .orderBy('RAND()')
-      .getOne();
+    const randTrack = await this.trackRepository.getRandomTrack();
 
     if (randTrack) {
       if (!fs.existsSync(pathConfig.tracks + '/' + randTrack.id + '.mp3')) {
@@ -44,14 +41,7 @@ export class RandCommand implements Command {
   }
 
   private async queueTrack(message: any, track: Track): Promise<void> {
-    const queuedTrack = new QueuedTrack();
-    queuedTrack.addedAt = new Date();
-    queuedTrack.addedBy = message.user;
-    queuedTrack.order = 0;
-    queuedTrack.track = track;
-    queuedTrack.randomized = true;
-
-    await this.queuedTrackRepository.save(queuedTrack);
+    this.queuedTrackRepository.queueTrack(track, true, message.user);
     this.slack.rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
   }
 }

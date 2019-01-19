@@ -44,12 +44,12 @@ export class LsCommand implements Command {
       const currentTrack = await this.queuedTrackRepository.getCurrentTrackById(currentTrackId);
 
       if (currentTrack) {
-        msg += `Teraz gram: ${currentTrack.track.title}, dodane przez ${currentTrack.addedBy.realName}` + (currentTrack.randomized ? ' (rand)' : '') + '\n';
+        msg += `Teraz gram: ${currentTrack.track.title}, dodane przez ${currentTrack.addedBy ? currentTrack.addedBy.realName : 'BOT'}` + (currentTrack.randomized ? ' (rand)' : '') + '\n';
       }
     }
 
     queuedTracks.forEach((queuedTrack, index) => {
-      msg += `${index + 1}. ${queuedTrack.track.title}, dodane przez ${queuedTrack.addedBy.realName}` + (queuedTrack.randomized ? ' (rand)' : '') + '\n';
+      msg += `${index + 1}. ${queuedTrack.track.title}, dodane przez ${queuedTrack.addedBy ? queuedTrack.addedBy.realName : 'BOT'}` + (queuedTrack.randomized ? ' (rand)' : '') + '\n';
     });
 
     if (!msg.length) {

@@ -24,6 +24,7 @@ export class Gateway implements OnGatewayConnection, OnGatewayInit {
   }
 
   handleConnection(client, ...args: any[]): any {
+    setTimeout(() => this.server.of('/').emit('play_dj'), 1000);
   }
 
   @SubscribeMessage('events')

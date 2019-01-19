@@ -9,7 +9,6 @@ import { appConfig } from '../../../../../configs/app.config';
 import { connectionConfig } from '../../../../../configs/connection.config';
 import { pathConfig } from '../../../../../configs/path.config';
 import { TrackStatus } from '../../../../shared/enums/track-status.enum';
-import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track.model';
 import { Track } from '../../../../shared/modules/db/entities/track.model';
 import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
@@ -117,13 +116,7 @@ export class PlayTrackCommand implements Command {
   }
 
   private async queueTrack(message: any, track: Track): Promise<void> {
-    const queuedTrack = new QueuedTrack();
-    queuedTrack.addedAt = new Date();
-    queuedTrack.addedBy = message.user;
-    queuedTrack.order = 0;
-    queuedTrack.track = track;
-
-    await this.queuedTrackRepository.save(queuedTrack);
+    this.queuedTrackRepository.queueTrack(track, false, message.user);
     this.slack.rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
   }
 }
