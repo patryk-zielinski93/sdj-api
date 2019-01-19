@@ -1,0 +1,197 @@
+<div>
+  Slack DJ:
+  <audio id="dj" controls>
+    <source src="http://radio-stream.local/dj" type="audio/mpeg" autoplay>
+    Your browser does not support the audio element.
+  </audio>
+</div>
+<div>
+  <h1>Speech synthesiser</h1>
+
+  <p>Enter some text in the input below and press return to hear it. change voices using the dropdown menu.</p>
+
+  <form>
+    <input type="text" class="txt">
+    <div>
+      <label for="rate">Rate</label><input type="range" min="0.5" max="2" value="1" step="0.1" id="rate">
+      <div class="rate-value">1</div>
+      <div class="clearfix"></div>
+    </div>
+    <div>
+      <label for="pitch">Pitch</label><input type="range" min="0" max="2" value="1" step="0.1" id="pitch">
+      <div class="pitch-value">1</div>
+      <div class="clearfix"></div>
+    </div>
+    <select>
+
+    </select>
+  </form>
+
+  Open fm:
+  <audio id="open" controls>
+    <source src="http://stream.open.fm/109" type="audio/mpeg" autoplay>
+    Your browser does not support the audio element.
+  </audio>
+</div>
+<script src="socket.io.js"></script>
+<script>
+  'use strict';
+  var synth = window.speechSynthesis;
+
+  var inputForm = document.querySelector('form');
+  var inputTxt = document.querySelector('.txt');
+  var voiceSelect = document.querySelector('select');
+
+  var pitch = document.querySelector('#pitch');
+  var pitchValue = document.querySelector('.pitch-value');
+  var rate = document.querySelector('#rate');
+  var rateValue = document.querySelector('.rate-value');
+
+  var voices = [];
+
+  function populateVoiceList() {
+    voices = synth.getVoices();
+    var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
+    voiceSelect.innerHTML = '';
+    for (var i = 0; i < voices.length; i++) {
+      var option = document.createElement('option');
+      option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+      if (voices[i].default) {
+        option.textContent += ' -- DEFAULT';
+      }
+
+      option.setAttribute('data-lang', voices[i].lang);
+      option.setAttribute('data-name', voices[i].name);
+      voiceSelect.appendChild(option);
+    }
+    voiceSelect.selectedIndex = selectedIndex;
+  }
+
+  populateVoiceList();
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+  }
+
+  inputForm.onsubmit = function(event) {
+    event.preventDefault();
+
+    var utterThis = new SpeechSynthesisUtterance(inputTxt.value);
+    var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+    for (var i = 0; i < voices.length; i++) {
+      if (voices[i].name === selectedOption) {
+        utterThis.voice = voices[i];
+      }
+    }
+    utterThis.pitch = pitch.value;
+    utterThis.rate = rate.value;
+    synth.speak(utterThis);
+
+    utterThis.onpause = function(event) {
+      var char = event.utterance.text.charAt(event.charIndex);
+      console.log('Speech paused at character ' + event.charIndex + ' of "' +
+        event.utterance.text + '", which is "' + char + '".');
+    };
+
+    inputTxt.blur();
+  };
+  var timeout;
+  var speeching = false;
+
+  function czytaj(text) {
+    var dj = document.getElementById('dj');
+    if (dj.paused || speeching) {
+      return;
+    }
+
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    speeching = true;
+    dj.volume = 0.1;
+
+    var utterThis = new SpeechSynthesisUtterance(text);
+    utterThis.onend = function(event) {
+      event.preventDefault();
+      dj.volume = 1;
+      speeching = false;
+    };
+    var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+    for (var i = 0; i < voices.length; i++) {
+      if (voices[i].name === selectedOption) {
+        utterThis.voice = voices[i];
+      }
+    }
+    utterThis.pitch = pitch.value;
+    utterThis.rate = rate.value;
+    synth.speak(utterThis);
+
+    timeout = setTimeout(function() {
+      dj.volume = 1;
+    }, 20000);
+  }
+
+  pitch.onchange = function() {
+    pitchValue.textContent = pitch.value;
+  };
+
+  rate.onchange = function() {
+    rateValue.textContent = rate.value;
+  };
+
+  var socket = io('http://localhost:8888');
+
+  socket.on('connect', function() {
+    console.log('Connected');
+    socket.emit('events', { test: 'test' });
+    socket.emit('identity', 0, function(response) {
+        console.log('Identity:', response);
+      }
+    )
+    ;
+  });
+  socket.on('events', function(data) {
+    console.log('event', data);
+  });
+  socket.on('exception', function(data) {
+    console.log('event', data);
+  });
+  socket.on('disconnect', function() {
+    console.log('Disconnected');
+  });
+
+  socket.on('play_dj', function(data) {
+    var dj = document.getElementById('dj');
+    var open = document.getElementById('open');
+    open.pause();
+    if (dj.paused) {
+      dj.load();
+    }
+    dj.play();
+  });
+
+  socket.on('connect', function() {
+    console.log('Connected');
+
+    socket.emit('events', { test: 'test' });
+    socket.emit('identity', 0, function(response) {
+      console.log('Identity:', response);
+    });
+  });
+  socket.on('play_radio', function(data) {
+    var dj = document.getElementById('dj');
+    var open = document.getElementById('open');
+    dj.pause();
+    if (open.paused) {
+      open.load();
+    }
+    open.play();
+
+  });
+
+  socket.on('pozdro', function(data) {
+    console.log(data.message);
+    czytaj(data.message);
+  });
+</script>
