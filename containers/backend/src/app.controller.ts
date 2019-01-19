@@ -19,7 +19,8 @@ export class AppController {
 
   @Get('next')
   removeNextSong(): any {
-    this.playlist.getNext().subscribe(queuedTrack => {
+    this.playlist.getNext()
+      .then(queuedTrack => {
       if (queuedTrack) {
         this.playlist.removeQueuedTrack(queuedTrack);
         return `/tracks/${queuedTrack.track.id}.mp3`;

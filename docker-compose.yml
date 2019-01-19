@@ -62,7 +62,7 @@ services:
       dockerfile: Dockerfile
       context: ./containers/ices
     volumes:
-      - ./src/public/tracks:/tracks
+    - ./containers/backend/src/public/tracks:/tracks
     depends_on:
       - slack_dj_redis
       - slack_dj_icecast
@@ -78,11 +78,11 @@ services:
     container_name: ${BACKEND_CONTAINER_NAME}
     build:
       dockerfile: Dockerfile
-      context: ./
+      context: ./containers/backend
       args:
         - LOCAL_USER_ID=${LOCAL_USER_ID}
     volumes:
-      - ./:/app
+    - ./containers/backend:/app
     environment:
       - VIRTUAL_HOST=${BACKEND_URL}
       - VIRTUAL_PORT=8888
