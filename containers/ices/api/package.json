@@ -1,0 +1,21 @@
+{
+  "name": "sdj-ices-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc -p ./tsconfig.json",
+    "start:dev": "npm run compile && node ./src/index.js",
+    "start": "npm run compile && forever start ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maciej Sikorski",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.17.0",
+    "@types/node": "10.1.4"
+  }
+}

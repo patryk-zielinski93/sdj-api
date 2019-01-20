@@ -1,5 +1,23 @@
 version: '3.6'
 services:
+  slack_dj_ng:
+    container_name: ${NG_CONTAINER_NAME}
+    build:
+      dockerfile: Dockerfile
+      context: ./containers/ng
+      args:
+      - LOCAL_USER_ID=${LOCAL_USER_ID}
+    volumes:
+    - ./containers/ng:/app
+    environment:
+    - VIRTUAL_HOST=${NG_URL}
+    - VIRTUAL_PORT=80
+    - LOCAL_USER_ID=${LOCAL_USER_ID}
+    networks:
+      frontend:
+        aliases:
+        - frontend
+
   slack_dj_nginx_proxy:
     container_name: ${NGINX_PROXY_CONTAINER_NAME}
     build:
@@ -62,7 +80,7 @@ services:
       dockerfile: Dockerfile
       context: ./containers/ices
     volumes:
-      - ./src/public/tracks:/tracks
+    - ./containers/backend/src/public/tracks:/tracks
     depends_on:
       - slack_dj_redis
       - slack_dj_icecast
@@ -70,16 +88,19 @@ services:
       streaming:
         aliases:
           - ices
+      backend:
+        aliases:
+          - ices
 
   slack_dj_backend:
     container_name: ${BACKEND_CONTAINER_NAME}
     build:
       dockerfile: Dockerfile
-      context: ./
+      context: ./containers/backend
       args:
         - LOCAL_USER_ID=${LOCAL_USER_ID}
     volumes:
-      - ./:/app
+    - ./containers/backend:/app
     environment:
       - VIRTUAL_HOST=${BACKEND_URL}
       - VIRTUAL_PORT=8888

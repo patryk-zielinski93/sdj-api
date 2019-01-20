@@ -5,6 +5,7 @@ import time
 # This is just a skeleton, something for you to start with.
 r = None
 silence = '/tracks/10-sec-of-silence.mp3'
+last_song = ''
 
 
 # Function called to initialize your python environment.
@@ -26,13 +27,18 @@ def ices_shutdown():
 # Function called to get the next filename to stream.
 # Should return a string.
 def ices_get_next():
-    global silence
+    global silence, last_song
     print 'Executing get_next() function...'
-    r.publish('getNext', 'getNext')
-    time.sleep(1)
     song_id = r.get('next_song')
     next_song = '/tracks/' + song_id + '.mp3'
-    return next_song if song_id else silence
+    if not song_id or next_song == last_song:
+        r.publish('getNext', 'getNext')
+        time.sleep(1)
+        song_id = r.get('next_song')
+        next_song = '/tracks/' + song_id + '.mp3'
+    received_new_song = True if song_id and next_song != last_song else False
+    last_song = next_song if received_new_song else last_song
+    return next_song if received_new_song else silence
 
 # This function, if defined, returns the string you'd like used
 # as metadata (ie for title streaming) for the current song. You may
