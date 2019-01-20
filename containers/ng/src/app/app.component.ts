@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import * as io from 'socket.io-client';
+import { AfterViewInit, Component } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 
 @Component({
@@ -7,7 +6,7 @@ import { WebSocketService } from '../web-socket.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'sdj';
   synth: SpeechSynthesis;
   dj: HTMLAudioElement;
@@ -50,12 +49,12 @@ export class AppComponent {
         speechSynthesis.onvoiceschanged = this.populateVoiceList;
       });
 
-    this.inputForm.onsubmit = function(event) {
+    this.inputForm.onsubmit = (event) => {
       event.preventDefault();
 
-      var utterThis = new SpeechSynthesisUtterance(this.inputTxt.value);
-      var selectedOption = this.voiceSelect.selectedOptions[0].getAttribute('data-name');
-      for (var i = 0; i < this.voices.length; i++) {
+      const utterThis = new SpeechSynthesisUtterance(this.inputTxt.value);
+      const selectedOption = this.voiceSelect.selectedOptions[0].getAttribute('data-name');
+      for (let i = 0; i < this.voices.length; i++) {
         if (this.voices[i].name === selectedOption) {
           utterThis.voice = this.voices[i];
         }
@@ -65,65 +64,55 @@ export class AppComponent {
       this.synth.speak(utterThis);
 
       utterThis.onpause = function(event) {
-        var char = event.utterance.text.charAt(event.charIndex);
+        const char = event.utterance.text.charAt(event.charIndex);
         console.log('Speech paused at character ' + event.charIndex + ' of "' +
           event.utterance.text + '", which is "' + char + '".');
       };
 
       this.inputTxt.blur();
-    }.bind(this);
+    };
 
-    this.pitch.onchange = function() {
+    this.pitch.onchange = () => {
       this.pitchValue.textContent = this.pitch.value;
-    }.bind(this);
+    };
 
-    this.rate.onchange = function() {
+    this.rate.onchange = () => {
       this.rateValue.textContent = this.rate.value;
-    }.bind(this);
+    };
 
-    var socket = io('http://localhost:8888');
-
-    socket.on('connect', function() {
+    const connect$ = this.ws.createSubject('connect');
+    const events$ = this.ws.createSubject('events');
+    connect$.subscribe(() => {
       console.log('Connected');
-      socket.emit('events', { test: 'test' });
-      socket.emit('identity', 0, function(response) {
-          console.log('Identity:', response);
-        }
-      )
-      ;
+      events$.next(<any>{ test: 'test' });
     });
-    socket.on('events', function(data) {
-      console.log('event', data);
-    });
-    socket.on('exception', function(data) {
-      console.log('event', data);
-    });
-    socket.on('disconnect', function() {
-      console.log('Disconnected');
-    });
+    events$.subscribe((data) => console.log('event', data));
+    const disconnect$ = this.ws.createSubject('disconnect');
+    disconnect$.subscribe(() => console.log('Disconnected'));
+    const exception$ = this.ws.createSubject('exception');
+    exception$.subscribe(() => console.log('Disconnected'));
 
-    socket.on('play_dj', (data) => {
-      var dj = document.getElementById('dj');
-      var open = document.getElementById('open');
+    const pozdro = this.ws.createSubject('pozdro');
+    pozdro.subscribe((data: any) => {
+      console.log(data.message);
+      this.czytaj(data.message);
+    });
+    const playDJ$ = this.ws.createSubject('play_dj');
+    playDJ$.subscribe((data) => {
+      console.log('playDj');
       this.open.pause();
       if (this.dj.paused) {
         this.dj.load();
       }
       this.dj.play();
     });
-
-    socket.on('play_radio', (data) => {
+    const playRadio$ = this.ws.createSubject('play_radio');
+    playRadio$.subscribe(() => {
       this.dj.pause();
       if (this.open.paused) {
         this.open.load();
       }
       this.open.play();
-
-    });
-
-    socket.on('pozdro', (data) => {
-      console.log(data.message);
-      this.czytaj(data.message);
     });
   }
 
@@ -139,14 +128,14 @@ export class AppComponent {
     this.speeching = true;
     this.dj.volume = 0.1;
 
-    var utterThis = new SpeechSynthesisUtterance(text);
-    utterThis.onend = function(event) {
+    const utterThis = new SpeechSynthesisUtterance(text);
+    utterThis.onend = (event) => {
       event.preventDefault();
       this.dj.volume = 1;
       this.speeching = false;
-    }.bind(this);
-    var selectedOption = this.voiceSelect.selectedOptions[0].getAttribute('data-name');
-    for (var i = 0; i < this.voices.length; i++) {
+    };
+    const selectedOption = this.voiceSelect.selectedOptions[0].getAttribute('data-name');
+    for (let i = 0; i < this.voices.length; i++) {
       if (this.voices[i].name === selectedOption) {
         utterThis.voice = this.voices[i];
       }
@@ -155,17 +144,17 @@ export class AppComponent {
     utterThis.rate = this.rate.value;
     this.synth.speak(utterThis);
 
-    this.timeout = setTimeout(function() {
+    this.timeout = setTimeout(() => {
       this.dj.volume = 1;
     }, 20000);
   }
 
   populateVoiceList() {
     this.voices = this.synth.getVoices();
-    var selectedIndex = this.voiceSelect.selectedIndex < 0 ? 0 : this.voiceSelect.selectedIndex;
+    const selectedIndex = this.voiceSelect.selectedIndex < 0 ? 0 : this.voiceSelect.selectedIndex;
     this.voiceSelect.innerHTML = '';
-    for (var i = 0; i < this.voices.length; i++) {
-      var option = document.createElement('option');
+    for (let i = 0; i < this.voices.length; i++) {
+      let option = document.createElement('option');
       option.textContent = this.voices[i].name + ' (' + this.voices[i].lang + ')';
 
       if (this.voices[i].default) {
