@@ -1,7 +1,7 @@
 <div>
   Slack DJ:
   <audio id="dj" controls>
-    <source src="http://radio-stream.local/dj" type="audio/mpeg" autoplay>
+    <source [src]="audioSrc" type="audio/mpeg" autoplay>
     Your browser does not support the audio element.
   </audio>
 </div>
@@ -26,10 +26,4 @@
 
     </select>
   </form>
-
-  Open fm:
-  <audio id="open" controls>
-    <source src="http://stream.open.fm/109" type="audio/mpeg" autoplay>
-    Your browser does not support the audio element.
-  </audio>
 </div>

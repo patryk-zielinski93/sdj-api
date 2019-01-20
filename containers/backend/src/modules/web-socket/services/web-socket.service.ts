@@ -58,7 +58,7 @@ export class WebSocketService {
             if (count > 1) {
               this.playRadio.next();
             }
-
+              this.handlingNextSong = false;
           }
         });
     });

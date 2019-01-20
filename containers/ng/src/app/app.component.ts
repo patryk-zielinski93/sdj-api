@@ -1,4 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { environment } from '@environment/environment';
+import { appConfig } from '../configs/app.config';
 import { WebSocketService } from '../web-socket.service';
 
 @Component({
@@ -7,10 +9,9 @@ import { WebSocketService } from '../web-socket.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit {
-  title = 'sdj';
+  audioSrc = environment.radioStreamUrl;
   synth: SpeechSynthesis;
   dj: HTMLAudioElement;
-  open: HTMLAudioElement;
   inputForm;
   inputTxt;
   voiceSelect;
@@ -30,7 +31,6 @@ export class AppComponent implements AfterViewInit {
     this.synth = window.speechSynthesis;
 
     this.dj = <HTMLAudioElement>document.getElementById('dj');
-    this.open = <HTMLAudioElement>document.getElementById('open');
 
     this.inputForm = document.querySelector('form');
     this.inputTxt = document.querySelector('.txt');
@@ -80,43 +80,10 @@ export class AppComponent implements AfterViewInit {
       this.rateValue.textContent = this.rate.value;
     };
 
-    const connect$ = this.ws.createSubject('connect');
-    const events$ = this.ws.createSubject('events');
-    connect$.subscribe(() => {
-      console.log('Connected');
-      events$.next(<any>{ test: 'test' });
-    });
-    events$.subscribe((data) => console.log('event', data));
-    const disconnect$ = this.ws.createSubject('disconnect');
-    disconnect$.subscribe(() => console.log('Disconnected'));
-    const exception$ = this.ws.createSubject('exception');
-    exception$.subscribe(() => console.log('Disconnected'));
-
-    const pozdro = this.ws.createSubject('pozdro');
-    pozdro.subscribe((data: any) => {
-      console.log(data.message);
-      this.czytaj(data.message);
-    });
-    const playDJ$ = this.ws.createSubject('play_dj');
-    playDJ$.subscribe((data) => {
-      console.log('playDj');
-      this.open.pause();
-      if (this.dj.paused) {
-        this.dj.load();
-      }
-      this.dj.play();
-    });
-    const playRadio$ = this.ws.createSubject('play_radio');
-    playRadio$.subscribe(() => {
-      this.dj.pause();
-      if (this.open.paused) {
-        this.open.load();
-      }
-      this.open.play();
-    });
+    this.handleWsEvents();
   }
 
-  czytaj(text) {
+  czytaj(text): void {
     if (this.dj.paused || this.speeching) {
       return;
     }
@@ -149,7 +116,7 @@ export class AppComponent implements AfterViewInit {
     }, 20000);
   }
 
-  populateVoiceList() {
+  populateVoiceList(): void {
     this.voices = this.synth.getVoices();
     const selectedIndex = this.voiceSelect.selectedIndex < 0 ? 0 : this.voiceSelect.selectedIndex;
     this.voiceSelect.innerHTML = '';
@@ -166,5 +133,43 @@ export class AppComponent implements AfterViewInit {
       this.voiceSelect.appendChild(option);
     }
     this.voiceSelect.selectedIndex = selectedIndex;
+  }
+
+  handleWsEvents(): void {
+    const connect$ = this.ws.createSubject('connect');
+    const events$ = this.ws.createSubject('events');
+    connect$.subscribe(() => {
+      console.log('Connected');
+      events$.next(<any>{ test: 'test' });
+    });
+    events$.subscribe((data) => console.log('event', data));
+    const disconnect$ = this.ws.createSubject('disconnect');
+    disconnect$.subscribe(() => console.log('Disconnected'));
+    const exception$ = this.ws.createSubject('exception');
+    exception$.subscribe(() => console.log('Disconnected'));
+
+    const pozdro = this.ws.createSubject('pozdro');
+    pozdro.subscribe((data: any) => {
+      console.log(data.message);
+      this.czytaj(data.message);
+    });
+    const playDJ$ = this.ws.createSubject('play_dj');
+    playDJ$.subscribe((data) => {
+      console.log('dj');
+      if (this.audioSrc !== environment.radioStreamUrl) {
+        this.dj.load();
+      }
+      this.dj.play();
+      this.audioSrc = environment.radioStreamUrl;
+    });
+    const playRadio$ = this.ws.createSubject('play_radio');
+    playRadio$.subscribe(() => {
+      console.log('radio');
+      if (this.audioSrc !== appConfig.externalStream) {
+        this.dj.load();
+      }
+      this.dj.play();
+      this.audioSrc = appConfig.externalStream;
+    });
   }
 }

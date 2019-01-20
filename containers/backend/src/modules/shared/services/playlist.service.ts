@@ -29,7 +29,7 @@ export class PlaylistService {
         case PlaylistType.radio:
         default:
           const tracksInDb = await this.trackRepository.countTracks();
-          if (tracksInDb >= appConfig.nextSongVoteQuantity) {
+            if (tracksInDb >= appConfig.trackLengthToStartOwnRadio) {
             const randTrack = <Track>await this.trackRepository.getRandomTrack();
             return this.queuedTrackRepository.queueTrack(randTrack, true);
           }
