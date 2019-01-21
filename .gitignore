@@ -72,4 +72,6 @@ dist
 /libpeerconnection.log
 npm-debug.log
 testem.log
-ormconfig.json
+containers/backend/ormconfig.json
+.idea/sonarlint/
+db/slack_dj_queued_track.sql
