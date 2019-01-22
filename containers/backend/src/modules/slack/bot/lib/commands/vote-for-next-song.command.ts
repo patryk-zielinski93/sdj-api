@@ -9,6 +9,7 @@ import { TrackRepository } from '../../../../shared/modules/db/repositories/trac
 import { UserRepository } from '../../../../shared/modules/db/repositories/user.repository';
 import { VoteRepository } from '../../../../shared/modules/db/repositories/vote.repository';
 import { IcesService } from '../../../../shared/services/ices.service';
+import { SlackService } from '../../../../shared/services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 @Injectable()
@@ -17,6 +18,7 @@ export class VoteForNextSongCommand implements Command {
     type = ':-1:';
 
     constructor(@InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
+                private slackService: SlackService,
                 @InjectRepository(UserRepository) private userRepository: UserRepository,
                 @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
                 @InjectRepository(VoteRepository) private voteRepository: VoteRepository) {
@@ -36,6 +38,7 @@ export class VoteForNextSongCommand implements Command {
         const unlikesCount = await this.voteRepository.countUnlinksForQueuedTrack(currentTrackInQueue.id);
 
         if (unlikesCount + 1 >= appConfig.nextSongVoteQuantity) {
+            this.slackService.rtm.sendMessage('Skipinng ' + currentTrackInQueue.track.title, message.channel);
             IcesService.nextSong();
             currentTrackInQueue.track.skips++;
             this.trackRepository.save(currentTrackInQueue.track);

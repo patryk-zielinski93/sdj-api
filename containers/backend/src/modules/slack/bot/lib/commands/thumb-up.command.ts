@@ -7,14 +7,16 @@ import { QueuedTrackRepository } from '../../../../shared/modules/db/repositorie
 import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
 import { UserRepository } from '../../../../shared/modules/db/repositories/user.repository';
 import { VoteRepository } from '../../../../shared/modules/db/repositories/vote.repository';
+import { SlackService } from '../../../../shared/services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 @Injectable()
-export class VoteForNextSongCommand implements Command {
-    description = 'the song will be played more often';
+export class ThumbUpCommand implements Command {
+    description = ' the song will be played more often';
     type = ':+1:';
 
     constructor(@InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
+                private slack: SlackService,
                 @InjectRepository(UserRepository) private userRepository: UserRepository,
                 @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
                 @InjectRepository(VoteRepository) private voteRepository: VoteRepository) {
@@ -33,7 +35,10 @@ export class VoteForNextSongCommand implements Command {
 
         const thumbUp = new Vote(<User>user, currentTrackInQueue, 1);
         thumbUp.addedAt = new Date();
-        this.voteRepository.save(thumbUp);
+        this.voteRepository.save(thumbUp)
+            .then(() => {
+                this.slack.rtm.sendMessage('Super! Ta piosenka będzie grana częściej', message.channel);
+            });
     };
 
 }

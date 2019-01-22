@@ -9,13 +9,17 @@ export class TrackRepository extends Repository<Track> {
         return this.createQueryBuilder('track').getCount();
     }
 
-    getRandomTrack(): Promise<Track | undefined> {
-        return this.createQueryBuilder('track')
+    async getRandomTrack(): Promise<Track> {
+        const rawOne = await this.createQueryBuilder('track')
+            .select('DISTINCT track.id, vote.id as vId, vote.value')
             .orderBy('RAND()')
-            .leftJoin('track.queuedTracks', 'queuedTrack')
+            .innerJoin('track.queuedTracks', 'queuedTrack')
             .leftJoin('queuedTrack.votes', 'vote')
             .where('skips < ' + appConfig.skipsToBan)
             .andWhere('vote.value > 0')
-            .getOne();
+            .orWhere('vote.value IS NULL')
+            .getRawOne();
+
+        return this.findOneOrFail(rawOne.id);
     }
 }

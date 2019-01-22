@@ -8,7 +8,7 @@ export class SlackService {
   private readonly _web: WebClient;
 
   get rtm(): RTMClient {
-    return this._rtm;
+      return this._rtm;
   }
 
   get web(): WebClient {

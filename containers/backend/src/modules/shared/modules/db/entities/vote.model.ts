@@ -13,7 +13,7 @@ export class Vote {
     addedBy: User;
 
     @PrimaryGeneratedColumn()
-    id?: number;
+    id: number;
 
     @ManyToOne(type => QueuedTrack, track => track.votes)
     @JoinColumn()
