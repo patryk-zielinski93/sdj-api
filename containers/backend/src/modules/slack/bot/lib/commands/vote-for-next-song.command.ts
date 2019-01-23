@@ -38,10 +38,13 @@ export class VoteForNextSongCommand implements Command {
         const unlikesCount = await this.voteRepository.countUnlinksForQueuedTrack(currentTrackInQueue.id);
 
         if (unlikesCount + 1 >= appConfig.nextSongVoteQuantity) {
-            this.slackService.rtm.sendMessage('Skipinng ' + currentTrackInQueue.track.title, message.channel);
+            this.slackService.rtm.sendMessage('Skipping ' + currentTrackInQueue.track.title + '\n'
+                + (currentTrackInQueue.track.skips + 1) + ' times skipped', message.channel);
             IcesService.nextSong();
             currentTrackInQueue.track.skips++;
             this.trackRepository.save(currentTrackInQueue.track);
+        } else {
+            this.slackService.rtm.sendMessage('Left ' + (appConfig.nextSongVoteQuantity - (unlikesCount + 1)) + ' before skip', message.channel);
         }
 
         const unlike = new Vote(<User>user, currentTrackInQueue, -1);

@@ -27,7 +27,7 @@ export class ThumbUpCommand implements Command {
         const user = await this.userRepository.findOne(userId);
         const currentTrackInQueue = <QueuedTrack>await this.queuedTrackRepository.getCurrentTrack();
 
-        const thumbUpFromUser = await this.voteRepository.countUnlikesFromUserToQueuedTrack(currentTrackInQueue.id, userId);
+        const thumbUpFromUser = await this.voteRepository.countPositiveVotesFromUserToQueuedTrack(currentTrackInQueue.id, userId);
 
         if (thumbUpFromUser > 0) {
             return;
@@ -37,7 +37,7 @@ export class ThumbUpCommand implements Command {
         thumbUp.addedAt = new Date();
         this.voteRepository.save(thumbUp)
             .then(() => {
-                this.slack.rtm.sendMessage('Super! Ta piosenka będzie grana częściej', message.channel);
+                this.slack.rtm.sendMessage('Super! (' + currentTrackInQueue.track.title + ') będzie grana częściej', message.channel);
             });
     };
 

@@ -56,8 +56,13 @@ export class PlayTrackCommand implements Command {
             if (fs.existsSync(pathConfig.tracks + '/' + track.id + '.mp3')) {
                 return this.queueTrack(message, track);
             } else {
-                await this.mp3.downloadAndNormalize(track.id);
-                return this.queueTrack(message, track);
+                this.mp3.downloadAndNormalize(track.id)
+                    .subscribe(undefined, () => {
+                        console.log('Can\'t download track ' + track.id);
+                    }, () => {
+                        this.queueTrack(message, track);
+                    });
+                return;
             }
         }
 
