@@ -113,6 +113,7 @@ export class AppComponent implements AfterViewInit {
 
     this.timeout = setTimeout(() => {
       this.dj.volume = 1;
+        this.speeching = false;
     }, 20000);
   }
 

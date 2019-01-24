@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { appConfig } from '../../../configs/app.config';
 import { PlaylistType } from '../enums/playlist-type.enum';
@@ -10,7 +11,9 @@ import { UserRepository } from '../modules/db/repositories/user.repository';
 
 @Injectable()
 export class PlaylistService {
-    type: PlaylistType = PlaylistType.radio;
+    type: PlaylistType = PlaylistType.topRated;
+    index = 10;
+    pozdro = new Subject<string>();
 
     constructor(
         @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
@@ -25,6 +28,14 @@ export class PlaylistService {
             return queuedTrack;
         } else {
             switch (this.type) {
+                case PlaylistType.topRated:
+                    this.index--;
+                    if (this.index < 0) {
+                        this.type = PlaylistType.radio;
+                    }
+                    this.pozdro.next('Numer ' + (this.index + 1));
+                    const tracks = await this.trackRepository.findTopRatedTracks(this.index);
+                    return this.queuedTrackRepository.queueTrack(tracks[0]);
                 case PlaylistType.radio:
                 default:
                     const tracksInDb = await this.trackRepository.countTracks();

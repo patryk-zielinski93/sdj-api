@@ -17,6 +17,7 @@ export class WebSocketService {
     private handlingNextSong = false;
     public playDj = new Subject<QueuedTrack>();
     public playRadio = new Subject<void>();
+    public pozdro = new Subject<string>();
     private redisClient;
     private redisSub;
 
@@ -34,6 +35,9 @@ export class WebSocketService {
             host: 'redis'
         });
 
+        this.playlist.pozdro.subscribe((message) => {
+            this.pozdro.next(message);
+        });
         this.subscribeToRedisGetNext();
     }
 

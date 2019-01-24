@@ -6,36 +6,42 @@ import { WebSocketService } from './services/web-socket.service';
 
 @WebSocketGateway()
 export class Gateway implements OnGatewayConnection, OnGatewayInit {
-  @WebSocketServer() server;
+    @WebSocketServer() server;
 
-  constructor(private service: WebSocketService) {
-  }
+    constructor(private service: WebSocketService) {
+    }
 
-  afterInit(server): any {
-    this.service.playDj
-      .subscribe((queuedTrack: QueuedTrack) => {
-        this.server.of('/').emit('play_dj', queuedTrack);
-      });
+    afterInit(server): any {
+        this.service.playDj
+            .subscribe((queuedTrack: QueuedTrack) => {
+                this.server.of('/').emit('play_dj', queuedTrack);
+            });
 
-    this.service.playRadio
-      .subscribe(() => {
-        this.server.of('/').emit('play_radio');
-      });
-  }
+        this.service.playRadio
+            .subscribe(() => {
+                this.server.of('/').emit('play_radio');
+            });
 
-  handleConnection(client, ...args: any[]): any {
-  }
+        this.service.pozdro.subscribe((message) => {
+            this.server.of('/').emit('pozdro', {
+                message: /*'Pozdrowienia od ' + user.realName + ': ' +*/ message
+            });
+        });
+    }
 
-  @SubscribeMessage('events')
-  findAll(client, data): Observable<WsResponse<number>> {
-    return from([1, 2, 3])
-      .pipe(
-        concatMap(x => of({ event: 'events', data: x })
-          .pipe(
-            filter(x => x.data !== 2),
-            delay(2000)
-          )
-        )
-      );
-  }
+    handleConnection(client, ...args: any[]): any {
+    }
+
+    @SubscribeMessage('events')
+    findAll(client, data): Observable<WsResponse<number>> {
+        return from([1, 2, 3])
+            .pipe(
+                concatMap(x => of({ event: 'events', data: x })
+                    .pipe(
+                        filter(x => x.data !== 2),
+                        delay(2000)
+                    )
+                )
+            );
+    }
 }

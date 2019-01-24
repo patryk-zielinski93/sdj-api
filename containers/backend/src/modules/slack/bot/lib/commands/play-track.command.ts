@@ -59,8 +59,6 @@ export class PlayTrackCommand implements Command {
                 this.mp3.downloadAndNormalize(track.id)
                     .subscribe(undefined, () => {
                         console.log('Can\'t download track ' + track.id);
-                    }, () => {
-                        this.queueTrack(message, track);
                     });
                 return;
             }
@@ -97,6 +95,8 @@ export class PlayTrackCommand implements Command {
             track.createdAt = new Date();
             this.trackRepository.save(track);
             await this.queueTrack(message, track);
+        }, () => {
+            console.log('Can\'t download track ' + track.id);
         });
     }
 

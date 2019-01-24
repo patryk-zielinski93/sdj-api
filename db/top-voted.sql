@@ -1,4 +1,4 @@
-SELECT DISTINCT `track`.*, COUNT(track.id) as 'count'
+SELECT `track`.*, COUNT(track.id) as 'count'
 FROM `track` `track`
        INNER JOIN `queued_track` `queuedTrack` ON `queuedTrack`.`trackId` = `track`.`id`
        LEFT JOIN `vote` `vote` ON `vote`.`trackId` = `queuedTrack`.`id`
