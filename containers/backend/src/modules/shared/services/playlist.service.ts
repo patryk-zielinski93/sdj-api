@@ -5,15 +5,17 @@ import { Observable } from 'rxjs/internal/Observable';
 import { appConfig } from '../../../configs/app.config';
 import { PlaylistType } from '../enums/playlist-type.enum';
 import { QueuedTrack } from '../modules/db/entities/queued-track.model';
+import { Track } from '../modules/db/entities/track.model';
 import { QueuedTrackRepository } from '../modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../modules/db/repositories/track.repository';
 import { UserRepository } from '../modules/db/repositories/user.repository';
 
 @Injectable()
 export class PlaylistService {
-    type: PlaylistType = PlaylistType.topRated;
+    type: PlaylistType = PlaylistType.radio;
     index = 10;
     pozdro = new Subject<string>();
+    list: Track[] = [];
 
     constructor(
         @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
@@ -28,14 +30,10 @@ export class PlaylistService {
             return queuedTrack;
         } else {
             switch (this.type) {
+                case PlaylistType.mostPlayed:
+                    return this.getNextForMostPlayed();
                 case PlaylistType.topRated:
-                    this.index--;
-                    if (this.index < 0) {
-                        this.type = PlaylistType.radio;
-                    }
-                    this.pozdro.next('Numer ' + (this.index + 1));
-                    const tracks = await this.trackRepository.findTopRatedTracks(this.index);
-                    return this.queuedTrackRepository.queueTrack(tracks[0]);
+                    return this.getNextForTopRated();
                 case PlaylistType.radio:
                 default:
                     const tracksInDb = await this.trackRepository.countTracks();
@@ -46,6 +44,32 @@ export class PlaylistService {
                     break;
             }
         }
+    }
+
+    async getNextForMostPlayed(): Promise<QueuedTrack | undefined> {
+        if (!this.list.length) {
+            this.list = await this.trackRepository.findMostPlayedTracks(0, 10);
+        }
+        this.index--;
+        if (this.index < 0) {
+            this.type = PlaylistType.radio;
+            return;
+        }
+        this.pozdro.next('Numer ' + (this.index + 1));
+        return this.queuedTrackRepository.queueTrack(this.list[this.index]);
+    }
+
+    async getNextForTopRated(): Promise<QueuedTrack | undefined> {
+        if (!this.list.length) {
+            this.list = await this.trackRepository.findTopRatedTracks(0, 10);
+        }
+        this.index--;
+        if (this.index < 0) {
+            this.type = PlaylistType.radio;
+            return;
+        }
+        this.pozdro.next('Numer ' + (this.index + 1));
+        return this.queuedTrackRepository.queueTrack(this.list[this.index]);
     }
 
     removeQueuedTrack(queuedTrack: QueuedTrack): Promise<QueuedTrack> {
