@@ -7,7 +7,7 @@ import { QueuedTrackRepository } from '../../../../shared/modules/db/repositorie
 import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
 import { UserRepository } from '../../../../shared/modules/db/repositories/user.repository';
 import { VoteRepository } from '../../../../shared/modules/db/repositories/vote.repository';
-import { SlackService } from '../../../../shared/services/slack.service';
+import { SlackService } from '../../../services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 @Injectable()

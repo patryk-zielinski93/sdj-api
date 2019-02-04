@@ -7,7 +7,7 @@ import { Track } from '../../../../shared/modules/db/entities/track.model';
 import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
 import { Mp3Service } from '../../../../shared/services/mp3.service';
-import { SlackService } from '../../../../shared/services/slack.service';
+import { SlackService } from '../../../services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 @Injectable()

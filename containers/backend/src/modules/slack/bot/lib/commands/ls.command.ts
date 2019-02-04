@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as redis from 'redis';
 import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
-import { SlackService } from '../../../../shared/services/slack.service';
+import { SlackService } from '../../../services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 @Injectable()

@@ -10,6 +10,7 @@ import { RandCommand } from './bot/lib/commands/rand.command';
 import { RefreshCommand } from './bot/lib/commands/refresh.command';
 import { ThumbUpCommand } from './bot/lib/commands/thumb-up.command';
 import { VoteForNextSongCommand } from './bot/lib/commands/vote-for-next-song.command';
+import { SlackService } from './services/slack.service';
 
 @Module({
     imports: [
@@ -25,7 +26,8 @@ import { VoteForNextSongCommand } from './bot/lib/commands/vote-for-next-song.co
         RandCommand,
         RefreshCommand,
         ThumbUpCommand,
-        VoteForNextSongCommand
+        VoteForNextSongCommand,
+        SlackService
     ]
 })
 export class SlackModule {

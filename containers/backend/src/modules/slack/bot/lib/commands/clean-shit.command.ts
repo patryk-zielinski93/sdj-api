@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SlackService } from '../../../../shared/services/slack.service';
+import { SlackService } from '../../../services/slack.service';
 import { Command } from '../interfaces/command.iterface';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../../../shared/modules/db/entities/user.model';
 import { UserRepository } from '../../../shared/modules/db/repositories/user.repository';
 import { Mp3Service } from '../../../shared/services/mp3.service';
-import { SlackService } from '../../../shared/services/slack.service';
+import { SlackService } from '../../services/slack.service';
 import { CleanShitCommand } from './commands/clean-shit.command';
 import { LsCommand } from './commands/ls.command';
 import { PlayTrackCommand } from './commands/play-track.command';
