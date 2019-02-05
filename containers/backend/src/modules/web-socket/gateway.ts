@@ -2,7 +2,7 @@ import { OnGatewayConnection, OnGatewayInit, SubscribeMessage, WebSocketGateway,
 import { from, Observable, of } from 'rxjs';
 import { concatMap, delay, filter } from 'rxjs/operators';
 import { QueuedTrack } from '../shared/modules/db/entities/queued-track.model';
-import { WebSocketService } from './services/web-socket.service';
+import { WebSocketService } from '../shared/services/web-socket.service';
 
 @WebSocketGateway()
 export class Gateway implements OnGatewayConnection, OnGatewayInit {
