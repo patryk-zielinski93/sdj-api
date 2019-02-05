@@ -1,34 +1,31 @@
-import { CommandBus } from '@nestjs/cqrs';
+import { AggregateRoot, CommandBus, EventBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as fs from 'fs';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
-import { Observable, of, Subject } from 'rxjs';
-import { finalize, switchMap } from 'rxjs/operators';
-import { pathConfig } from '../../../configs/path.config';
-import { PlayDjCommand } from '../../web-socket/cqrs/command-bus/commands/play-dj.command';
+import { Observable, Subject } from 'rxjs';
 import { PlayRadioCommand } from '../../web-socket/cqrs/command-bus/commands/play-radio.command';
+import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
 import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 import { QueuedTrackRepository } from '../modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../modules/db/repositories/track.repository';
 import { UserRepository } from '../modules/db/repositories/user.repository';
-import { Mp3Service } from './mp3.service';
 import { PlaylistService } from './playlist.service';
 
 type RedisSubject = Subject<{ channel: string, message: any } | any>;
 
-export class RedisService {
+export class RedisService extends AggregateRoot {
     private handlingNextSong = false;
     private nextSongSubject: RedisSubject;
     private redisClient: RedisClient;
     private redisSub: RedisClient;
 
     constructor(private readonly commandBus: CommandBus,
-                private mp3: Mp3Service,
+                private readonly publisher: EventBus,
                 private playlist: PlaylistService,
                 @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
                 @InjectRepository(QueuedTrackRepository) private queueTrackRepository: QueuedTrackRepository,
                 @InjectRepository(UserRepository) private userRepository: UserRepository) {
+        super();
         this.redisClient = redis.createClient({
             host: 'redis'
         });
@@ -78,21 +75,7 @@ export class RedisService {
                     console.log(channel, message);
                     if (queuedTrack) {
                         count = 0;
-                        this.downloadAndPlay(queuedTrack)
-                            .pipe(finalize(() => {
-                                this.handlingNextSong = false;
-                            }))
-                            .subscribe(undefined, () => {
-                                const track = queuedTrack.track;
-                                console.log('Can\'t download track ' + track.id);
-                                console.log('Removing ' + track.title);
-                                // TODO CASCADE DELETE
-                                // track.queuedTracks.forEach((qTrack: QueuedTrack) => {
-                                //     this.queueTrackRepository.remove(qTrack);
-                                // });
-                                // this.trackRepository.remove(track);
-                                this.playlist.updateQueuedTrackPlayedAt(queuedTrack);
-                            });
+                        this.publisher.publish(new RedisGetNextEvent(queuedTrack));
                     } else {
                         count = count + 1;
                         this.nextSongSubject.next('10-sec-of-silence');
@@ -104,24 +87,5 @@ export class RedisService {
                 });
         });
 
-    }
-
-    private downloadAndPlay(queuedTrack: QueuedTrack): Observable<null> {
-        const track = queuedTrack.track;
-        if (!fs.existsSync(pathConfig.tracks + '/' + track.id + '.mp3')) {
-            return this.mp3.downloadAndNormalize(track.id)
-                .pipe(
-                    switchMap(() => this.play(queuedTrack))
-                );
-        } else {
-            return this.play(queuedTrack);
-        }
-    }
-
-    private play(queuedTrack: QueuedTrack): Observable<null> {
-        this.nextSongSubject.next(queuedTrack.track.id);
-        this.commandBus.execute(new PlayDjCommand());
-        this.playlist.updateQueuedTrackPlayedAt(queuedTrack);
-        return of(null);
     }
 }

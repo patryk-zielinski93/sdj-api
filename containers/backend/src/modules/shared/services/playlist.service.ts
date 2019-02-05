@@ -13,7 +13,7 @@ import { UserRepository } from '../modules/db/repositories/user.repository';
 
 @Injectable()
 export class PlaylistService {
-    type: PlaylistType = PlaylistType.mostPlayed;
+    type: PlaylistType = PlaylistType.radio;
     index = 10;
     list: Track[] = [];
 
