@@ -1,33 +1,32 @@
 import { Injectable } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import { UserRepository } from '../../../../shared/modules/db/repositories/user.repository';
-import { Gateway } from '../../../../web-socket/gateway';
+import { TellCommand } from '../../../../web-socket/cqrs/command-bus/commands/tell.command';
 import { Command } from '../interfaces/command.iterface';
 
 @Injectable()
 export class PozdroCommand implements Command {
-  description = 'wyślij pozdro swoim ziomeczkom (może też być dla mamy)';
-  type = 'pozdro';
+    description = 'wyślij pozdro swoim ziomeczkom (może też być dla mamy)';
+    type = 'pozdro';
 
-  constructor(private userRepository: UserRepository, private websocket: Gateway) {
-  }
-
-  async handler(command: string[], message: any): Promise<any> {
-
-    command.shift();
-    const pozdro = command.join(' ');
-
-    if (pozdro.length > 200) {
-      throw new Error('too long');
+    constructor(private userRepository: UserRepository, private readonly commandBus: CommandBus) {
     }
 
-    const user = await this.userRepository.findOne({ id: message.user });
+    async handler(command: string[], message: any): Promise<any> {
 
-      if (user) {
-        console.log(user.realName + ' mowi: ' + pozdro);
+        command.shift();
+        const pozdro = command.join(' ');
 
-        this.websocket.server.of('/').emit('pozdro', {
-          message: /*'Pozdrowienia od ' + user.realName + ': ' +*/ pozdro
-        })
-      }
-  }
+        if (pozdro.length > 200) {
+            throw new Error('too long');
+        }
+
+        const user = await this.userRepository.findOne({ id: message.user });
+
+        if (user) {
+            console.log(user.realName + ' mowi: ' + pozdro);
+
+            this.commandBus.execute(new TellCommand(pozdro));
+        }
+    }
 }

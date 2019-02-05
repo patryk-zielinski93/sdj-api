@@ -1,3 +1,4 @@
+import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import * as redis from 'redis';
@@ -5,13 +6,14 @@ import { RedisClient } from 'redis';
 import { Observable, of, Subject } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
 import { pathConfig } from '../../../configs/path.config';
+import { PlayDjCommand } from '../../web-socket/cqrs/command-bus/commands/play-dj.command';
+import { PlayRadioCommand } from '../../web-socket/cqrs/command-bus/commands/play-radio.command';
 import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 import { QueuedTrackRepository } from '../modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../modules/db/repositories/track.repository';
 import { UserRepository } from '../modules/db/repositories/user.repository';
 import { Mp3Service } from './mp3.service';
 import { PlaylistService } from './playlist.service';
-import { WebSocketService } from './web-socket.service';
 
 type RedisSubject = Subject<{ channel: string, message: any } | any>;
 
@@ -21,9 +23,9 @@ export class RedisService {
     private redisClient: RedisClient;
     private redisSub: RedisClient;
 
-    constructor(private mp3: Mp3Service,
+    constructor(private readonly commandBus: CommandBus,
+                private mp3: Mp3Service,
                 private playlist: PlaylistService,
-                private wsService: WebSocketService,
                 @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
                 @InjectRepository(QueuedTrackRepository) private queueTrackRepository: QueuedTrackRepository,
                 @InjectRepository(UserRepository) private userRepository: UserRepository) {
@@ -95,7 +97,7 @@ export class RedisService {
                         count = count + 1;
                         this.nextSongSubject.next('10-sec-of-silence');
                         if (count > 1) {
-                            this.wsService.playRadio.next();
+                            this.commandBus.execute(new PlayRadioCommand());
                         }
                         this.handlingNextSong = false;
                     }
@@ -118,7 +120,7 @@ export class RedisService {
 
     private play(queuedTrack: QueuedTrack): Observable<null> {
         this.nextSongSubject.next(queuedTrack.track.id);
-        this.wsService.playDj.next(queuedTrack);
+        this.commandBus.execute(new PlayDjCommand());
         this.playlist.updateQueuedTrackPlayedAt(queuedTrack);
         return of(null);
     }

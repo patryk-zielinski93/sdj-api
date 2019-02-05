@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { appConfig } from '../../../configs/app.config';
+import { TellCommand } from '../../web-socket/cqrs/command-bus/commands/tell.command';
 import { PlaylistType } from '../enums/playlist-type.enum';
 import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 import { Track } from '../modules/db/entities/track.model';
@@ -12,12 +13,12 @@ import { UserRepository } from '../modules/db/repositories/user.repository';
 
 @Injectable()
 export class PlaylistService {
-    type: PlaylistType = PlaylistType.radio;
+    type: PlaylistType = PlaylistType.mostPlayed;
     index = 10;
-    pozdro = new Subject<string>();
     list: Track[] = [];
 
     constructor(
+        private readonly commandBus: CommandBus,
         @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
         @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
         @InjectRepository(UserRepository) private userRepository: UserRepository
@@ -55,7 +56,7 @@ export class PlaylistService {
             this.type = PlaylistType.radio;
             return;
         }
-        this.pozdro.next('Numer ' + (this.index + 1));
+        this.commandBus.execute(new TellCommand('Numer ' + (this.index + 1)));
         return this.queuedTrackRepository.queueTrack(this.list[this.index]);
     }
 
@@ -68,7 +69,7 @@ export class PlaylistService {
             this.type = PlaylistType.radio;
             return;
         }
-        this.pozdro.next('Numer ' + (this.index + 1));
+        this.commandBus.execute(new TellCommand('Numer ' + (this.index + 1)));
         return this.queuedTrackRepository.queueTrack(this.list[this.index]);
     }
 
