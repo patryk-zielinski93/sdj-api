@@ -76,6 +76,8 @@ export class RedisService extends AggregateRoot {
                     if (queuedTrack) {
                         count = 0;
                         this.publisher.publish(new RedisGetNextEvent(queuedTrack));
+                        //ToDo fix this
+                        this.handlingNextSong = false;
                     } else {
                         count = count + 1;
                         this.nextSongSubject.next('10-sec-of-silence');
