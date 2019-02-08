@@ -35,6 +35,9 @@ export class RedisService extends AggregateRoot {
         this.handleGetNext();
         this.nextSongSubject = this.getNextSongSubject();
         this.redisSub.subscribe('getNext');
+        this.playlist.pozdro.subscribe((message) => {
+            this.wsService.pozdro.next(message);
+        });
     }
 
     createSubject(event: string): RedisSubject {

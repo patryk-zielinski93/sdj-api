@@ -2,6 +2,8 @@ import { EntityRepository, Repository } from 'typeorm';
 import { appConfig } from '../../../../../configs/app.config';
 import { Track } from '../entities/track.model';
 
+require('datejs');
+
 @EntityRepository(Track)
 export class TrackRepository extends Repository<Track> {
 
@@ -24,12 +26,47 @@ export class TrackRepository extends Repository<Track> {
             .getMany();
     }
 
+    findWeeklyTopRatedTracks(index?: number, limit?: number): Promise<Track[]> {
+        const qb = this.createQueryBuilder('track')
+            .innerJoin('track.queuedTracks', 'queuedTrack')
+            .leftJoin('queuedTrack.votes', 'vote')
+            .where('vote.value > 0')
+            .andWhere('queuedTrack.addedAt >= :weekAgo')
+            .groupBy('track.id')
+            .printSql()
+            .orderBy('COUNT(track.id)', 'DESC')
+            .setParameter('weekAgo', Date.last().week().toString(appConfig.dbDateFormat));
+        if (index) {
+            qb.offset(index);
+            qb.limit(limit || 1);
+        }
+
+        return qb
+            .getMany();
+    }
+
     findMostPlayedTracks(index?: number, limit?: number): Promise<Track[]> {
         const qb = this.createQueryBuilder('track')
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .where('queuedTrack.randomized = 0')
             .groupBy('track.id')
             .orderBy('COUNT(track.id)', 'DESC');
+        if (index) {
+            qb.offset(index);
+            qb.limit(limit || 1);
+        }
+        return qb
+            .getMany();
+    }
+
+    findWeeklyMostPlayedTracks(index?: number, limit?: number): Promise<Track[]> {
+        const qb = this.createQueryBuilder('track')
+            .innerJoin('track.queuedTracks', 'queuedTrack')
+            .where('queuedTrack.randomized = 0')
+            .andWhere('queuedTrack.addedAt >= :weekAgo')
+            .groupBy('track.id')
+            .orderBy('COUNT(track.id)', 'DESC')
+            .setParameter('weekAgo', Date.last().week().toString(appConfig.dbDateFormat));
         if (index) {
             qb.offset(index);
             qb.limit(limit || 1);
