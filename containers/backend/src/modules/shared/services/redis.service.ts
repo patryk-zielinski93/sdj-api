@@ -9,6 +9,7 @@ import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 import { QueuedTrackRepository } from '../modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../modules/db/repositories/track.repository';
 import { UserRepository } from '../modules/db/repositories/user.repository';
+import { PlaylistStore } from '../store/playlist.store';
 import { PlaylistService } from './playlist.service';
 
 type RedisSubject = Subject<{ channel: string, message: any } | any>;
@@ -20,8 +21,9 @@ export class RedisService extends AggregateRoot {
     private redisSub: RedisClient;
 
     constructor(private readonly commandBus: CommandBus,
-                private readonly publisher: EventBus,
                 private playlist: PlaylistService,
+                private playlistStore: PlaylistStore,
+                private readonly publisher: EventBus,
                 @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
                 @InjectRepository(QueuedTrackRepository) private queueTrackRepository: QueuedTrackRepository,
                 @InjectRepository(UserRepository) private userRepository: UserRepository) {
@@ -32,12 +34,12 @@ export class RedisService extends AggregateRoot {
         this.redisSub = redis.createClient({
             host: 'redis'
         });
+        this.playlistStore.isNextSongaHandled().subscribe((value) => {
+            this.handlingNextSong = value;
+        });
         this.handleGetNext();
         this.nextSongSubject = this.getNextSongSubject();
         this.redisSub.subscribe('getNext');
-        this.playlist.pozdro.subscribe((message) => {
-            this.wsService.pozdro.next(message);
-        });
     }
 
     createSubject(event: string): RedisSubject {
@@ -72,22 +74,21 @@ export class RedisService extends AggregateRoot {
 
         redisMessage.subscribe(({ channel, message }) => {
             if (this.handlingNextSong) return;
-            this.handlingNextSong = true;
+            this.playlistStore.startHandlingNextSong();
             this.playlist.getNext()
                 .then(async (queuedTrack: QueuedTrack | undefined) => {
                     console.log(channel, message);
                     if (queuedTrack) {
                         count = 0;
                         this.publisher.publish(new RedisGetNextEvent(queuedTrack));
-                        //ToDo fix this
-                        this.handlingNextSong = false;
+                        this.playlistStore.endHandlingNextSong();
                     } else {
                         count = count + 1;
                         this.nextSongSubject.next('10-sec-of-silence');
                         if (count > 1) {
                             this.commandBus.execute(new PlayRadioCommand());
+                            this.playlistStore.endHandlingNextSong();
                         }
-                        this.handlingNextSong = false;
                     }
                 });
         });

@@ -11,6 +11,7 @@ import { Mp3Service } from './services/mp3.service';
 import { PlaylistService } from './services/playlist.service';
 import { RedisService } from './services/redis.service';
 import { WebSocketService } from './services/web-socket.service';
+import { PlaylistStore } from './store/playlist.store';
 
 export const CommandHandlers = [DownloadAndPlayHandler, DownloadTrackHandler, SetNextSongHandler];
 
@@ -24,6 +25,7 @@ export const CommandHandlers = [DownloadAndPlayHandler, DownloadTrackHandler, Se
         IcesService,
         Mp3Service,
         PlaylistService,
+        PlaylistStore,
         RedisSagas,
         RedisService,
         WebSocketService
