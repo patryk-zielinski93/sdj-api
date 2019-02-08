@@ -48,7 +48,7 @@ export class PlaylistService {
 
     async getNextForMostPlayed(): Promise<QueuedTrack | undefined> {
         if (!this.list.length) {
-            this.list = await this.trackRepository.findMostPlayedTracks(0, 10);
+            this.list = await this.trackRepository.findWeeklyMostPlayedTracks(0, 10);
         }
         this.index--;
         if (this.index < 0) {
@@ -61,7 +61,7 @@ export class PlaylistService {
 
     async getNextForTopRated(): Promise<QueuedTrack | undefined> {
         if (!this.list.length) {
-            this.list = await this.trackRepository.findTopRatedTracks(0, 10);
+            this.list = await this.trackRepository.findWeeklyTopRatedTracks(0, 10);
         }
         this.index--;
         if (this.index < 0) {
