@@ -26,10 +26,7 @@ RUN curl -L http://ftp.pl.debian.org/debian/pool/main/m/mp3gain/mp3gain_1.5.2-r2
 RUN dpkg -i mp3gain.deb
 WORKDIR /app
 
-EXPOSE 58585
-EXPOSE 58586
-EXPOSE 58587
-EXPOSE 8888
+EXPOSE 4200
 
 ENTRYPOINT ["/var/docker/entrypoint.sh"]
 

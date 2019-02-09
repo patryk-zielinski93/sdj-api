@@ -1,7 +1,8 @@
 # sdj-api
 #####1. Copy: 
- * ./ormconfig-sample.json
+ * ./docker-compose.override.yml-sample
  * ./env-sample 
+ * ./containers/backend/ormconfig-sample.json
  * ,/containers/icecast/icecast-sample.xml
  * ,/containers/ices/ices-sample.conf
  * ./src/configs/*.sample.ts

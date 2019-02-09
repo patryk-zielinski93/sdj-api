@@ -15,6 +15,6 @@ WORKDIR /app
 RUN npm install
 RUN npm run build
 
-EXPOSE 8888
+EXPOSE 4200
 
 CMD ["npm", "start"]
