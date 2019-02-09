@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:lts-jessie
 ARG LOCAL_USER_ID
 
 RUN echo "deb http://ftp.fr.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
