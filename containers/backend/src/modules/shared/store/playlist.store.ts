@@ -3,29 +3,43 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 
-interface PlaylistSate {
+interface PlaylistState {
+    silenceCount: number,
     handlingNextSong: boolean;
     list: QueuedTrack[];
 }
 
 @Injectable()
 export class PlaylistStore {
-    initialState: PlaylistSate = {
+    get state(): BehaviorSubject<PlaylistState> {
+        return this._state;
+    }
+
+    initialState: PlaylistState = {
+        silenceCount: 0,
         handlingNextSong: false,
         list: []
     };
 
-    state: BehaviorSubject<PlaylistSate> = new BehaviorSubject(this.initialState);
+    private _state: BehaviorSubject<PlaylistState> = new BehaviorSubject(this.initialState);
 
     startHandlingNextSong(): void {
-        this.state.next({ ...this.state.getValue(), handlingNextSong: true });
+        this._state.next({...this._state.getValue(), handlingNextSong: true});
     }
 
     isNextSongaHandled(): Observable<boolean> {
-        return this.state.pipe(map((state: PlaylistSate) => state.handlingNextSong));
+        return this._state.pipe(map((state: PlaylistState) => state.handlingNextSong));
     }
 
     endHandlingNextSong(): void {
-        this.state.next({ ...this.state.getValue(), handlingNextSong: false });
+        this._state.next({...this._state.getValue(), handlingNextSong: false});
+    }
+
+    setSilenceCount(value: number): void {
+        this._state.next({...this._state.getValue(), silenceCount: value});
+    }
+
+    getSilenceCount(): Observable<number> {
+        return this._state.pipe(map((state: PlaylistState) => state.silenceCount));
     }
 }

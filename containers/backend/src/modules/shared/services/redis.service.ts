@@ -3,9 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
 import { Observable, Subject } from 'rxjs';
-import { PlayRadioCommand } from '../../web-socket/cqrs/command-bus/commands/play-radio.command';
 import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
-import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 import { QueuedTrackRepository } from '../modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../modules/db/repositories/track.repository';
 import { UserRepository } from '../modules/db/repositories/user.repository';
@@ -68,29 +66,12 @@ export class RedisService extends AggregateRoot {
 
     private async handleGetNext(): Promise<void> {
 
-        let count = 0;
-
         const redisMessage = this.getMessageSubject();
 
         redisMessage.subscribe(({ channel, message }) => {
+            console.log(channel, message);
             if (this.handlingNextSong) return;
-            this.playlistStore.startHandlingNextSong();
-            this.playlist.getNext()
-                .then(async (queuedTrack: QueuedTrack | undefined) => {
-                    console.log(channel, message);
-                    if (queuedTrack) {
-                        count = 0;
-                        this.publisher.publish(new RedisGetNextEvent(queuedTrack));
-                        this.playlistStore.endHandlingNextSong();
-                    } else {
-                        count = count + 1;
-                        this.nextSongSubject.next('10-sec-of-silence');
-                        if (count > 1) {
-                            this.commandBus.execute(new PlayRadioCommand());
-                            this.playlistStore.endHandlingNextSong();
-                        }
-                    }
-                });
+            this.publisher.publish(new RedisGetNextEvent());
         });
 
     }

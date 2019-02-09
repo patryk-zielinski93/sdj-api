@@ -1,14 +1,13 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Gateway } from '../../../gateway';
-import { PlayDjCommand } from '../commands/play-dj.command';
+import { PlayDjEvent } from '../../../../shared/cqrs/events/play-dj.event';
 
-@CommandHandler(PlayDjCommand)
-export class PlayDjHandler implements ICommandHandler<PlayDjCommand> {
+@EventsHandler(PlayDjEvent)
+export class PlayDjHandler implements IEventHandler<PlayDjEvent> {
     constructor(private readonly gateway: Gateway) {
     }
 
-    async execute(command: PlayDjCommand, resolve: (value?) => void) {
+    handle(event: PlayDjEvent): any {
         this.gateway.server.of('/').emit('play_dj');
-
     }
 }

@@ -1,14 +1,14 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Gateway } from '../../../gateway';
-import { PlayRadioCommand } from '../commands/play-radio.command';
+import { PlayRadioEvent } from '../../../../shared/cqrs/events/play-radio.event';
 
-@CommandHandler(PlayRadioCommand)
-export class PlayRadioHandler implements ICommandHandler<PlayRadioCommand> {
+@EventsHandler(PlayRadioEvent)
+export class PlayRadioHandler implements IEventHandler<PlayRadioEvent> {
     constructor(private readonly gateway: Gateway) {
     }
 
-    async execute(command: PlayRadioCommand, resolve: (value?) => void) {
-        this.gateway.server.of('/').emit('play_dj');
-
+    handle(event: PlayRadioEvent) {
+        this.gateway.server.of('/').emit('play_radio');
     }
+
 }

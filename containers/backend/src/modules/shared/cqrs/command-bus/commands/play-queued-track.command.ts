@@ -1,7 +1,7 @@
 import { ICommand } from '@nestjs/cqrs';
 import { QueuedTrack } from '../../../modules/db/entities/queued-track.model';
 
-export class SetNextSongCommand implements ICommand {
+export class PlayQueuedTrackCommand implements ICommand {
     constructor(public queuedTrack: QueuedTrack) {
     }
 }

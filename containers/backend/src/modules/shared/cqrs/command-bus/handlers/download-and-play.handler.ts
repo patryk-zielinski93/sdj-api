@@ -4,7 +4,7 @@ import { QueuedTrackRepository } from '../../../modules/db/repositories/queued-t
 import { RedisService } from '../../../services/redis.service';
 import { DownloadAndPlayCommand } from '../commands/download-and-play.command';
 import { DownloadTrackCommand } from '../commands/download-track.command';
-import { SetNextSongCommand } from '../commands/set-next-song.command';
+import { PlayQueuedTrackCommand } from '../commands/play-queued-track.command';
 
 @CommandHandler(DownloadAndPlayCommand)
 export class DownloadAndPlayHandler implements ICommandHandler<DownloadAndPlayCommand> {
@@ -15,7 +15,7 @@ export class DownloadAndPlayHandler implements ICommandHandler<DownloadAndPlayCo
 
     async execute(command: DownloadAndPlayCommand, resolve: (value?) => void) {
         this.commandBus.execute(new DownloadTrackCommand(command.queuedTrack))
-            .then(() => this.commandBus.execute(new SetNextSongCommand(command.queuedTrack)));
+            .then(() => this.commandBus.execute(new PlayQueuedTrackCommand(command.queuedTrack)));
         resolve();
     }
 

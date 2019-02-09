@@ -1,23 +1,26 @@
-import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PlayDjCommand } from '../../../../web-socket/cqrs/command-bus/commands/play-dj.command';
+import { PlayDjEvent } from '../../events/play-dj.event';
 import { QueuedTrack } from '../../../modules/db/entities/queued-track.model';
 import { QueuedTrackRepository } from '../../../modules/db/repositories/queued-track.repository';
 import { RedisService } from '../../../services/redis.service';
-import { SetNextSongCommand } from '../commands/set-next-song.command';
+import { PlaylistStore } from '../../../store/playlist.store';
+import { PlayQueuedTrackCommand } from '../commands/play-queued-track.command';
 
-@CommandHandler(SetNextSongCommand)
-export class SetNextSongHandler implements ICommandHandler<SetNextSongCommand> {
-    constructor(private readonly commandBus: CommandBus,
+@CommandHandler(PlayQueuedTrackCommand)
+export class PlayQueuedTrackHandler implements ICommandHandler<PlayQueuedTrackCommand> {
+    constructor(private readonly publisher: EventBus,
+                private readonly playlistStore: PlaylistStore,
                 private readonly redisService: RedisService,
                 @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository) {
     }
 
-    async execute(command: SetNextSongCommand, resolve: (value?) => void) {
+    async execute(command: PlayQueuedTrackCommand, resolve: (value?) => void) {
         const queuedTrack = command.queuedTrack;
         this.redisService.getNextSongSubject().next(queuedTrack.track.id);
-        this.commandBus.execute(new PlayDjCommand());
+        this.publisher.publish(new PlayDjEvent());
         this.updateQueuedTrackPlayedAt(queuedTrack);
+        this.playlistStore.setSilenceCount(0);
         resolve();
     }
 

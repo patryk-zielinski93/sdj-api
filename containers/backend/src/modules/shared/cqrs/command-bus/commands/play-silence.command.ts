@@ -1,7 +1,6 @@
 import { ICommand } from '@nestjs/cqrs';
 
-export class PlayDjCommand implements ICommand {
+export class PlaySilenceCommand implements ICommand {
     constructor() {
     }
-
 }
