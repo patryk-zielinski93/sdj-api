@@ -9,8 +9,8 @@ import { PlayTrackSlackCommand } from './commands/play-track.slack-command';
 import { PozdroSlackCommand } from './commands/pozdro.slack-command';
 import { RandSlackCommand } from './commands/rand.slack-command';
 import { RefreshSlackCommand } from './commands/refresh.slack-command';
+import { ThumbDownSlackCommand } from './commands/thumb-down.slack-command';
 import { ThumbUpSlackCommand } from './commands/thumb-up.slack-command';
-import { VoteForNextSongSlackCommand } from './commands/thumb-down.slack-command';
 import { SlackCommand } from './interfaces/slack-command';
 
 @Injectable()
@@ -28,10 +28,10 @@ export class Bot {
         randC: RandSlackCommand,
         refreshC: RefreshSlackCommand,
         thumbUpC: ThumbUpSlackCommand,
-        voteC: VoteForNextSongSlackCommand
+        thumbDownC: ThumbDownSlackCommand
     ) {
         this.handleMessage = this.handleMessage.bind(this);
-        this.init(cleanC, lsC, playtrackC, pozdroC, randC, refreshC, thumbUpC, voteC);
+        this.init(cleanC, lsC, playtrackC, pozdroC, randC, refreshC, thumbUpC, thumbDownC);
     }
 
     init(...commands) {

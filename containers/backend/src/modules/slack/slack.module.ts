@@ -7,8 +7,8 @@ import { PlayTrackSlackCommand } from './bot/lib/commands/play-track.slack-comma
 import { PozdroSlackCommand } from './bot/lib/commands/pozdro.slack-command';
 import { RandSlackCommand } from './bot/lib/commands/rand.slack-command';
 import { RefreshSlackCommand } from './bot/lib/commands/refresh.slack-command';
+import { ThumbDownSlackCommand } from './bot/lib/commands/thumb-down.slack-command';
 import { ThumbUpSlackCommand } from './bot/lib/commands/thumb-up.slack-command';
-import { VoteForNextSongSlackCommand } from './bot/lib/commands/thumb-down.slack-command';
 import { SlackService } from './services/slack.service';
 
 @Module({
@@ -24,7 +24,7 @@ import { SlackService } from './services/slack.service';
         RandSlackCommand,
         RefreshSlackCommand,
         ThumbUpSlackCommand,
-        VoteForNextSongSlackCommand,
+        ThumbDownSlackCommand,
         SlackService
     ]
 })
