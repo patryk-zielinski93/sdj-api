@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '../../../../../configs/app.config';
-import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track.model';
-import { User } from '../../../../shared/modules/db/entities/user.model';
-import { Vote } from '../../../../shared/modules/db/entities/vote.model';
-import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
-import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
-import { UserRepository } from '../../../../shared/modules/db/repositories/user.repository';
-import { VoteRepository } from '../../../../shared/modules/db/repositories/vote.repository';
-import { IcesService } from '../../../../shared/services/ices.service';
+import { QueuedTrack } from '../../../../core/modules/db/entities/queued-track.model';
+import { User } from '../../../../core/modules/db/entities/user.model';
+import { Vote } from '../../../../core/modules/db/entities/vote.model';
+import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
+import { TrackRepository } from '../../../../core/modules/db/repositories/track.repository';
+import { UserRepository } from '../../../../core/modules/db/repositories/user.repository';
+import { VoteRepository } from '../../../../core/modules/db/repositories/vote.repository';
+import { IcesService } from '../../../../core/services/ices.service';
 import { SlackService } from '../../../services/slack.service';
-import { Command } from '../interfaces/command.iterface';
+import { SlackCommand } from '../interfaces/slack-command';
 
 @Injectable()
-export class VoteForNextSongCommand implements Command {
+export class ThumbDownSlackCommand implements SlackCommand {
     description = 'Vote to skip that song';
     type = ':-1:';
 

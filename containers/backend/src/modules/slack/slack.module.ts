@@ -1,32 +1,30 @@
 import { Module } from '@nestjs/common';
-import { SharedModule } from '../shared/shared.module';
 import { WebSocketModule } from '../web-socket/web-socket.module';
 import { Bot } from './bot/lib/bot';
-import { CleanShitCommand } from './bot/lib/commands/clean-shit.command';
-import { LsCommand } from './bot/lib/commands/ls.command';
-import { PlayTrackCommand } from './bot/lib/commands/play-track.command';
-import { PozdroCommand } from './bot/lib/commands/pozdro.command';
-import { RandCommand } from './bot/lib/commands/rand.command';
-import { RefreshCommand } from './bot/lib/commands/refresh.command';
-import { ThumbUpCommand } from './bot/lib/commands/thumb-up.command';
-import { VoteForNextSongCommand } from './bot/lib/commands/vote-for-next-song.command';
+import { CleanShitSlackCommand } from './bot/lib/commands/clean-shit.slack-command';
+import { LsSlackCommand } from './bot/lib/commands/ls.slack-command';
+import { PlayTrackSlackCommand } from './bot/lib/commands/play-track.slack-command';
+import { PozdroSlackCommand } from './bot/lib/commands/pozdro.slack-command';
+import { RandSlackCommand } from './bot/lib/commands/rand.slack-command';
+import { RefreshSlackCommand } from './bot/lib/commands/refresh.slack-command';
+import { ThumbUpSlackCommand } from './bot/lib/commands/thumb-up.slack-command';
+import { VoteForNextSongSlackCommand } from './bot/lib/commands/thumb-down.slack-command';
 import { SlackService } from './services/slack.service';
 
 @Module({
     imports: [
-        SharedModule,
         WebSocketModule
     ],
     providers: [
         Bot,
-        CleanShitCommand,
-        LsCommand,
-        PlayTrackCommand,
-        PozdroCommand,
-        RandCommand,
-        RefreshCommand,
-        ThumbUpCommand,
-        VoteForNextSongCommand,
+        CleanShitSlackCommand,
+        LsSlackCommand,
+        PlayTrackSlackCommand,
+        PozdroSlackCommand,
+        RandSlackCommand,
+        RefreshSlackCommand,
+        ThumbUpSlackCommand,
+        VoteForNextSongSlackCommand,
         SlackService
     ]
 })

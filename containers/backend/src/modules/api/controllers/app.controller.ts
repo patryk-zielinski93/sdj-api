@@ -1,6 +1,6 @@
 import { Controller, Get, Render } from '@nestjs/common';
-import { IcesService } from './modules/shared/services/ices.service';
-import { PlaylistService } from './modules/shared/services/playlist.service';
+import { IcesService } from '../../core/services/ices.service';
+import { PlaylistService } from '../../core/services/playlist.service';
 
 @Controller()
 export class AppController {

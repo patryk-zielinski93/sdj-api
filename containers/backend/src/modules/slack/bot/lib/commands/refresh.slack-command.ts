@@ -2,15 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { appConfig } from '../../../../../configs/app.config';
-import { QueuedTrack } from '../../../../shared/modules/db/entities/queued-track.model';
-import { Track } from '../../../../shared/modules/db/entities/track.model';
-import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
-import { TrackRepository } from '../../../../shared/modules/db/repositories/track.repository';
+import { QueuedTrack } from '../../../../core/modules/db/entities/queued-track.model';
+import { Track } from '../../../../core/modules/db/entities/track.model';
+import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
+import { TrackRepository } from '../../../../core/modules/db/repositories/track.repository';
 import { SlackService } from '../../../services/slack.service';
-import { Command } from '../interfaces/command.iterface';
+import { SlackCommand } from '../interfaces/slack-command';
 
 @Injectable()
-export class RefreshCommand implements Command {
+export class RefreshSlackCommand implements SlackCommand {
   description = 'zagram pioseneczkę, która była grana najdawniej';
   type = 'refresh';
 

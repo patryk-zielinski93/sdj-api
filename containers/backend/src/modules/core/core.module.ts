@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Global, Module, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { CommandBus, CQRSModule, EventBus } from '@nestjs/cqrs';
 import { DownloadAndPlayHandler } from './cqrs/command-bus/handlers/download-and-play.handler';
@@ -14,18 +14,25 @@ import { PlaylistService } from './services/playlist.service';
 import { RedisService } from './services/redis.service';
 import { WebSocketService } from './services/web-socket.service';
 import { PlaylistStore } from './store/playlist.store';
+import { CreateTrackHandler } from "./cqrs/command-bus/handlers/create-track.handler";
+import { QueueTrackHandler } from "./cqrs/command-bus/handlers/queue-track.handler";
+import { ThumbUpHandler } from "./cqrs/command-bus/handlers/thumb-up.handler";
 
 export const CommandHandlers = [
+    CreateTrackHandler,
     DownloadAndPlayHandler,
     DownloadTrackHandler,
     PlayQueuedTrackHandler,
-    PlaySilenceHandler
+    PlaySilenceHandler,
+    QueueTrackHandler,
+    ThumbUpHandler
 ];
 
 export const EventHandlers = [
     RedisGetNextHandler
 ];
 
+@Global()
 @Module({
     imports: [
         DbModule,
@@ -50,7 +57,7 @@ export const EventHandlers = [
         WebSocketService
     ]
 })
-export class SharedModule implements OnModuleInit {
+export class CoreModule implements OnModuleInit {
     constructor(
         private readonly moduleRef: ModuleRef,
         private readonly command$: CommandBus,

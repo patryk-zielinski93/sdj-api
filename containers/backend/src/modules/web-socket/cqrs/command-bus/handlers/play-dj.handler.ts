@@ -1,6 +1,6 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Gateway } from '../../../gateway';
-import { PlayDjEvent } from '../../../../shared/cqrs/events/play-dj.event';
+import { PlayDjEvent } from '../../../../core/cqrs/events/play-dj.event';
 
 @EventsHandler(PlayDjEvent)
 export class PlayDjHandler implements IEventHandler<PlayDjEvent> {

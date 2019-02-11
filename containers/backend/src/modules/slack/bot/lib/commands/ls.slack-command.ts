@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as redis from 'redis';
-import { QueuedTrackRepository } from '../../../../shared/modules/db/repositories/queued-track.repository';
+import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { SlackService } from '../../../services/slack.service';
-import { Command } from '../interfaces/command.iterface';
+import { SlackCommand } from '../interfaces/slack-command';
 
 @Injectable()
-export class LsCommand implements Command {
+export class LsSlackCommand implements SlackCommand {
   description = 'obczaj listę utworów';
   redisClient = redis.createClient({
     host: 'redis'

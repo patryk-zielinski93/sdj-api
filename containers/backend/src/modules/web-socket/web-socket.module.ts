@@ -1,7 +1,6 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
-import { SharedModule } from '../shared/shared.module';
 import { PlayDjHandler } from './cqrs/command-bus/handlers/play-dj.handler';
 import { PlayRadioHandler } from './cqrs/command-bus/handlers/play-radio.handler';
 import { TellHandler } from './cqrs/command-bus/handlers/tell.handler';
@@ -11,7 +10,6 @@ export const CommandHandlers = [TellHandler];
 export const EventHandlers = [PlayDjHandler, PlayRadioHandler];
 
 @Module({
-    imports: [SharedModule],
     providers: [
         ...CommandHandlers,
         ...EventHandlers,

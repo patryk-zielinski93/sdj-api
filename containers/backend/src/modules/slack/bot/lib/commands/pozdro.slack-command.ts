@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { UserRepository } from '../../../../shared/modules/db/repositories/user.repository';
+import { UserRepository } from '../../../../core/modules/db/repositories/user.repository';
 import { TellCommand } from '../../../../web-socket/cqrs/command-bus/commands/tell.command';
-import { Command } from '../interfaces/command.iterface';
+import { SlackCommand } from '../interfaces/slack-command';
 
 @Injectable()
-export class PozdroCommand implements Command {
+export class PozdroSlackCommand implements SlackCommand {
     description = 'wyślij pozdro swoim ziomeczkom (może też być dla mamy)';
     type = 'pozdro';
 
@@ -26,6 +26,7 @@ export class PozdroCommand implements Command {
         if (user) {
             console.log(user.realName + ' mowi: ' + pozdro);
 
+            //ToDo module injection
             this.commandBus.execute(new TellCommand(pozdro));
         }
     }

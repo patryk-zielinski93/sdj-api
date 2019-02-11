@@ -1,4 +1,4 @@
-export interface Command {
+export interface SlackCommand {
   /**
    * Description for help message.
    */

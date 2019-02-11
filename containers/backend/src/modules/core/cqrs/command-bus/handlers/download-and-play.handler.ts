@@ -14,7 +14,7 @@ export class DownloadAndPlayHandler implements ICommandHandler<DownloadAndPlayCo
     }
 
     async execute(command: DownloadAndPlayCommand, resolve: (value?) => void) {
-        this.commandBus.execute(new DownloadTrackCommand(command.queuedTrack))
+        this.commandBus.execute(new DownloadTrackCommand(command.queuedTrack.track))
             .then(() => this.commandBus.execute(new PlayQueuedTrackCommand(command.queuedTrack)));
         resolve();
     }

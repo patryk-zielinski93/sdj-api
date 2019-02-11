@@ -14,7 +14,7 @@ export class DownloadTrackHandler implements ICommandHandler<DownloadTrackComman
     }
 
     async execute(command: DownloadTrackCommand, resolve: (value?) => void) {
-        const track = command.queuedTrack.track;
+        const track = command.track;
         if (!fs.existsSync(pathConfig.tracks + '/' + track.id + '.mp3')) {
             return this.mp3.downloadAndNormalize(track.id).subscribe(undefined, () => {
                 console.log('Can\'t download track ' + track.id);
@@ -24,7 +24,6 @@ export class DownloadTrackHandler implements ICommandHandler<DownloadTrackComman
                 //     this.queueTrackRepository.remove(qTrack);
                 // });
                 // this.trackRepository.remove(track);
-                this.updateQueuedTrackPlayedAt(command.queuedTrack);
             }, () => {
                 resolve();
             });

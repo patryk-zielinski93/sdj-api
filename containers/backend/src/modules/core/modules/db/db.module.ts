@@ -10,16 +10,16 @@ import { UserRepository } from './repositories/user.repository';
 import { VoteRepository } from './repositories/vote.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([
-    QueuedTrack,
-    QueuedTrackRepository,
-    Track,
-    TrackRepository,
-    User,
-    UserRepository,
-    Vote,
-    VoteRepository
-  ])]
+    imports: [TypeOrmModule.forFeature([
+        QueuedTrack,
+        QueuedTrackRepository,
+        Track,
+        TrackRepository,
+        User,
+        UserRepository,
+        Vote,
+        VoteRepository
+    ])]
 })
-export class DbModule {}
- 
+export class DbModule {
+}

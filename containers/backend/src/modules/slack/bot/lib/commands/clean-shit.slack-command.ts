@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { SlackService } from '../../../services/slack.service';
-import { Command } from '../interfaces/command.iterface';
+import { SlackCommand } from '../interfaces/slack-command';
 
 @Injectable()
-export class CleanShitCommand implements Command {
+export class CleanShitSlackCommand implements SlackCommand {
   description = '`[żeton]` specjalnie dla Ciebie usunę wszystkie utwory w kolejce (żeton kosztuje 2zł)';
   type = 'cleanShit';
 
