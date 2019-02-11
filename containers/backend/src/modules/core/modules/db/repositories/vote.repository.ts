@@ -50,7 +50,7 @@ export class VoteRepository extends Repository<Vote> {
 
     countUnlinksForQueuedTrack(queuedTrackId): Promise<number> {
         return this.createQueryBuilder('unlike')
-            .where('unlike.value = -1')
+            .where('unlike.value < 0')
             .andWhere('unlike.track.id = :trackId')
             .setParameter('trackId', queuedTrackId)
             .getCount();
