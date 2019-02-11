@@ -48,7 +48,7 @@ export class ThumbDownSlackCommand implements SlackCommand {
         }
 
         const unlike = new Vote(<User>user, currentTrackInQueue, -1);
-        unlike.addedAt = new Date();
+        unlike.createdAt = new Date();
         this.voteRepository.save(unlike);
     };
 

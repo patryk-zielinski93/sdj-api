@@ -36,13 +36,13 @@ export class RefreshSlackCommand implements SlackCommand {
     }
 
     const groupedTracksQuery = this.queuedTrackRepository.createQueryBuilder()
-      .select('trackId, MAX(addedAt) as addedAt')
+        .select('trackId, MAX(createdAt) as createdAt')
       .groupBy('trackId');
 
     const oldestTrack = await this.connection.createQueryBuilder()
       .select('*')
       .from(`(${groupedTracksQuery.getQuery()})`, 'latest')
-      .orderBy('latest.addedAt', 'ASC')
+        .orderBy('latest.createdAt', 'ASC')
       .limit(1)
       .execute();
 
@@ -57,7 +57,7 @@ export class RefreshSlackCommand implements SlackCommand {
 
   private async queueTrack(message: any, track: Track): Promise<void> {
     const queuedTrack = new QueuedTrack();
-    queuedTrack.addedAt = new Date();
+      queuedTrack.createdAt = new Date();
     queuedTrack.addedBy = message.user;
     queuedTrack.order = 0;
     queuedTrack.track = track;

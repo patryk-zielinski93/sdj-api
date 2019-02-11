@@ -28,7 +28,7 @@ export class QueuedTrackRepository extends Repository<QueuedTrack> {
             .leftJoinAndSelect('queuedTrack.track', 'track')
             .where('queuedTrack.playedAt IS NOT NULL')
             .limit(1)
-            .orderBy('addedAt', 'DESC')
+            .orderBy('queuedTrack.createdAt', 'DESC')
             .getOne();
     }
 
@@ -55,7 +55,7 @@ export class QueuedTrackRepository extends Repository<QueuedTrack> {
 
     queueTrack(track: Track, randomized = false, user?: User): Promise<QueuedTrack> {
         const queuedTrack = new QueuedTrack();
-        queuedTrack.addedAt = new Date();
+        queuedTrack.createdAt = new Date();
         queuedTrack.addedBy = user || null;
         queuedTrack.order = 0;
         queuedTrack.track = track;

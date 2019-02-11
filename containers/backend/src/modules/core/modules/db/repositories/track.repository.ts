@@ -31,7 +31,7 @@ export class TrackRepository extends Repository<Track> {
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .leftJoin('queuedTrack.votes', 'vote')
             .where('vote.value > 0')
-            .andWhere('queuedTrack.addedAt >= :weekAgo')
+            .andWhere('queuedTrack.createdAt >= :weekAgo')
             .groupBy('track.id')
             .printSql()
             .orderBy('COUNT(track.id)', 'DESC')
@@ -63,7 +63,7 @@ export class TrackRepository extends Repository<Track> {
         const qb = this.createQueryBuilder('track')
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .where('queuedTrack.randomized = 0')
-            .andWhere('queuedTrack.addedAt >= :weekAgo')
+            .andWhere('queuedTrack.createdAt >= :weekAgo')
             .groupBy('track.id')
             .orderBy('COUNT(track.id)', 'DESC')
             .setParameter('weekAgo', Date.last().week().toString(appConfig.dbDateFormat));

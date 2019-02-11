@@ -6,7 +6,7 @@ import { User } from './user.model';
 export class Vote {
 
     @Column('datetime')
-    addedAt: Date;
+    createdAt: Date;
 
     @ManyToOne(type => User)
     @JoinColumn()

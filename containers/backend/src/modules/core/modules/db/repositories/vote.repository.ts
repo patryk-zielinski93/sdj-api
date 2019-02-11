@@ -1,8 +1,32 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { appConfig } from '../../../../../configs/app.config';
 import { Vote } from '../entities/vote.model';
+
+require('datejs');
 
 @EntityRepository(Vote)
 export class VoteRepository extends Repository<Vote> {
+
+    countTodayHeartsFromUser(userId: string): Promise<number> {
+        return this.createQueryBuilder('vote')
+            .where('vote.addedBy.id = :userId')
+            .andWhere('vote.value = 3')
+            .andWhere('vote.createdAt > :today')
+            .setParameter('today', Date.today().toString(appConfig.dbDateFormat))
+            .setParameter('userId', userId)
+            .getCount();
+    }
+
+    countTodayFucksFromUser(userId: string): Promise<number> {
+        return this.createQueryBuilder('vote')
+            .where('vote.addedBy.id = :userId')
+            .andWhere('vote.value = :value')
+            .andWhere('vote.createdAt > :today')
+            .setParameter('today', Date.today().toString(appConfig.dbDateFormat))
+            .setParameter('userId', userId)
+            .setParameter('value', -3)
+            .getCount();
+    }
 
     countPositiveVotesFromUserToQueuedTrack(queuedTrackId: number, userId: string): Promise<number> {
         return this.createQueryBuilder('vote')

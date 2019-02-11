@@ -4,6 +4,8 @@ import { UserRepository } from '../../../core/modules/db/repositories/user.repos
 import { Mp3Service } from '../../../core/services/mp3.service';
 import { SlackService } from '../../services/slack.service';
 import { CleanShitSlackCommand } from './commands/clean-shit.slack-command';
+import { FuckYouSlackCommand } from './commands/fuck-you.slack-command';
+import { HeartSlackCommand } from './commands/heart.slack-command';
 import { LsSlackCommand } from './commands/ls.slack-command';
 import { PlayTrackSlackCommand } from './commands/play-track.slack-command';
 import { PozdroSlackCommand } from './commands/pozdro.slack-command';
@@ -22,6 +24,8 @@ export class Bot {
         private slack: SlackService,
         private userRepository: UserRepository,
         cleanC: CleanShitSlackCommand,
+        fuckYouC: FuckYouSlackCommand,
+        heartC: HeartSlackCommand,
         lsC: LsSlackCommand,
         playtrackC: PlayTrackSlackCommand,
         pozdroC: PozdroSlackCommand,
@@ -31,7 +35,7 @@ export class Bot {
         thumbDownC: ThumbDownSlackCommand
     ) {
         this.handleMessage = this.handleMessage.bind(this);
-        this.init(cleanC, lsC, playtrackC, pozdroC, randC, refreshC, thumbUpC, thumbDownC);
+        this.init(cleanC, lsC, playtrackC, pozdroC, randC, refreshC, thumbUpC, thumbDownC, heartC, fuckYouC);
     }
 
     init(...commands) {

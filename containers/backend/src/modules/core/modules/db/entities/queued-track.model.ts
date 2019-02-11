@@ -7,7 +7,7 @@ import { Vote } from './vote.model';
 export class QueuedTrack {
 
     @Column('datetime')
-    addedAt: Date;
+    createdAt: Date;
 
     @ManyToOne(type => User)
     @JoinColumn()
