@@ -30,9 +30,9 @@ export class QueuedTrack {
     })
     randomized: boolean;
 
-    @ManyToOne(type => Track, track => track.queuedTracks)
+    @ManyToOne(type => Track, track => track.queuedTracks, { eager: true })
     @JoinColumn()
-    track: Promise<Track>;
+    track: Track;
 
     @OneToMany(type => Vote, (vote: Vote) => vote.track)
     votes: Vote[];
