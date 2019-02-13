@@ -32,7 +32,7 @@ export class QueuedTrack {
 
     @ManyToOne(type => Track, track => track.queuedTracks)
     @JoinColumn()
-    track: Track;
+    track: Promise<Track>;
 
     @OneToMany(type => Vote, (vote: Vote) => vote.track)
     votes: Vote[];
