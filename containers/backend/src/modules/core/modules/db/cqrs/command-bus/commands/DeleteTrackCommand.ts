@@ -1,6 +1,6 @@
 import { ICommand } from '@nestjs/cqrs';
 
-export class DownloadTrackCommand implements ICommand {
+export class DeleteTrackCommand implements ICommand {
     constructor(public trackId: string) {
     }
 }

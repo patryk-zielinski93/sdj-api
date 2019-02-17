@@ -30,7 +30,7 @@ export class QueuedTrack {
     })
     randomized: boolean;
 
-    @ManyToOne(type => Track, track => track.queuedTracks)
+    @ManyToOne(type => Track, track => track.queuedTracks, { eager: true })
     @JoinColumn()
     track: Track;
 

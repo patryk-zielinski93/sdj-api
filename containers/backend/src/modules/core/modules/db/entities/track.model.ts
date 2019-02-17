@@ -33,6 +33,6 @@ export class Track {
     })
     title: string;
 
-    @OneToMany(type => QueuedTrack, queuedTrack => queuedTrack.track, { onDelete: 'CASCADE' })
-    queuedTracks: QueuedTrack[];
+    @OneToMany(type => QueuedTrack, queuedTrack => queuedTrack.track)
+    queuedTracks: Promise<QueuedTrack[]>;
 }

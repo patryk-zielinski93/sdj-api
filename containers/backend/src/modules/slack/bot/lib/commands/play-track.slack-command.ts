@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '../../../../../configs/app.config';
+import { CreateTrackCommand } from '../../../../core/cqrs/command-bus/commands/create-track.command';
+import { DownloadTrackCommand } from '../../../../core/cqrs/command-bus/commands/download-track.command';
+import { QueueTrackCommand } from '../../../../core/cqrs/command-bus/commands/queue-track.command';
 import { Track } from '../../../../core/modules/db/entities/track.model';
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../../../../core/modules/db/repositories/track.repository';
+import { Utils } from '../../../../core/utils/utils';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
-import { Utils } from "../../../../core/utils/utils";
-import { CommandBus } from '@nestjs/cqrs';
-import { DownloadTrackCommand } from "../../../../core/cqrs/command-bus/commands/download-track.command";
-import { QueueTrackCommand } from "../../../../core/cqrs/command-bus/commands/queue-track.command";
-import { CreateTrackCommand } from "../../../../core/cqrs/command-bus/commands/create-track.command";
 
 @Injectable()
 export class PlayTrackSlackCommand implements SlackCommand {
@@ -48,16 +48,16 @@ export class PlayTrackSlackCommand implements SlackCommand {
                 return;
             }
 
-            this.commandBus.execute(new DownloadTrackCommand(track))
+            this.commandBus.execute(new DownloadTrackCommand(track.id))
                 .then(() => {
                     this.queueTrack(message, track);
                 });
+        } else {
+            this.commandBus.execute(new CreateTrackCommand(id, message.user))
+                .then((newTrack: Track) => {
+                    this.queueTrack(message, newTrack);
+                });
         }
-
-        this.commandBus.execute(new CreateTrackCommand(id, message.user))
-            .then((newTrack: Track) => {
-                this.queueTrack(message, newTrack);
-            });
     }
 
     private async queueTrack(message: any, track: Track): Promise<void> {
