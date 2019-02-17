@@ -9,7 +9,7 @@ export class MiniPlayerComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }
