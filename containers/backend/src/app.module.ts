@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
 import { SlackModule } from './modules/slack/slack.module';
 import { WebSocketModule } from './modules/web-socket/web-socket.module';
+import { CoreModule } from "./modules/core/core.module";
+import { ApiModule } from "./modules/api/api.module";
 
 @Module({
-  imports: [
-    SlackModule,
-    TypeOrmModule.forRoot(),
-    WebSocketModule
-  ],
-  controllers: [AppController]
+    imports: [
+        ApiModule,
+        CoreModule,
+        SlackModule,
+        TypeOrmModule.forRoot(),
+        WebSocketModule
+    ]
 })
-export class AppModule {}
+export class AppModule {
+}

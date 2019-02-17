@@ -31,11 +31,13 @@
     "ts-loader": "^4.4.2",
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.7.0",
-    "tslint": "5.11.0"
+    "tslint": "5.11.0",
+    "tslint-sonarts": "^1.9.0"
   },
   "dependencies": {
     "@nestjs/common": "^5.4.0",
     "@nestjs/core": "^5.4.0",
+    "@nestjs/cqrs": "^5.1.1",
     "@nestjs/typeorm": "^5.2.2",
     "@nestjs/websockets": "^5.6.2",
     "@slack/client": "^4.3.1",

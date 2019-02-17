@@ -1,37 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../../../shared/modules/db/entities/user.model';
-import { UserRepository } from '../../../shared/modules/db/repositories/user.repository';
-import { Mp3Service } from '../../../shared/services/mp3.service';
+import { User } from '../../../core/modules/db/entities/user.model';
+import { UserRepository } from '../../../core/modules/db/repositories/user.repository';
+import { Mp3Service } from '../../../core/services/mp3.service';
 import { SlackService } from '../../services/slack.service';
-import { CleanShitCommand } from './commands/clean-shit.command';
-import { LsCommand } from './commands/ls.command';
-import { PlayTrackCommand } from './commands/play-track.command';
-import { PozdroCommand } from './commands/pozdro.command';
-import { RandCommand } from './commands/rand.command';
-import { RefreshCommand } from './commands/refresh.command';
-import { ThumbUpCommand } from './commands/thumb-up.command';
-import { VoteForNextSongCommand } from './commands/vote-for-next-song.command';
-import { Command } from './interfaces/command.iterface';
+import { CleanShitSlackCommand } from './commands/clean-shit.slack-command';
+import { FuckYouSlackCommand } from './commands/fuck-you.slack-command';
+import { HeartSlackCommand } from './commands/heart.slack-command';
+import { LsSlackCommand } from './commands/ls.slack-command';
+import { PlayTrackSlackCommand } from './commands/play-track.slack-command';
+import { PozdroSlackCommand } from './commands/pozdro.slack-command';
+import { RandSlackCommand } from './commands/rand.slack-command';
+import { RefreshSlackCommand } from './commands/refresh.slack-command';
+import { ThumbDownSlackCommand } from './commands/thumb-down.slack-command';
+import { ThumbUpSlackCommand } from './commands/thumb-up.slack-command';
+import { SlackCommand } from './interfaces/slack-command';
 
 @Injectable()
 export class Bot {
-    private commands: { [key: string]: Command[] } = {};
+    private commands: { [key: string]: SlackCommand[] } = {};
 
     constructor(
         private mp3: Mp3Service,
         private slack: SlackService,
         private userRepository: UserRepository,
-        cleanC: CleanShitCommand,
-        lsC: LsCommand,
-        playtrackC: PlayTrackCommand,
-        pozdroC: PozdroCommand,
-        randC: RandCommand,
-        refreshC: RefreshCommand,
-        thumbUpC: ThumbUpCommand,
-        voteC: VoteForNextSongCommand
+        cleanC: CleanShitSlackCommand,
+        fuckYouC: FuckYouSlackCommand,
+        heartC: HeartSlackCommand,
+        lsC: LsSlackCommand,
+        playtrackC: PlayTrackSlackCommand,
+        pozdroC: PozdroSlackCommand,
+        randC: RandSlackCommand,
+        refreshC: RefreshSlackCommand,
+        thumbUpC: ThumbUpSlackCommand,
+        thumbDownC: ThumbDownSlackCommand
     ) {
         this.handleMessage = this.handleMessage.bind(this);
-        this.init(cleanC, lsC, playtrackC, pozdroC, randC, refreshC, thumbUpC, voteC);
+        this.init(cleanC, lsC, playtrackC, pozdroC, randC, refreshC, thumbUpC, thumbDownC, heartC, fuckYouC);
     }
 
     init(...commands) {
@@ -40,7 +44,7 @@ export class Bot {
         this.start();
     }
 
-    addCommand(command: Command): void {
+    addCommand(command: SlackCommand): void {
         let commands = this.commands[command.type];
 
         if (!commands) {
