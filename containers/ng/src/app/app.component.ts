@@ -4,7 +4,7 @@ import { appConfig } from '../configs/app.config';
 import { WebSocketService } from '../web-socket.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'sdj-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

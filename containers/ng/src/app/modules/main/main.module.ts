@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuComponent } from './menu/menu.component';
+import { NavbarComponent } from './navbar/navbar.component';
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
-import { UserProfileComponent } from './menu/user-profile/user-profile.component';
-import { MiniPlayerComponent } from './menu/mini-player/mini-player.component';
+import { UserProfileComponent } from './navbar/user-profile/user-profile.component';
+import { MiniPlayerComponent } from './navbar/mini-player/mini-player.component';
 
 @NgModule({
   declarations: [
-    MenuComponent,
+    NavbarComponent,
     MainComponent,
     MiniPlayerComponent,
     UserProfileComponent

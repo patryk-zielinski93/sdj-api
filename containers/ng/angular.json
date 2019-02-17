@@ -7,10 +7,14 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "sdj",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "styleext": "scss",
+          "prefix": "sdj"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "sdj"
         }
       },
       "architect": {
