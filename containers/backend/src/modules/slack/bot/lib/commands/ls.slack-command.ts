@@ -49,9 +49,8 @@ export class LsSlackCommand implements SlackCommand {
             }
         }
 
-        queuedTracks.forEach(async (queuedTrack, index) => {
-            const track = await queuedTrack.track;
-            msg += `${index + 1}. ${track.title}, dodane przez ${queuedTrack.addedBy ? queuedTrack.addedBy.realName : 'BOT'}` + (queuedTrack.randomized ? ' (rand)' : '') + '\n';
+        queuedTracks.forEach((queuedTrack, index) => {
+            msg += `${index + 1}. ${queuedTrack.track.title}, dodane przez ${queuedTrack.addedBy ? queuedTrack.addedBy.realName : 'BOT'}` + (queuedTrack.randomized ? ' (rand)' : '') + '\n';
         });
 
         if (!msg.length) {

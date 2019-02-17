@@ -34,7 +34,7 @@ export class TrackRepository extends Repository<Track> {
             .andWhere('queuedTrack.createdAt >= :weekAgo')
             .groupBy('track.id')
             .printSql()
-            .orderBy('COUNT(track.id)', 'DESC')
+            .orderBy('SUM(vote.value)', 'DESC')
             .setParameter('weekAgo', Date.last().week().toString(appConfig.dbDateFormat));
         if (index) {
             qb.offset(index);
@@ -81,7 +81,7 @@ export class TrackRepository extends Repository<Track> {
             .orderBy('RAND()')
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .leftJoin('queuedTrack.votes', 'vote')
-            .where('skips < ' + appConfig.skipsToBan)
+            .where('track.skips < ' + appConfig.skipsToBan)
             .andWhere('vote.value > 0')
             .orWhere('vote.value IS NULL')
             .getRawOne();
