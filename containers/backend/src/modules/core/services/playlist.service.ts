@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Observable } from 'rxjs/internal/Observable';
 import { appConfig } from '../../../configs/app.config';
 import { TellCommand } from '../../web-socket/cqrs/command-bus/commands/tell.command';
 import { PlaylistType } from '../enums/playlist-type.enum';
@@ -75,17 +74,5 @@ export class PlaylistService {
 
     removeQueuedTrack(queuedTrack: QueuedTrack): Promise<QueuedTrack> {
         return this.queuedTrackRepository.remove(queuedTrack);
-    }
-
-    /**
-     * Update playedAt in database to current or provided time
-     * @param {QueuedTrack} queuedTrack
-     * @param {Date} [playedAt]
-     * @returns {Observable<QueuedTrack>}
-     */
-    updateQueuedTrackPlayedAt(queuedTrack: QueuedTrack, playedAt?: Date): Promise<QueuedTrack> {
-        queuedTrack.playedAt = playedAt || new Date();
-
-        return this.queuedTrackRepository.save(queuedTrack);
     }
 }

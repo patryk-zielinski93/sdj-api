@@ -82,8 +82,7 @@ export class TrackRepository extends Repository<Track> {
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .leftJoin('queuedTrack.votes', 'vote')
             .where('track.skips < ' + appConfig.skipsToBan)
-            .andWhere('vote.value > 0')
-            .orWhere('vote.value IS NULL')
+            .andWhere('vote.value > 0 OR vote.value IS NULL')
             .getRawOne();
 
         return this.findOneOrFail(rawOne.id);
