@@ -1,6 +1,8 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { environment } from '@environment/environment';
+import { Subject } from 'rxjs';
 import { appConfig } from '../configs/app.config';
+import { QueuedTrack } from './common/interfaces/queued-track.interface';
 import { SpeechService } from './modules/core/services/speech.service';
 import { WebSocketService } from './modules/core/services/web-socket.service';
 
@@ -12,6 +14,7 @@ import { WebSocketService } from './modules/core/services/web-socket.service';
 export class AppComponent implements AfterViewInit {
   audioSrc = environment.radioStreamUrl;
   dj: HTMLAudioElement;
+  queuedTracks$: Subject<QueuedTrack[]>;
 
   constructor(private ws: WebSocketService, private speechService: SpeechService) {
 
@@ -20,15 +23,22 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.dj = <HTMLAudioElement>document.getElementById('dj');
 
+    this.handleSpeeching();
     this.handleWsEvents();
-    this.handleSpeaching();
   }
 
-  handleSpeaching(): void {
+  handleQueuedTrackList(): void {
+    this.queuedTracks$ = this.ws.getQueuedTrackListSubject();
+    this.queuedTracks$.subscribe((list) => {
+      console.log(list);
+    });
+    this.queuedTracks$.next();
+  }
+
+  handleSpeeching(): void {
     this.speechService.startListening();
     this.speechService.speeching.subscribe(
       (speeching: boolean) => {
-        console.log(speeching);
         if (speeching) {
           this.dj.volume = 0.1;
         } else {
@@ -44,6 +54,7 @@ export class AppComponent implements AfterViewInit {
     connect$.subscribe(() => {
       console.log('Connected');
       events$.next(<any>{ test: 'test' });
+      this.handleQueuedTrackList();
     });
     events$.subscribe((data) => console.log('event', data));
     const disconnect$ = this.ws.createSubject('disconnect');

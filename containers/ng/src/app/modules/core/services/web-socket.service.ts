@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment';
 import { Observable, Subject } from 'rxjs';
 import * as io from 'socket.io-client';
+import { environment } from '../../../../environments/environment';
+import { QueuedTrack } from '../../../common/interfaces/queued-track.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
 
-  // Our socket connection
   private socket;
 
   constructor() {
     this.socket = io(environment.backendUrl);
   }
 
-  createSubject(event: string): Subject<MessageEvent> {
+  createSubject<T>(event: string): Subject<T> {
     let observable = new Observable(observer => {
       this.socket.on(event, (data) => {
         observer.next(data);
@@ -32,6 +32,10 @@ export class WebSocketService {
     };
 
     return Subject.create(observer, observable);
+  }
+
+  getQueuedTrackListSubject(): Subject<QueuedTrack[]> {
+    return this.createSubject<QueuedTrack[]>('queuedTrackList');
   }
 
 }

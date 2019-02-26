@@ -6,40 +6,52 @@ import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 interface PlaylistState {
     silenceCount: number,
     handlingNextSong: boolean;
-    list: QueuedTrack[];
+    queue: QueuedTrack[];
 }
 
 @Injectable()
 export class PlaylistStore {
-    get state(): BehaviorSubject<PlaylistState> {
-        return this._state;
+    get state(): PlaylistState {
+        return this._state.getValue();
     }
 
     initialState: PlaylistState = {
         silenceCount: 0,
         handlingNextSong: false,
-        list: []
+        queue: []
     };
 
     private _state: BehaviorSubject<PlaylistState> = new BehaviorSubject(this.initialState);
 
-    startHandlingNextSong(): void {
-        this._state.next({...this._state.getValue(), handlingNextSong: true});
+    addToQueue(queuedTrack: QueuedTrack): void {
+        this._state.next({ ...this.state, queue: this.state.queue.concat(queuedTrack) });
     }
 
-    isNextSongaHandled(): Observable<boolean> {
+    startHandlingNextSong(): void {
+        this._state.next({ ...this.state, handlingNextSong: true });
+    }
+
+    isNextSongHandled(): Observable<boolean> {
         return this._state.pipe(map((state: PlaylistState) => state.handlingNextSong));
     }
 
     endHandlingNextSong(): void {
-        this._state.next({...this._state.getValue(), handlingNextSong: false});
+        this._state.next({ ...this.state, handlingNextSong: false });
     }
 
     setSilenceCount(value: number): void {
-        this._state.next({...this._state.getValue(), silenceCount: value});
+        this._state.next({ ...this.state, silenceCount: value });
     }
 
     getSilenceCount(): Observable<number> {
         return this._state.pipe(map((state: PlaylistState) => state.silenceCount));
+    }
+
+    getQueue(): Observable<QueuedTrack[]> {
+        return this._state.pipe(map((state: PlaylistState) => state.queue));
+    }
+
+    removeFromQueue(queuedTrack: QueuedTrack): void {
+        this._state.next({ ...this.state, queue: this.state.queue.filter((qTrack) => qTrack.id !== queuedTrack.id) });
     }
 }

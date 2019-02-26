@@ -59,6 +59,7 @@ export const EventHandlers = [
         IcesService,
         Mp3Service,
         PlaylistService,
+        PlaylistStore,
         RedisService,
         WebSocketService
     ]

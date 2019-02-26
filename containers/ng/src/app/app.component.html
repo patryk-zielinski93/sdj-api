@@ -5,3 +5,8 @@
     Your browser does not support the audio element.
   </audio>
 </div>
+<ul>
+  <li *ngFor="let queuedTrack of (queuedTracks$ | async)">
+    {{queuedTrack.track.title}}
+  </li>
+</ul>

@@ -32,7 +32,7 @@ export class RedisService extends AggregateRoot {
         this.redisSub = redis.createClient({
             host: 'redis'
         });
-        this.playlistStore.isNextSongaHandled().subscribe((value) => {
+        this.playlistStore.isNextSongHandled().subscribe((value) => {
             this.handlingNextSong = value;
         });
         this.handleGetNext();

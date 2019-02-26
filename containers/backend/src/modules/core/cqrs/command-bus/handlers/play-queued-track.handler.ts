@@ -18,6 +18,10 @@ export class PlayQueuedTrackHandler implements ICommandHandler<PlayQueuedTrackCo
     async execute(command: PlayQueuedTrackCommand, resolve: (value?) => void) {
         const queuedTrack = command.queuedTrack;
         const track = await queuedTrack.track;
+        const prevTrack = await this.queuedTrackRepository.getCurrentTrack();
+        if (prevTrack) {
+            this.playlistStore.removeFromQueue(prevTrack);
+        }
         this.redisService.getNextSongSubject().next(track.id);
         this.publisher.publish(new PlayDjEvent());
         this.updateQueuedTrackPlayedAt(queuedTrack);
@@ -27,7 +31,6 @@ export class PlayQueuedTrackHandler implements ICommandHandler<PlayQueuedTrackCo
 
     updateQueuedTrackPlayedAt(queuedTrack: QueuedTrack, playedAt?: Date): Promise<QueuedTrack> {
         queuedTrack.playedAt = playedAt || new Date();
-
         return this.queuedTrackRepository.save(queuedTrack);
     }
 }
