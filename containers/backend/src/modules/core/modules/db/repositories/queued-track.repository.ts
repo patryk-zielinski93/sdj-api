@@ -1,10 +1,12 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { RedisService } from '../../../services/redis.service';
 import { QueuedTrack } from '../entities/queued-track.model';
 import { Track } from '../entities/track.model';
 import { User } from '../entities/user.model';
 
 @EntityRepository(QueuedTrack)
 export class QueuedTrackRepository extends Repository<QueuedTrack> {
+    redisService: RedisService;
 
     countTracksInQueueFromUser(userId: string): Promise<number> {
         return this.createQueryBuilder('queuedTrack')
@@ -23,17 +25,15 @@ export class QueuedTrackRepository extends Repository<QueuedTrack> {
             .getMany();
     }
 
-    getCurrentTrack(): Promise<QueuedTrack | undefined> {
-        return this.createQueryBuilder('queuedTrack')
-            .leftJoinAndSelect('queuedTrack.track', 'track')
-            .where('queuedTrack.playedAt IS NOT NULL')
-            .limit(1)
-            .orderBy('queuedTrack.createdAt', 'DESC')
-            .getOne();
+    async getCurrentTrack(): Promise<QueuedTrack | undefined> {
+        const currentTrackId = await this.redisService.getCurrentTrackId();
+        if (currentTrackId !== '10-sec-of-silence') {
+            return;
+        }
+        return this.getCurrentTrackById(currentTrackId);
     }
 
-    getCurrentTrackById(currentTrackId: string): Promise<QueuedTrack> {
-        // TODO remove cheat with type
+    getCurrentTrackById(currentTrackId: string): Promise<QueuedTrack | undefined> {
         return <Promise<QueuedTrack>>this.createQueryBuilder('queuedTrack')
             .leftJoinAndSelect('queuedTrack.track', 'track')
             .leftJoinAndSelect('queuedTrack.addedBy', 'user')

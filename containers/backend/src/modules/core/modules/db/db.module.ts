@@ -25,7 +25,8 @@ export const CommandHandlers = [DeleteTrackHandler];
         Vote,
         VoteRepository
     ])],
-    providers: [DeleteTrackHandler]
+    providers: [DeleteTrackHandler,
+        QueuedTrackRepository]
 })
 export class DbModule implements OnModuleInit {
     constructor(private readonly moduleRef: ModuleRef,

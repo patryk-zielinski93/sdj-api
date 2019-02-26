@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueuedTrack } from '../../../../core/modules/db/entities/queued-track.model';
+import { ThumbUpCommand } from '../../../../core/cqrs/command-bus/commands/thumb-up.command';
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
-import { CommandBus } from '@nestjs/cqrs';
-import { ThumbUpCommand } from "../../../../core/cqrs/command-bus/commands/thumb-up.command";
 
 @Injectable()
 export class ThumbUpSlackCommand implements SlackCommand {
@@ -19,7 +18,10 @@ export class ThumbUpSlackCommand implements SlackCommand {
     }
 
     async handler(command: string[], message: any): Promise<any> {
-        const currentTrackInQueue = <QueuedTrack>await this.queuedTrackRepository.getCurrentTrack();
+        const currentTrackInQueue = await this.queuedTrackRepository.getCurrentTrack();
+        if (!currentTrackInQueue) {
+            return;
+        }
 
         this.commandBus.execute(new ThumbUpCommand(currentTrackInQueue.id, message.user))
             .then(() => {

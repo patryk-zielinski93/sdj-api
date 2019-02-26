@@ -18,16 +18,17 @@ export class HeartSlackCommand implements SlackCommand {
     }
 
     async handler(command: string[], message: any): Promise<any> {
-        //ToDo true current track is in redis
         const currentTrackInQueue = <QueuedTrack>await this.queuedTrackRepository.getCurrentTrack();
-        this.commandBus.execute(new HeartCommand(currentTrackInQueue.id, message.user))
-            .then((value) => {
-                if (value) {
-                    this.slackService.rtm.sendMessage(':heart: ' + currentTrackInQueue.track.title, message.channel);
-                } else {
-                    this.slackService.rtm.sendMessage('Co ty pedał jesteś?', message.channel);
-                }
-            });
+        if (currentTrackInQueue) {
+            this.commandBus.execute(new HeartCommand(currentTrackInQueue.id, message.user))
+                .then((value) => {
+                    if (value) {
+                        this.slackService.rtm.sendMessage(':heart: ' + currentTrackInQueue.track.title, message.channel);
+                    } else {
+                        this.slackService.rtm.sendMessage('Co ty pedał jesteś?', message.channel);
+                    }
+                });
+        }
         return;
     }
 }

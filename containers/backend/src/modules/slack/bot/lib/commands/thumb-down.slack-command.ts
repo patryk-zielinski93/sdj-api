@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '../../../../../configs/app.config';
-import { QueuedTrack } from '../../../../core/modules/db/entities/queued-track.model';
 import { User } from '../../../../core/modules/db/entities/user.model';
 import { Vote } from '../../../../core/modules/db/entities/vote.model';
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
@@ -27,7 +26,10 @@ export class ThumbDownSlackCommand implements SlackCommand {
     async handler(command: string[], message: any): Promise<any> {
         const userId = message.user;
         const user = await this.userRepository.findOne(userId);
-        const currentTrackInQueue = <QueuedTrack>await this.queuedTrackRepository.getCurrentTrack();
+        const currentTrackInQueue = await this.queuedTrackRepository.getCurrentTrack();
+        if (!currentTrackInQueue) {
+            return;
+        }
 
         const unlikesCountFromUser = await this.voteRepository.countUnlikesFromUserToQueuedTrack(currentTrackInQueue.id, userId);
 

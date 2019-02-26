@@ -23,7 +23,6 @@ export class FuckYouHandler implements ICommandHandler<FuckYouCommand> {
         const fucksFromUser = await this.voteRepository.countTodayFucksFromUser(userId);
 
         if (fucksFromUser > 0) {
-            //ToDo info
             resolve(false);
             return;
         }

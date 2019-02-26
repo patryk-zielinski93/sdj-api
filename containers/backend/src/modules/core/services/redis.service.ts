@@ -56,6 +56,20 @@ export class RedisService extends AggregateRoot {
         return Subject.create(observer, observable);
     }
 
+    getCurrentTrackId(): Promise<string> {
+        // ToDo handle undefined
+        return new Promise<string>((resolve, reject) => {
+            this.redisClient.get('next_song', (err, value) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                resolve(value);
+            });
+        });
+    }
+
     getNextSongSubject(): RedisSubject {
         return this.createSubject('next_song');
     }
