@@ -27,7 +27,7 @@ export class QueuedTrackRepository extends Repository<QueuedTrack> {
 
     async getCurrentTrack(): Promise<QueuedTrack | undefined> {
         const currentTrackId = await this.redisService.getCurrentTrackId();
-        if (currentTrackId !== '10-sec-of-silence') {
+        if (currentTrackId === '10-sec-of-silence') {
             return;
         }
         return this.getCurrentTrackById(currentTrackId);

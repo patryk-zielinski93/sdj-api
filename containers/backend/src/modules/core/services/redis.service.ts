@@ -57,7 +57,6 @@ export class RedisService extends AggregateRoot {
     }
 
     getCurrentTrackId(): Promise<string> {
-        // ToDo handle undefined
         return new Promise<string>((resolve, reject) => {
             this.redisClient.get('next_song', (err, value) => {
                 if (err) {
