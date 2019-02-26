@@ -1,8 +1,8 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { environment } from '@environment/environment';
 import { appConfig } from '../configs/app.config';
-import { WebSocketService } from './modules/core/services/web-socket.service';
 import { SpeechService } from './modules/core/services/speech.service';
+import { WebSocketService } from './modules/core/services/web-socket.service';
 
 @Component({
   selector: 'sdj-root',
@@ -21,6 +21,21 @@ export class AppComponent implements AfterViewInit {
     this.dj = <HTMLAudioElement>document.getElementById('dj');
 
     this.handleWsEvents();
+    this.handleSpeaching();
+  }
+
+  handleSpeaching(): void {
+    this.speechService.startListening();
+    this.speechService.speeching.subscribe(
+      (speeching: boolean) => {
+        console.log(speeching);
+        if (speeching) {
+          this.dj.volume = 0.1;
+        } else {
+          this.dj.volume = 1;
+        }
+      }
+    );
   }
 
   handleWsEvents(): void {

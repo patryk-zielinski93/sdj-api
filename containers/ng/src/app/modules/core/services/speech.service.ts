@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Subject, zip } from 'rxjs';
+import { delay, filter, takeUntil } from 'rxjs/operators';
 import { WebSocketService } from './web-socket.service';
-import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpeechService {
-  private speeching = false;
+  speeching = new BehaviorSubject(false);
+
   private synth: SpeechSynthesis;
-  private timeout: number;
   private pozdro$: Subject<MessageEvent>;
   private voice: SpeechSynthesisVoice;
 
@@ -16,7 +17,9 @@ export class SpeechService {
   private pitch = 1;
   private rate = 1;
 
-  constructor(private ws: WebSocketService) {}
+  constructor(private ws: WebSocketService) {
+    this.init();
+  }
 
   public init(): void {
     new Promise(resolve => window.speechSynthesis.onvoiceschanged = resolve)
@@ -28,47 +31,35 @@ export class SpeechService {
 
   public startListening(): void {
     this.pozdro$ = this.ws.createSubject('pozdro');
-    this.pozdro$.subscribe((data: any) => {
+    const input = this.pozdro$;
+    const signal = this.speeching.pipe(filter(speeching => !speeching));
+    const output = zip(input, signal, (i, s) => i);
+    output.pipe(
+      delay(0),
+      takeUntil(this.pozdro$)
+    )
+      .subscribe((data: any) => {
         console.log(data.message);
-        // this.czytaj(data.message);
+        this.czytaj(data.message);
       });
   }
 
+  // ToDo implement on logout
   public stopListening(): void {
     this.pozdro$.complete();
   }
 
-  // private czytaj(text): void {
-  //   if (this.speeching) {
-  //     return;
-  //   }
-  //
-  //   if (this.timeout) {
-  //     clearTimeout(this.timeout);
-  //   }
-  //
-  //   this.speeching = true;
-  //   this.dj.volume = 0.1;
-  //
-  //   const utterThis = new SpeechSynthesisUtterance(text);
-  //   utterThis.onend = (event) => {
-  //     event.preventDefault();
-  //     this.dj.volume = 1;
-  //     this.speeching = false;
-  //   };
-  //   const selectedOption = this.voiceSelect.selectedOptions[0].getAttribute('data-name');
-  //   for (let i = 0; i < this.voices.length; i++) {
-  //     if (this.voices[i].name === selectedOption) {
-  //       utterThis.voice = this.voices[i];
-  //     }
-  //   }
-  //   utterThis.pitch = this.pitch.value;
-  //   utterThis.rate = this.rate.value;
-  //   this.synth.speak(utterThis);
-  //
-  //   this.timeout = setTimeout(() => {
-  //     this.dj.volume = 1;
-  //     this.speeching = false;
-  //   }, 20000);
-  // }
+  private czytaj(text): void {
+    this.speeching.next(true);
+
+    const utterThis = new SpeechSynthesisUtterance(text);
+    utterThis.onend = (event) => {
+      event.preventDefault();
+      this.speeching.next(false);
+    };
+    utterThis.voice = this.voice;
+    utterThis.pitch = this.pitch;
+    utterThis.rate = this.rate;
+    this.synth.speak(utterThis);
+  }
 }
