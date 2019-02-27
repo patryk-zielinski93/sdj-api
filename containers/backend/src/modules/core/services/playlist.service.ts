@@ -3,6 +3,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '../../../configs/app.config';
 import { TellCommand } from '../../web-socket/cqrs/command-bus/commands/tell.command';
+import { QueueTrackCommand } from '../cqrs/command-bus/commands/queue-track.command';
 import { PlaylistType } from '../enums/playlist-type.enum';
 import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 import { Track } from '../modules/db/entities/track.model';
@@ -39,7 +40,7 @@ export class PlaylistService {
                     const tracksInDb = await this.trackRepository.countTracks();
                     if (tracksInDb >= appConfig.trackLengthToStartOwnRadio) {
                         const randTrack = await this.trackRepository.getRandomTrack();
-                        return this.queuedTrackRepository.queueTrack(randTrack, true);
+                        return this.commandBus.execute(new QueueTrackCommand(randTrack.id, undefined, true));
                     }
                     break;
             }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { QueuedTrack } from '../modules/db/entities/queued-track.model';
 
 interface PlaylistState {
@@ -48,7 +48,7 @@ export class PlaylistStore {
     }
 
     getQueue(): Observable<QueuedTrack[]> {
-        return this._state.pipe(map((state: PlaylistState) => state.queue));
+        return this._state.pipe(map((state: PlaylistState) => state.queue), distinctUntilChanged());
     }
 
     removeFromQueue(queuedTrack: QueuedTrack): void {

@@ -19,6 +19,6 @@ export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
         const track = await this.trackRepository.findOneOrFail(command.trackId);
         const queuedTrack = await this.queuedTrackRepository.queueTrack(track, command.randomized, command.addedBy);
         this.playlistStore.addToQueue(queuedTrack);
-        resolve();
+        resolve(queuedTrack);
     }
 }
