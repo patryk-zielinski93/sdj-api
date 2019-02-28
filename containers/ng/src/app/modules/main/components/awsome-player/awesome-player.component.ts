@@ -124,23 +124,28 @@ class Player {
   }
 
   nextTrack() {
-    return;
     ++this.currentSongIndex;
     if (this.currentSongIndex == this.tracks.length) {
       this.currentSongIndex = 0;
     }
-
+    this.source.stop();
+    this.source = this.context.createBufferSource();
+    this.source.connect(this.gainNode);
     this.loadTrack(this.currentSongIndex);
+    this.source.start();
   }
 
   prevTrack() {
-    return;
     --this.currentSongIndex;
     if (this.currentSongIndex == -1) {
       this.currentSongIndex = this.tracks.length - 1;
     }
 
+    this.source.stop();
+    this.source = this.context.createBufferSource();
+    this.source.connect(this.gainNode);
     this.loadTrack(this.currentSongIndex);
+    this.source.start();
   }
 
   play() {
@@ -250,7 +255,7 @@ class Controls {
 
   initNextSongButton() {
     this.nextSongButton = document.querySelector('.nextSong');
-    this.nextSongButton.addEventListener('mouseup', () => {
+    this.nextSongButton.addEventListener('click', () => {
       this.player.nextTrack();
       this.playing && this.player.play();
     });
