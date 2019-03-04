@@ -29,7 +29,7 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
     constructor() {
     }
 
-    ngOnInit() {
+  ngOnInit(): void {
     }
 
     ngAfterViewInit(): void {
