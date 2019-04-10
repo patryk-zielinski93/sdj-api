@@ -1,6 +1,4 @@
-FROM node:carbon
-
-RUN echo "deb http://ftp.fr.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
+FROM node:lts-stretch
 
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --fix-missing build-essential gcc g++ ca-certificates libmp3lame-dev libxml2-dev libshout-dev libvorbis-dev tcl expect python-dev \
