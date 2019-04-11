@@ -1,5 +1,5 @@
 import { CommandBus, EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { QueuedTrack } from '../../../modules/db/entities/queued-track.model';
+import { QueuedTrack } from '../../../modules/db/entities/queued-track.entity';
 import { PlaylistService } from '../../../services/playlist.service';
 import { PlaylistStore } from '../../../store/playlist.store';
 import { DownloadAndPlayCommand } from '../../command-bus/commands/download-and-play.command';

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { QueuedTrack } from '../modules/db/entities/queued-track.model';
+import { QueuedTrack } from '../modules/db/entities/queued-track.entity';
 
 interface PlaylistState {
     silenceCount: number,

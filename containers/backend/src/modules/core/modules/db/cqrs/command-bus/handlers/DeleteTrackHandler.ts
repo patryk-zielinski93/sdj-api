@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueuedTrack } from '../../../entities/queued-track.model';
+import { QueuedTrack } from '../../../entities/queued-track.entity';
 import { QueuedTrackRepository } from '../../../repositories/queued-track.repository';
 import { TrackRepository } from '../../../repositories/track.repository';
 import { DeleteTrackCommand } from '../commands/DeleteTrackCommand';

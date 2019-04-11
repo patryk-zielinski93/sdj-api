@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '../../../../../configs/app.config';
-import { User } from '../../../../core/modules/db/entities/user.model';
-import { Vote } from '../../../../core/modules/db/entities/vote.model';
+import { User } from '../../../../core/modules/db/entities/user.entity';
+import { Vote } from '../../../../core/modules/db/entities/vote.entity';
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../../../../core/modules/db/repositories/track.repository';
 import { UserRepository } from '../../../../core/modules/db/repositories/user.repository';

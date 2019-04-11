@@ -1,7 +1,7 @@
 import { OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
 import { from, Observable, of } from 'rxjs';
 import { concatMap, delay, filter, switchMap } from 'rxjs/operators';
-import { QueuedTrack } from '../core/modules/db/entities/queued-track.model';
+import { QueuedTrack } from '../core/modules/db/entities/queued-track.entity';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { PlaylistStore } from '../core/store/playlist.store';
 

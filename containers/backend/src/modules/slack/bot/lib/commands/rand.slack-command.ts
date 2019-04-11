@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '../../../../../configs/app.config';
 import { DownloadTrackCommand } from '../../../../core/cqrs/command-bus/commands/download-track.command';
 import { QueueTrackCommand } from '../../../../core/cqrs/command-bus/commands/queue-track.command';
-import { Track } from '../../../../core/modules/db/entities/track.model';
+import { Track } from '../../../../core/modules/db/entities/track.entity';
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../../../../core/modules/db/repositories/track.repository';
 import { SlackService } from '../../../services/slack.service';

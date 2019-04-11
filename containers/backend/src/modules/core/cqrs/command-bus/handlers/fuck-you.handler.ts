@@ -1,10 +1,10 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../../../core/modules/db/entities/user.model';
-import { Vote } from '../../../../core/modules/db/entities/vote.model';
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { UserRepository } from '../../../../core/modules/db/repositories/user.repository';
 import { VoteRepository } from '../../../../core/modules/db/repositories/vote.repository';
+import { User } from '../../../modules/db/entities/user.entity';
+import { Vote } from '../../../modules/db/entities/vote.entity';
 import { FuckYouCommand } from '../commands/fuck-you.command';
 import { HeartCommand } from '../commands/heart.command';
 
