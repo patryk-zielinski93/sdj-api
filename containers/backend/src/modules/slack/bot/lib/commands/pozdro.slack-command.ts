@@ -3,6 +3,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { UserRepository } from '../../../../core/modules/db/repositories/user.repository';
 import { TellCommand } from '../../../../web-socket/cqrs/command-bus/commands/tell.command';
 import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class PozdroSlackCommand implements SlackCommand {
@@ -12,7 +13,7 @@ export class PozdroSlackCommand implements SlackCommand {
     constructor(private userRepository: UserRepository, private readonly commandBus: CommandBus) {
     }
 
-    async handler(command: string[], message: any): Promise<any> {
+    async handler(command: string[], message: SlackMessage): Promise<void> {
 
         command.shift();
         const pozdro = command.join(' ');

@@ -1,4 +1,5 @@
 import { CommandBus, EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { Channel } from '../../../modules/db/entities/channel.entity';
 import { QueuedTrack } from '../../../modules/db/entities/queued-track.entity';
 import { PlaylistService } from '../../../services/playlist.service';
 import { PlaylistStore } from '../../../store/playlist.store';
@@ -13,7 +14,7 @@ export class RedisGetNextHandler implements IEventHandler<RedisGetNextEvent> {
 
     handle(event: RedisGetNextEvent): any {
         this.playlistStore.startHandlingNextSong();
-        this.playlist.getNext()
+        this.playlist.getNext({} as Channel)
             .then(async (queuedTrack: QueuedTrack | undefined) => {
                 if (queuedTrack) {
                     this.commandBus.execute(new DownloadAndPlayCommand(queuedTrack))

@@ -56,7 +56,7 @@ export class VoteRepository extends Repository<Vote> {
             .getCount();
     }
 
-    countUnlinksForQueuedTrack(queuedTrackId: string, channelId: string): Promise<number> {
+    countUnlinksForQueuedTrack(queuedTrackId: number, channelId: string): Promise<number> {
         return this.createQueryBuilder('unlike')
             .where('unlike.value < 0')
             .andWhere('unlike.addedIn = :channelId')

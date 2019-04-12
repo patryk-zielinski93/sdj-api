@@ -10,6 +10,7 @@ import { VoteRepository } from '../../../../core/modules/db/repositories/vote.re
 import { IcesService } from '../../../../core/services/ices.service';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class ThumbDownSlackCommand implements SlackCommand {
@@ -23,21 +24,21 @@ export class ThumbDownSlackCommand implements SlackCommand {
                 @InjectRepository(VoteRepository) private voteRepository: VoteRepository) {
     }
 
-    async handler(command: string[], message: any): Promise<any> {
+    async handler(command: string[], message: SlackMessage): Promise<void> {
         const userId = message.user;
         const user = await this.userRepository.findOne(userId);
-        const currentTrackInQueue = await this.queuedTrackRepository.getCurrentTrack();
+        const currentTrackInQueue = await this.queuedTrackRepository.getCurrentTrack(message.channel);
         if (!currentTrackInQueue) {
             return;
         }
 
-        const unlikesCountFromUser = await this.voteRepository.countUnlikesFromUserToQueuedTrack(currentTrackInQueue.id, userId);
+        const unlikesCountFromUser = await this.voteRepository.countUnlikesFromUserToQueuedTrack(currentTrackInQueue.id, userId, message.channel);
 
         if (unlikesCountFromUser > 0) {
             return;
         }
 
-        const unlikesCount = await this.voteRepository.countUnlinksForQueuedTrack(currentTrackInQueue.id);
+        const unlikesCount = await this.voteRepository.countUnlinksForQueuedTrack(currentTrackInQueue.id, message.channel);
 
         if (unlikesCount + 1 >= appConfig.nextSongVoteQuantity) {
             this.slackService.rtm.sendMessage('Skipping ' + currentTrackInQueue.track.title + '\n'

@@ -8,6 +8,7 @@ import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/
 import { TrackRepository } from '../../../../core/modules/db/repositories/track.repository';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class RefreshSlackCommand implements SlackCommand {
@@ -22,8 +23,8 @@ export class RefreshSlackCommand implements SlackCommand {
     ) {
     }
 
-    async handler(command: string[], message: any): Promise<any> {
-
+    async handler(command: string[], message: SlackMessage): Promise<void> {
+            // @TODO move this to repository
         const queuedTracksCount = await this.queuedTrackRepository.createQueryBuilder('queuedTrack')
             .where('queuedTrack.playedAt IS NULL')
             .andWhere('queuedTrack.addedById = :userId')

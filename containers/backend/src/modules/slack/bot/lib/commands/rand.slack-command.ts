@@ -9,6 +9,7 @@ import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/
 import { TrackRepository } from '../../../../core/modules/db/repositories/track.repository';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class RandSlackCommand implements SlackCommand {
@@ -22,15 +23,15 @@ export class RandSlackCommand implements SlackCommand {
     ) {
     }
 
-    async handler(command: string[], message: any): Promise<any> {
-        const queuedTracksCount = await this.queuedTrackRepository.countTracksInQueueFromUser(message.user);
+    async handler(command: string[], message: SlackMessage): Promise<void> {
+        const queuedTracksCount = await this.queuedTrackRepository.countTracksInQueueFromUser(message.user, message.channel);
 
         if (queuedTracksCount >= appConfig.queuedTracksPerUser) {
             this.slack.rtm.sendMessage(`Osiągnąłeś limit ${appConfig.queuedTracksPerUser} zakolejkowanych utworów.`, message.channel);
             throw new Error('zakolejkowane');
         }
 
-        const randTrack = await this.trackRepository.getRandomTrack();
+        const randTrack = await this.trackRepository.getRandomTrack(message.channel);
 
         if (randTrack) {
             this.commandBus.execute(new DownloadTrackCommand(randTrack.id))

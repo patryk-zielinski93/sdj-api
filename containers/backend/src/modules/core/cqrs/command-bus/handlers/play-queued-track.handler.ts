@@ -18,7 +18,7 @@ export class PlayQueuedTrackHandler implements ICommandHandler<PlayQueuedTrackCo
     async execute(command: PlayQueuedTrackCommand, resolve: (value?) => void) {
         const queuedTrack = command.queuedTrack;
         const track = await queuedTrack.track;
-        const prevTrack = await this.queuedTrackRepository.getCurrentTrack();
+        const prevTrack = await this.queuedTrackRepository.getCurrentTrack('');
         if (prevTrack) {
             this.playlistStore.removeFromQueue(prevTrack);
         }

@@ -22,7 +22,7 @@ export class ThumbUpHandler implements ICommandHandler<ThumbUpCommand> {
         const user = await this.userRepository.findOne(userId);
         const queuedTrack = await this.queuedTrackRepository.findOneOrFail(command.queuedTrackId);
 
-        const thumbUpFromUser = await this.voteRepository.countPositiveVotesFromUserToQueuedTrack(queuedTrack.id, userId);
+        const thumbUpFromUser = await this.voteRepository.countPositiveVotesFromUserToQueuedTrack(queuedTrack.id, userId, '');
 
         if (thumbUpFromUser > 0) {
             return;

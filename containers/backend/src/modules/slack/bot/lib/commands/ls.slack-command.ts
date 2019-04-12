@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class LsSlackCommand implements SlackCommand {
@@ -15,12 +16,12 @@ export class LsSlackCommand implements SlackCommand {
     ) {
     }
 
-    async handler(command: string[], message: any): Promise<any> {
-        const queuedTracks = await this.queuedTrackRepository.findQueuedTracks();
+    async handler(command: string[], message: SlackMessage): Promise<void> {
+        const queuedTracks = await this.queuedTrackRepository.findQueuedTracks(message.channel);
 
         let msg = '';
 
-        const currentTrack = await this.queuedTrackRepository.getCurrentTrack();
+        const currentTrack = await this.queuedTrackRepository.getCurrentTrack(message.channel);
             if (currentTrack) {
                 msg += `Teraz gram: ${(await currentTrack.track).title}, dodane przez ${currentTrack.addedBy ? currentTrack.addedBy.realName : 'BOT'}` + (currentTrack.randomized ? ' (rand)' : '') + '\n';
             }

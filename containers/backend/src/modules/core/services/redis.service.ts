@@ -8,7 +8,6 @@ import { QueuedTrackRepository } from '../modules/db/repositories/queued-track.r
 import { TrackRepository } from '../modules/db/repositories/track.repository';
 import { UserRepository } from '../modules/db/repositories/user.repository';
 import { PlaylistStore } from '../store/playlist.store';
-import { PlaylistService } from './playlist.service';
 
 type RedisSubject = Subject<{ channel: string, message: any } | any>;
 
@@ -19,7 +18,6 @@ export class RedisService extends AggregateRoot {
     private redisSub: RedisClient;
 
     constructor(private readonly commandBus: CommandBus,
-                private playlist: PlaylistService,
                 private playlistStore: PlaylistStore,
                 private readonly publisher: EventBus,
                 @InjectRepository(TrackRepository) private trackRepository: TrackRepository,

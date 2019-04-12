@@ -17,7 +17,7 @@ export class PlaySilenceHandler implements ICommandHandler<PlaySilenceCommand> {
     async execute(command: PlaySilenceCommand, resolve: (value?) => void) {
         const count = this.playlistStore.state.silenceCount + 1;
         this.playlistStore.setSilenceCount(count);
-        const prevTrack = await this.queuedTrackRepository.getCurrentTrack();
+        const prevTrack = await this.queuedTrackRepository.getCurrentTrack('');
         if (prevTrack) {
             this.playlistStore.removeFromQueue(prevTrack);
         }
