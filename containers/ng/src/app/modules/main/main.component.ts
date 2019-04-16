@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { environment } from '@environment/environment';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { appConfig } from '../../../configs/app.config';
 import { QueuedTrack } from '../../common/interfaces/queued-track.interface';
-import { SlackHttpService } from '../core/services/slack-http.service';
+import { Channel } from '../../resources/entities/channel.entity';
+import { ChannelService } from '../core/services/channel.service';
 import { SpeechService } from '../core/services/speech.service';
 import { WebSocketService } from '../core/services/web-socket.service';
 
@@ -14,16 +15,16 @@ import { WebSocketService } from '../core/services/web-socket.service';
 })
 export class MainComponent implements OnInit, AfterViewInit {
     audioSrc = environment.radioStreamUrl;
-    channels: any;
+    channels: Observable<Channel[]>;
     dj: HTMLAudioElement;
     queuedTracks$: Subject<QueuedTrack[]>;
 
-    constructor(private ws: WebSocketService, private slackHttpService: SlackHttpService, private speechService: SpeechService) {
+    constructor(private ws: WebSocketService, private channelService: ChannelService, private speechService: SpeechService) {
     }
 
     ngOnInit(): void {
-        this.slackHttpService.getChannelList()
-            .subscribe((channels) => this.channels = channels);
+        this.channels = this.channelService.getChannels();
+
     }
 
     ngAfterViewInit(): void {
