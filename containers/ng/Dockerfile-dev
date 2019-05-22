@@ -5,10 +5,11 @@ RUN apt-get update -y && apt-get upgrade -y && apt-get install -y --fix-missing 
 
 RUN mkdir -p /app
 
-COPY ./docker /var/docker
+COPY ./docker/dev /var/docker
 RUN find /var/docker -name "*.sh" | xargs dos2unix
 
 WORKDIR /app
+RUN npm install -g ts-node && npm install -g typescript
 
 EXPOSE 4200
 
