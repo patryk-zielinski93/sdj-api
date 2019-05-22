@@ -13,6 +13,9 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
     }
 
     @Input()
+    mediaElement: HTMLMediaElement;
+
+    @Input()
     set track$(value: Observable<any>) {
         this._track$ = value;
         if (this.player) {
@@ -29,7 +32,7 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
     constructor() {
     }
 
-  ngOnInit(): void {
+    ngOnInit(): void {
     }
 
     ngAfterViewInit(): void {
@@ -39,7 +42,7 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
         const controls = new Controls();
 
         this.scene = new Scene(this.framer, tracker, controls);
-        this.player = new Player(this.scene, this.framer);
+        this.player = new Player(this.scene, this.framer, this.mediaElement);
         if (this.track$) {
             this.player.track = this.track$;
         }
@@ -93,12 +96,12 @@ class Player {
     private firstLaunch: boolean;
     private gainNode: GainNode;
     private javascriptNode: ScriptProcessorNode;
-    source: AudioBufferSourceNode;
+    source: MediaStreamAudioSourceNode;
 
-    constructor(private scene: Scene, private framer: Framer) {
+    constructor(private scene: Scene, private framer: Framer, private mediaElement: HTMLMediaElement) {
     }
 
-    init() {
+    async init() {
         (<any>window).AudioContext = (<any>window).AudioContext || (<any>window).webkitAudioContext;
         this.context = new AudioContext();
         this.context.suspend && this.context.suspend();
@@ -110,7 +113,10 @@ class Player {
             this.analyser.connect(this.javascriptNode);
             this.analyser.smoothingTimeConstant = 0.6;
             this.analyser.fftSize = 2048;
-            this.source = this.context.createBufferSource();
+            const audio = new Audio(environment.radioStreamUrl);
+            const stream = audio.captureStream();
+            await audio.play(); // stream now has input
+            this.source = this.context.createMediaStreamSource(stream);
             this.destination = this.context.destination;
 
             this.gainNode = this.context.createGain();
@@ -129,18 +135,14 @@ class Player {
     handleTrackChange(): void {
         this._track.subscribe((track) => {
             try {
-                this.source.stop();
+                this.context.suspend();
             } catch (e) {
             }
-            this.source = this.context.createBufferSource();
-            this.source.connect(this.gainNode);
             const convertedTrack = {
                 artist: 'DJ PAWEŁ',
                 song: track.track.title,
                 url: environment.backendUrl + 'tracks/' + track.track.id + '.mp3'
             };
-            this.loadTrack(convertedTrack);
-            this.source.start();
         });
     }
 
@@ -155,7 +157,7 @@ class Player {
 
         request.onload = () => {
             this.context.decodeAudioData(request.response, (buffer) => {
-                this.source.buffer = buffer;
+                // this.source.buffer = buffer;
             });
         };
 
@@ -191,7 +193,7 @@ class Player {
     play() {
         this.context.resume && this.context.resume();
         if (this.firstLaunch) {
-            this.source.start();
+            this.context.resume();
             this.firstLaunch = false;
         }
     }
@@ -499,7 +501,7 @@ class Tracker {
                 if (!this.animatedInProgress) {
                     this.pressButton = false;
                     // TODO
-                    (<any>this.player.context).currentTime = this.angle / (2 * Math.PI) * this.player.source.buffer.duration;
+                    // (<any>this.player.context).currentTime = this.angle / (2 * Math.PI) * this.player.source.buffer.duration;
                     clearInterval(id);
                 }
             }, 100);
@@ -527,13 +529,13 @@ class Tracker {
     }
 
     draw() {
-        if (!this.player.source.buffer) {
-            return;
-        }
-        if (!this.pressButton) {
-            this.angle = this.player.context.currentTime / this.player.source.buffer.duration * 2 * Math.PI || 0;
-        }
-        this.drawArc();
+        // if (!this.player.source.buffer) {
+        //     return;
+        // }
+        // if (!this.pressButton) {
+        //     this.angle = this.player.context.currentTime / this.player.source.buffer.duration * 2 * Math.PI || 0;
+        // }
+        // this.drawArc();
     }
 
     drawArc() {
