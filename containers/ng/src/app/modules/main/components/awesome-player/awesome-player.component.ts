@@ -96,7 +96,7 @@ class Player {
     private firstLaunch: boolean;
     private gainNode: GainNode;
     private javascriptNode: ScriptProcessorNode;
-    source: MediaStreamAudioSourceNode;
+    source: MediaElementAudioSourceNode;
 
     constructor(private scene: Scene, private framer: Framer, private mediaElement: HTMLMediaElement) {
     }
@@ -114,9 +114,9 @@ class Player {
             this.analyser.smoothingTimeConstant = 0.6;
             this.analyser.fftSize = 2048;
             const audio = new Audio(environment.radioStreamUrl);
-            const stream = audio.captureStream();
+            audio.crossOrigin = 'anonymous';
             await audio.play(); // stream now has input
-            this.source = this.context.createMediaStreamSource(stream);
+            this.source = this.context.createMediaElementSource(audio);
             this.destination = this.context.destination;
 
             this.gainNode = this.context.createGain();
@@ -219,6 +219,7 @@ class Player {
         this.javascriptNode.onaudioprocess = () => {
             this.framer.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
             this.analyser.getByteFrequencyData(this.framer.frequencyData);
+            console.log(this.framer.frequencyData);
         };
     }
 }

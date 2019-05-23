@@ -10,5 +10,5 @@
         {{queuedTrack.track.title}}
     </li>
 </ul>
-<sdj-awesome-player *ngIf="!!dj && dj.currentTime" [mediaElement]="dj" [track$]="currentTrack">
+<sdj-awesome-player [track$]="currentTrack">
 </sdj-awesome-player>
