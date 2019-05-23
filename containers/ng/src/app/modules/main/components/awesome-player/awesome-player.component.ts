@@ -13,9 +13,6 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
     }
 
     @Input()
-    mediaElement: HTMLMediaElement;
-
-    @Input()
     set track$(value: Observable<any>) {
         this._track$ = value;
         if (this.player) {
@@ -42,7 +39,7 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
         const controls = new Controls();
 
         this.scene = new Scene(this.framer, tracker, controls);
-        this.player = new Player(this.scene, this.framer, this.mediaElement);
+      this.player = new Player(this.scene, this.framer);
         if (this.track$) {
             this.player.track = this.track$;
         }
@@ -68,37 +65,18 @@ class Player {
         this.handleTrackChange();
     }
 
-    buffer = null;
-    duration = 0;
-    private _track: Observable<any>;
-    //     [
-    //   {
-    //     artist: 'Fernando Riviera',
-    //     song: 'Ha ha ha. Wspaniale',
-    //     url: environment.backendUrl + 'tracks/VB8UjNxpkdI.mp3'
-    //   },
-    //   {
-    //     artist: 'Naruto Shippudent',
-    //     song: 'Samidare',
-    //     url: environment.backendUrl + 'tracks/OyXcAdvLsqI.mp3'
-    //   },
-    //   {
-    //     artist: 'Kavinsky',
-    //     song: 'Odd Look ft. The Weeknd',
-    //     url: '//katiebaca.com/tutorial/odd-look.mp3'
-    //   }
-    // ];
+  public context: AudioContext;
 
     private analyser: AnalyserNode;
-    context: AudioContext;
-    private currentSongIndex: number;
+  private audio: HTMLAudioElement;
     private destination: AudioDestinationNode;
     private firstLaunch: boolean;
     private gainNode: GainNode;
     private javascriptNode: ScriptProcessorNode;
-    source: MediaElementAudioSourceNode;
+  private source: MediaElementAudioSourceNode;
+  private _track: Observable<any>;
 
-    constructor(private scene: Scene, private framer: Framer, private mediaElement: HTMLMediaElement) {
+  constructor(private scene: Scene, private framer: Framer) {
     }
 
     async init() {
@@ -113,10 +91,10 @@ class Player {
             this.analyser.connect(this.javascriptNode);
             this.analyser.smoothingTimeConstant = 0.6;
             this.analyser.fftSize = 2048;
-            const audio = new Audio(environment.radioStreamUrl);
-            audio.crossOrigin = 'anonymous';
-            await audio.play(); // stream now has input
-            this.source = this.context.createMediaElementSource(audio);
+          this.audio = new Audio(environment.radioStreamUrl);
+          this.audio.crossOrigin = 'anonymous';
+          await this.audio.play(); // stream now has input
+          this.source = this.context.createMediaElementSource(this.audio);
             this.destination = this.context.destination;
 
             this.gainNode = this.context.createGain();
@@ -125,43 +103,22 @@ class Player {
             this.gainNode.connect(this.destination);
 
             this.initHandlers();
-        } catch (e) {
-            this.framer.setLoadingPercent(1);
+        } finally {
+          this.framer.setLoadingPercent(1);
         }
-        this.framer.setLoadingPercent(1);
         this.scene.init();
     }
 
     handleTrackChange(): void {
         this._track.subscribe((track) => {
-            try {
-                this.context.suspend();
-            } catch (e) {
-            }
             const convertedTrack = {
                 artist: 'DJ PAWEŁ',
-                song: track.track.title,
-                url: environment.backendUrl + 'tracks/' + track.track.id + '.mp3'
+              song: track.track.title
             };
+          document.querySelector('.song .artist').textContent = convertedTrack.artist;
+          document.querySelector('.song .name').textContent = convertedTrack.song;
+          // this.currentSongIndex = index;
         });
-    }
-
-    loadTrack(track) {
-        const request = new XMLHttpRequest();
-        document.querySelector('.song .artist').textContent = track.artist;
-        document.querySelector('.song .name').textContent = track.song;
-        // this.currentSongIndex = index;
-
-        request.open('GET', track.url, true);
-        request.responseType = 'arraybuffer';
-
-        request.onload = () => {
-            this.context.decodeAudioData(request.response, (buffer) => {
-                // this.source.buffer = buffer;
-            });
-        };
-
-        request.send();
     }
 
     nextTrack() {
@@ -192,10 +149,7 @@ class Player {
     //
     play() {
         this.context.resume && this.context.resume();
-        if (this.firstLaunch) {
-            this.context.resume();
-            this.firstLaunch = false;
-        }
+      this.audio.play();
     }
 
     stop() {
@@ -204,7 +158,8 @@ class Player {
     }
 
     pause() {
-        this.context.suspend();
+      this.context.suspend && this.context.suspend();
+      this.audio.pause();
     }
 
     mute() {
@@ -219,7 +174,6 @@ class Player {
         this.javascriptNode.onaudioprocess = () => {
             this.framer.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
             this.analyser.getByteFrequencyData(this.framer.frequencyData);
-            console.log(this.framer.frequencyData);
         };
     }
 }
@@ -501,8 +455,7 @@ class Tracker {
             const id = setInterval(() => {
                 if (!this.animatedInProgress) {
                     this.pressButton = false;
-                    // TODO
-                    // (<any>this.player.context).currentTime = this.angle / (2 * Math.PI) * this.player.source.buffer.duration;
+                  (<any>this.player.context).currentTime = this.angle / (2 * Math.PI) * 60;
                     clearInterval(id);
                 }
             }, 100);
@@ -530,13 +483,10 @@ class Tracker {
     }
 
     draw() {
-        // if (!this.player.source.buffer) {
-        //     return;
-        // }
-        // if (!this.pressButton) {
-        //     this.angle = this.player.context.currentTime / this.player.source.buffer.duration * 2 * Math.PI || 0;
-        // }
-        // this.drawArc();
+      if (!this.pressButton) {
+        this.angle = this.player.context.currentTime / 60 * 2 * Math.PI || 0;
+      }
+      this.drawArc();
     }
 
     drawArc() {

@@ -14,7 +14,7 @@ import { WebSocketService } from './modules/core/services/web-socket.service';
 })
 export class AppComponent implements AfterViewInit {
     audioSrc = environment.radioStreamUrl;
-    dj: HTMLAudioElement;
+  // dj: HTMLAudioElement;
     queuedTracks$: Subject<QueuedTrack[]>;
     prvTrackId: number;
     currentTrack: Observable<any>;
@@ -23,9 +23,9 @@ export class AppComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.dj = <HTMLAudioElement>document.getElementById('dj');
-
-        this.handleSpeeching();
+      // this.dj = <HTMLAudioElement>document.getElementById('dj');
+      //
+      // this.handleSpeeching();
         this.handleWsEvents();
     }
 
@@ -44,16 +44,16 @@ export class AppComponent implements AfterViewInit {
     }
 
     handleSpeeching(): void {
-        this.speechService.startListening();
-        this.speechService.speeching.subscribe(
-            (speeching: boolean) => {
-                if (speeching) {
-                    this.dj.volume = 0.1;
-                } else {
-                    this.dj.volume = 1;
-                }
-            }
-        );
+      // this.speechService.startListening();
+      // this.speechService.speeching.subscribe(
+      //     (speeching: boolean) => {
+      //         if (speeching) {
+      //             this.dj.volume = 0.1;
+      //         } else {
+      //             this.dj.volume = 1;
+      //         }
+      //     }
+      // );
     }
 
     handleWsEvents(): void {
@@ -73,19 +73,19 @@ export class AppComponent implements AfterViewInit {
         const playDJ$ = this.ws.createSubject('play_dj');
         playDJ$.subscribe((data) => {
             console.log('dj');
-            if (this.audioSrc !== environment.radioStreamUrl) {
-                this.dj.load();
-            }
-            this.dj.play();
-            this.audioSrc = environment.radioStreamUrl;
+          // if (this.audioSrc !== environment.radioStreamUrl) {
+          //     this.dj.load();
+          // }
+          // this.dj.play();
+          // this.audioSrc = environment.radioStreamUrl;
         });
         const playRadio$ = this.ws.createSubject('play_radio');
         playRadio$.subscribe(() => {
             console.log('radio');
-            if (this.audioSrc !== appConfig.externalStream) {
-                this.dj.load();
-            }
-            this.dj.play();
+          // if (this.audioSrc !== appConfig.externalStream) {
+          //     this.dj.load();
+          // }
+          // this.dj.play();
             this.audioSrc = appConfig.externalStream;
         });
     }
