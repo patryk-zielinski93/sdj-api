@@ -77,7 +77,7 @@ export class AppComponent implements AfterViewInit {
           //     this.dj.load();
           // }
           // this.dj.play();
-          // this.audioSrc = environment.radioStreamUrl;
+          this.audioSrc = environment.radioStreamUrl;
         });
         const playRadio$ = this.ws.createSubject('play_radio');
         playRadio$.subscribe(() => {
