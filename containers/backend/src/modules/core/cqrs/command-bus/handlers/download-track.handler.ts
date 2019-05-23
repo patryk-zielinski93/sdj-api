@@ -1,6 +1,7 @@
 import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
+import { throwError } from 'rxjs';
 import { pathConfig } from '../../../../../configs/path.config';
 import { DeleteTrackCommand } from '../../../modules/db/cqrs/command-bus/commands/DeleteTrackCommand';
 import { TrackRepository } from '../../../modules/db/repositories/track.repository';
@@ -21,7 +22,7 @@ export class DownloadTrackHandler implements ICommandHandler<DownloadTrackComman
                 console.log('Can\'t download track ' + track.id);
                 console.log('Removing ' + track.title);
                 await this.commandBus.execute(new DeleteTrackCommand(track.id));
-                resolve();
+                throwError(new Error('Can\'t download track '));
             }, () => {
                 resolve();
             });
