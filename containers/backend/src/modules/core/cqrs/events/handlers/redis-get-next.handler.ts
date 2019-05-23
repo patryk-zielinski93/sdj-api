@@ -21,8 +21,10 @@ export class RedisGetNextHandler implements IEventHandler<RedisGetNextEvent> {
                             this.playlistStore.endHandlingNextSong();
                         });
                 } else {
-                    this.commandBus.execute(new PlaySilenceCommand());
-                    this.playlistStore.endHandlingNextSong();
+                    this.commandBus.execute(new PlaySilenceCommand())
+                        .then(() => {
+                            this.playlistStore.endHandlingNextSong();
+                        });
                 }
             });
     }
