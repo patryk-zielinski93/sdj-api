@@ -28,10 +28,10 @@ export class Player {
     this.handleTrackChange();
   }
 
+  public audio: HTMLAudioElement;
   public context: AudioContext;
 
   private analyser: AnalyserNode;
-  private audio: HTMLAudioElement;
   private destination: AudioDestinationNode;
   private firstLaunch: boolean;
   private gainNode: GainNode;

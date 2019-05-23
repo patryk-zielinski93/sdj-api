@@ -1,8 +1,7 @@
-
 <ul>
     <li *ngFor="let queuedTrack of (queuedTracks$ | async)">
         {{queuedTrack.track.title}}
     </li>
 </ul>
-<sdj-awesome-player [src]="audioSrc" [track$]="currentTrack">
+<sdj-awesome-player #playerComponent [src]="audioSrc" [track$]="currentTrack">
 </sdj-awesome-player>

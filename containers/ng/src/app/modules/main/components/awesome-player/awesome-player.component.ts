@@ -36,7 +36,7 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private player: Player;
+  public player: Player;
   private framer: Framer;
   private scene: Scene;
 
