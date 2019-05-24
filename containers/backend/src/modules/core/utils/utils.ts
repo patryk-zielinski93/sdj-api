@@ -1,5 +1,5 @@
-import * as url from "url";
-import * as querystring from "querystring";
+import * as querystring from 'querystring';
+import * as url from 'url';
 
 export namespace Utils {
     export function extractVideoIdFromYoutubeUrl(ytUrl: string): string {
@@ -11,7 +11,7 @@ export namespace Utils {
         }
 
         if (u.pathname) {
-            return u.pathname.slice(1, 11);
+            return u.pathname.slice(1, 12);
         }
 
         return '';
