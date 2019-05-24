@@ -104,9 +104,10 @@ body {
   color: #FE4365;
   position: absolute;
   top: 225px;
-  left: 0;
-  width: 100%;
+  max-width: 400px;
+  left: 50%;
   text-align: center;
+  transform: translateX(-50%);
 }
 
 .player .song .artist {
