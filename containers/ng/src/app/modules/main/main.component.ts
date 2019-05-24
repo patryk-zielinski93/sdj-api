@@ -1,12 +1,14 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { environment } from '@environment/environment';
 import { Observable, Subject } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 import { appConfig } from '../../../configs/app.config';
 import { QueuedTrack } from '../../common/interfaces/queued-track.interface';
 import { Channel } from '../../resources/entities/channel.entity';
 import { ChannelService } from '../core/services/channel.service';
 import { SpeechService } from '../core/services/speech.service';
 import { WebSocketService } from '../core/services/web-socket.service';
+import { AwesomePlayerComponent } from './components/awesome-player/awesome-player.component';
 
 @Component({
     selector: 'sdj-main',
@@ -16,10 +18,13 @@ import { WebSocketService } from '../core/services/web-socket.service';
 export class MainComponent implements OnInit, AfterViewInit {
     audioSrc = environment.radioStreamUrl;
     channels: Observable<Channel[]>;
-    dj: HTMLAudioElement;
+    currentTrack: Observable<any>;
     queuedTracks$: Subject<QueuedTrack[]>;
+    @ViewChild('playerComponent')
+    playerComponent: AwesomePlayerComponent;
+    prvTrackId: number;
 
-    constructor(private ws: WebSocketService, private channelService: ChannelService, private speechService: SpeechService) {
+    constructor(private channelService: ChannelService, private ws: WebSocketService, private speechService: SpeechService) {
     }
 
     ngOnInit(): void {
@@ -28,18 +33,19 @@ export class MainComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.dj = <HTMLAudioElement>document.getElementById('dj');
-
         this.handleSpeeching();
         this.handleWsEvents();
     }
 
     handleQueuedTrackList(): void {
         this.queuedTracks$ = this.ws.getQueuedTrackListSubject();
-        this.queuedTracks$.subscribe((list) => {
-            console.log(list);
-        });
         this.queuedTracks$.next();
+
+        this.currentTrack = this.queuedTracks$
+            .pipe(map((list) => list[0]),
+                filter((track: any) => track && track.id !== this.prvTrackId),
+                tap((track: any) => this.prvTrackId = track.id)
+            );
     }
 
     handleSpeeching(): void {
@@ -47,9 +53,9 @@ export class MainComponent implements OnInit, AfterViewInit {
         this.speechService.speeching.subscribe(
             (speeching: boolean) => {
                 if (speeching) {
-                    this.dj.volume = 0.1;
+                    this.playerComponent.player.audio.volume = 0.1;
                 } else {
-                    this.dj.volume = 1;
+                    this.playerComponent.player.audio.volume = 1;
                 }
             }
         );
@@ -72,19 +78,11 @@ export class MainComponent implements OnInit, AfterViewInit {
         const playDJ$ = this.ws.createSubject('play_dj');
         playDJ$.subscribe((data) => {
             console.log('dj');
-            if (this.audioSrc !== environment.radioStreamUrl) {
-                this.dj.load();
-            }
-            this.dj.play();
             this.audioSrc = environment.radioStreamUrl;
         });
         const playRadio$ = this.ws.createSubject('play_radio');
         playRadio$.subscribe(() => {
             console.log('radio');
-            if (this.audioSrc !== appConfig.externalStream) {
-                this.dj.load();
-            }
-            this.dj.play();
             this.audioSrc = appConfig.externalStream;
         });
     }

@@ -9,7 +9,7 @@ import { Channel } from '../../../resources/entities/channel.entity';
 })
 export class SlackHttpService {
     readonly baseSlackUrl = 'https://slack.com/api/';
-    readonly channelList = this.baseSlackUrl + 'channels.list';
+    readonly channelList = this.baseSlackUrl + 'conversations.list?types=public_channel%2C%20private_channel&pretty=1';
 
     constructor(private http: HttpClient) {
     }

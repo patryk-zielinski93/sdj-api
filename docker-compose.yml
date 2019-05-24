@@ -15,6 +15,8 @@ services:
     - LOCAL_USER_ID=${LOCAL_USER_ID}
     - BACKEND_URL=${BACKEND_URL}
     - RADIO_STREAM_URL=${ICECAST_URL}
+    - SLACK_CLIENT_ID=${SLACK_CLIENT_ID}
+    - SLACK_CLIENT_SECRET=${SLACK_CLIENT_SECRET}
     networks:
       frontend:
         aliases:

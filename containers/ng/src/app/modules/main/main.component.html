@@ -10,19 +10,12 @@
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-        <div>
-            Slack DJ:
-            <audio id="dj" controls autoplay>
-                <source [src]="audioSrc" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </div>
         <ul>
             <li *ngFor="let queuedTrack of (queuedTracks$ | async)">
                 {{queuedTrack.track.title}}
             </li>
         </ul>
-        <sdj-awesome-player>
+        <sdj-awesome-player #playerComponent [src]="audioSrc" [track$]="currentTrack">
         </sdj-awesome-player>
         <router-outlet></router-outlet>
     </mat-sidenav-content>
