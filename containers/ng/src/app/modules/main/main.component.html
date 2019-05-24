@@ -4,7 +4,7 @@
 <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sidenav mode="side">
         <mat-nav-list>
-            <mat-list-item routerLinkActive="list-item-active" *ngFor="let channel of channels | async">
+            <mat-list-item routerLinkActive="list-item-active" *ngFor="let channel of channels$ | async">
                 {{ channel.name }}
             </mat-list-item>
         </mat-nav-list>

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { environment } from '@environment/environment';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, first, map, tap } from 'rxjs/operators';
 import { appConfig } from '../../../configs/app.config';
 import { QueuedTrack } from '../../common/interfaces/queued-track.interface';
 import { Channel } from '../../resources/entities/channel.entity';
@@ -17,7 +17,7 @@ import { AwesomePlayerComponent } from './components/awesome-player/awesome-play
 })
 export class MainComponent implements OnInit, AfterViewInit {
     audioSrc = environment.radioStreamUrl;
-    channels: Observable<Channel[]>;
+    channels$: Observable<Channel[]>;
     currentTrack: Observable<any>;
     queuedTracks$: Subject<QueuedTrack[]>;
     @ViewChild('playerComponent')
@@ -28,8 +28,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
-        this.channels = this.channelService.getChannels();
-
+        this.channels$ = this.channelService.getChannels();
     }
 
     ngAfterViewInit(): void {
@@ -64,8 +63,14 @@ export class MainComponent implements OnInit, AfterViewInit {
     handleWsEvents(): void {
         const connect$ = this.ws.createSubject('connect');
         const events$ = this.ws.createSubject('events');
-        connect$.subscribe(() => {
-            console.log('Connected');
+        const join$ = this.ws.createSubject('join');
+        const newUser$ = this.ws.createSubject('newUser');
+        connect$.subscribe((socket) => {
+            this.channels$.pipe(first())
+                .subscribe((channels: Channel[]) => {
+                    join$.next({ room: channels[Math.floor(Math.random() * 2)].id });
+                });
+            newUser$.subscribe((data) => console.log(data));
             events$.next(<any>{ test: 'test' });
             this.handleQueuedTrackList();
         });

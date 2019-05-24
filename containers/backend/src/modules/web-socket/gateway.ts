@@ -1,13 +1,14 @@
 import { OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
 import { from, Observable, of } from 'rxjs';
 import { concatMap, delay, filter, switchMap } from 'rxjs/operators';
+import { Client, Server } from 'socket.io';
 import { QueuedTrack } from '../core/modules/db/entities/queued-track.model';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { PlaylistStore } from '../core/store/playlist.store';
 
 @WebSocketGateway()
 export class Gateway implements OnGatewayConnection {
-    @WebSocketServer() server;
+    @WebSocketServer() server: Server;
 
     constructor(private service: WebSocketService, private readonly playlistStore: PlaylistStore) {
     }
@@ -26,6 +27,15 @@ export class Gateway implements OnGatewayConnection {
                     )
                 )
             );
+    }
+
+    @SubscribeMessage('join')
+    join(client: Client, data: string): void {
+        const room = JSON.parse(data).room;
+        client.join(room);
+        this.server.in(room)
+            .emit('newUser', 'New Player in ' + room);
+        return;
     }
 
     @SubscribeMessage('queuedTrackList')

@@ -10,8 +10,7 @@ export class ChannelResolver implements Resolve<Channel[]> {
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Channel[]> | Promise<Channel[]> | Channel[] {
-        this.channelService.loadChannels();
-        return this.channelService.getChannels();
+        return this.channelService.loadChannels();
     }
 
 }

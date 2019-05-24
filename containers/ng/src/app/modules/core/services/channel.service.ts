@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Channel } from '../../../resources/entities/channel.entity';
 import { SlackHttpService } from './slack-http.service';
 
@@ -9,7 +9,7 @@ import { SlackHttpService } from './slack-http.service';
 export class ChannelService {
     private selectedChannel: Channel;
     private channels: Channel[];
-    private channels$: Observable<Channel[]>;
+    private channels$: Subject<Channel[]> = new BehaviorSubject([]);
 
     constructor(private slackHttpService: SlackHttpService) {
     }
@@ -18,12 +18,14 @@ export class ChannelService {
         return this.channels$;
     }
 
-    loadChannels(): void {
-        this.channels$ = this.slackHttpService.getChannelList();
-        this.channels$.subscribe((channels: Channel[]) => {
+    loadChannels(): Observable<Channel[]> {
+        const source = this.slackHttpService.getChannelList();
+        source.subscribe((channels: Channel[]) => {
+            this.channels$.next(channels);
             this.channels = channels;
             this.selectGeneral();
         });
+        return source;
     }
 
     selectGeneral(): void {

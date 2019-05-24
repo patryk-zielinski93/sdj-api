@@ -3,13 +3,14 @@ import { Observable, Subject } from 'rxjs';
 import * as io from 'socket.io-client';
 import { environment } from '../../../../environments/environment';
 import { QueuedTrack } from '../../../common/interfaces/queued-track.interface';
+import Socket = SocketIOClient.Socket;
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
 
-  private socket;
+    private socket: Socket;
 
   constructor() {
     this.socket = io(environment.backendUrl);
