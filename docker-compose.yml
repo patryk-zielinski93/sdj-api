@@ -13,6 +13,8 @@ services:
     - VIRTUAL_HOST=${NG_URL}
     - VIRTUAL_PORT=80
     - LOCAL_USER_ID=${LOCAL_USER_ID}
+    - BACKEND_URL=${BACKEND_URL}
+    - RADIO_STREAM_URL=${ICECAST_URL}
     networks:
       frontend:
         aliases:
