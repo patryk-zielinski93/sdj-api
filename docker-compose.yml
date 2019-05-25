@@ -79,12 +79,14 @@ services:
           - icecast
 
   slack_dj_ices:
-    container_name: ${ICES_CONTAINER_NAME}
+    container_name: ${ICES_CONTAINER_NAME}-${ROOM_ID}
     build:
       dockerfile: Dockerfile
       context: ./containers/ices
     volumes:
-    - ./containers/backend/src/public/tracks:/tracks
+      - ./containers/backend/src/public/tracks:/tracks
+    environment:
+      - ROOM_ID=${ROOM_ID}
     depends_on:
       - slack_dj_redis
       - slack_dj_icecast
