@@ -1,7 +1,7 @@
 import { OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
 import { from, Observable, of } from 'rxjs';
 import { concatMap, delay, filter, switchMap } from 'rxjs/operators';
-import { Client, Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { QueuedTrack } from '../core/modules/db/entities/queued-track.model';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { PlaylistStore } from '../core/store/playlist.store';
@@ -30,7 +30,9 @@ export class Gateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage('join')
-    join(client: Client, data: string): void {
+    join(client: Socket, data: string): void {
+        const oldRoom = Object.keys(client.rooms).filter(item => item != client.id);
+        oldRoom.forEach((room) => client.leave(room));
         const room = JSON.parse(data).room;
         client.join(room);
         this.server.in(room)

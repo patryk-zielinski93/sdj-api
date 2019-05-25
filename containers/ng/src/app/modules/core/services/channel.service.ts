@@ -7,7 +7,7 @@ import { SlackHttpService } from './slack-http.service';
     providedIn: 'root'
 })
 export class ChannelService {
-    private selectedChannel: Channel;
+  private selectedChannel$: Subject<Channel> = new BehaviorSubject(null);
     private channels: Channel[];
     private channels$: Subject<Channel[]> = new BehaviorSubject([]);
 
@@ -17,6 +17,10 @@ export class ChannelService {
     getChannels(): Observable<Channel[]> {
         return this.channels$;
     }
+
+  getSelectedChannel(): Observable<Channel> {
+    return this.selectedChannel$;
+  }
 
     loadChannels(): Observable<Channel[]> {
         const source = this.slackHttpService.getChannelList();
@@ -29,6 +33,10 @@ export class ChannelService {
     }
 
     selectGeneral(): void {
-        this.selectedChannel = this.channels.find((channel: Channel) => channel.is_general);
+      this.selectedChannel$.next(this.channels.find((channel: Channel) => channel.is_general));
     }
+
+  selectChannel(channel: Channel): void {
+    this.selectedChannel$.next(channel);
+  }
 }
