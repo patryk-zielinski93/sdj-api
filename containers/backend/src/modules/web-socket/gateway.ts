@@ -3,6 +3,7 @@ import { from, Observable, of } from 'rxjs';
 import { concatMap, delay, filter, switchMap } from 'rxjs/operators';
 import { Server, Socket } from 'socket.io';
 import { QueuedTrack } from '../core/modules/db/entities/queued-track.model';
+import { HostService } from '../core/services/host.service';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { PlaylistStore } from '../core/store/playlist.store';
 
@@ -30,13 +31,30 @@ export class Gateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage('join')
-    join(client: Socket, data: string): void {
-        const oldRoom = Object.keys(client.rooms).filter(item => item != client.id);
-        oldRoom.forEach((room) => client.leave(room));
+    async join(client: Socket, data: string): Promise<void> {
         const room = JSON.parse(data).room;
-        client.join(room);
-        this.server.in(room)
-            .emit('newUser', 'New Player in ' + room);
+        if (!client.rooms[room]) {
+            if (!this.server.sockets.adapter.rooms[room]) {
+                HostService.startRadioStream(room)
+                    .then(() => {
+                        this.server.in(room)
+                            .emit('roomIsRunning');
+                    });
+            } else {
+                this.server.in(room)
+                    .emit('roomIsRunning');
+            }
+            const oldRoom = Object.keys(client.rooms).filter(item => item != client.id);
+            oldRoom.forEach((room) => {
+                client.leave(room);
+                if (!this.server.sockets.adapter.rooms[room]) {
+                    HostService.removeRadioStream(room);
+                }
+            });
+            client.join(room);
+            this.server.in(room)
+                .emit('newUser', 'New Player in ' + room);
+        }
         return;
     }
 

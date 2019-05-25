@@ -111,6 +111,7 @@ services:
       - VIRTUAL_HOST=${BACKEND_URL}
       - VIRTUAL_PORT=8888
       - LOCAL_USER_ID=${LOCAL_USER_ID}
+      - HOST_IP=${HOST_IP}
     networks:
       backend:
         aliases:

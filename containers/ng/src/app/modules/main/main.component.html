@@ -1,22 +1,23 @@
 <mat-toolbar color="primary">
-    <span (click)="sidenav.toggle()">My Application</span>
+  <span (click)="sidenav.toggle()">My Application</span>
 </mat-toolbar>
 <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav mode="side">
-        <mat-nav-list>
-          <mat-list-item (click)="selectChannel(channel)" routerLinkActive="list-item-active" *ngFor="let channel of channels$ | async">
-                {{ channel.name }}
-            </mat-list-item>
-        </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content>
-        <ul>
-            <li *ngFor="let queuedTrack of (queuedTracks$ | async)">
-                {{queuedTrack.track.title}}
-            </li>
-        </ul>
-        <sdj-awesome-player #playerComponent [src]="audioSrc" [track$]="currentTrack">
-        </sdj-awesome-player>
-        <router-outlet></router-outlet>
-    </mat-sidenav-content>
+  <mat-sidenav #sidenav mode="side">
+    <mat-nav-list>
+      <mat-list-item [ngStyle]="channel.id === selectedChannel.id && {backgroundColor: '#777'}" (click)="selectChannel(channel)"
+                     routerLinkActive="list-item-active" *ngFor="let channel of channels$ | async">
+        {{ channel.name }}
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <ul>
+      <li *ngFor="let queuedTrack of (queuedTracks$ | async)">
+        {{queuedTrack.track.title}}
+      </li>
+    </ul>
+    <sdj-awesome-player #playerComponent [src]="audioSrc" [track$]="currentTrack">
+    </sdj-awesome-player>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
 </mat-sidenav-container>

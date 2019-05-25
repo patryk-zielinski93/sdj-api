@@ -22,7 +22,6 @@ export class WebSocketService {
         observer.next(data);
       });
       return () => {
-        this.socket.disconnect();
       };
     });
 

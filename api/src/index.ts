@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 
 //TODO VALIDATE ID!!!
 app.get('/start/:id', function(req, res) {
+    console.log('starting', req.params.id);
     const signal = spawn('bash', ['-c', `cd .. && docker-compose run -d --name slack_dj_ices_${req.params.id} -e ROOM_ID=${req.params.id} slack_dj_ices`]);
 
     signal.stdout.on('data', data => {
@@ -27,6 +28,7 @@ app.get('/start/:id', function(req, res) {
 });
 
 app.get('/remove/:id', function(req, res) {
+    console.log('removing', req.params.id);
     const signal = spawn('bash', ['-c', `cd .. && docker rm -f slack_dj_ices_${req.params.id}`]);
 
     signal.stdout.on('data', data => {

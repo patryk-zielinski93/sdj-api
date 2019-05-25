@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { environment } from '@environment/environment';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, first, map, tap } from 'rxjs/operators';
 import { appConfig } from '../../../configs/app.config';
 import { QueuedTrack } from '../../common/interfaces/queued-track.interface';
 import { Channel } from '../../resources/entities/channel.entity';
@@ -16,24 +16,34 @@ import { AwesomePlayerComponent } from './components/awesome-player/awesome-play
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, AfterViewInit {
-  audioSrc = environment.radioStreamUrl;
+  audioSrc = appConfig.externalStream;
   channels$: Observable<Channel[]>;
   currentTrack: Observable<any>;
   queuedTracks$: Subject<QueuedTrack[]>;
   @ViewChild('playerComponent')
   playerComponent: AwesomePlayerComponent;
   prvTrackId: number;
+  selectedChannel: Channel;
 
   constructor(private channelService: ChannelService, private ws: WebSocketService, private speechService: SpeechService) {
   }
 
   ngOnInit(): void {
     this.channels$ = this.channelService.getChannels();
+    this.handleChannelChanges();
   }
 
   ngAfterViewInit(): void {
     this.handleSpeeching();
     this.handleWsEvents();
+    this.handleAudioSource();
+  }
+
+  handleChannelChanges(): void {
+    this.channelService.getSelectedChannel()
+      .subscribe((channel: Channel) => {
+        this.selectedChannel = channel;
+      });
   }
 
   handleQueuedTrackList(): void {
@@ -45,6 +55,29 @@ export class MainComponent implements OnInit, AfterViewInit {
         filter((track: any) => track && track.id !== this.prvTrackId),
         tap((track: any) => this.prvTrackId = track.id)
       );
+  }
+
+  handleAudioSource(): void {
+    this.channelService.getSelectedChannel()
+      .pipe(distinctUntilChanged((room1, room2) => room1.id !== room2.id))
+      .subscribe((selectedRoom: Channel) => {
+        this.ws.createSubject('roomIsRunning')
+          .pipe(first())
+          .subscribe(() => {
+            this.audioSrc = environment.radioStreamUrl + selectedRoom.id;
+          });
+      });
+    this.ws.createSubject('play_dj')
+      .subscribe(() => {
+        console.log('dj');
+        this.audioSrc = environment.radioStreamUrl + this.selectedChannel.id;
+      });
+
+    this.ws.createSubject('play_radio')
+      .subscribe(() => {
+        console.log('radio');
+        this.audioSrc = appConfig.externalStream;
+      });
   }
 
   handleSpeeching(): void {
@@ -79,17 +112,6 @@ export class MainComponent implements OnInit, AfterViewInit {
     disconnect$.subscribe(() => console.log('Disconnected'));
     const exception$ = this.ws.createSubject('exception');
     exception$.subscribe(() => console.log('Disconnected'));
-
-    const playDJ$ = this.ws.createSubject('play_dj');
-    playDJ$.subscribe((data) => {
-      console.log('dj');
-      this.audioSrc = environment.radioStreamUrl;
-    });
-    const playRadio$ = this.ws.createSubject('play_radio');
-    playRadio$.subscribe(() => {
-      console.log('radio');
-      this.audioSrc = appConfig.externalStream;
-    });
   }
 
   selectChannel(channel: Channel): void {
