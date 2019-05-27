@@ -14,7 +14,6 @@ export class DeleteTrackHandler implements ICommandHandler<DeleteTrackCommand> {
         // TODO CASCADE DELETE
         const track = await this.trackRepository.findOneOrFail(command.trackId);
         const queuedTracks = await track.queuedTracks;
-        console.log(queuedTracks);
         for (const qTrack of queuedTracks) {
             await this.queuedTrackRepository.remove(qTrack);
         }

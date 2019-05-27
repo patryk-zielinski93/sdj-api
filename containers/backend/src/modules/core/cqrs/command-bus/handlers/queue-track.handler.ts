@@ -1,5 +1,6 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Channel } from '../../../modules/db/entities/channel.entity';
 import { QueuedTrackRepository } from '../../../modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../../../modules/db/repositories/track.repository';
 import { RedisService } from '../../../services/redis.service';
@@ -17,7 +18,7 @@ export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
 
     async execute(command: QueueTrackCommand, resolve: (value?) => void) {
         const track = await this.trackRepository.findOneOrFail(command.trackId);
-        const queuedTrack = await this.queuedTrackRepository.queueTrack(track, command.randomized, command.addedBy);
+        const queuedTrack = await this.queuedTrackRepository.queueTrack(track, {} as Channel, command.randomized, command.addedBy);
         this.playlistStore.addToQueue(queuedTrack);
         resolve(queuedTrack);
     }

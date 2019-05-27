@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class CleanShitSlackCommand implements SlackCommand {
@@ -10,7 +11,7 @@ export class CleanShitSlackCommand implements SlackCommand {
   constructor(private slack: SlackService) {
   }
 
-  async handler(command: string[], message: any): Promise<any> {
+    async handler(command: string[], message: SlackMessage): Promise<void> {
     this.slack.rtm.sendMessage('Nie masz wystarczającej liczby żetonów.', message.channel);
   }
 }

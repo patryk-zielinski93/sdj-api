@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HeartCommand } from '../../../../core/cqrs/command-bus/commands/heart.command';
-import { QueuedTrack } from '../../../../core/modules/db/entities/queued-track.model';
+import { QueuedTrack } from '../../../../core/modules/db/entities/queued-track.entity';
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class HeartSlackCommand implements SlackCommand {
@@ -17,8 +18,8 @@ export class HeartSlackCommand implements SlackCommand {
                 @InjectRepository(QueuedTrackRepository) private readonly queuedTrackRepository: QueuedTrackRepository) {
     }
 
-    async handler(command: string[], message: any): Promise<any> {
-        const currentTrackInQueue = <QueuedTrack>await this.queuedTrackRepository.getCurrentTrack();
+    async handler(command: string[], message: SlackMessage): Promise<void> {
+        const currentTrackInQueue = <QueuedTrack>await this.queuedTrackRepository.getCurrentTrack(message.channel);
         if (currentTrackInQueue) {
             this.commandBus.execute(new HeartCommand(currentTrackInQueue.id, message.user))
                 .then((value) => {

@@ -3,11 +3,12 @@ import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '../../../../../configs/app.config';
 import { QueueTrackCommand } from '../../../../core/cqrs/command-bus/commands/queue-track.command';
-import { Track } from '../../../../core/modules/db/entities/track.model';
+import { Track } from '../../../../core/modules/db/entities/track.entity';
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { TrackRepository } from '../../../../core/modules/db/repositories/track.repository';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class RefreshSlackCommand implements SlackCommand {
@@ -22,8 +23,8 @@ export class RefreshSlackCommand implements SlackCommand {
     ) {
     }
 
-    async handler(command: string[], message: any): Promise<any> {
-
+    async handler(command: string[], message: SlackMessage): Promise<void> {
+        // @TODO move this to repository
         const queuedTracksCount = await this.queuedTrackRepository.createQueryBuilder('queuedTrack')
             .where('queuedTrack.playedAt IS NULL')
             .andWhere('queuedTrack.addedById = :userId')

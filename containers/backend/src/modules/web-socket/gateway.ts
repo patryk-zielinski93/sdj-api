@@ -2,7 +2,7 @@ import { OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServe
 import { from, Observable, of } from 'rxjs';
 import { concatMap, delay, filter, switchMap } from 'rxjs/operators';
 import { Server, Socket } from 'socket.io';
-import { QueuedTrack } from '../core/modules/db/entities/queued-track.model';
+import { QueuedTrack } from '../core/modules/db/entities/queued-track.entity';
 import { HostService } from '../core/services/host.service';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { PlaylistStore } from '../core/store/playlist.store';

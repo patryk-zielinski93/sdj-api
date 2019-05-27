@@ -1,7 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Track } from './track.model';
-import { User } from './user.model';
-import { Vote } from './vote.model';
+import { Channel } from './channel.entity';
+import { Track } from './track.entity';
+import { User } from './user.entity';
+import { Vote } from './vote.entity';
 
 @Entity()
 export class QueuedTrack {
@@ -24,6 +25,10 @@ export class QueuedTrack {
         default: null
     })
     playedAt: Date;
+
+    @ManyToOne(type => Channel)
+    @JoinColumn()
+    playedIn: Channel;
 
     @Column({
         default: false

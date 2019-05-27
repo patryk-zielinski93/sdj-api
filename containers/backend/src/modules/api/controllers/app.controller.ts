@@ -1,4 +1,5 @@
 import { Controller, Get, Render } from '@nestjs/common';
+import { Channel } from '../../core/modules/db/entities/channel.entity';
 import { IcesService } from '../../core/services/ices.service';
 import { PlaylistService } from '../../core/services/playlist.service';
 
@@ -19,7 +20,7 @@ export class AppController {
 
   @Get('next')
   removeNextSong(): any {
-    this.playlist.getNext()
+      this.playlist.getNext({} as Channel)
       .then(queuedTrack => {
       if (queuedTrack) {
         this.playlist.removeQueuedTrack(queuedTrack);

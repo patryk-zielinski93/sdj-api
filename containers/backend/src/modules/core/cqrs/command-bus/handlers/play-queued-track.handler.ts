@@ -1,6 +1,6 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueuedTrack } from '../../../modules/db/entities/queued-track.model';
+import { QueuedTrack } from '../../../modules/db/entities/queued-track.entity';
 import { QueuedTrackRepository } from '../../../modules/db/repositories/queued-track.repository';
 import { RedisService } from '../../../services/redis.service';
 import { PlaylistStore } from '../../../store/playlist.store';
@@ -18,7 +18,7 @@ export class PlayQueuedTrackHandler implements ICommandHandler<PlayQueuedTrackCo
     async execute(command: PlayQueuedTrackCommand, resolve: (value?) => void) {
         const queuedTrack = command.queuedTrack;
         const track = await queuedTrack.track;
-        const prevTrack = await this.queuedTrackRepository.getCurrentTrack();
+        const prevTrack = await this.queuedTrackRepository.getCurrentTrack('');
         if (prevTrack) {
             this.playlistStore.removeFromQueue(prevTrack);
         }

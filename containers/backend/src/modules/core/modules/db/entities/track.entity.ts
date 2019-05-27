@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
-import { QueuedTrack } from './queued-track.model';
-import { User } from './user.model';
+import { QueuedTrack } from './queued-track.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Track {

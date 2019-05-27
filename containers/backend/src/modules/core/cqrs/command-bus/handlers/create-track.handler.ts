@@ -1,19 +1,18 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as parseIsoDuration from 'parse-iso-duration';
+import * as requestPromise from 'request-promise-native';
+import { connectionConfig } from '../../../../../configs/connection.config';
+import { YoutubeIdError } from '../../../../slack/bot/lib/errors/youtube-id.error';
+import { VideoMetadata } from '../../../../slack/bot/lib/interfaces/video-metadata.interface';
+import { TrackStatus } from '../../../enums/track-status.enum';
+import { Track } from '../../../modules/db/entities/track.entity';
+import { User } from '../../../modules/db/entities/user.entity';
+import { TrackRepository } from '../../../modules/db/repositories/track.repository';
+import { Mp3Service } from '../../../services/mp3.service';
 import { RedisService } from '../../../services/redis.service';
 import { PlaylistStore } from '../../../store/playlist.store';
-import { CreateTrackCommand } from "../commands/create-track.command";
-import * as requestPromise from "request-promise-native";
-import { connectionConfig } from "../../../../../configs/connection.config";
-import { VideoMetadata } from "../../../../slack/bot/lib/interfaces/video-metadata.interface";
-import { YoutubeIdError } from "../../../../slack/bot/lib/errors/youtube-id.error";
-import * as parseIsoDuration from 'parse-iso-duration';
-import { User } from "../../../modules/db/entities/user.model";
-import { Track } from "../../../modules/db/entities/track.model";
-import { TrackStatus } from "../../../enums/track-status.enum";
-import { TrackRepository } from "../../../modules/db/repositories/track.repository";
-import { InjectRepository } from '@nestjs/typeorm';
-import { Mp3Service } from "../../../services/mp3.service";
-
+import { CreateTrackCommand } from '../commands/create-track.command';
 
 @CommandHandler(CreateTrackCommand)
 export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {

@@ -5,6 +5,7 @@ import { ThumbUpCommand } from '../../../../core/cqrs/command-bus/commands/thumb
 import { QueuedTrackRepository } from '../../../../core/modules/db/repositories/queued-track.repository';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class ThumbUpSlackCommand implements SlackCommand {
@@ -17,8 +18,8 @@ export class ThumbUpSlackCommand implements SlackCommand {
     ) {
     }
 
-    async handler(command: string[], message: any): Promise<any> {
-        const currentTrackInQueue = await this.queuedTrackRepository.getCurrentTrack();
+    async handler(command: string[], message: SlackMessage): Promise<void> {
+        const currentTrackInQueue = await this.queuedTrackRepository.getCurrentTrack(message.channel);
         if (!currentTrackInQueue) {
             return;
         }

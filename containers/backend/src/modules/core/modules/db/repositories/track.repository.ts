@@ -1,22 +1,28 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { appConfig } from '../../../../../configs/app.config';
-import { Track } from '../entities/track.model';
+import { Track } from '../entities/track.entity';
 
 require('datejs');
 
 @EntityRepository(Track)
 export class TrackRepository extends Repository<Track> {
 
-    countTracks(): Promise<number> {
-        return this.createQueryBuilder('track').getCount();
+    countTracks(channelId: string): Promise<number> {
+        return this.createQueryBuilder('track')
+            .innerJoin('track.queuedTracks', 'queuedTrack')
+            .where('queuedTrack.playedIn = :channelId')
+            .setParameter('channelId', channelId)
+            .getCount();
     }
 
-    findTopRatedTracks(index?: number, limit?: number): Promise<Track[]> {
+    findTopRatedTracks(channelId: string, index?: number, limit?: number): Promise<Track[]> {
         const qb = this.createQueryBuilder('track')
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .leftJoin('queuedTrack.votes', 'vote')
             .where('vote.value > 0')
+            .andWhere('queuedTrack.playedIn = :channelId')
             .groupBy('track.id')
+            .setParameter('channelId', channelId)
             .orderBy('COUNT(track.id)', 'DESC');
         if (index) {
             qb.offset(index);
@@ -26,15 +32,17 @@ export class TrackRepository extends Repository<Track> {
             .getMany();
     }
 
-    findWeeklyTopRatedTracks(index?: number, limit?: number): Promise<Track[]> {
+    findWeeklyTopRatedTracks(channelId: string, index?: number, limit?: number): Promise<Track[]> {
         const qb = this.createQueryBuilder('track')
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .leftJoin('queuedTrack.votes', 'vote')
             .where('vote.value > 0')
+            .andWhere('queuedTrack.playedIn = :channelId')
             .andWhere('queuedTrack.createdAt >= :weekAgo')
             .groupBy('track.id')
             .printSql()
             .orderBy('SUM(vote.value)', 'DESC')
+            .setParameter('channelId', channelId)
             .setParameter('weekAgo', Date.last().week().toString(appConfig.dbDateFormat));
         if (index) {
             qb.offset(index);
@@ -45,11 +53,13 @@ export class TrackRepository extends Repository<Track> {
             .getMany();
     }
 
-    findMostPlayedTracks(index?: number, limit?: number): Promise<Track[]> {
+    findMostPlayedTracks(channelId: string, index?: number, limit?: number): Promise<Track[]> {
         const qb = this.createQueryBuilder('track')
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .where('queuedTrack.randomized = 0')
+            .andWhere('queuedTrack.playedIn = :channelId')
             .groupBy('track.id')
+            .setParameter('channelId', channelId)
             .orderBy('COUNT(track.id)', 'DESC');
         if (index) {
             qb.offset(index);
@@ -59,13 +69,15 @@ export class TrackRepository extends Repository<Track> {
             .getMany();
     }
 
-    findWeeklyMostPlayedTracks(index?: number, limit?: number): Promise<Track[]> {
+    findWeeklyMostPlayedTracks(channelId: string, index?: number, limit?: number): Promise<Track[]> {
         const qb = this.createQueryBuilder('track')
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .where('queuedTrack.randomized = 0')
+            .andWhere('queuedTrack.playedIn = :channelId')
             .andWhere('queuedTrack.createdAt >= :weekAgo')
             .groupBy('track.id')
             .orderBy('COUNT(track.id)', 'DESC')
+            .setParameter('channelId', channelId)
             .setParameter('weekAgo', Date.last().week().toString(appConfig.dbDateFormat));
         if (index) {
             qb.offset(index);
@@ -75,7 +87,7 @@ export class TrackRepository extends Repository<Track> {
             .getMany();
     }
 
-    async getRandomTrack(): Promise<Track> {
+    async getRandomTrack(channelId: string): Promise<Track> {
         const rawOne = await this.createQueryBuilder('track')
             .select('DISTINCT track.id, vote.id as vId, vote.value')
             .orderBy('RAND()')
@@ -83,6 +95,8 @@ export class TrackRepository extends Repository<Track> {
             .leftJoin('queuedTrack.votes', 'vote')
             .where('track.skips < ' + appConfig.skipsToBan)
             .andWhere('vote.value > 0 OR vote.value IS NULL')
+            .andWhere('queuedTrack.playedIn = :channelId')
+            .setParameter('channelId', channelId)
             .getRawOne();
 
         return this.findOneOrFail(rawOne.id);
