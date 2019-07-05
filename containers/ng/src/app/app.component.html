@@ -1,7 +1,22 @@
-<ul>
-    <li *ngFor="let queuedTrack of (queuedTracks$ | async)">
-        {{queuedTrack.track.title}}
+<div class="app-content">
+  <ul class="queued-tracks-list">
+    <li
+      class="queued-tracks-list__track"
+      *ngFor="let queuedTrack of queuedTracks$ | async"
+    >
+      <div class="queued-track">
+        <img
+        class="queued-track__thumbnail"
+          [src]="
+            'https://img.youtube.com/vi/' +
+            queuedTrack.track.id +
+            '/mqdefault.jpg'
+          "
+        />
+        <div>{{ queuedTrack.track.title }}</div>
+      </div>
     </li>
-</ul>
-<sdj-awesome-player #playerComponent [src]="audioSrc" [track$]="currentTrack">
-</sdj-awesome-player>
+  </ul>
+  <sdj-awesome-player #playerComponent [src]="audioSrc" [track$]="currentTrack">
+  </sdj-awesome-player>
+</div>
