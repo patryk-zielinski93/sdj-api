@@ -17,7 +17,11 @@ canvas {
   width: 740px;
   height: 740px;
   display: block;
-  position: relative;
+  margin-left: -370px;
+  margin-top: -370px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
 }
 
 .player .playarea {
