@@ -45,8 +45,6 @@ export class Scene {
     const size = Math.max(this.minSize, 1/*document.body.clientHeight */);
     this.canvas.setAttribute('width', size.toString());
     this.canvas.setAttribute('height', size.toString());
-    //this.canvas.style.marginTop = -size / 2 + 'px';
-    //this.canvas.style.marginLeft = -size / 2 + 'px';
 
     this.width = size;
     this.height = size;

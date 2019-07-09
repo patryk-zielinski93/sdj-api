@@ -28,7 +28,7 @@ export class Framer {
 
   configure() {
     this.maxTickSize = this.tickSize * 9 * this.scene.scaleCoef;
-    this.countTicks = 360 * this.scene.scaleCoef;
+    this.countTicks = this.countTicks * this.scene.scaleCoef;
   }
 
   draw() {
