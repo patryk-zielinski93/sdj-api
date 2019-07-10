@@ -8,7 +8,8 @@ export class PlayRadioHandler implements IEventHandler<PlayRadioEvent> {
     }
 
     handle(event: PlayRadioEvent) {
-        this.gateway.server.of('/').emit('play_radio');
+        console.log(event.channelId, 'radio')
+        this.gateway.server.in(event.channelId).emit('play_radio');
     }
 
 }

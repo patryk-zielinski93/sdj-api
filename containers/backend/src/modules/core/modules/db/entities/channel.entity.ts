@@ -1,17 +1,23 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, OneToMany } from 'typeorm';
+import { QueuedTrack } from './queued-track.entity';
 
 @Entity()
 export class Channel {
-    @PrimaryColumn('varchar')
-    id: string;
+  @PrimaryColumn('varchar')
+  id: string;
 
-    @Column('varchar', {
-        length: 200
-    })
-    name: string;
+  @Column('varchar', {
+    length: 200,
+    nullable: true
+  })
+  name: string;
 
-    @Column('varchar', {
-        length: 200
-    })
-    defaultStreamUrl: string;
+  @Column('varchar', {
+    length: 200,
+    nullable: true
+  })
+  defaultStreamUrl: string;
+
+  @OneToMany(type => QueuedTrack, queuedTrack => queuedTrack.track)
+  queuedTracks: Promise<QueuedTrack[]>;
 }

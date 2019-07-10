@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { environment } from '@environment/environment';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, zip } from 'rxjs';
 import { distinctUntilChanged, filter, first, map, tap } from 'rxjs/operators';
 import { appConfig } from '../../../configs/app.config';
 import { QueuedTrack } from '../../common/interfaces/queued-track.interface';
@@ -9,6 +9,7 @@ import { ChannelService } from '../core/services/channel.service';
 import { SpeechService } from '../core/services/speech.service';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { AwesomePlayerComponent } from './components/awesome-player/awesome-player.component';
+import { TrackUtil } from '../core/utils/track.util';
 
 @Component({
   selector: 'sdj-main',
@@ -19,9 +20,15 @@ export class MainComponent implements OnInit, AfterViewInit {
   audioSrc = appConfig.externalStream;
   channels$: Observable<Channel[]>;
   currentTrack: Observable<any>;
-  queuedTracks$: Subject<QueuedTrack[]>;
+  getThumbnail = TrackUtil.getTrackThumbnail;
+  listScrollSubject: Subject<void> = new Subject();
+  queuedTracks: QueuedTrack[];
+  queuedTracks$: Observable<QueuedTrack[]>;
+  readonly queuedTrackskWidth = 210;
   @ViewChild('playerComponent')
   playerComponent: AwesomePlayerComponent;
+  @ViewChild("toPlay")
+  toPlayContainer: ElementRef<HTMLElement>;
   prvTrackId: number;
   selectedChannel: Channel;
 
@@ -47,14 +54,31 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   handleQueuedTrackList(): void {
-    this.queuedTracks$ = this.ws.getQueuedTrackListSubject();
-    this.queuedTracks$.next();
+    this.ws.getQueuedTrackListSubject().next();
+    this.queuedTracks$ = zip(
+      this.ws.getQueuedTrackListSubject().pipe(map(list => list.slice(1))),
+      this.listScrollSubject
+    ).pipe(
+      map(([list, scrolled]) => {
+        return list;
+      })
+    );
 
-    this.currentTrack = this.queuedTracks$
-      .pipe(map((list) => list[0]),
-        filter((track: any) => track && track.id !== this.prvTrackId),
-        tap((track: any) => this.prvTrackId = track.id)
-      );
+    this.ws
+      .getQueuedTrackListSubject()
+      .pipe(tap(list => this.handleScrollList(list.slice(1))))
+      .subscribe();
+
+    this.queuedTracks$.subscribe(list => {
+      this.queuedTracks = list;
+      this.toPlayContainer.nativeElement.scrollLeft += this.queuedTrackskWidth;
+    });
+
+    this.currentTrack = this.ws.getQueuedTrackListSubject().pipe(
+      map(list => list[0]),
+      filter((track: any) => track && track.id !== this.prvTrackId),
+      tap((track: any) => (this.prvTrackId = track.id))
+    );
   }
 
   handleAudioSource(): void {
@@ -78,6 +102,22 @@ export class MainComponent implements OnInit, AfterViewInit {
         console.log('radio');
         this.audioSrc = appConfig.externalStream;
       });
+  }
+
+  handleScrollList(newList: QueuedTrack[]): void {
+    if (this.queuedTracks && newList.length < this.queuedTracks.length) {
+      let scrollAmount = 0;
+      const slideTimer: any = setInterval(() => {
+        this.toPlayContainer.nativeElement.scrollLeft -= 10;
+        scrollAmount += 10;
+        if (scrollAmount >= this.queuedTrackskWidth) {
+          this.listScrollSubject.next();
+          window.clearInterval(slideTimer);
+        }
+      }, 25);
+    } else {
+      this.listScrollSubject.next();
+    }
   }
 
   handleSpeeching(): void {

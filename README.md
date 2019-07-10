@@ -16,3 +16,4 @@
 #####5. Run `docker-compose up`
 
 ``` kill -s SIGUSR1 1 - next song```
+docker rm -f $(docker ps|grep ices|awk '{print $1}')

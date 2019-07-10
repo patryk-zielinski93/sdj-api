@@ -8,4 +8,4 @@ export class IcesService {
     console.log('next song');
     http.get(`http://${connectionConfig.ices.host}:${connectionConfig.ices.port}`);
   }
-}
+} 

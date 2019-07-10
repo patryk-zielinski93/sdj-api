@@ -67,7 +67,7 @@ export class PlayTrackSlackCommand implements SlackCommand {
     }
 
     private async queueTrack(message: SlackMessage, track: Track, user: User): Promise<void> {
-        this.commandBus.execute(new QueueTrackCommand(track.id, user))
+        this.commandBus.execute(new QueueTrackCommand(track.id, message.channel, user))
             .then(() => {
                 this.slack.rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
             });

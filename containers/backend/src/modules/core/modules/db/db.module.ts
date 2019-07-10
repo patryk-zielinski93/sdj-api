@@ -11,11 +11,15 @@ import { QueuedTrackRepository } from './repositories/queued-track.repository';
 import { TrackRepository } from './repositories/track.repository';
 import { UserRepository } from './repositories/user.repository';
 import { VoteRepository } from './repositories/vote.repository';
+import { Channel } from './entities/channel.entity';
+import { ChannelRepository } from './repositories/channel.repository';
 
 export const CommandHandlers = [DeleteTrackHandler];
 
 @Module({
     imports: [TypeOrmModule.forFeature([
+        Channel,
+        ChannelRepository,
         QueuedTrack,
         QueuedTrackRepository,
         Track,

@@ -9,81 +9,73 @@ import { TrackRepository } from '../modules/db/repositories/track.repository';
 import { UserRepository } from '../modules/db/repositories/user.repository';
 import { PlaylistStore } from '../store/playlist.store';
 
-type RedisSubject = Subject<{ channel: string, message: any } | any>;
+type RedisSubject = Subject<{ channel: string; message: any } | any>;
 
 export class RedisService extends AggregateRoot {
-    private handlingNextSong = false;
-    private nextSongSubject: RedisSubject;
-    private redisClient: RedisClient;
-    private redisSub: RedisClient;
+  private redisClient: RedisClient;
+  private redisSub: RedisClient;
 
-    constructor(private readonly commandBus: CommandBus,
-                private playlistStore: PlaylistStore,
-                private readonly publisher: EventBus,
-                @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
-                @InjectRepository(QueuedTrackRepository) private queueTrackRepository: QueuedTrackRepository,
-                @InjectRepository(UserRepository) private userRepository: UserRepository) {
-        super();
-        this.redisClient = redis.createClient({
-            host: 'redis'
-        });
-        this.redisSub = redis.createClient({
-            host: 'redis'
-        });
-        this.playlistStore.isNextSongHandled().subscribe((value) => {
-            this.handlingNextSong = value;
-        });
-        this.handleGetNext();
-        this.nextSongSubject = this.getNextSongSubject();
-        this.redisSub.subscribe('getNext');
-    }
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly publisher: EventBus,
+    @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
+    @InjectRepository(QueuedTrackRepository) private queueTrackRepository: QueuedTrackRepository,
+    @InjectRepository(UserRepository) private userRepository: UserRepository
+  ) {
+    super();
+    this.redisClient = redis.createClient({
+      host: 'redis'
+    });
+    this.redisSub = redis.createClient({
+      host: 'redis'
+    });
+    this.handleGetNext();
+    this.redisSub.subscribe('getNext');
+  }
 
-    createSubject(event: string): RedisSubject {
-        let observable = new Observable(observer => {
-            this.redisSub.on(event, (channel, message) => {
-                observer.next({ channel, message });
-            });
-        });
+  createSubject(event: string): RedisSubject {
+    let observable = new Observable(observer => {
+      this.redisSub.on(event, (channel, message) => {
+        observer.next({ channel, message });
+      });
+    });
 
-        let observer = {
-            next: (data: string) => {
-                this.redisClient.set(event, data);
-            }
-        };
+    let observer = {
+      next: (data: string) => {
+        this.redisClient.publish(event, data);
+      }
+    };
 
-        return Subject.create(observer, observable);
-    }
+    return Subject.create(observer, observable);
+  }
 
-    getCurrentTrackId(): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            this.redisClient.get('next_song', (err, value) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
+  getCurrentTrackId(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      this.redisClient.get('next_song', (err, value) => {
+        if (err) {
+          reject(err);
+          return;
+        }
 
-                resolve(value);
-            });
-        });
-    }
+        resolve(value);
+      });
+    });
+  }
 
-    getNextSongSubject(): RedisSubject {
-        return this.createSubject('next_song');
-    }
+  getNextSongSubject(channelId: string): RedisSubject {
+    return this.createSubject(channelId);
+  }
 
-    getMessageSubject(): RedisSubject {
-        return this.createSubject('message');
-    }
+  getMessageSubject(): RedisSubject {
+    return this.createSubject('message');
+  }
 
-    private async handleGetNext(): Promise<void> {
+  private async handleGetNext(): Promise<void> {
+    const redisMessage = this.getMessageSubject();
 
-        const redisMessage = this.getMessageSubject();
-
-        redisMessage.subscribe(({ channel, message }) => {
-            console.log(channel, message);
-            if (this.handlingNextSong) return;
-            this.publisher.publish(new RedisGetNextEvent());
-        });
-
-    }
+    redisMessage.subscribe(({ channel, message }) => {
+      console.log(channel, message);
+      this.publisher.publish(new RedisGetNextEvent(message));
+    });
+  }
 }

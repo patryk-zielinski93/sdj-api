@@ -6,40 +6,38 @@ import { Vote } from './vote.entity';
 
 @Entity()
 export class QueuedTrack {
+  @Column('datetime')
+  createdAt: Date;
 
-    @Column('datetime')
-    createdAt: Date;
+  @ManyToOne(type => User)
+  @JoinColumn()
+  addedBy: User | null;
 
-    @ManyToOne(type => User)
-    @JoinColumn()
-    addedBy: User | null;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column('int')
+  order: number;
 
-    @Column('int')
-    order: number;
+  @Column('datetime', {
+    nullable: true,
+    default: null
+  })
+  playedAt: Date;
 
-    @Column('datetime', {
-        nullable: true,
-        default: null
-    })
-    playedAt: Date;
+  @ManyToOne(type => Channel, playedIn => playedIn.queuedTracks, { eager: true })
+  @JoinColumn()
+  playedIn: Channel;
 
-    @ManyToOne(type => Channel)
-    @JoinColumn()
-    playedIn: Channel;
+  @Column({
+    default: false
+  })
+  randomized: boolean;
 
-    @Column({
-        default: false
-    })
-    randomized: boolean;
+  @ManyToOne(type => Track, track => track.queuedTracks, { eager: true })
+  @JoinColumn()
+  track: Track;
 
-    @ManyToOne(type => Track, track => track.queuedTracks, { eager: true })
-    @JoinColumn()
-    track: Track;
-
-    @OneToMany(type => Vote, (vote: Vote) => vote.track)
-    votes: Vote[];
-
+  @OneToMany(type => Vote, (vote: Vote) => vote.track)
+  votes: Vote[];
 }

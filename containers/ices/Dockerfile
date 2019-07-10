@@ -26,7 +26,7 @@ RUN mkdir /etc/ices
 
 RUN wget https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
-RUN pip install redis
+RUN pip install redis 
 COPY ./src/ices.py /usr/local/etc/modules/ices.py
 
 CMD ["bash", "/docker/start.sh"]

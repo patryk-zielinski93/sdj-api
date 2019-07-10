@@ -22,9 +22,9 @@ export class PlaySilenceHandler implements ICommandHandler<PlaySilenceCommand> {
             this.playlistStore.removeFromQueue(prevTrack);
         }
         if (count > 1) {
-            this.publisher.publish(new PlayRadioEvent());
+            this.publisher.publish(new PlayRadioEvent(command.channelId));
         }
-        this.redisService.getNextSongSubject().next('10-sec-of-silence');
+        this.redisService.getNextSongSubject(command.channelId).next('10-sec-of-silence');
         resolve();
     }
 }

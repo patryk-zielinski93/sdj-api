@@ -57,7 +57,7 @@ export class RefreshSlackCommand implements SlackCommand {
     }
 
     private async queueTrack(message: any, track: Track): Promise<void> {
-        await this.commandBus.execute(new QueueTrackCommand(track.id, message.user, true));
+        await this.commandBus.execute(new QueueTrackCommand(track.id, message.user, message.channel, true));
         this.slack.rtm.sendMessage(`Odświeżamy! Dodałem ${track.title} do playlisty :)`, message.channel);
     }
 }

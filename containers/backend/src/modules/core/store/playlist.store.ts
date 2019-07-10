@@ -5,7 +5,6 @@ import { QueuedTrack } from '../modules/db/entities/queued-track.entity';
 
 interface PlaylistState {
     silenceCount: number,
-    handlingNextSong: boolean;
     queue: QueuedTrack[];
 }
 
@@ -17,7 +16,6 @@ export class PlaylistStore {
 
     initialState: PlaylistState = {
         silenceCount: 0,
-        handlingNextSong: false,
         queue: []
     };
 
@@ -25,18 +23,6 @@ export class PlaylistStore {
 
     addToQueue(queuedTrack: QueuedTrack): void {
         this._state.next({ ...this.state, queue: this.state.queue.concat(queuedTrack) });
-    }
-
-    startHandlingNextSong(): void {
-        this._state.next({ ...this.state, handlingNextSong: true });
-    }
-
-    isNextSongHandled(): Observable<boolean> {
-        return this._state.pipe(map((state: PlaylistState) => state.handlingNextSong));
-    }
-
-    endHandlingNextSong(): void {
-        this._state.next({ ...this.state, handlingNextSong: false });
     }
 
     setSilenceCount(value: number): void {

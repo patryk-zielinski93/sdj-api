@@ -6,19 +6,22 @@ import { TrackRepository } from '../../../modules/db/repositories/track.reposito
 import { RedisService } from '../../../services/redis.service';
 import { PlaylistStore } from '../../../store/playlist.store';
 import { QueueTrackCommand } from '../commands/queue-track.command';
+import { ChannelRepository } from '../../../modules/db/repositories/channel.repository';
 
 @CommandHandler(QueueTrackCommand)
 export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
     constructor(private readonly publisher: EventBus,
                 private readonly playlistStore: PlaylistStore,
                 private readonly redisService: RedisService,
+                @InjectRepository(ChannelRepository) private channelRepository: ChannelRepository,
                 @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
                 @InjectRepository(TrackRepository) private readonly trackRepository: TrackRepository) {
     }
 
     async execute(command: QueueTrackCommand, resolve: (value?) => void) {
+        const channel = await this.channelRepository.findOrCreate(command.channelId);
         const track = await this.trackRepository.findOneOrFail(command.trackId);
-        const queuedTrack = await this.queuedTrackRepository.queueTrack(track, {} as Channel, command.randomized, command.addedBy);
+        const queuedTrack = await this.queuedTrackRepository.queueTrack(track, channel, command.randomized, command.addedBy);
         this.playlistStore.addToQueue(queuedTrack);
         resolve(queuedTrack);
     }

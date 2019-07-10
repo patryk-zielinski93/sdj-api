@@ -17,19 +17,6 @@ export class Gateway implements OnGatewayConnection {
     handleConnection(client, ...args: any[]): any {
     }
 
-    @SubscribeMessage('events')
-    findAll(client, data): Observable<WsResponse<number>> {
-        return from([1, 2, 3])
-            .pipe(
-                concatMap(x => of({ event: 'events', data: x })
-                    .pipe(
-                        filter(x => x.data !== 2),
-                        delay(2000)
-                    )
-                )
-            );
-    }
-
     @SubscribeMessage('join')
     async join(client: Socket, data: string): Promise<void> {
         const room = JSON.parse(data).room;
