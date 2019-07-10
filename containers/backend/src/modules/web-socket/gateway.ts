@@ -47,7 +47,7 @@ export class Gateway implements OnGatewayConnection {
 
     @SubscribeMessage('queuedTrackList')
     onQueuedTrackList(client, data): Observable<WsResponse<QueuedTrack[]>> {
-        const queue = this.playlistStore.getQueue();
+        const queue = this.playlistStore.getQueue(JSON.parse(data));
         return queue.pipe(switchMap(list => {
             return of({ event: 'queuedTrackList', data: list });
         }));

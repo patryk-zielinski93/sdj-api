@@ -27,7 +27,7 @@ export class PlayQueuedTrackHandler implements ICommandHandler<PlayQueuedTrackCo
         this.redisService.getNextSongSubject(queuedTrack.playedIn.id).next(track.id);
         this.publisher.publish(new PlayDjEvent(queuedTrack.playedIn.id));
         this.updateQueuedTrackPlayedAt(queuedTrack);
-        this.playlistStore.setSilenceCount(0);
+        this.playlistStore.setSilenceCount(queuedTrack.playedIn.id, 0);
         resolve();
     }
 
