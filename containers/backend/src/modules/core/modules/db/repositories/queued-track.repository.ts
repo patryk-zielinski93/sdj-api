@@ -4,10 +4,10 @@ import { Channel } from '../entities/channel.entity';
 import { QueuedTrack } from '../entities/queued-track.entity';
 import { Track } from '../entities/track.entity';
 import { User } from '../entities/user.entity';
+import { PlaylistStore } from '../../../store/playlist.store';
 
 @EntityRepository(QueuedTrack)
 export class QueuedTrackRepository extends Repository<QueuedTrack> {
-    redisService: RedisService;
 
     countTracksInQueueFromUser(userId: string, channelId: string): Promise<number> {
         return this.createQueryBuilder('queuedTrack')
@@ -28,27 +28,6 @@ export class QueuedTrackRepository extends Repository<QueuedTrack> {
             .orderBy('queuedTrack.order, queuedTrack.id', 'ASC')
             .setParameter('channelId', channelId)
             .getMany();
-    }
-
-    async getCurrentTrack(channelId: string): Promise<QueuedTrack | undefined> {
-        const currentTrackId = await this.redisService.getCurrentTrackId();
-        if (currentTrackId === '10-sec-of-silence') {
-            return;
-        }
-        return this.getCurrentTrackById(currentTrackId, channelId);
-    }
-
-    getCurrentTrackById(currentTrackId: string, channelId: string): Promise<QueuedTrack | undefined> {
-        return <Promise<QueuedTrack>>this.createQueryBuilder('queuedTrack')
-            .where('queuedTrack.playedIn = :channelId')
-            .leftJoinAndSelect('queuedTrack.track', 'track')
-            .leftJoinAndSelect('queuedTrack.addedBy', 'user')
-            .where('queuedTrack.trackId = :trackId')
-            .andWhere('queuedTrack.playedAt IS NOT NULL')
-            .orderBy('queuedTrack.playedAt', 'DESC')
-            .setParameter('channelId', channelId)
-            .setParameter('trackId', currentTrackId)
-            .getOne();
     }
 
     getNextSongInQueue(channelId: string): Promise<QueuedTrack | undefined> {

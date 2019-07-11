@@ -32,6 +32,18 @@ export class PlaylistStore {
     return this.state[channelId];
   }
 
+  getCurrentTrack(channelId: string): QueuedTrack | null {
+    return this.getChannelState(channelId).currentTrack;
+  }
+
+  setCurrentTrack(channelId: string, queuedTrack: QueuedTrack | null): void {
+    const channelState = this.getChannelState(channelId);
+    this._state.next({
+      ...this.state,
+      [channelId]: { ...channelState, currentTrack: queuedTrack }
+    });
+  }
+
   addToQueue(queuedTrack: QueuedTrack): void {
     const channelState = this.getChannelState(queuedTrack.playedIn.id);
     this._state.next({

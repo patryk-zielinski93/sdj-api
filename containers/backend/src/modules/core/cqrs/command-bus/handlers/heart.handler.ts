@@ -19,7 +19,7 @@ export class HeartHandler implements ICommandHandler<HeartCommand> {
         const userId = command.userId;
         const user = await this.userRepository.findOne(userId);
         const queuedTrack = await this.queuedTrackRepository.findOneOrFail(command.queuedTrackId);
-        const heartsFromUser = await this.voteRepository.countTodayHeartsFromUser(userId, '');
+        const heartsFromUser = await this.voteRepository.countTodayHeartsFromUser(userId, queuedTrack.playedIn.id);
 
         if (heartsFromUser > 0) {
             resolve(false);

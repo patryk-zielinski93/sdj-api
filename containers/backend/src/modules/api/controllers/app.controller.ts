@@ -1,6 +1,6 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Param, Render } from '@nestjs/common';
 import { Channel } from '../../core/modules/db/entities/channel.entity';
-import { IcesService } from '../../core/services/ices.service';
+import { HostService } from '../../core/services/host.service';
 import { PlaylistService } from '../../core/services/playlist.service';
 
 @Controller()
@@ -13,9 +13,9 @@ export class AppController {
   appView(): any {
   }
 
-  @Get('ices')
-  nexSong(): any {
-    IcesService.nextSong();
+  @Get('ices/:id')
+  nexSong(@Param() params): any {
+    HostService.nextSong(params.id);
   }
 
   @Get('next')

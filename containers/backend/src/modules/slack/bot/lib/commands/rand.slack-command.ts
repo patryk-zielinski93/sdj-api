@@ -42,7 +42,7 @@ export class RandSlackCommand implements SlackCommand {
     }
 
     private async queueTrack(message: any, track: Track): Promise<void> {
-        this.commandBus.execute(new QueueTrackCommand(track.id, message.channel, message.user))
+        this.commandBus.execute(new QueueTrackCommand(track.id, message.channel, message.user, true))
             .then(() => {
                 this.slack.rtm.sendMessage(`Dodałem ${track.title} do playlisty :)`, message.channel);
             });

@@ -49,19 +49,6 @@ export class RedisService extends AggregateRoot {
     return Subject.create(observer, observable);
   }
 
-  getCurrentTrackId(): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      this.redisClient.get('next_song', (err, value) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(value);
-      });
-    });
-  }
-
   getNextSongSubject(channelId: string): RedisSubject {
     return this.createSubject(channelId);
   }

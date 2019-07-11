@@ -20,7 +20,7 @@ export class FuckYouHandler implements ICommandHandler<FuckYouCommand> {
         const userId = command.userId;
         const user = await this.userRepository.findOne(userId);
         const queuedTrack = await this.queuedTrackRepository.findOneOrFail(command.queuedTrackId);
-        const fucksFromUser = await this.voteRepository.countTodayFucksFromUser(userId, '');
+        const fucksFromUser = await this.voteRepository.countTodayFucksFromUser(userId, queuedTrack.playedIn.id);
 
         if (fucksFromUser > 0) {
             resolve(false);

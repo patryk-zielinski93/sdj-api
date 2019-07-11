@@ -2,6 +2,7 @@ import { Global, Module, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { CommandBus, CQRSModule, EventBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { CreateTrackHandler } from './cqrs/command-bus/handlers/create-track.handler';
 import { DownloadAndPlayHandler } from './cqrs/command-bus/handlers/download-and-play.handler';
 import { DownloadTrackHandler } from './cqrs/command-bus/handlers/download-track.handler';
@@ -15,7 +16,6 @@ import { RedisGetNextHandler } from './cqrs/events/handlers/redis-get-next.handl
 import { RedisSagas } from './cqrs/events/sagas/redis.sagas';
 import { DbModule } from './modules/db/db.module';
 import { QueuedTrackRepository } from './modules/db/repositories/queued-track.repository';
-import { IcesService } from './services/ices.service';
 import { Mp3Service } from './services/mp3.service';
 import { PlaylistService } from './services/playlist.service';
 import { RedisService } from './services/redis.service';
@@ -47,7 +47,6 @@ export const EventHandlers = [
     providers: [
         ...CommandHandlers,
         ...EventHandlers,
-        IcesService,
         Mp3Service,
         PlaylistService,
         PlaylistStore,
@@ -56,7 +55,6 @@ export const EventHandlers = [
         WebSocketService
     ],
     exports: [
-        IcesService,
         Mp3Service,
         PlaylistService,
         PlaylistStore,
@@ -69,8 +67,6 @@ export class CoreModule implements OnModuleInit {
         private readonly moduleRef: ModuleRef,
         private readonly command$: CommandBus,
         private readonly event$: EventBus,
-        private readonly redisSagas: RedisSagas,
-        private readonly redisService: RedisService,
         @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository
     ) {
     }
@@ -84,7 +80,5 @@ export class CoreModule implements OnModuleInit {
         this.event$.combineSagas([
             // this.redisSagas.getNext
         ]);
-
-        this.queuedTrackRepository.redisService = this.redisService;
     }
 }

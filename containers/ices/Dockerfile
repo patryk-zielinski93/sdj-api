@@ -12,7 +12,6 @@ RUN mkdir /etc/ices2
 COPY ./ices-0.4.tar.gz /tmp/ices-0.4.tar.gz
 COPY ./src /ices
 COPY ./ices.conf /ices
-COPY ./api /api
 COPY ./docker /docker
 
 
