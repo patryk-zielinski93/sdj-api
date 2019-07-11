@@ -94,8 +94,8 @@ export class TrackRepository extends Repository<Track> {
             .innerJoin('track.queuedTracks', 'queuedTrack')
             .leftJoin('queuedTrack.votes', 'vote')
             .where('track.skips < ' + appConfig.skipsToBan)
-            .andWhere('vote.value > 0 OR vote.value IS NULL')
             .andWhere('queuedTrack.playedIn = :channelId')
+            .andWhere('vote.value > 0 OR vote.value IS NULL')
             .setParameter('channelId', channelId)
             .getRawOne();
 
