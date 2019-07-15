@@ -107,8 +107,12 @@ export class MainComponent implements OnInit, AfterViewInit {
 
     this.currentTrack = wsSubject.pipe(
       map(list => list[0]),
-      filter((track: QueuedTrack) => track && track.id !== this.prvTrackId),
-      tap((track: QueuedTrack) => (this.prvTrackId = track.id))
+      filter(
+        (track: QueuedTrack) =>
+          (!track && !!this.prvTrackId) ||
+          (!!track && track.id !== this.prvTrackId)
+      ),
+      tap((track: QueuedTrack) => (this.prvTrackId = track ? track.id : null))
     );
   }
 

@@ -85,7 +85,7 @@ export class Player {
     this._track.subscribe(track => {
       const convertedTrack = {
         artist: "DJ PAWEŁ",
-        song: track.track.title
+        song: track ? track.track.title : "OPEN FM"
       };
       document.querySelector(".song .artist").textContent =
         convertedTrack.artist;
