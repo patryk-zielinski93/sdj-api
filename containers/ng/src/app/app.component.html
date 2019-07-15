@@ -1,19 +1,2 @@
-<div class="app-content">
-  <ul class="queued-tracks-list" #toPlay>
-    <li
-      class="queued-tracks-list__track"
-      *ngFor="let queuedTrack of queuedTracks$ | async"
-    >
-      <div class="queued-track">
-        <img
-          class="queued-track__thumbnail"
-          [src]="getThumbnail(queuedTrack.track)"
-        />
-        <span class="queued-track__title">{{ queuedTrack.track.title }}</span>
-      </div>
-    </li>
-    <li class="queued-tracks-list__last-element queued-tracks-list__track"></li>
-  </ul>
-  <sdj-awesome-player #playerComponent [src]="audioSrc" [track$]="currentTrack">
-  </sdj-awesome-player>
-</div>
+<router-outlet></router-outlet>
+

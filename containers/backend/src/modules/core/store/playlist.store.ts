@@ -1,57 +1,104 @@
 import { Injectable } from '@nestjs/common';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { QueuedTrack } from '../modules/db/entities/queued-track.model';
+import { distinctUntilChanged, map, filter, first } from 'rxjs/operators';
+import { QueuedTrack } from '../modules/db/entities/queued-track.entity';
+import { Channel } from '../modules/db/entities/channel.entity';
+
+interface ChannelState {
+  silenceCount: number;
+  queue: QueuedTrack[];
+  currentTrack: QueuedTrack | null;
+}
 
 interface PlaylistState {
-    silenceCount: number,
-    handlingNextSong: boolean;
-    queue: QueuedTrack[];
+  [key: string]: ChannelState;
 }
+
+const initialChannelState = { silenceCount: 0, queue: [], currentTrack: null };
+const initialPlaylistState = {};
 
 @Injectable()
 export class PlaylistStore {
-    get state(): PlaylistState {
-        return this._state.getValue();
+  get state(): PlaylistState {
+    return this._state.getValue();
+  }
+
+  private _state: BehaviorSubject<PlaylistState> = new BehaviorSubject(initialPlaylistState);
+
+  channelAppear(channelId: string): Observable<void> {
+    return this._state.pipe(
+      filter(state => !!state[channelId]),
+      map(channelState => undefined),
+      first()
+    );
+  }
+
+  channelDisappears(channelId: string): void {
+    const state = this.state;
+    delete state[channelId];
+    this._state.next(state);
+  }
+
+  getChannelState(channelId: string): ChannelState {
+    if (!this.state[channelId]) {
+      this.state[channelId] = initialChannelState;
     }
+    return this.state[channelId];
+  }
 
-    initialState: PlaylistState = {
-        silenceCount: 0,
-        handlingNextSong: false,
-        queue: []
-    };
+  getCurrentTrack(channelId: string): QueuedTrack | null {
+    return this.getChannelState(channelId).currentTrack;
+  }
 
-    private _state: BehaviorSubject<PlaylistState> = new BehaviorSubject(this.initialState);
+  setCurrentTrack(channelId: string, queuedTrack: QueuedTrack | null): void {
+    const channelState = this.getChannelState(channelId);
+    this._state.next({
+      ...this.state,
+      [channelId]: { ...channelState, currentTrack: queuedTrack }
+    });
+  }
 
-    addToQueue(queuedTrack: QueuedTrack): void {
-        this._state.next({ ...this.state, queue: this.state.queue.concat(queuedTrack) });
-    }
+  addToQueue(queuedTrack: QueuedTrack): void {
+    const channelState = this.getChannelState(queuedTrack.playedIn.id);
+    this._state.next({
+      ...this.state,
+      [queuedTrack.playedIn.id]: {
+        ...channelState,
+        queue: channelState.queue.concat(queuedTrack)
+      }
+    });
+  }
 
-    startHandlingNextSong(): void {
-        this._state.next({ ...this.state, handlingNextSong: true });
-    }
+  setSilenceCount(channelId: string, value: number): void {
+    const channelState = this.getChannelState(channelId);
+    this._state.next({ ...this.state, [channelId]: { ...channelState, silenceCount: value } });
+  }
 
-    isNextSongHandled(): Observable<boolean> {
-        return this._state.pipe(map((state: PlaylistState) => state.handlingNextSong));
-    }
+  getSilenceCount(channelId: string): Observable<number> {
+    return this._state.pipe(
+      filter((state: PlaylistState) => !!state[channelId]),
+      map((state: PlaylistState) => state[channelId]),
+      map((state: ChannelState) => state.silenceCount)
+    );
+  }
 
-    endHandlingNextSong(): void {
-        this._state.next({ ...this.state, handlingNextSong: false });
-    }
+  getQueue(channelId: string): Observable<QueuedTrack[]> {
+    return this._state.pipe(
+      filter((state: PlaylistState) => !!state[channelId]),
+      map((state: PlaylistState) => state[channelId]),
+      map((state: ChannelState) => state.queue),
+      distinctUntilChanged()
+    );
+  }
 
-    setSilenceCount(value: number): void {
-        this._state.next({ ...this.state, silenceCount: value });
-    }
-
-    getSilenceCount(): Observable<number> {
-        return this._state.pipe(map((state: PlaylistState) => state.silenceCount));
-    }
-
-    getQueue(): Observable<QueuedTrack[]> {
-        return this._state.pipe(map((state: PlaylistState) => state.queue), distinctUntilChanged());
-    }
-
-    removeFromQueue(queuedTrack: QueuedTrack): void {
-        this._state.next({ ...this.state, queue: this.state.queue.filter((qTrack) => qTrack.id !== queuedTrack.id) });
-    }
+  removeFromQueue(queuedTrack: QueuedTrack): void {
+    const channelState = this.getChannelState(queuedTrack.playedIn.id);
+    this._state.next({
+      ...this.state,
+      [queuedTrack.playedIn.id]: {
+        ...channelState,
+        queue: channelState.queue.filter(qTrack => qTrack.id !== queuedTrack.id)
+      }
+    });
+  }
 }

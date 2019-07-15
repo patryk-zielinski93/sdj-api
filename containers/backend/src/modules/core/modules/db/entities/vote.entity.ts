@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { QueuedTrack } from './queued-track.model';
-import { User } from './user.model';
+import { Channel } from './channel.entity';
+import { QueuedTrack } from './queued-track.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Vote {
@@ -11,6 +12,10 @@ export class Vote {
     @ManyToOne(type => User)
     @JoinColumn()
     addedBy: User;
+
+    @ManyToOne(type => Channel)
+    @JoinColumn()
+    addedIn: Channel;
 
     @PrimaryGeneratedColumn()
     id: number;

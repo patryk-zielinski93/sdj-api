@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../../../core/modules/db/entities/user.model';
+import { User } from '../../../core/modules/db/entities/user.entity';
 import { UserRepository } from '../../../core/modules/db/repositories/user.repository';
 import { Mp3Service } from '../../../core/services/mp3.service';
 import { SlackService } from '../../services/slack.service';

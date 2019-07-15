@@ -8,6 +8,7 @@ export class PlayDjHandler implements IEventHandler<PlayDjEvent> {
     }
 
     handle(event: PlayDjEvent): any {
-        this.gateway.server.of('/').emit('play_dj');
+        console.log(event.channelId, 'dj')
+        this.gateway.server.in(event.channelId).emit('play_dj');
     }
 }

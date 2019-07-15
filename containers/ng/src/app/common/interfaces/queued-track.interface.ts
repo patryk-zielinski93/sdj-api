@@ -1,5 +1,7 @@
 import { Track } from './track.interface';
 
 export interface QueuedTrack {
-  track: Track
+  id: number;
+  addedBy: any;
+  track: Track;
 }

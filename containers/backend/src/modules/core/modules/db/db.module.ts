@@ -3,19 +3,23 @@ import { ModuleRef } from '@nestjs/core';
 import { CommandBus } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DeleteTrackHandler } from './cqrs/command-bus/handlers/DeleteTrackHandler';
-import { QueuedTrack } from './entities/queued-track.model';
-import { Track } from './entities/track.model';
-import { User } from './entities/user.model';
-import { Vote } from './entities/vote.model';
+import { QueuedTrack } from './entities/queued-track.entity';
+import { Track } from './entities/track.entity';
+import { User } from './entities/user.entity';
+import { Vote } from './entities/vote.entity';
 import { QueuedTrackRepository } from './repositories/queued-track.repository';
 import { TrackRepository } from './repositories/track.repository';
 import { UserRepository } from './repositories/user.repository';
 import { VoteRepository } from './repositories/vote.repository';
+import { Channel } from './entities/channel.entity';
+import { ChannelRepository } from './repositories/channel.repository';
 
 export const CommandHandlers = [DeleteTrackHandler];
 
 @Module({
     imports: [TypeOrmModule.forFeature([
+        Channel,
+        ChannelRepository,
         QueuedTrack,
         QueuedTrackRepository,
         Track,

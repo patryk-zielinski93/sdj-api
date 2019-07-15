@@ -1,7 +1,7 @@
-import { environment } from '@environment/environment.prod';
-import { Observable } from 'rxjs';
-import { Framer } from './framer';
-import { Scene } from './scene';
+import { environment } from "@environment/environment.prod";
+import { Observable } from "rxjs";
+import { Framer } from "./framer";
+import { Scene } from "./scene";
 
 export class Player {
   get src(): string {
@@ -13,7 +13,7 @@ export class Player {
       this._src = value;
       this.audio.src = value;
       this.audio.load();
-      if (this.context.state === 'running') {
+      if (this.context.state === "running") {
         this.audio.play();
       }
     }
@@ -40,11 +40,11 @@ export class Player {
   private _src: string;
   private _track: Observable<any>;
 
-  constructor(private scene: Scene, private framer: Framer) {
-  }
+  constructor(private scene: Scene, private framer: Framer) {}
 
   init() {
-    (<any>window).AudioContext = (<any>window).AudioContext || (<any>window).webkitAudioContext;
+    (<any>window).AudioContext =
+      (<any>window).AudioContext || (<any>window).webkitAudioContext;
     this.context = new AudioContext();
     this.context.suspend && this.context.suspend();
     this.firstLaunch = true;
@@ -56,8 +56,16 @@ export class Player {
       this.analyser.smoothingTimeConstant = 0.6;
       this.analyser.fftSize = 2048;
       this.audio = new Audio(environment.radioStreamUrl);
-      this.audio.crossOrigin = 'anonymous';
+      this.audio.crossOrigin = "anonymous";
       this.audio.load();
+      this.audio.addEventListener("error", () => {
+        setTimeout(() => {
+          this.audio.load();
+          if (this.context.state === "running") {
+            this.audio.play();
+          }
+        }, 1000);
+      });
       this.source = this.context.createMediaElementSource(this.audio);
       this.destination = this.context.destination;
 
@@ -74,13 +82,14 @@ export class Player {
   }
 
   handleTrackChange(): void {
-    this._track.subscribe((track) => {
+    this._track.subscribe(track => {
       const convertedTrack = {
-        artist: 'DJ PAWEŁ',
-        song: track.track.title
+        artist: "DJ PAWEŁ",
+        song: track ? track.track.title : "OPEN FM"
       };
-      document.querySelector('.song .artist').textContent = convertedTrack.artist;
-      document.querySelector('.song .name').textContent = convertedTrack.song;
+      document.querySelector(".song .artist").textContent =
+        convertedTrack.artist;
+      document.querySelector(".song .name").textContent = convertedTrack.song;
       // this.currentSongIndex = index;
     });
   }
@@ -137,7 +146,9 @@ export class Player {
 
   initHandlers() {
     this.javascriptNode.onaudioprocess = () => {
-      this.framer.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
+      this.framer.frequencyData = new Uint8Array(
+        this.analyser.frequencyBinCount
+      );
       this.analyser.getByteFrequencyData(this.framer.frequencyData);
     };
   }

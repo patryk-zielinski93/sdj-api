@@ -71,7 +71,7 @@ export class Tracker {
 
   draw() {
     if (!this.pressButton) {
-      this.angle = this.player.context.currentTime / 60 * 2 * Math.PI || 0;
+      this.angle = this.player.context.currentTime % 60 / 60 * 2 * Math.PI || 0;
     }
     this.drawArc();
   }

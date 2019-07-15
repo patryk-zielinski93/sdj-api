@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
-npm install --prefix /api
-npm start --prefix /api &>/dev/null &
+sed -i -- "s/{{ROOM_ID}}/$ROOM_ID/g" /ices/ices.conf
 /usr/local/bin/ices -c /ices/ices.conf

@@ -9,6 +9,11 @@
 #####2. Create your own [youtube api key](https://developers.google.com/youtube/v3/getting-started)
 #####3. Create [slack token](https://api.slack.com/custom-integrations/legacy-tokens)
 #####4. Put it to ./src/connection.config.ts
+#####6. Run docker api 
+ * go to ./api
+ * run npm install
+ * run npm start
 #####5. Run `docker-compose up`
 
 ``` kill -s SIGUSR1 1 - next song```
+docker rm -f $(docker ps|grep ices|awk '{print $1}')
