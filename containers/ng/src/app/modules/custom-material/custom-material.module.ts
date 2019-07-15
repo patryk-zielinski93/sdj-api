@@ -1,24 +1,33 @@
-import { NgModule } from '@angular/core';
-import { MatButtonModule, MatButtonToggleModule, MatListModule, MatSidenavModule, MatToolbarModule } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgModule } from "@angular/core";
+import {
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatIconModule,
+  MatListModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from "@angular/material";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
-    imports: [
-        BrowserAnimationsModule,
-        MatListModule,
-        MatToolbarModule,
-        MatSidenavModule,
-        MatButtonModule,
-        MatButtonToggleModule
-    ],
+  imports: [
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatListModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatToolbarModule
+  ],
 
-    exports: [
-        BrowserAnimationsModule,
-        MatListModule,
-        MatToolbarModule,
-        MatSidenavModule,
-        MatButtonModule,
-        MatButtonToggleModule
-    ]
+  exports: [
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatListModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatToolbarModule
+  ]
 })
 export class CustomMaterialModule {}

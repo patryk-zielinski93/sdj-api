@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged, map, filter } from 'rxjs/operators';
+import { distinctUntilChanged, map, filter, first } from 'rxjs/operators';
 import { QueuedTrack } from '../modules/db/entities/queued-track.entity';
 import { Channel } from '../modules/db/entities/channel.entity';
 
@@ -24,6 +24,20 @@ export class PlaylistStore {
   }
 
   private _state: BehaviorSubject<PlaylistState> = new BehaviorSubject(initialPlaylistState);
+
+  channelAppear(channelId: string): Observable<void> {
+    return this._state.pipe(
+      filter(state => !!state[channelId]),
+      map(channelState => undefined),
+      first()
+    );
+  }
+
+  channelDisappears(channelId: string): void {
+    const state = this.state;
+    delete state[channelId];
+    this._state.next(state);
+  }
 
   getChannelState(channelId: string): ChannelState {
     if (!this.state[channelId]) {

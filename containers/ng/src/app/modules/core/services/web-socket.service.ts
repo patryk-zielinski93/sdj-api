@@ -1,29 +1,23 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import * as io from 'socket.io-client';
-import { environment } from '../../../../environments/environment';
-import { QueuedTrack } from '../../../common/interfaces/queued-track.interface';
+import { Injectable } from "@angular/core";
+import { Observable, Subject, fromEvent } from "rxjs";
+import * as io from "socket.io-client";
+import { environment } from "../../../../environments/environment";
+import { QueuedTrack } from "../../../common/interfaces/queued-track.interface";
 import Socket = SocketIOClient.Socket;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class WebSocketService {
-
-    private socket: Socket;
+  private queuedTrackList$: Subject<QueuedTrack[]>;
+  private socket: Socket;
 
   constructor() {
     this.socket = io(environment.backendUrl);
   }
 
   createSubject<T>(event: string): Subject<T> {
-    let observable = new Observable(observer => {
-      this.socket.on(event, (data) => {
-        observer.next(data);
-      });
-      return () => {
-      };
-    });
+    let observable = fromEvent(this.socket, event);
 
     let observer = {
       next: (data: Object) => {
@@ -35,7 +29,11 @@ export class WebSocketService {
   }
 
   getQueuedTrackListSubject(): Subject<QueuedTrack[]> {
-    return this.createSubject<QueuedTrack[]>('queuedTrackList');
+    if (!this.queuedTrackList$) {
+      this.queuedTrackList$ = this.createSubject<QueuedTrack[]>(
+        "queuedTrackList"
+      );
+    }
+    return this.queuedTrackList$;
   }
-
 }

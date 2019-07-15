@@ -1,3 +1,4 @@
+import { element } from "protractor";
 import {
   AfterViewInit,
   Component,
@@ -6,8 +7,15 @@ import {
   ElementRef
 } from "@angular/core";
 import { environment } from "@environment/environment";
-import { Observable, Subject, zip } from "rxjs";
-import { distinctUntilChanged, filter, first, map, tap } from "rxjs/operators";
+import { Observable, Subject, zip, merge } from "rxjs";
+import {
+  distinctUntilChanged,
+  filter,
+  first,
+  map,
+  tap,
+  takeUntil
+} from "rxjs/operators";
 import { appConfig } from "../../../configs/app.config";
 import { QueuedTrack } from "../../common/interfaces/queued-track.interface";
 import { Channel } from "../../resources/entities/channel.entity";
@@ -27,7 +35,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   channels$: Observable<Channel[]>;
   currentTrack: Observable<any>;
   getThumbnail = TrackUtil.getTrackThumbnail;
-  listScrollSubject: Subject<void> = new Subject();
+  listScrollSubject: Subject<QueuedTrack[]> = new Subject();
   queuedTracks: QueuedTrack[];
   queuedTracks$: Observable<QueuedTrack[]>;
   readonly queuedTrackskWidth = 210;
@@ -37,6 +45,9 @@ export class MainComponent implements OnInit, AfterViewInit {
   toPlayContainer: ElementRef<HTMLElement>;
   prvTrackId: number;
   selectedChannel: Channel;
+
+  private selectedChannelUnsubscribe = new Subject<void>();
+  tmp = 0;
 
   constructor(
     private channelService: ChannelService,
@@ -52,7 +63,6 @@ export class MainComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.handleSpeeching();
     this.handleWsEvents();
-    this.handleAudioSource();
   }
 
   handleChannelChanges(): void {
@@ -62,54 +72,70 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   handleQueuedTrackList(): void {
-    const wsSubject = this.ws.getQueuedTrackListSubject();
-    wsSubject.next(<any>this.selectedChannel.id);
-    this.queuedTracks$ = zip(
-      wsSubject.pipe(map(list => list.slice(1))),
-      this.listScrollSubject
-    ).pipe(
-      map(([list, scrolled]) => {
-        return list;
-      })
+    const wsSubject = this.ws
+      .getQueuedTrackListSubject()
+      .pipe(takeUntil(this.selectedChannelUnsubscribe));
+    this.ws.getQueuedTrackListSubject().next(<any>this.selectedChannel.id);
+    const trackWillBePlayed$ = wsSubject.pipe(
+      map(list => list.slice(1)),
+      filter(
+        newList =>
+          this.queuedTracks && newList.length < this.queuedTracks.length
+      ),
+      tap(list => this.handleScrollList(list))
     );
+    trackWillBePlayed$.subscribe();
 
-    wsSubject
-      .pipe(tap(list => this.handleScrollList(list.slice(1))))
-      .subscribe();
+    const newTrackAddedToQueue$ = wsSubject.pipe(
+      map(list => list.slice(1)),
+      filter(
+        newList =>
+          !this.queuedTracks || newList.length >= this.queuedTracks.length
+      )
+    );
+    this.queuedTracks$ = merge(
+      this.listScrollSubject,
+      newTrackAddedToQueue$
+    ).pipe(takeUntil(this.selectedChannelUnsubscribe));
 
     this.queuedTracks$.subscribe(list => {
       this.queuedTracks = list;
-      this.toPlayContainer.nativeElement.scrollLeft += this.queuedTrackskWidth;
+      const listElement = this.toPlayContainer.nativeElement;
+      listElement.scrollLeft +=
+        listElement.scrollWidth - listElement.clientWidth;
     });
 
-    this.currentTrack = this.ws.getQueuedTrackListSubject().pipe(
+    this.currentTrack = wsSubject.pipe(
       map(list => list[0]),
-      filter((track: any) => track && track.id !== this.prvTrackId),
-      tap((track: any) => (this.prvTrackId = track.id))
+      filter((track: QueuedTrack) => track && track.id !== this.prvTrackId),
+      tap((track: QueuedTrack) => (this.prvTrackId = track.id))
     );
   }
 
   handleAudioSource(): void {
-    this.channelService
-      .getSelectedChannel()
-      .pipe(distinctUntilChanged((room1, room2) => room1.id !== room2.id))
-      .subscribe((selectedRoom: Channel) => {
+    this.ws
+      .createSubject("roomIsRunning")
+      .pipe(first())
+      .subscribe(() => {
+        console.log("roomIsRunning");
+        this.audioSrc = environment.radioStreamUrl + this.selectedChannel.id;
         this.ws
-          .createSubject("roomIsRunning")
-          .pipe(first())
+          .createSubject("play_dj")
+          .pipe(takeUntil(this.selectedChannelUnsubscribe))
           .subscribe(() => {
-            this.audioSrc = environment.radioStreamUrl + selectedRoom.id;
+            console.log("dj");
+            this.audioSrc =
+              environment.radioStreamUrl + this.selectedChannel.id;
+          });
+
+        this.ws
+          .createSubject("play_radio")
+          .pipe(takeUntil(this.selectedChannelUnsubscribe))
+          .subscribe(() => {
+            console.log("radio");
+            this.audioSrc = appConfig.externalStream;
           });
       });
-    this.ws.createSubject("play_dj").subscribe(() => {
-      console.log("dj");
-      this.audioSrc = environment.radioStreamUrl + this.selectedChannel.id;
-    });
-
-    this.ws.createSubject("play_radio").subscribe(() => {
-      console.log("radio");
-      this.audioSrc = appConfig.externalStream;
-    });
   }
 
   handleScrollList(newList: QueuedTrack[]): void {
@@ -119,12 +145,12 @@ export class MainComponent implements OnInit, AfterViewInit {
         this.toPlayContainer.nativeElement.scrollLeft -= 10;
         scrollAmount += 10;
         if (scrollAmount >= this.queuedTrackskWidth) {
-          this.listScrollSubject.next();
+          this.listScrollSubject.next(newList);
           window.clearInterval(slideTimer);
         }
       }, 25);
     } else {
-      this.listScrollSubject.next();
+      this.listScrollSubject.next(newList);
     }
   }
 
@@ -141,27 +167,21 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   handleWsEvents(): void {
     const connect$ = this.ws.createSubject("connect");
-    const events$ = this.ws.createSubject("events");
     const join$ = this.ws.createSubject("join");
-    const newUser$ = this.ws.createSubject("newUser");
     connect$.subscribe(socket => {
       this.handleQueuedTrackList();
       this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
+        this.selectedChannelUnsubscribe.next();
+        this.selectedChannelUnsubscribe.complete();
+        this.selectedChannelUnsubscribe = new Subject();
+        this.handleQueuedTrackList();
+        this.handleAudioSource();
         join$.next({ room: channel.id });
-        this.audioSrc = environment.radioStreamUrl + this.selectedChannel.id;
       });
-      newUser$.subscribe(data => console.log(data));
-      events$.next(<any>{ test: "test" });
     });
-    events$.subscribe(data => console.log("event", data));
-    const disconnect$ = this.ws.createSubject("disconnect");
-    disconnect$.subscribe(() => console.log("Disconnected"));
-    const exception$ = this.ws.createSubject("exception");
-    exception$.subscribe(() => console.log("Disconnected"));
   }
 
   selectChannel(channel: Channel): void {
     this.channelService.selectChannel(channel);
-    this.handleQueuedTrackList();
   }
 }

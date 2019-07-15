@@ -1,11 +1,19 @@
 <mat-toolbar color="primary">
-  <span (click)="sidenav.toggle()">My Application</span>
+  <button mat-icon-button (click)="sidenav.toggle()"
+    ><mat-icon>dashboard</mat-icon>
+  </button>
 </mat-toolbar>
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="side">
     <mat-nav-list>
-      <mat-list-item [ngStyle]="channel.id === selectedChannel.id && {backgroundColor: '#777'}" (click)="selectChannel(channel)"
-                     routerLinkActive="list-item-active" *ngFor="let channel of channels$ | async">
+      <mat-list-item
+        [ngStyle]="
+          channel.id === selectedChannel.id && { backgroundColor: '#777' }
+        "
+        (click)="selectChannel(channel)"
+        routerLinkActive="list-item-active"
+        *ngFor="let channel of channels$ | async"
+      >
         {{ channel.name }}
       </mat-list-item>
     </mat-nav-list>
@@ -15,19 +23,28 @@
       <ul class="queued-tracks-list" #toPlay>
         <li
           class="queued-tracks-list__track"
-          *ngFor="let queuedTrack of queuedTracks$ | async"
+          *ngFor="let queuedTrack of queuedTracks"
         >
           <div class="queued-track">
             <img
               class="queued-track__thumbnail"
               [src]="getThumbnail(queuedTrack.track)"
             />
-            <span class="queued-track__title">{{ queuedTrack.track.title }}</span>
+            <div class="queued-track__title">{{ queuedTrack.track.title }}</div>
+            <div *ngIf="queuedTrack.addedBy.displayName">
+              ~{{ queuedTrack.addedBy.displayName }}
+            </div>
           </div>
         </li>
-        <li class="queued-tracks-list__last-element queued-tracks-list__track"></li>
+        <li
+          class="queued-tracks-list__last-element queued-tracks-list__track"
+        ></li>
       </ul>
-      <sdj-awesome-player #playerComponent [src]="audioSrc" [track$]="currentTrack">
+      <sdj-awesome-player
+        #playerComponent
+        [src]="audioSrc"
+        [track$]="currentTrack"
+      >
       </sdj-awesome-player>
     </div>
   </mat-sidenav-content>

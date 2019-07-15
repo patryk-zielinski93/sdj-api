@@ -31,7 +31,6 @@ export class PlayTrackSlackCommand implements SlackCommand {
 
     async handler(command: string[], message: SlackMessage): Promise<void> {
         //ToDO move to QueueTrackHandler
-        console.log(message);
         const queuedTracksCount = await this.queuedTrackRepository.countTracksInQueueFromUser(message.user, message.channel);
 
         if (queuedTracksCount >= appConfig.queuedTracksPerUser) {

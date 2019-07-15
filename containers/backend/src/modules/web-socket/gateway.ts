@@ -47,12 +47,13 @@ export class Gateway implements OnGatewayDisconnect {
   }
 
   private doRoomsSnapshot(): void {
-    this.roomsSnapshot = {...this.server.sockets.adapter.rooms};
+    this.roomsSnapshot = { ...this.server.sockets.adapter.rooms };
   }
 
   private joinRoom(client: Socket, room: string): void {
     if (!this.server.sockets.adapter.rooms[room]) {
-      HostService.startRadioStream(room).then(() => {
+      HostService.startRadioStream(room);
+      this.playlistStore.channelAppear(room).subscribe(() => {
         this.server.in(room).emit('roomIsRunning');
       });
     } else {
@@ -68,6 +69,7 @@ export class Gateway implements OnGatewayDisconnect {
       client.leave(room);
       if (!this.server.sockets.adapter.rooms[room]) {
         HostService.removeRadioStream(room);
+        this.playlistStore.channelDisappears(room);
       }
     });
     this.doRoomsSnapshot();
