@@ -1,20 +1,29 @@
-FROM node:lts-jessie
-ARG LOCAL_USER_ID
-
-RUN echo "deb http://ftp.fr.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
-RUN apt-get update -y && apt-get upgrade -y && apt-get install -y --fix-missing build-essential gcc g++ ca-certificates curl dos2unix ffmpeg sox libsox-fmt-mp3 mp3info alsa-base alsa-utils libasound2-dev
-
-RUN cd /opt
-RUN curl -L http://ftp.pl.debian.org/debian/pool/main/m/mp3gain/mp3gain_1.5.2-r2-2+deb7u1_amd64.deb > mp3gain.deb
-RUN dpkg -i mp3gain.deb
-
-RUN mkdir -p /app
-COPY ./ /app
-
+FROM node:lts-jessie as build-stage
 WORKDIR /app
-RUN npm install
+
+COPY package.json package-lock.json /app/
+RUN npm set progress=false && npm install
+
+COPY tsconfig.json .
+COPY angular.json .
+
+COPY src /app/src
+COPY src/env.sample.js /app/src/env.js
+
 RUN npm run build
 
-EXPOSE 8888
+FROM nginx:1.15
 
-CMD ["npm", "start"]
+COPY docker/prod/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker/prod/nginx/sdj.conf /etc/nginx/conf.d/sdj.conf
+COPY docker/prod/entrypoint.sh /usr/local/bin/
+
+RUN rm -rf /usr/share/nginx/html/* && rm /etc/nginx/conf.d/default.conf
+
+COPY --from=build-stage /app/dist/ /usr/share/nginx/html
+
+ENTRYPOINT ["entrypoint.sh"]
+
+STOPSIGNAL SIGTERM
+
+CMD ["nginx", "-g", "daemon off;"]

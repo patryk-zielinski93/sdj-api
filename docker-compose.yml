@@ -13,6 +13,10 @@ services:
     - VIRTUAL_HOST=${NG_URL}
     - VIRTUAL_PORT=80
     - LOCAL_USER_ID=${LOCAL_USER_ID}
+    - BACKEND_URL=${BACKEND_URL}
+    - RADIO_STREAM_URL=${ICECAST_URL}
+    - SLACK_CLIENT_ID=${SLACK_CLIENT_ID}
+    - SLACK_CLIENT_SECRET=${SLACK_CLIENT_SECRET}
     networks:
       frontend:
         aliases:
@@ -75,12 +79,14 @@ services:
           - icecast
 
   slack_dj_ices:
-    container_name: ${ICES_CONTAINER_NAME}
+    container_name: ${ICES_CONTAINER_NAME}-${ROOM_ID}
     build:
       dockerfile: Dockerfile
       context: ./containers/ices
     volumes:
-    - ./containers/backend/src/public/tracks:/tracks
+      - ./containers/backend/src/public/tracks:/tracks
+    environment:
+      - ROOM_ID=${ROOM_ID}
     depends_on:
       - slack_dj_redis
       - slack_dj_icecast
@@ -105,6 +111,7 @@ services:
       - VIRTUAL_HOST=${BACKEND_URL}
       - VIRTUAL_PORT=8888
       - LOCAL_USER_ID=${LOCAL_USER_ID}
+      - HOST_IP=${HOST_IP}
     networks:
       backend:
         aliases:

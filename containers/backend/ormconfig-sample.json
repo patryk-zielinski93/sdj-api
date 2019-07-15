@@ -8,13 +8,13 @@
   "synchronize": true,
   "logging": false,
   "entities": [
-    "src/modules/shared/modules/db/entities/**/*.ts"
+    "src/modules/core/modules/db/entities/**/*.ts"
   ],
   "migrations": [
-    "src/modules/shared/modules/db/migrations/**/*.ts"
+    "src/modules/core/modules/db/migrations/**/*.ts"
   ],
   "subscribers": [
-    "src/modules/shared/modules/db/**/*.ts"
+    "src/modules/core/modules/db/**/*.ts"
   ],
   "cli": {
     "entitiesDir": "src/entities",

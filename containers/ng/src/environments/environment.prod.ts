@@ -1,4 +1,9 @@
-export const environment = {
-  backendUrl: '//api.radio.local/',
-  production: true
+const browserWindow = window || {};
+const browserWindowEnv = browserWindow['__env'] || {};
+
+export const environment: { backendUrl: string, radioStreamUrl: string, production: boolean } = {
+  ...browserWindowEnv,
+  ...{
+    production: true
+  }
 };

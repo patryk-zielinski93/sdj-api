@@ -1,10 +1,23 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+// Read environment variables from browser window
+const browserWindow = window || {};
+const browserWindowEnv = browserWindow['__env'] || {};
 
-export const environment = {
-  backendUrl: '//api.radio.local/',
-  production: false
+export const environment: {
+    backendUrl: string,
+    radioStreamUrl: string,
+    slack: {
+        clientId: string,
+        clientSecret: string
+    },
+    production: boolean
+} = {
+    ...browserWindowEnv,
+    ...{
+        production: false
+    }
 };
 
 /*

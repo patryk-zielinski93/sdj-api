@@ -1,6 +1,4 @@
-FROM node:carbon
-
-RUN echo "deb http://ftp.fr.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
+FROM node:lts-stretch
 
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --fix-missing build-essential gcc g++ ca-certificates libmp3lame-dev libxml2-dev libshout-dev libvorbis-dev tcl expect python-dev \
@@ -14,7 +12,6 @@ RUN mkdir /etc/ices2
 COPY ./ices-0.4.tar.gz /tmp/ices-0.4.tar.gz
 COPY ./src /ices
 COPY ./ices.conf /ices
-COPY ./api /api
 COPY ./docker /docker
 
 
@@ -28,7 +25,7 @@ RUN mkdir /etc/ices
 
 RUN wget https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
-RUN pip install redis
+RUN pip install redis 
 COPY ./src/ices.py /usr/local/etc/modules/ices.py
 
 CMD ["bash", "/docker/start.sh"]
