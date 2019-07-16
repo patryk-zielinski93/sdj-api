@@ -15,7 +15,7 @@ services:
   slack_dj_backend:
     container_name: ${BACKEND_CONTAINER_NAME}
     build:
-      dockerfile: Dockerfile-dev
+      dockerfile: ./apps/api/Dockerfile-dev
     ports:
     - 58587:58587
     - 58586:58586

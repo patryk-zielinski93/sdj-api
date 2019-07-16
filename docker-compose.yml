@@ -84,7 +84,7 @@ services:
       dockerfile: Dockerfile
       context: ./containers/ices
     volumes:
-      - ./containers/backend/src/public/tracks:/tracks
+      - ./sdj/apps/api/assets/tracks:/tracks
     environment:
       - ROOM_ID=${ROOM_ID}
     depends_on:
@@ -100,13 +100,14 @@ services:
 
   slack_dj_backend:
     container_name: ${BACKEND_CONTAINER_NAME}
+    command: sleep infinity
     build:
-      dockerfile: Dockerfile
-      context: ./containers/backend
+      dockerfile: ./apps/api/Dockerfile
+      context: ./sdj
       args:
         - LOCAL_USER_ID=${LOCAL_USER_ID}
     volumes:
-    - ./containers/backend:/app
+    - ./sdj:/app
     environment:
       - VIRTUAL_HOST=${BACKEND_URL}
       - VIRTUAL_PORT=8888
