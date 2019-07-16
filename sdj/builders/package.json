@@ -1,0 +1,29 @@
+{
+  "name": "ts-node-builder",
+  "builders": "./builders.json",
+  "version": "1.0.0",
+  "description": "ts node based builder for angular workspace",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sikora00/ts-node-builder.git"
+  },
+  "keywords": [
+    "Anguar",
+    "Nest",
+    "Nrwl",
+    "Nx",
+    "Node"
+  ],
+  "author": "Maciej Sikorski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sikora00/ts-node-builder/issues"
+  },
+  "homepage": "https://github.com/Sikora00/ts-node-builder#readme",
+  "dependencies": {
+    "@angular-devkit/architect": "^0.801.1"
+  }
+}

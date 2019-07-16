@@ -148,7 +148,7 @@
           }
         },
         "serve": {
-          "builder": "@nrwl/node:execute",
+          "builder": "./builders:ts-node",
           "options": {
             "buildTarget": "api:build"
           }
