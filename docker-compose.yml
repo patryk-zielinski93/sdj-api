@@ -84,7 +84,7 @@ services:
       dockerfile: Dockerfile
       context: ./containers/ices
     volumes:
-      - ./sdj/apps/api/assets/tracks:/tracks
+      - ./sdj/apps/api/src/assets/tracks:/tracks
     environment:
       - ROOM_ID=${ROOM_ID}
     depends_on:

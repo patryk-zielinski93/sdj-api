@@ -8,6 +8,7 @@ import { QueuedTrackRepository } from '../modules/db/repositories/queued-track.r
 import { TrackRepository } from '../modules/db/repositories/track.repository';
 import { UserRepository } from '../modules/db/repositories/user.repository';
 import { PlaylistStore } from '../store/playlist.store';
+import { connectionConfig } from '../../../configs/connection.config';
 
 type RedisSubject = Subject<{ channel: string; message: any } | any>;
 
@@ -24,10 +25,10 @@ export class RedisService extends AggregateRoot {
   ) {
     super();
     this.redisClient = redis.createClient({
-      host: 'redis'
+      host: connectionConfig.redis.host
     });
     this.redisSub = redis.createClient({
-      host: 'redis'
+      host: connectionConfig.redis.host
     });
     this.handleGetNext();
     this.redisSub.subscribe('getNext');

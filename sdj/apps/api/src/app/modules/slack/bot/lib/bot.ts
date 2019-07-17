@@ -1,3 +1,4 @@
+import { ChannelRepository } from './../../../core/modules/db/repositories/channel.repository';
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../../core/modules/db/repositories/user.repository';
 import { Mp3Service } from '../../../core/services/mp3.service';

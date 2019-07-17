@@ -1,10 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { RedisService } from '../../../services/redis.service';
-import { PlaylistStore } from '../../../store/playlist.store';
+import { Channel } from '../entities/channel.entity';
 import { QueuedTrack } from '../entities/queued-track.entity';
 import { Track } from '../entities/track.entity';
-import { Channel } from '../entities/channel.entity';
 import { User } from '../entities/user.entity';
+import { PlaylistStore } from '../../../store/playlist.store';
 
 @EntityRepository(QueuedTrack)
 export class QueuedTrackRepository extends Repository<QueuedTrack> {
