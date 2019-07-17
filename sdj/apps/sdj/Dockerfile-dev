@@ -5,7 +5,7 @@ RUN apt-get update -y && apt-get upgrade -y && apt-get install -y --fix-missing 
 
 RUN mkdir -p /app
 
-COPY ./docker/dev /var/docker
+COPY ./apps/sdj/docker/dev /var/docker
 RUN find /var/docker -name "*.sh" | xargs dos2unix
 
 WORKDIR /app

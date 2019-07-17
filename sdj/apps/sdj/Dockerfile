@@ -1,6 +1,6 @@
 FROM node:lts-jessie as build-stage
 WORKDIR /app
-
+#ToDo To improve
 COPY package.json package-lock.json /app/
 RUN npm set progress=false && npm install
 

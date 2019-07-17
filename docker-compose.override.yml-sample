@@ -6,7 +6,7 @@ services:
 
   slack_dj_ng:
     build:
-      dockerfile: Dockerfile-dev
+      dockerfile: ./apps/sdj/Dockerfile-dev
     environment:
     - VIRTUAL_PORT=4200
     ports:

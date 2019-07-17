@@ -57,7 +57,9 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "sdj:build",
-            "proxyConfig": "apps/sdj/proxy.conf.json"
+            "proxyConfig": "apps/sdj/proxy.conf.json",
+            "host": "0.0.0.0",
+            "disableHostCheck": true
           },
           "configurations": {
             "production": {
