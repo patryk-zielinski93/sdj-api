@@ -1,7 +1,0 @@
-{
-  "$schema": "http://json-schema.org/schema",
-  "id": "BuildAngularWebpackServerSchema",
-  "title": "Universal Target",
-  "type": "object",
-  "properties": {}
-}
