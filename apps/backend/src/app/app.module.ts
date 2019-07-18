@@ -1,9 +1,9 @@
+import { WebSocketModule } from '@sdj/backend/websocket';
+import { CoreModule } from '@sdj/backend/core';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SlackModule } from './modules/slack/slack.module';
-import { WebSocketModule } from './modules/web-socket/web-socket.module';
-import { CoreModule } from './modules/core/core.module';
-import { ApiModule } from './modules/api/api.module';
+import { ApiModule } from '@sdj/backend/api';
+import { SlackModule } from '@sdj/backend/slack';
 
 @Module({
   imports: [
@@ -14,4 +14,4 @@ import { ApiModule } from './modules/api/api.module';
     WebSocketModule
   ]
 })
-export class AppModule {} 
+export class AppModule {}

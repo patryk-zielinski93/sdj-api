@@ -56,8 +56,17 @@
         "allow": [],
         "depConstraints": [
           {
-            "sourceTag": "*",
-            "onlyDependOnLibsWithTags": ["*"]
+            "sourceTag": "backend:app",
+            "onlyDependOnLibsWithTags": ["backend"]
+          },
+          {
+            "sourceTag": "backend",
+            "onlyDependOnLibsWithTags": [
+              "backend:core",
+              "backend:db",
+              "backend:config",
+              "backend:common"
+            ]
           }
         ]
       }

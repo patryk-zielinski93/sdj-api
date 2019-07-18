@@ -9,16 +9,37 @@
   },
   "projects": {
     "ng-e2e": {
-      "tags": []
+      "tags": ["ng-e2e"]
     },
     "ng": {
-      "tags": []
+      "tags": ["ng"]
     },
     "backend": {
-      "tags": []
+      "tags": ["backend", "backend:app"]
     },
     "host-api": {
-      "tags": []
+      "tags": ["host-api"]
+    },
+    "backend-slack": {
+      "tags": ["backend", "backend:slack"]
+    },
+    "backend-api": {
+      "tags": ["backend", "backend:api"]
+    },
+    "backend-websocket": {
+      "tags": ["backend", "backend:websocket"]
+    },
+    "backend-core": {
+      "tags": ["backend", "backend:core"]
+    },
+    "backend-db": {
+      "tags": ["backend", "backend:db"]
+    },
+    "backend-config": {
+      "tags": ["backend", "backend:config"]
+    },
+    "backend-common": {
+      "tags": ["backend", "backend:common"]
     }
   }
 }
