@@ -1,11 +1,7 @@
-import * as bodyParser from "body-parser";
-import { spawn } from "child_process";
-import * as express from "express";
-import * as http from "http";
+import * as express from 'express';
+import { spawn } from 'child_process';
 
 const app = express();
-const server = new http.Server(app);
-app.use(bodyParser.json());
 
 //TODO VALIDATE ID!!!
 app.get("/start/:id", function(req, res) {
@@ -63,4 +59,8 @@ app.get("/next/:id", function(req, res) {
   });
 });
 
-server.listen(8887, () => console.log("Docker Api listening on 8888"));
+const port = process.env.port || 8887;
+const server = app.listen(port, () => {
+  console.log(`Listening at http://localhost:${port}/api`);
+});
+server.on('error', console.error);

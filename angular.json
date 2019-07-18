@@ -22,7 +22,11 @@
             "main": "apps/sdj/src/main.ts",
             "polyfills": "apps/sdj/src/polyfills.ts",
             "tsConfig": "apps/sdj/tsconfig.app.json",
-            "assets": ["apps/sdj/src/favicon.ico", "apps/sdj/src/env.js", "apps/sdj/src/assets"],
+            "assets": [
+              "apps/sdj/src/favicon.ico",
+              "apps/sdj/src/env.js",
+              "apps/sdj/src/assets"
+            ],
             "styles": ["apps/sdj/src/styles.scss"],
             "scripts": []
           },
@@ -195,6 +199,60 @@
           "options": {
             "jestConfig": "libs/api-interface/jest.config.js",
             "tsConfig": "libs/api-interface/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "host-api": {
+      "root": "apps/host-api",
+      "sourceRoot": "apps/host-api/src",
+      "projectType": "application",
+      "prefix": "host-api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/host-api",
+            "main": "apps/host-api/src/main.ts",
+            "tsConfig": "apps/host-api/tsconfig.app.json",
+            "assets": ["apps/host-api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/host-api/src/environments/environment.ts",
+                  "with": "apps/host-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "host-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/host-api/tsconfig.app.json",
+              "apps/host-api/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/host-api/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/host-api/jest.config.js",
+            "tsConfig": "apps/host-api/tsconfig.spec.json"
           }
         }
       }
