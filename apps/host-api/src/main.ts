@@ -9,7 +9,7 @@ app.get('/start/:id', function(req, res) {
 
   const signal = spawn('bash', [
     '-c',
-    `cd .. && docker-compose run -d  --name slack_dj_ices_${
+    `docker-compose run -d  --name slack_dj_ices_${
       req.params.id
     } -e ROOM_ID=${req.params.id} slack_dj_ices`
   ]);
@@ -33,7 +33,7 @@ app.get('/remove/:id', function(req, res) {
   console.log('removing', req.params.id);
   const signal = spawn('bash', [
     '-c',
-    `cd .. && docker rm -f slack_dj_ices_${req.params.id}`
+    `docker rm -f slack_dj_ices_${req.params.id}`
   ]);
 
   signal.on('close', code => {
@@ -47,7 +47,7 @@ app.get('/next/:id', function(req, res) {
   console.log('removing', req.params.id);
   const signal = spawn('bash', [
     '-c',
-    `cd .. && docker exec slack_dj_ices_${
+    `docker exec slack_dj_ices_${
       req.params.id
     } bash -c "pgrep -f ices | xargs kill -s SIGUSR1"`
   ]);

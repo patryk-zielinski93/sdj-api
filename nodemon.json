@@ -1,11 +1,11 @@
 {
   "watch": [
-    "apps/api/src",
+    "apps/backend/src",
     "libs"
   ],
   "ext": "ts",
   "ignore": [
-    "apps/api/src/**/*.spec.ts"
+    "apps/backend/src/**/*.spec.ts"
   ],
-  "exec": "ts-node -r tsconfig-paths/register apps/api/src/main.ts"
+  "exec": "ts-node  --project apps/backend/tsconfig.app.json -r tsconfig-paths/register apps/backend/src/main.ts"
 }

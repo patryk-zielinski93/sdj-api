@@ -8,16 +8,13 @@
     "nx.json": "*"
   },
   "projects": {
-    "sdj-e2e": {
+    "ng-e2e": {
       "tags": []
     },
-    "sdj": {
+    "ng": {
       "tags": []
     },
-    "api": {
-      "tags": []
-    },
-    "api-interface": {
+    "backend": {
       "tags": []
     },
     "host-api": {

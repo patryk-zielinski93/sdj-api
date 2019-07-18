@@ -8,17 +8,17 @@
   "synchronize": true,
   "logging": false,
   "entities": [
-    "apps/api/src/modules/core/modules/db/entities/**/*.ts"
+    "apps/backend/src/app/modules/core/modules/db/entities/**/*.ts"
   ],
   "migrations": [
-    "apps/api/src/modules/core/modules/db/migrations/**/*.ts"
+    "apps/backend/src/app/modules/core/modules/db/migrations/**/*.ts"
   ],
   "subscribers": [
-    "apps/api/src/modules/core/modules/db/**/*.ts"
+    "apps/backend/src/app/modules/core/modules/db/**/*.ts"
   ],
   "cli": {
-    "entitiesDir": "apps/api/src/entities",
-    "migrationsDir": "apps/api/src/migrations",
-    "subscribersDir": "apps/api/src/subscribers"
+    "entitiesDir": "apps/backend/src/app/entities",
+    "migrationsDir": "apps/backend/src/app/migrations",
+    "subscribersDir": "apps/backend/src/app/subscribers"
   }
 }
