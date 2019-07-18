@@ -20,7 +20,9 @@ export class FuckYouSlackCommand implements SlackCommand {
   ) {}
 
   async handler(command: string[], message: SlackMessage): Promise<void> {
-    const currentTrackInQueue = await this.playlistStore.getCurrentTrack(message.channel);
+    const currentTrackInQueue = await this.playlistStore.getCurrentTrack(
+      message.channel
+    );
     if (currentTrackInQueue) {
       this.commandBus
         .execute(new FuckYouCommand(currentTrackInQueue.id, message.user))

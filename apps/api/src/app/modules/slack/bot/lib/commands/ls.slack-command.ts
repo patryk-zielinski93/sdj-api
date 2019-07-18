@@ -14,15 +14,20 @@ export class LsSlackCommand implements SlackCommand {
   constructor(
     private slack: SlackService,
     private readonly playlistStore: PlaylistStore,
-    @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository
+    @InjectRepository(QueuedTrackRepository)
+    private queuedTrackRepository: QueuedTrackRepository
   ) {}
 
   async handler(command: string[], message: SlackMessage): Promise<void> {
-    const queuedTracks = await this.queuedTrackRepository.findQueuedTracks(message.channel);
+    const queuedTracks = await this.queuedTrackRepository.findQueuedTracks(
+      message.channel
+    );
 
     let msg = '';
 
-    const currentTrack = await this.playlistStore.getCurrentTrack(message.channel);
+    const currentTrack = await this.playlistStore.getCurrentTrack(
+      message.channel
+    );
     if (currentTrack) {
       msg +=
         `Teraz gram: ${currentTrack.track.title}, dodane przez ${

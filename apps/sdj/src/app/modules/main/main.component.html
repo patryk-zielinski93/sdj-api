@@ -12,7 +12,7 @@
         "
         (click)="selectChannel(channel)"
         routerLinkActive="list-item-active"
-        *ngFor="let channel of channels$ | async"
+        *ngFor="let channel of (channels$ | async)"
       >
         # {{ channel.name }}
       </mat-list-item>

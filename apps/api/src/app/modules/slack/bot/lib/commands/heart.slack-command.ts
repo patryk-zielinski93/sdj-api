@@ -33,7 +33,10 @@ export class HeartSlackCommand implements SlackCommand {
               message.channel
             );
           } else {
-            this.slackService.rtm.sendMessage('Co ty pedał jesteś?', message.channel);
+            this.slackService.rtm.sendMessage(
+              'Co ty pedał jesteś?',
+              message.channel
+            );
           }
         });
     }

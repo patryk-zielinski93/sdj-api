@@ -20,7 +20,8 @@ export class RedisService extends AggregateRoot {
     private readonly commandBus: CommandBus,
     private readonly publisher: EventBus,
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
-    @InjectRepository(QueuedTrackRepository) private queueTrackRepository: QueuedTrackRepository,
+    @InjectRepository(QueuedTrackRepository)
+    private queueTrackRepository: QueuedTrackRepository,
     @InjectRepository(UserRepository) private userRepository: UserRepository
   ) {
     super();

@@ -18,7 +18,8 @@ export class RefreshSlackCommand implements SlackCommand {
   constructor(
     private commandBus: CommandBus,
     private slack: SlackService,
-    @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
+    @InjectRepository(QueuedTrackRepository)
+    private queuedTrackRepository: QueuedTrackRepository,
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository
   ) {}
 
@@ -31,7 +32,9 @@ export class RefreshSlackCommand implements SlackCommand {
 
     if (queuedTracksCount >= appConfig.queuedTracksPerUser) {
       this.slack.rtm.sendMessage(
-        `Osiągnąłeś limit ${appConfig.queuedTracksPerUser} zakolejkowanych utworów.`,
+        `Osiągnąłeś limit ${
+          appConfig.queuedTracksPerUser
+        } zakolejkowanych utworów.`,
         message.channel
       );
       throw new Error('zakolejkowane');

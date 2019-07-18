@@ -4,17 +4,13 @@ export interface VideoMetadata {
     dimension: string;
     definition: string;
     caption: string;
-    licensedContent: boolean,
+    licensedContent: boolean;
     regionRestriction: {
-      allowed: [
-        string
-        ],
-      blocked: [
-        string
-        ]
-    },
+      allowed: [string];
+      blocked: [string];
+    };
     projection: string;
-    hasCustomThumbnail: boolean
+    hasCustomThumbnail: boolean;
   };
   etag: string;
   id: string;
@@ -26,16 +22,14 @@ export interface VideoMetadata {
     description: string;
     thumbnails: any;
     channelTitle: string;
-    tags: [
-      string
-      ],
+    tags: [string];
     categoryId: string;
     liveBroadcastContent: string;
     defaultLanguage: string;
     localized: {
       title: string;
-      description: string
-    },
-    defaultAudioLanguage: string
+      description: string;
+    };
+    defaultAudioLanguage: string;
   };
 }

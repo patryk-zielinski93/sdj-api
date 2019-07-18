@@ -8,7 +8,8 @@ import { PlaylistService } from '../../core/services/playlist.service';
 export class AppController {
   constructor(
     private playlist: PlaylistService,
-    @InjectRepository(ChannelRepository) private readonly channelRepository: ChannelRepository
+    @InjectRepository(ChannelRepository)
+    private readonly channelRepository: ChannelRepository
   ) {}
 
   @Get()

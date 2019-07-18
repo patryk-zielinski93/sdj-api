@@ -20,46 +20,40 @@ import { WebSocketService } from './services/web-socket.service';
 import { PlaylistStore } from './store/playlist.store';
 
 export const CommandHandlers = [
-    CreateTrackHandler,
-    DownloadAndPlayHandler,
-    DownloadTrackHandler,
-    FuckYouHandler,
-    HeartHandler,
-    PlayQueuedTrackHandler,
-    PlaySilenceHandler,
-    QueueTrackHandler,
-    ThumbUpHandler
+  CreateTrackHandler,
+  DownloadAndPlayHandler,
+  DownloadTrackHandler,
+  FuckYouHandler,
+  HeartHandler,
+  PlayQueuedTrackHandler,
+  PlaySilenceHandler,
+  QueueTrackHandler,
+  ThumbUpHandler
 ];
 
-export const EventHandlers = [
-    RedisGetNextHandler
-];
+export const EventHandlers = [RedisGetNextHandler];
 
 @Global()
 @Module({
-    imports: [
-        DbModule,
-        CqrsModule
-    ],
-    providers: [
-        ...CommandHandlers,
-        ...EventHandlers,
-        Mp3Service,
-        PlaylistService,
-        PlaylistStore,
-        RedisSagas,
-        RedisService,
-        WebSocketService
-    ],
-    exports: [
-        Mp3Service,
-        PlaylistService,
-        PlaylistStore,
-        RedisService,
-        WebSocketService,
-        DbModule,
-        CqrsModule
-    ]
+  imports: [DbModule, CqrsModule],
+  providers: [
+    ...CommandHandlers,
+    ...EventHandlers,
+    Mp3Service,
+    PlaylistService,
+    PlaylistStore,
+    RedisSagas,
+    RedisService,
+    WebSocketService
+  ],
+  exports: [
+    Mp3Service,
+    PlaylistService,
+    PlaylistStore,
+    RedisService,
+    WebSocketService,
+    DbModule,
+    CqrsModule
+  ]
 })
-export class CoreModule {
-}
+export class CoreModule {}

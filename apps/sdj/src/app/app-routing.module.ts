@@ -5,18 +5,18 @@ import { ChannelResolver } from './modules/main/channel.resolver';
 import { MainComponent } from './modules/main/main.component';
 
 const routes: Routes = [
-    {
-        path: '',
-        component: MainComponent,
-        canActivate: [AuthGuard],
-        resolve: {
-            channel: ChannelResolver
-        }
+  {
+    path: '',
+    component: MainComponent,
+    canActivate: [AuthGuard],
+    resolve: {
+      channel: ChannelResolver
     }
+  }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

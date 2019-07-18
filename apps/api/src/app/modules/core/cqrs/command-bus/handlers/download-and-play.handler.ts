@@ -8,21 +8,27 @@ import { DownloadTrackCommand } from '../commands/download-track.command';
 import { PlayQueuedTrackCommand } from '../commands/play-queued-track.command';
 
 @CommandHandler(DownloadAndPlayCommand)
-export class DownloadAndPlayHandler implements ICommandHandler<DownloadAndPlayCommand> {
-    constructor(private readonly commandBus: CommandBus,
-                private readonly redisService: RedisService,
-                private readonly storage: PlaylistStore,
-                @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository) {
-    }
+export class DownloadAndPlayHandler
+  implements ICommandHandler<DownloadAndPlayCommand> {
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly redisService: RedisService,
+    private readonly storage: PlaylistStore,
+    @InjectRepository(QueuedTrackRepository)
+    private queuedTrackRepository: QueuedTrackRepository
+  ) {}
 
-    async execute(command: DownloadAndPlayCommand) {
-        const track = command.queuedTrack.track;
-        return this.commandBus.execute(new DownloadTrackCommand(track.id))
-            .then(async () => {
-                await this.commandBus.execute(new PlayQueuedTrackCommand(command.queuedTrack.id));
-            }, () => {
-                this.storage.removeFromQueue(command.queuedTrack);
-            });
-    }
-
+  async execute(command: DownloadAndPlayCommand) {
+    const track = command.queuedTrack.track;
+    return this.commandBus.execute(new DownloadTrackCommand(track.id)).then(
+      async () => {
+        await this.commandBus.execute(
+          new PlayQueuedTrackCommand(command.queuedTrack.id)
+        );
+      },
+      () => {
+        this.storage.removeFromQueue(command.queuedTrack);
+      }
+    );
+  }
 }

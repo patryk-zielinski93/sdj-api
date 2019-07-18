@@ -9,8 +9,7 @@ describe('AwesomePlayerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AwesomePlayerComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

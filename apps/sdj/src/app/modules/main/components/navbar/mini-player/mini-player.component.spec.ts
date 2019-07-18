@@ -8,9 +8,8 @@ describe('MiniPlayerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MiniPlayerComponent ]
-    })
-    .compileComponents();
+      declarations: [MiniPlayerComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

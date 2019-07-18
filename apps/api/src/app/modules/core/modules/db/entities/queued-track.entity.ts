@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 import { Channel } from './channel.entity';
 import { Track } from './track.entity';
 import { User } from './user.entity';
@@ -25,7 +32,9 @@ export class QueuedTrack {
   })
   playedAt: Date;
 
-  @ManyToOne(type => Channel, playedIn => playedIn.queuedTracks, { eager: true })
+  @ManyToOne(type => Channel, playedIn => playedIn.queuedTracks, {
+    eager: true
+  })
   @JoinColumn()
   playedIn: Channel;
 

@@ -9,16 +9,27 @@ import { ChannelRepository } from '../../../modules/db/repositories/channel.repo
 
 @CommandHandler(QueueTrackCommand)
 export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
-    constructor(private readonly playlistStore: PlaylistStore,
-                @InjectRepository(ChannelRepository) private channelRepository: ChannelRepository,
-                @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
-                @InjectRepository(TrackRepository) private readonly trackRepository: TrackRepository) {
-    }
+  constructor(
+    private readonly playlistStore: PlaylistStore,
+    @InjectRepository(ChannelRepository)
+    private channelRepository: ChannelRepository,
+    @InjectRepository(QueuedTrackRepository)
+    private queuedTrackRepository: QueuedTrackRepository,
+    @InjectRepository(TrackRepository)
+    private readonly trackRepository: TrackRepository
+  ) {}
 
-    async execute(command: QueueTrackCommand) {
-        const channel = await this.channelRepository.findOrCreate(command.channelId);
-        const track = await this.trackRepository.findOneOrFail(command.trackId);
-        const queuedTrack = await this.queuedTrackRepository.queueTrack(track, channel, command.randomized, command.addedBy);
-        this.playlistStore.addToQueue(queuedTrack);
-    }
+  async execute(command: QueueTrackCommand) {
+    const channel = await this.channelRepository.findOrCreate(
+      command.channelId
+    );
+    const track = await this.trackRepository.findOneOrFail(command.trackId);
+    const queuedTrack = await this.queuedTrackRepository.queueTrack(
+      track,
+      channel,
+      command.randomized,
+      command.addedBy
+    );
+    this.playlistStore.addToQueue(queuedTrack);
+  }
 }

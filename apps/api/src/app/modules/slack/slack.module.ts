@@ -15,24 +15,20 @@ import { SlackService } from './services/slack.service';
 import { CoreModule } from '../core/core.module';
 
 @Module({
-    imports: [
-        WebSocketModule,
-        CoreModule
-    ],
-    providers: [
-        Bot,
-        CleanShitSlackCommand,
-        FuckYouSlackCommand,
-        LsSlackCommand,
-        HeartSlackCommand,
-        PlayTrackSlackCommand,
-        PozdroSlackCommand,
-        RandSlackCommand,
-        RefreshSlackCommand,
-        ThumbUpSlackCommand,
-        ThumbDownSlackCommand,
-        SlackService
-    ]
+  imports: [WebSocketModule, CoreModule],
+  providers: [
+    Bot,
+    CleanShitSlackCommand,
+    FuckYouSlackCommand,
+    LsSlackCommand,
+    HeartSlackCommand,
+    PlayTrackSlackCommand,
+    PozdroSlackCommand,
+    RandSlackCommand,
+    RefreshSlackCommand,
+    ThumbUpSlackCommand,
+    ThumbDownSlackCommand,
+    SlackService
+  ]
 })
-export class SlackModule {
-}
+export class SlackModule {}

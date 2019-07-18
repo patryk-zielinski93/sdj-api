@@ -4,12 +4,11 @@ import { TellCommand } from '../commands/tell.command';
 
 @CommandHandler(TellCommand)
 export class TellHandler implements ICommandHandler<TellCommand> {
-    constructor(private readonly gateway: Gateway) {
-    }
+  constructor(private readonly gateway: Gateway) {}
 
-    async execute(command: TellCommand) {
-        this.gateway.server.of('/').emit('pozdro', {
-            message: command.message
-        });
-    }
+  async execute(command: TellCommand) {
+    this.gateway.server.of('/').emit('pozdro', {
+      message: command.message
+    });
+  }
 }

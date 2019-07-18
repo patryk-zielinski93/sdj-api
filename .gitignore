@@ -41,3 +41,4 @@ Thumbs.db
 ormconfig.json
 .history
 .env
+data/

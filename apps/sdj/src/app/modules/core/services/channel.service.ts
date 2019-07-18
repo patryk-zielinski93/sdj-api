@@ -4,37 +4,38 @@ import { Channel } from '../../../resources/entities/channel.entity';
 import { SlackHttpService } from './slack-http.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class ChannelService {
   private selectedChannel$: Subject<Channel> = new BehaviorSubject(null);
-    private channels: Channel[];
-    private channels$: Subject<Channel[]> = new BehaviorSubject([]);
+  private channels: Channel[];
+  private channels$: Subject<Channel[]> = new BehaviorSubject([]);
 
-    constructor(private slackHttpService: SlackHttpService) {
-    }
+  constructor(private slackHttpService: SlackHttpService) {}
 
-    getChannels(): Observable<Channel[]> {
-        return this.channels$;
-    }
+  getChannels(): Observable<Channel[]> {
+    return this.channels$;
+  }
 
   getSelectedChannel(): Observable<Channel> {
     return this.selectedChannel$;
   }
 
-    loadChannels(): Observable<Channel[]> {
-        const source = this.slackHttpService.getChannelList();
-        source.subscribe((channels: Channel[]) => {
-            this.channels$.next(channels);
-            this.channels = channels;
-            this.selectGeneral();
-        });
-        return source;
-    }
+  loadChannels(): Observable<Channel[]> {
+    const source = this.slackHttpService.getChannelList();
+    source.subscribe((channels: Channel[]) => {
+      this.channels$.next(channels);
+      this.channels = channels;
+      this.selectGeneral();
+    });
+    return source;
+  }
 
-    selectGeneral(): void {
-      this.selectedChannel$.next(this.channels.find((channel: Channel) => channel.is_general));
-    }
+  selectGeneral(): void {
+    this.selectedChannel$.next(
+      this.channels.find((channel: Channel) => channel.is_general)
+    );
+  }
 
   selectChannel(channel: Channel): void {
     this.selectedChannel$.next(channel);

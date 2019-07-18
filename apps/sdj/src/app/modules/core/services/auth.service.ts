@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class AuthService {
   private token: string;
 
   constructor() {
-    this.token = localStorage.getItem("token");
+    this.token = localStorage.getItem('token');
   }
 
   isUserLogged(): boolean {
@@ -20,6 +20,6 @@ export class AuthService {
 
   setToken(token: string) {
     this.token = token;
-    localStorage.setItem("token", token);
+    localStorage.setItem('token', token);
   }
 }

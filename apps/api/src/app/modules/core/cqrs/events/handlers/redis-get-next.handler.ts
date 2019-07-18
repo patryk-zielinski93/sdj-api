@@ -13,17 +13,20 @@ export class RedisGetNextHandler implements IEventHandler<RedisGetNextEvent> {
   constructor(
     private readonly commandBus: CommandBus,
     private playlist: PlaylistService,
-    @InjectRepository(ChannelRepository) private channelRepository: ChannelRepository
+    @InjectRepository(ChannelRepository)
+    private channelRepository: ChannelRepository
   ) {}
 
   async handle(event: RedisGetNextEvent): Promise<any> {
     const channel = await this.channelRepository.findOrCreate(event.channelId);
-    this.playlist.getNext(channel).then(async (queuedTrack: QueuedTrack | undefined) => {
-      if (queuedTrack) {
-        this.commandBus.execute(new DownloadAndPlayCommand(queuedTrack));
-      } else {
-        this.commandBus.execute(new PlaySilenceCommand(channel.id));
-      }
-    });
+    this.playlist
+      .getNext(channel)
+      .then(async (queuedTrack: QueuedTrack | undefined) => {
+        if (queuedTrack) {
+          this.commandBus.execute(new DownloadAndPlayCommand(queuedTrack));
+        } else {
+          this.commandBus.execute(new PlaySilenceCommand(channel.id));
+        }
+      });
   }
 }

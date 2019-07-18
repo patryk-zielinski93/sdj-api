@@ -1,7 +1,7 @@
-import { environment } from "@environment/environment.prod";
-import { Observable } from "rxjs";
-import { Framer } from "./framer";
-import { Scene } from "./scene";
+import { environment } from '@environment/environment.prod';
+import { Observable } from 'rxjs';
+import { Framer } from './framer';
+import { Scene } from './scene';
 
 export class Player {
   get src(): string {
@@ -13,7 +13,7 @@ export class Player {
       this._src = value;
       this.audio.src = value;
       this.audio.load();
-      if (this.context.state === "running") {
+      if (this.context.state === 'running') {
         this.audio.play();
       }
     }
@@ -56,12 +56,12 @@ export class Player {
       this.analyser.smoothingTimeConstant = 0.6;
       this.analyser.fftSize = 2048;
       this.audio = new Audio(environment.radioStreamUrl);
-      this.audio.crossOrigin = "anonymous";
+      this.audio.crossOrigin = 'anonymous';
       this.audio.load();
-      this.audio.addEventListener("error", () => {
+      this.audio.addEventListener('error', () => {
         setTimeout(() => {
           this.audio.load();
-          if (this.context.state === "running") {
+          if (this.context.state === 'running') {
             this.audio.play();
           }
         }, 1000);
@@ -84,12 +84,12 @@ export class Player {
   handleTrackChange(): void {
     this._track.subscribe(track => {
       const convertedTrack = {
-        artist: "DJ PAWEŁ",
-        song: track ? track.track.title : "OPEN FM"
+        artist: 'DJ PAWEŁ',
+        song: track ? track.track.title : 'OPEN FM'
       };
-      document.querySelector(".song .artist").textContent =
+      document.querySelector('.song .artist').textContent =
         convertedTrack.artist;
-      document.querySelector(".song .name").textContent = convertedTrack.song;
+      document.querySelector('.song .name').textContent = convertedTrack.song;
       // this.currentSongIndex = index;
     });
   }

@@ -19,7 +19,10 @@ export class Gateway implements OnGatewayDisconnect {
   private roomsSnapshot: Rooms;
   @WebSocketServer() server: Server;
 
-  constructor(private service: WebSocketService, private readonly playlistStore: PlaylistStore) {}
+  constructor(
+    private service: WebSocketService,
+    private readonly playlistStore: PlaylistStore
+  ) {}
 
   handleDisconnect(client, ...args: any[]): any {
     this.leaveOtherChannels(client);
@@ -64,7 +67,9 @@ export class Gateway implements OnGatewayDisconnect {
   }
 
   private leaveOtherChannels(client: Socket, roomId?: string): void {
-    const otherRoomsKeys = Object.keys(this.roomsSnapshot).filter((key: string) => key !== roomId);
+    const otherRoomsKeys = Object.keys(this.roomsSnapshot).filter(
+      (key: string) => key !== roomId
+    );
     otherRoomsKeys.forEach(room => {
       client.leave(room);
       if (!this.server.sockets.adapter.rooms[room]) {

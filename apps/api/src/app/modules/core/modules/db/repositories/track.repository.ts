@@ -14,7 +14,11 @@ export class TrackRepository extends Repository<Track> {
       .getCount();
   }
 
-  findTopRatedTracks(channelId: string, index?: number, limit?: number): Promise<Track[]> {
+  findTopRatedTracks(
+    channelId: string,
+    index?: number,
+    limit?: number
+  ): Promise<Track[]> {
     const qb = this.createQueryBuilder('track')
       .innerJoin('track.queuedTracks', 'queuedTrack')
       .leftJoin('queuedTrack.votes', 'vote')
@@ -30,7 +34,11 @@ export class TrackRepository extends Repository<Track> {
     return qb.getMany();
   }
 
-  findWeeklyTopRatedTracks(channelId: string, index?: number, limit?: number): Promise<Track[]> {
+  findWeeklyTopRatedTracks(
+    channelId: string,
+    index?: number,
+    limit?: number
+  ): Promise<Track[]> {
     const qb = this.createQueryBuilder('track')
       .innerJoin('track.queuedTracks', 'queuedTrack')
       .leftJoin('queuedTrack.votes', 'vote')
@@ -55,7 +63,11 @@ export class TrackRepository extends Repository<Track> {
     return qb.getMany();
   }
 
-  findMostPlayedTracks(channelId: string, index?: number, limit?: number): Promise<Track[]> {
+  findMostPlayedTracks(
+    channelId: string,
+    index?: number,
+    limit?: number
+  ): Promise<Track[]> {
     const qb = this.createQueryBuilder('track')
       .innerJoin('track.queuedTracks', 'queuedTrack')
       .where('queuedTrack.randomized = 0')
@@ -70,7 +82,11 @@ export class TrackRepository extends Repository<Track> {
     return qb.getMany();
   }
 
-  findWeeklyMostPlayedTracks(channelId: string, index?: number, limit?: number): Promise<Track[]> {
+  findWeeklyMostPlayedTracks(
+    channelId: string,
+    index?: number,
+    limit?: number
+  ): Promise<Track[]> {
     const qb = this.createQueryBuilder('track')
       .innerJoin('track.queuedTracks', 'queuedTrack')
       .where('queuedTrack.randomized = 0')

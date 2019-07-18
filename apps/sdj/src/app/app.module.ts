@@ -16,30 +16,30 @@ import { MainComponent } from './modules/main/main.component';
 import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        NavbarComponent,
-        MainComponent,
-        MiniPlayerComponent,
-        UserProfileComponent,
-        AwesomePlayerComponent
-    ],
-    imports: [
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        BrowserModule,
-        CoreModule,
-        CustomMaterialModule,
-        HttpClientModule,
-        SharedModule
-    ],
-    providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: TokenInterceptor,
-            multi: true
-        }
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    MainComponent,
+    MiniPlayerComponent,
+    UserProfileComponent,
+    AwesomePlayerComponent
+  ],
+  imports: [
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    CoreModule,
+    CustomMaterialModule,
+    HttpClientModule,
+    SharedModule
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

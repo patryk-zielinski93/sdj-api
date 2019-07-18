@@ -37,5 +37,4 @@ const typeormModule = TypeOrmModule.forFeature([
   providers: [...CommandHandlers],
   exports: [typeormModule]
 })
-export class DbModule {
-}
+export class DbModule {}

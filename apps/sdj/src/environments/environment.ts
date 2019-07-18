@@ -6,18 +6,18 @@ const browserWindow = window || {};
 const browserWindowEnv = browserWindow['__env'] || {};
 
 export const environment: {
-    backendUrl: string,
-    radioStreamUrl: string,
-    slack: {
-        clientId: string,
-        clientSecret: string
-    },
-    production: boolean
+  backendUrl: string;
+  radioStreamUrl: string;
+  slack: {
+    clientId: string;
+    clientSecret: string;
+  };
+  production: boolean;
 } = {
-    ...browserWindowEnv,
-    ...{
-        production: false
-    }
+  ...browserWindowEnv,
+  ...{
+    production: false
+  }
 };
 
 /*

@@ -12,8 +12,7 @@ import { pathConfig } from '../../../configs/path.config';
 export class Mp3Service {
   private inProgress: { [key: string]: Observable<string> } = {};
 
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Download youtube video, convert and normalize mp3.
@@ -26,9 +25,11 @@ export class Mp3Service {
     }
 
     const obs = this.download(id).pipe(
-      switchMap(filePath => this.normalize(filePath).pipe(
-        switchMap(() => this.getDuration(filePath))
-      )),
+      switchMap(filePath =>
+        this.normalize(filePath).pipe(
+          switchMap(() => this.getDuration(filePath))
+        )
+      ),
       finalize(() => {
         delete this.inProgress[id];
       })
@@ -48,23 +49,32 @@ export class Mp3Service {
     const sub = new Subject<string>();
     let filePath = path.join(pathConfig.tracks, id);
 
-    ytdl.exec(`https://www.youtube.com/watch?v=${id}`, [
-      '--restrict-filenames',
-      '--geo-bypass-country', 'PL',
-      '-o', filePath + '.%(ext)s',
-      '--extract-audio',
-      '--audio-format', 'mp3',
-      '--audio-quality', '1'
-    ], {}, (err, output) => {
-      if (err) {
-        sub.error(err);
-        sub.complete();
-        return;
-      }
+    ytdl.exec(
+      `https://www.youtube.com/watch?v=${id}`,
+      [
+        '--restrict-filenames',
+        '--geo-bypass-country',
+        'PL',
+        '-o',
+        filePath + '.%(ext)s',
+        '--extract-audio',
+        '--audio-format',
+        'mp3',
+        '--audio-quality',
+        '1'
+      ],
+      {},
+      (err, output) => {
+        if (err) {
+          sub.error(err);
+          sub.complete();
+          return;
+        }
 
-      sub.next(filePath + '.mp3');
-      sub.complete();
-    });
+        sub.next(filePath + '.mp3');
+        sub.complete();
+      }
+    );
 
     return sub;
   }
@@ -78,16 +88,15 @@ export class Mp3Service {
     const sub = new Subject<string>();
 
     try {
-      exec(`mp3info -p "%S" ${filePath}`,
-        (err, stdout, stderr) => {
-          if (err) {
-            sub.error(err);
-          } else {
-            sub.next(stdout);
-          }
+      exec(`mp3info -p "%S" ${filePath}`, (err, stdout, stderr) => {
+        if (err) {
+          sub.error(err);
+        } else {
+          sub.next(stdout);
+        }
 
-          sub.complete();
-        });
+        sub.complete();
+      });
     } catch (e) {
       sub.error(e);
       sub.complete();
@@ -104,19 +113,23 @@ export class Mp3Service {
   private normalize(filePath: string): Observable<void> {
     const sub = new Subject<void>();
 
-    exec(`mp3gain -c -p -r -d ${connectionConfig.tracks.normalizationDb - 89} ${filePath} && \\
+    exec(
+      `mp3gain -c -p -r -d ${connectionConfig.tracks.normalizationDb -
+        89} ${filePath} && \\
 sox ${filePath} ${filePath}.temp.mp3 silence 1 0.1 1% reverse silence 1 0.1 1% reverse && \\
 rm ${filePath} && \\
 mv ${filePath}.temp.mp3 ${filePath}
-`, (err, stdout, stderr) => {
-      if (err) {
-        sub.error(err);
-      } else {
-        sub.next();
-      }
+`,
+      (err, stdout, stderr) => {
+        if (err) {
+          sub.error(err);
+        } else {
+          sub.next();
+        }
 
-      sub.complete();
-    });
+        sub.complete();
+      }
+    );
 
     return sub;
   }

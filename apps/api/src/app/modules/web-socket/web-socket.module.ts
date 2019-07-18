@@ -10,12 +10,7 @@ export const CommandHandlers = [TellHandler];
 export const EventHandlers = [PlayDjHandler, PlayRadioHandler];
 
 @Module({
-    providers: [
-        ...CommandHandlers,
-        ...EventHandlers,
-        Gateway
-    ],
-    exports: [Gateway]
+  providers: [...CommandHandlers, ...EventHandlers, Gateway],
+  exports: [Gateway]
 })
-export class WebSocketModule {
-}
+export class WebSocketModule {}

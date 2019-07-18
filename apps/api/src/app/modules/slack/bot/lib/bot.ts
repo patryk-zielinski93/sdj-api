@@ -19,134 +19,154 @@ import { User } from '../../../core/modules/db/entities/user.entity';
 
 @Injectable()
 export class Bot {
-    private commands: { [key: string]: SlackCommand[] } = {};
+  private commands: { [key: string]: SlackCommand[] } = {};
 
-    constructor(
-        private mp3: Mp3Service,
-        private slack: SlackService,
-        @InjectRepository(UserRepository) private userRepository: UserRepository,
-        cleanC: CleanShitSlackCommand,
-        fuckYouC: FuckYouSlackCommand,
-        heartC: HeartSlackCommand,
-        lsC: LsSlackCommand,
-        playtrackC: PlayTrackSlackCommand,
-        pozdroC: PozdroSlackCommand,
-        randC: RandSlackCommand,
-        refreshC: RefreshSlackCommand,
-        thumbUpC: ThumbUpSlackCommand,
-        thumbDownC: ThumbDownSlackCommand
+  constructor(
+    private mp3: Mp3Service,
+    private slack: SlackService,
+    @InjectRepository(UserRepository) private userRepository: UserRepository,
+    cleanC: CleanShitSlackCommand,
+    fuckYouC: FuckYouSlackCommand,
+    heartC: HeartSlackCommand,
+    lsC: LsSlackCommand,
+    playtrackC: PlayTrackSlackCommand,
+    pozdroC: PozdroSlackCommand,
+    randC: RandSlackCommand,
+    refreshC: RefreshSlackCommand,
+    thumbUpC: ThumbUpSlackCommand,
+    thumbDownC: ThumbDownSlackCommand
+  ) {
+    this.handleMessage = this.handleMessage.bind(this);
+    this.init(
+      cleanC,
+      lsC,
+      playtrackC,
+      pozdroC,
+      randC,
+      refreshC,
+      thumbUpC,
+      thumbDownC,
+      heartC,
+      fuckYouC
+    );
+  }
+
+  init(...commands) {
+    const addCommand = this.addCommand.bind(this);
+    commands.forEach(addCommand);
+    this.start();
+  }
+
+  addCommand(command: SlackCommand): void {
+    let commands = this.commands[command.type];
+
+    if (!commands) {
+      commands = this.commands[command.type] = [];
+    }
+
+    commands.push(command);
+  }
+
+  getHelpMessage(user: string): string {
+    let helpMsg = `Cześć <@${user}>! Łap listę poleceń!\n\n`;
+
+    Object.keys(this.commands).forEach(key => {
+      this.commands[key].forEach(command => {
+        const typeEmiticon = command.type.startsWith(':');
+        if (!typeEmiticon) {
+          helpMsg += `\``;
+        }
+
+        helpMsg += `${command.type}`;
+        if (!typeEmiticon) {
+          helpMsg += `\``;
+        }
+
+        helpMsg += ` - ${command.description}\n`;
+      });
+    });
+
+    return helpMsg;
+  }
+
+  handleMessage(message: any): void {
+    if (
+      !message.user ||
+      message.type !== 'message' ||
+      message.subtype === 'bot_message'
     ) {
-        this.handleMessage = this.handleMessage.bind(this);
-        this.init(cleanC, lsC, playtrackC, pozdroC, randC, refreshC, thumbUpC, thumbDownC, heartC, fuckYouC);
+      return;
     }
 
-    init(...commands) {
-        const addCommand = this.addCommand.bind(this);
-        commands.forEach(addCommand);
-        this.start();
-    }
+    this.userRepository.findOne(message.user).then(async (user: User) => {
+      let userProfile: any;
 
-    addCommand(command: SlackCommand): void {
-        let commands = this.commands[command.type];
+      if (!user) {
+        try {
+          userProfile = await this.slack.web.users.info({
+            user: message.user
+          });
+          userProfile = userProfile.user;
 
-        if (!commands) {
-            commands = this.commands[command.type] = [];
-        }
-
-        commands.push(command);
-    }
-
-    getHelpMessage(user: string): string {
-        let helpMsg = `Cześć <@${user}>! Łap listę poleceń!\n\n`;
-
-        Object.keys(this.commands).forEach((key) => {
-            this.commands[key].forEach(command => {
-                const typeEmiticon = command.type.startsWith(':');
-                if (!typeEmiticon) {
-                    helpMsg += `\``;
-                }
-
-                helpMsg += `${command.type}`;
-                if (!typeEmiticon) {
-                    helpMsg += `\``;
-                }
-
-                helpMsg += ` - ${command.description}\n`;
-            });
-        });
-
-        return helpMsg;
-    }
-
-    handleMessage(message: any): void {
-        if (!message.user || message.type !== 'message' || message.subtype === 'bot_message') {
+          if (!userProfile) {
             return;
+          }
+        } catch (e) {
+          console.log(e);
+          return;
         }
 
-        this.userRepository.findOne(message.user)
-            .then(async (user: User) => {
-                let userProfile: any;
+        user = new User();
+        user.id = message.user;
+        user.name = userProfile.name;
+        user.displayName = userProfile.profile.display_name;
+        user.realName = userProfile.profile.real_name;
+        user.image192 = userProfile.profile.image_192;
+        user.image24 = userProfile.profile.image_24;
+        user.image32 = userProfile.profile.image_32;
+        user.image48 = userProfile.profile.image_48;
+        user.image512 = userProfile.profile.image_512;
+        user.image72 = userProfile.profile.image_72;
 
-                if (!user) {
-                    try {
-                        userProfile = await this.slack.web.users.info({
-                            user: message.user
-                        });
-                        userProfile = userProfile.user;
+        await this.userRepository.save(user);
+      }
 
-                        if (!userProfile) {
-                            return;
-                        }
-                    } catch (e) {
-                        console.log(e);
-                        return;
-                    }
+      const command = message.text.split(' ');
+      const commands = this.commands[command[0]];
 
-                    user = new User();
-                    user.id = message.user;
-                    user.name = userProfile.name;
-                    user.displayName = userProfile.profile.display_name;
-                    user.realName = userProfile.profile.real_name;
-                    user.image192 = userProfile.profile.image_192;
-                    user.image24 = userProfile.profile.image_24;
-                    user.image32 = userProfile.profile.image_32;
-                    user.image48 = userProfile.profile.image_48;
-                    user.image512 = userProfile.profile.image_512;
-                    user.image72 = userProfile.profile.image_72;
+      if (command[0] === 'help') {
+        this.slack.rtm.sendMessage(
+          this.getHelpMessage(message.user),
+          message.channel
+        );
+      }
 
-                    await this.userRepository.save(user);
-                }
-
-                const command = message.text.split(' ');
-                const commands = this.commands[command[0]];
-
-                if (command[0] === 'help') {
-                    this.slack.rtm.sendMessage(this.getHelpMessage(message.user), message.channel);
-                }
-
-                if (commands && commands.length) {
-                    commands.forEach(c => {
-                        c.handler(command, message).catch(e => {
-                            console.log(e.message);
-                            this.sendErrorMessage(message.channel);
-                        });
-                    });
-                } else {
-                    // this.slack.rtm.sendMessage(this.getHelpMessage(message.user), message.channel);
-                }
-
-            });
-    }
-
-    start(): void {
-        this.slack.rtm.on('authenticated', (rtmStartData) => {
-            console.log(`Logged in as ${rtmStartData.self.name} of team ${rtmStartData.team.name}.`);
+      if (commands && commands.length) {
+        commands.forEach(c => {
+          c.handler(command, message).catch(e => {
+            console.log(e.message);
+            this.sendErrorMessage(message.channel);
+          });
         });
+      } else {
+        // this.slack.rtm.sendMessage(this.getHelpMessage(message.user), message.channel);
+      }
+    });
+  }
 
-        this.slack.rtm.on('message', this.handleMessage);
-    }
+  start(): void {
+    this.slack.rtm.on('authenticated', rtmStartData => {
+      console.log(
+        `Logged in as ${rtmStartData.self.name} of team ${
+          rtmStartData.team.name
+        }.`
+      );
+    });
 
-    private sendErrorMessage(channel: string): void {
-        this.slack.rtm.sendMessage('Ups! Coś poszło nie tak :(', channel);
-    }
+    this.slack.rtm.on('message', this.handleMessage);
+  }
+
+  private sendErrorMessage(channel: string): void {
+    this.slack.rtm.sendMessage('Ups! Coś poszło nie tak :(', channel);
+  }
 }

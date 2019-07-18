@@ -20,7 +20,8 @@ export class ThumbDownSlackCommand implements SlackCommand {
   type = ':-1:';
 
   constructor(
-    @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository,
+    @InjectRepository(QueuedTrackRepository)
+    private queuedTrackRepository: QueuedTrackRepository,
     private slackService: SlackService,
     private readonly playlistStore: PlaylistStore,
     @InjectRepository(UserRepository) private userRepository: UserRepository,
@@ -31,7 +32,9 @@ export class ThumbDownSlackCommand implements SlackCommand {
   async handler(command: string[], message: SlackMessage): Promise<void> {
     const userId = message.user;
     const user = await this.userRepository.findOne(userId);
-    const currentTrackInQueue = await this.playlistStore.getCurrentTrack(message.channel);
+    const currentTrackInQueue = await this.playlistStore.getCurrentTrack(
+      message.channel
+    );
     if (!currentTrackInQueue) {
       return;
     }
@@ -65,7 +68,9 @@ export class ThumbDownSlackCommand implements SlackCommand {
       this.trackRepository.save(currentTrackInQueue.track);
     } else {
       this.slackService.rtm.sendMessage(
-        'Left ' + (appConfig.nextSongVoteQuantity - (unlikesCount + 1)) + ' before skip',
+        'Left ' +
+          (appConfig.nextSongVoteQuantity - (unlikesCount + 1)) +
+          ' before skip',
         message.channel
       );
     }

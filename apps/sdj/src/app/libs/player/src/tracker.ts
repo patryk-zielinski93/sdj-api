@@ -25,7 +25,7 @@ export class Tracker {
   }
 
   initHandlers() {
-    this.scene.canvas.addEventListener('mousedown', (e) => {
+    this.scene.canvas.addEventListener('mousedown', e => {
       if (this.isInsideOfSmallCircle(e) || this.isOusideOfBigCircle(e)) {
         return;
       }
@@ -42,13 +42,14 @@ export class Tracker {
       const id = setInterval(() => {
         if (!this.animatedInProgress) {
           this.pressButton = false;
-          (<any>this.player.context).currentTime = this.angle / (2 * Math.PI) * 60;
+          (<any>this.player.context).currentTime =
+            (this.angle / (2 * Math.PI)) * 60;
           clearInterval(id);
         }
       }, 100);
     });
 
-    window.addEventListener('mousemove', (e) => {
+    window.addEventListener('mousemove', e => {
       if (this.animatedInProgress) {
         return;
       }
@@ -65,13 +66,18 @@ export class Tracker {
   }
 
   isOusideOfBigCircle(e) {
-    return Math.abs(e.pageX - this.scene.cx - this.scene.coord.left) > this.scene.radius ||
-      Math.abs(e.pageY - this.scene.cy - this.scene.coord.top) > this.scene.radius;
+    return (
+      Math.abs(e.pageX - this.scene.cx - this.scene.coord.left) >
+        this.scene.radius ||
+      Math.abs(e.pageY - this.scene.cy - this.scene.coord.top) >
+        this.scene.radius
+    );
   }
 
   draw() {
     if (!this.pressButton) {
-      this.angle = this.player.context.currentTime % 60 / 60 * 2 * Math.PI || 0;
+      this.angle =
+        ((this.player.context.currentTime % 60) / 60) * 2 * Math.PI || 0;
     }
     this.drawArc();
   }
@@ -86,7 +92,10 @@ export class Tracker {
     this.context.arc(
       this.scene.radius + this.scene.padding,
       this.scene.radius + this.scene.padding,
-      this.r, 0, this.angle, false
+      this.r,
+      0,
+      this.angle,
+      false
     );
     this.context.stroke();
     this.context.restore();
@@ -96,7 +105,10 @@ export class Tracker {
     this.animatedInProgress = animatedInProgress;
     this.mx = e.pageX;
     this.my = e.pageY;
-    this.angle = Math.atan((this.my - this.scene.cy - this.scene.coord.top) / (this.mx - this.scene.cx - this.scene.coord.left));
+    this.angle = Math.atan(
+      (this.my - this.scene.cy - this.scene.coord.top) /
+        (this.mx - this.scene.cx - this.scene.coord.left)
+    );
     if (this.mx < this.scene.cx + this.scene.coord.left) {
       this.angle = Math.PI + this.angle;
     }
@@ -113,7 +125,8 @@ export class Tracker {
   startAnimation() {
     var angle = this.angle;
     var l = Math.abs(this.angle) - Math.abs(this.prevAngle);
-    var step = l / this.animationCount, i = 0;
+    var step = l / this.animationCount,
+      i = 0;
     var f = () => {
       this.angle += step;
       if (++i == this.animationCount) {

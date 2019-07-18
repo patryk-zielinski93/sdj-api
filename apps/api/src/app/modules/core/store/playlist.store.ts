@@ -22,7 +22,9 @@ export class PlaylistStore {
     return this._state.getValue();
   }
 
-  private _state: BehaviorSubject<PlaylistState> = new BehaviorSubject(initialPlaylistState);
+  private _state: BehaviorSubject<PlaylistState> = new BehaviorSubject(
+    initialPlaylistState
+  );
 
   channelAppear(channelId: string): Observable<void> {
     return this._state.pipe(
@@ -70,7 +72,10 @@ export class PlaylistStore {
 
   setSilenceCount(channelId: string, value: number): void {
     const channelState = this.getChannelState(channelId);
-    this._state.next({ ...this.state, [channelId]: { ...channelState, silenceCount: value } });
+    this._state.next({
+      ...this.state,
+      [channelId]: { ...channelState, silenceCount: value }
+    });
   }
 
   getSilenceCount(channelId: string): Observable<number> {

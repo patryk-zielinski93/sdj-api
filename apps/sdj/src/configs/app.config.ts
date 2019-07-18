@@ -1,3 +1,3 @@
 export const appConfig = {
-    externalStream: '//stream.open.fm/109'
+  externalStream: '//stream.open.fm/109'
 };

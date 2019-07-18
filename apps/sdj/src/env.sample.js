@@ -6,4 +6,4 @@
     clientId: '{{slackClientId}}',
     clientSecret: '{{slackClientSecret}}'
   };
-}(this));
+})(this);

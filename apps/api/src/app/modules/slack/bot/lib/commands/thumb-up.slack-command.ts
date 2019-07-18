@@ -17,21 +17,28 @@ export class ThumbUpSlackCommand implements SlackCommand {
     private readonly commandBus: CommandBus,
     private slack: SlackService,
     private readonly playlistStore: PlaylistStore,
-    @InjectRepository(QueuedTrackRepository) private queuedTrackRepository: QueuedTrackRepository
+    @InjectRepository(QueuedTrackRepository)
+    private queuedTrackRepository: QueuedTrackRepository
   ) {}
 
   async handler(command: string[], message: SlackMessage): Promise<void> {
-    const currentTrackInQueue = await this.playlistStore.getCurrentTrack(message.channel);
+    const currentTrackInQueue = await this.playlistStore.getCurrentTrack(
+      message.channel
+    );
     console.log(currentTrackInQueue);
     if (!currentTrackInQueue) {
       return;
     }
 
-    this.commandBus.execute(new ThumbUpCommand(currentTrackInQueue.id, message.user)).then(() => {
-      this.slack.rtm.sendMessage(
-        'Super! (' + currentTrackInQueue.track.title + ') będzie grana częściej',
-        message.channel
-      );
-    });
+    this.commandBus
+      .execute(new ThumbUpCommand(currentTrackInQueue.id, message.user))
+      .then(() => {
+        this.slack.rtm.sendMessage(
+          'Super! (' +
+            currentTrackInQueue.track.title +
+            ') będzie grana częściej',
+          message.channel
+        );
+      });
   }
 }

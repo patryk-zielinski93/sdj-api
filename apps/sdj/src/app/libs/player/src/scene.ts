@@ -18,8 +18,11 @@ export class Scene {
   private height: number;
   coord: ClientRect | DOMRect;
 
-  constructor(private framer: Framer, private tracker: Tracker, private controls: Controls) {
-  }
+  constructor(
+    private framer: Framer,
+    private tracker: Tracker,
+    private controls: Controls
+  ) {}
 
   init() {
     this.canvasConfigure();
@@ -42,7 +45,7 @@ export class Scene {
   calculateSize() {
     this.scaleCoef = Math.max(0.5, 740 / this.optimiseHeight);
 
-    const size = Math.max(this.minSize, 1/*document.body.clientHeight */);
+    const size = Math.max(this.minSize, 1 /*document.body.clientHeight */);
     this.canvas.setAttribute('width', size.toString());
     this.canvas.setAttribute('height', size.toString());
 

@@ -7,28 +7,29 @@ import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class PozdroSlackCommand implements SlackCommand {
-    description = 'wyślij pozdro swoim ziomeczkom (może też być dla mamy)';
-    type = 'pozdro';
+  description = 'wyślij pozdro swoim ziomeczkom (może też być dla mamy)';
+  type = 'pozdro';
 
-    constructor(private userRepository: UserRepository, private readonly commandBus: CommandBus) {
+  constructor(
+    private userRepository: UserRepository,
+    private readonly commandBus: CommandBus
+  ) {}
+
+  async handler(command: string[], message: SlackMessage): Promise<void> {
+    command.shift();
+    const pozdro = command.join(' ');
+
+    if (pozdro.length > 200) {
+      throw new Error('too long');
     }
 
-    async handler(command: string[], message: SlackMessage): Promise<void> {
+    const user = await this.userRepository.findOne({ id: message.user });
 
-        command.shift();
-        const pozdro = command.join(' ');
+    if (user) {
+      console.log(user.realName + ' mowi: ' + pozdro);
 
-        if (pozdro.length > 200) {
-            throw new Error('too long');
-        }
-
-        const user = await this.userRepository.findOne({ id: message.user });
-
-        if (user) {
-            console.log(user.realName + ' mowi: ' + pozdro);
-
-            //ToDo module injection
-            this.commandBus.execute(new TellCommand(pozdro));
-        }
+      //ToDo module injection
+      this.commandBus.execute(new TellCommand(pozdro));
     }
+  }
 }

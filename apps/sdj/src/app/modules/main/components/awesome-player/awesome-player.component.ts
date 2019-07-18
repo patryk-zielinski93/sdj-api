@@ -43,11 +43,9 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
   private _src: string;
   private _track$: Observable<any>;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.framer = new Framer();
@@ -70,6 +68,4 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
     this.player.init();
     this.player.src = this.src;
   }
-
 }
-

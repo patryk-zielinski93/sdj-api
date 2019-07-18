@@ -1,6 +1,5 @@
 import { ICommand } from '@nestjs/cqrs';
 
 export class PlaySilenceCommand implements ICommand {
-    constructor(public channelId: string) {
-    }
+  constructor(public channelId: string) {}
 }

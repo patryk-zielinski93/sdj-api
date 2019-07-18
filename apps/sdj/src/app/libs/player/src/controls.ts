@@ -3,7 +3,6 @@ import { Scene } from './scene';
 import { Tracker } from './tracker';
 
 export class Controls {
-
   playing = false;
   private context: CanvasRenderingContext2D;
   private timeControl: Element;
@@ -87,7 +86,9 @@ export class Controls {
       const rawTime = this.player.context.currentTime || 0;
       const secondsInMin = 60;
       let min = Math.floor(rawTime / secondsInMin).toString();
-      let seconds = Math.floor(rawTime - parseInt(min) * secondsInMin).toString();
+      let seconds = Math.floor(
+        rawTime - parseInt(min) * secondsInMin
+      ).toString();
       if (parseInt(min) < 10) {
         min = '0' + min;
       }
@@ -108,7 +109,8 @@ export class Controls {
     this.context.beginPath();
     this.context.fillStyle = 'rgba(254, 67, 101, 0.85)';
     this.context.lineWidth = 1;
-    let x = this.tracker.r / Math.sqrt(Math.pow(Math.tan(this.tracker.angle), 2) + 1);
+    let x =
+      this.tracker.r / Math.sqrt(Math.pow(Math.tan(this.tracker.angle), 2) + 1);
     let y = Math.sqrt(this.tracker.r * this.tracker.r - x * x);
     if (this.getQuadrant() == 2) {
       x = -x;
@@ -120,7 +122,14 @@ export class Controls {
     if (this.getQuadrant() == 4) {
       y = -y;
     }
-    this.context.arc(this.scene.radius + this.scene.padding + x, this.scene.radius + this.scene.padding + y, 10, 0, Math.PI * 2, false);
+    this.context.arc(
+      this.scene.radius + this.scene.padding + x,
+      this.scene.radius + this.scene.padding + y,
+      10,
+      0,
+      Math.PI * 2,
+      false
+    );
     this.context.fill();
     this.context.restore();
   }
@@ -132,10 +141,16 @@ export class Controls {
     if (Math.PI / 2 <= this.tracker.angle && this.tracker.angle < Math.PI) {
       return 2;
     }
-    if (Math.PI < this.tracker.angle && this.tracker.angle < Math.PI * 3 / 2) {
+    if (
+      Math.PI < this.tracker.angle &&
+      this.tracker.angle < (Math.PI * 3) / 2
+    ) {
       return 3;
     }
-    if (Math.PI * 3 / 2 <= this.tracker.angle && this.tracker.angle <= Math.PI * 2) {
+    if (
+      (Math.PI * 3) / 2 <= this.tracker.angle &&
+      this.tracker.angle <= Math.PI * 2
+    ) {
       return 4;
     }
   }
