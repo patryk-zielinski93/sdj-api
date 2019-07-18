@@ -18,7 +18,8 @@ export class PlaySilenceHandler implements ICommandHandler<PlaySilenceCommand> {
 
   async execute(command: PlaySilenceCommand) {
     const count =
-      this.playlistStore.getChannelState(command.channelId).silenceCount + 1;
+      (await this.playlistStore.getChannelState(command.channelId))
+        .silenceCount + 1;
     this.playlistStore.setSilenceCount(command.channelId, count);
     const prevTrack = await this.playlistStore.getCurrentTrack(
       command.channelId
