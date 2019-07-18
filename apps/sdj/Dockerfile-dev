@@ -1,0 +1,17 @@
+FROM node:lts-stretch
+ARG LOCAL_USER_ID
+
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y --fix-missing dos2unix
+
+RUN mkdir -p /app
+
+COPY ./apps/sdj/docker/dev /var/docker
+RUN find /var/docker -name "*.sh" | xargs dos2unix
+
+WORKDIR /app
+RUN npm install -g ts-node && npm install -g typescript
+
+EXPOSE 4200
+
+
+CMD ["sh", "/var/docker/start.sh"]
