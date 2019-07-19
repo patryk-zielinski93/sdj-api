@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Channel } from '../../../resources/entities/channel.entity';
 import { SlackHttpService } from './slack-http.service';
+import { Channel } from '@sdj/shared/common';
 
 @Injectable({
   providedIn: 'root'

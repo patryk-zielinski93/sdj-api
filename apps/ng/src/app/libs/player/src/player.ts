@@ -1,11 +1,9 @@
 import { environment } from '@ng-environment/environment.prod';
 import { Observable } from 'rxjs';
 
-import {
-  QueuedTrack,
-} from './../../../../../../../.history/sdj/apps/api/src/app/modules/core/modules/db/entities/queued-track.entity_20190716095115';
 import { Framer } from './framer';
 import { Scene } from './scene';
+import { QueuedTrack } from '@sdj/shared/common';
 
 export class Player {
   get src(): string {

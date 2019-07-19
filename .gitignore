@@ -42,3 +42,4 @@ ormconfig.json
 .history
 .env
 data/
+docker-compose.override.yml

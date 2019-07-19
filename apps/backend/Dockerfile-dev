@@ -6,7 +6,7 @@ RUN apt-get update -y && apt-get upgrade -y && apt-get install -y --fix-missing 
 RUN npm install -g ts-node nodemon typescript @angular/cli
 RUN mkdir -p /app
 
-COPY ./apps/backend/docker /var/docker
+COPY ./apps/backend/docker/dev /var/docker
 RUN find /var/docker -name "*.sh" | xargs dos2unix
 
 # Handle permissions

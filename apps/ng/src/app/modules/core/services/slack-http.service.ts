@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Channel } from '../../../resources/entities/channel.entity';
+import { Channel } from '@sdj/shared/common';
 
 @Injectable({
   providedIn: 'root'

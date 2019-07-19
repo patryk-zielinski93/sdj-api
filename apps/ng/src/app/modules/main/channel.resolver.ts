@@ -5,7 +5,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Channel } from '../../resources/entities/channel.entity';
+import { Channel } from '@sdj/shared/common';
 import { ChannelService } from '../core/services/channel.service';
 
 @Injectable({ providedIn: 'root' })

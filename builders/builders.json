@@ -4,7 +4,12 @@
     "nodemon": {
       "implementation": "./nodemon",
       "schema": "./nodemon/schema.json",
-      "description": "Execute a TS Node application"
+      "description": "Run nodemon configuration"
+    },
+    "pm2": {
+      "implementation": "./pm2",
+      "schema": "./pm2/schema.json",
+      "description": "Compile application and run with pm2"
     }
   }
 }

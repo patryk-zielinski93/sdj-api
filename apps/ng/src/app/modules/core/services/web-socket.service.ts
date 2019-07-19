@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, fromEvent } from 'rxjs';
 import * as io from 'socket.io-client';
 import { environment } from '../../../../environments/environment';
-import { QueuedTrack } from '../../../common/interfaces/queued-track.interface';
 import Socket = SocketIOClient.Socket;
+import { QueuedTrack } from '@sdj/shared/common';
 
 @Injectable({
   providedIn: 'root'

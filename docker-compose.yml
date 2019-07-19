@@ -8,8 +8,6 @@ services:
       context: ./
       args:
         - LOCAL_USER_ID=${LOCAL_USER_ID}
-    volumes:
-    - ./:/app
     environment:
       - PORT=${BACKEND_PORT}
       - VIRTUAL_HOST=${BACKEND_URL}
@@ -77,8 +75,6 @@ services:
       context: ./
       args:
       - LOCAL_USER_ID=${LOCAL_USER_ID}
-    volumes:
-    - ./:/app
     environment:
     - VIRTUAL_HOST=${NG_URL}
     - VIRTUAL_PORT=80

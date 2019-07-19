@@ -11,7 +11,7 @@ import { merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 
 import { appConfig } from '../../../configs/app.config';
-import { Channel } from '../../resources/entities/channel.entity';
+import { Channel } from '@sdj/shared/common';
 import { ChannelService } from '../core/services/channel.service';
 import { SpeechService } from '../core/services/speech.service';
 import { WebSocketService } from '../core/services/web-socket.service';

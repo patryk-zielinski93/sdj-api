@@ -4,6 +4,8 @@ services:
     container_name: ${BACKEND_CONTAINER_NAME}
     build:
       dockerfile: ./apps/backend/Dockerfile-dev
+    volumes:
+    - ./:/app
     ports:
     - 58587:58587
     - 58586:58586
@@ -20,3 +22,5 @@ services:
     - VIRTUAL_PORT=4200
     ports:
       - 4200:4200
+    volumes:
+    - ./:/app
