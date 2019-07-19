@@ -8,9 +8,10 @@ import {
 } from 'typeorm';
 import { QueuedTrack } from './queued-track.entity';
 import { User } from './user.entity';
+import { Track as ITrack } from '@sdj/shared/common';
 
 @Entity()
-export class Track {
+export class Track implements ITrack {
   @ManyToOne(type => User)
   @JoinColumn()
   addedBy: User | null;

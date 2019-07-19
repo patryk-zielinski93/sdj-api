@@ -1,4 +1,4 @@
-import { Track } from '../../../common/interfaces/track.interface';
+import { Track } from '@sdj/shared/common';
 
 export namespace TrackUtil {
   export function getTrackThumbnail(track: Track): string {

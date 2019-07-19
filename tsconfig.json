@@ -23,7 +23,8 @@
       "@sdj/backend/core": ["libs/backend/core/src/index.ts"],
       "@sdj/backend/db": ["libs/backend/db/src/index.ts"],
       "@sdj/backend/common": ["libs/backend/common/src/index.ts"],
-      "@sdj/backend/config": ["libs/backend/config/src/index.ts"]
+      "@sdj/backend/config": ["libs/backend/config/src/index.ts"],
+      "@sdj/shared/common": ["libs/shared/common/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

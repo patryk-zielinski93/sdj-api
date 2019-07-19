@@ -1,9 +1,9 @@
 {
   "$schema": "@angular-devkit/architect/src/builders-schema.json",
   "builders": {
-    "ts-node": {
-      "implementation": "./ts-node",
-      "schema": "./ts-node/schema.json",
+    "nodemon": {
+      "implementation": "./nodemon",
+      "schema": "./nodemon/schema.json",
       "description": "Execute a TS Node application"
     }
   }

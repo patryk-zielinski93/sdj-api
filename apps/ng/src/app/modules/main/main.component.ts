@@ -1,3 +1,4 @@
+import { QueuedTrack } from '@sdj/shared/common';
 import {
   AfterViewInit,
   Component,
@@ -10,7 +11,6 @@ import { merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 
 import { appConfig } from '../../../configs/app.config';
-import { QueuedTrack } from '../../common/interfaces/queued-track.interface';
 import { Channel } from '../../resources/entities/channel.entity';
 import { ChannelService } from '../core/services/channel.service';
 import { SpeechService } from '../core/services/speech.service';

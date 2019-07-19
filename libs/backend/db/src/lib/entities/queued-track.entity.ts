@@ -10,9 +10,10 @@ import { Channel } from './channel.entity';
 import { Track } from './track.entity';
 import { User } from './user.entity';
 import { Vote } from './vote.entity';
+import { QueuedTrack as IQueuedTrack } from '@sdj/shared/common';
 
 @Entity()
-export class QueuedTrack {
+export class QueuedTrack implements IQueuedTrack {
   @Column('datetime')
   createdAt: Date;
 

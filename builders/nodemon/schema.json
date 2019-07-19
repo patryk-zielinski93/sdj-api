@@ -3,5 +3,7 @@
   "id": "BuildAngularWebpackServerSchema",
   "title": "Universal Target",
   "type": "object",
-  "properties": {}
+  "properties": {
+    "debug": "boolean"
+  }
 }

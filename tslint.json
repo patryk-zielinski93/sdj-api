@@ -65,8 +65,13 @@
               "backend:core",
               "backend:db",
               "backend:config",
-              "backend:common"
+              "backend:common",
+              "shared"
             ]
+          },
+          {
+            "sourceTag": "ng",
+            "onlyDependOnLibsWithTags": ["shared"]
           }
         ]
       }

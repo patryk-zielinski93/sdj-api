@@ -40,6 +40,9 @@
     },
     "backend-common": {
       "tags": ["backend", "backend:common"]
+    },
+    "shared-common": {
+      "tags": ["shared"]
     }
   }
 }

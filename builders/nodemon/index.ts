@@ -12,8 +12,12 @@ export default createBuilder((options: any, context) => {
     Promise.all([
       context.getTargetOptions(target),
       context.getBuilderNameForTarget(target)
-    ]).then(([options, builderName]: [OptionsT, string]) => {
-      const child = childProcess.spawn('nodemon', ['--config nodemon-debug.json']);
+    ]).then(([optionsT, builderName]: [OptionsT, string]) => {
+      const args = [];
+      if (optionsT.debug) {
+        args.concat(['--config', 'nodemon-debug.json']);
+      }
+      const child = childProcess.spawn('nodemon', args);
       child.stdout.on('data', data => {
         context.logger.info(data.toString());
       });

@@ -1,5 +1,9 @@
 import { environment } from '@ng-environment/environment.prod';
 import { Observable } from 'rxjs';
+
+import {
+  QueuedTrack,
+} from './../../../../../../../.history/sdj/apps/api/src/app/modules/core/modules/db/entities/queued-track.entity_20190716095115';
 import { Framer } from './framer';
 import { Scene } from './scene';
 
@@ -82,7 +86,7 @@ export class Player {
   }
 
   handleTrackChange(): void {
-    this._track.subscribe(track => {
+    this._track.subscribe((track: QueuedTrack) => {
       const convertedTrack = {
         artist: 'DJ PAWEŁ',
         song: track ? track.track.title : 'OPEN FM'
