@@ -154,9 +154,16 @@
           }
         },
         "serve": {
-          "builder": "./builders:ts-node",
+          "builder": "./builders:nodemon",
           "options": {
             "buildTarget": "backend:build"
+          }
+        },
+        "serve-dev": {
+          "builder": "./builders:nodemon",
+          "options": {
+            "buildTarget": "backend:build",
+            "debug": true
           }
         },
         "lint": {

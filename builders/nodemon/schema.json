@@ -4,6 +4,9 @@
   "title": "Universal Target",
   "type": "object",
   "properties": {
-    "debug": "boolean"
+    "debug": {
+      "default": false,
+      "type": "boolean"
+    }
   }
 }
