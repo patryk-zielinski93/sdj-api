@@ -6,6 +6,6 @@ export class QueueTrackCommand implements ICommand {
     public trackId: string,
     public channelId: string,
     public addedBy?: User,
-    public randomized = false
+    public randomized: boolean = false
   ) {}
 }

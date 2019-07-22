@@ -17,7 +17,7 @@ export class PlayQueuedTrackHandler
     private queuedTrackRepository: QueuedTrackRepository
   ) {}
 
-  async execute(command: PlayQueuedTrackCommand) {
+  async execute(command: PlayQueuedTrackCommand): Promise<void> {
     const queuedTrack = await this.queuedTrackRepository.findOneOrFail(
       command.queuedTrackId
     );
@@ -30,11 +30,11 @@ export class PlayQueuedTrackHandler
     }
     this.redisService
       .getNextSongSubject(queuedTrack.playedIn.id)
-      .next(track.id);
+      .next(<any>track.id);
     this.playlistStore.setCurrentTrack(queuedTrack.playedIn.id, queuedTrack);
     this.publisher.publish(new PlayDjEvent(queuedTrack.playedIn.id));
     this.updateQueuedTrackPlayedAt(queuedTrack);
-    this.playlistStore.setSilenceCount(queuedTrack.playedIn.id, 0);
+    return this.playlistStore.setSilenceCount(queuedTrack.playedIn.id, 0);
   }
 
   updateQueuedTrackPlayedAt(

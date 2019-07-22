@@ -9,7 +9,6 @@ import { Mp3Service } from '../../../services';
 import { TrackRepository, User, Track } from '@sdj/backend/db';
 import { TrackStatus } from '../../../enums';
 
-
 @CommandHandler(CreateTrackCommand)
 export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {
   constructor(
@@ -17,7 +16,7 @@ export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository
   ) {}
 
-  async execute(command: CreateTrackCommand) {
+  async execute(command: CreateTrackCommand): Promise<void> {
     const id = command.id;
     const res = await requestPromise.get(
       `https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails,snippet&key=${

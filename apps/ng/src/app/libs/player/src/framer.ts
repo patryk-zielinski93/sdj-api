@@ -1,6 +1,12 @@
 import { Scene } from './scene';
 import { Tracker } from './tracker';
 
+interface Tick {
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
+}
 export class Framer {
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
@@ -9,52 +15,52 @@ export class Framer {
   scene: Scene;
   ticks: { x1: number; y1: number; x2: number; y2: number }[];
 
-  countTicks = 360;
+  countTicks: number = 360;
   frequencyData: Uint8Array | Array<any> = [];
-  tickSize = 10;
-  PI = 360;
-  index = 0;
-  loadingAngle = 0;
+  tickSize: number = 10;
+  PI: number = 360;
+  index: number = 0;
+  loadingAngle: number = 0;
 
   tracker: Tracker;
 
-  init(scene: Scene) {
+  init(scene: Scene): void {
     this.canvas = document.querySelector('canvas');
     this.scene = scene;
     this.context = scene.context;
     this.configure();
   }
 
-  configure() {
+  configure(): void {
     this.maxTickSize = this.tickSize * 9 * this.scene.scaleCoef;
     this.countTicks = this.countTicks * this.scene.scaleCoef;
   }
 
-  draw() {
+  draw(): void {
     this.drawTicks();
     this.drawEdging();
   }
 
-  drawTicks() {
+  drawTicks(): void {
     this.context.save();
     this.context.beginPath();
     this.context.lineWidth = 1;
     this.ticks = this.getTicks(this.countTicks, this.tickSize, [0, 90]);
-    for (var i = 0, len = this.ticks.length; i < len; ++i) {
-      var tick = this.ticks[i];
+    for (let i = 0, len = this.ticks.length; i < len; ++i) {
+      const tick = this.ticks[i];
       this.drawTick(tick.x1, tick.y1, tick.x2, tick.y2);
     }
     this.context.restore();
   }
 
-  drawTick(x1, y1, x2, y2) {
-    var dx1 = parseInt(this.scene.cx + x1);
-    var dy1 = parseInt(this.scene.cy + y1);
+  drawTick(x1: number, y1: number, x2: number, y2: number): void {
+    const dx1 = this.scene.cx + x1;
+    const dy1 = this.scene.cy + y1;
 
-    var dx2 = parseInt(this.scene.cx + x2);
-    var dy2 = parseInt(this.scene.cy + y2);
+    const dx2 = this.scene.cx + x2;
+    const dy2 = this.scene.cy + y2;
 
-    var gradient = this.context.createLinearGradient(dx1, dy1, dx2, dy2);
+    const gradient = this.context.createLinearGradient(dx1, dy1, dx2, dy2);
     gradient.addColorStop(0, '#FE4365');
     gradient.addColorStop(0.6, '#FE4365');
     gradient.addColorStop(1, '#F5F5F5');
@@ -66,17 +72,17 @@ export class Framer {
     this.context.stroke();
   }
 
-  setLoadingPercent(percent) {
+  setLoadingPercent(percent: number): void {
     this.loadingAngle = percent * 2 * Math.PI;
   }
 
-  drawEdging() {
+  drawEdging(): void {
     this.context.save();
     this.context.beginPath();
     this.context.strokeStyle = 'rgba(254, 67, 101, 0.5)';
     this.context.lineWidth = 1;
 
-    var offset = this.tracker.lineWidth / 2;
+    const offset = this.tracker.lineWidth / 2;
     this.context.moveTo(
       this.scene.padding +
         2 * this.scene.radius -
@@ -97,21 +103,16 @@ export class Framer {
     this.context.restore();
   }
 
-  getTicks(count, size, animationParams) {
+  getTicks(count: number, size: number, animationParams: number[]): Tick[] {
     size = 10;
-    var ticks = this.getTickPoitns(count);
-    var x1,
-      y1,
-      x2,
-      y2,
-      m = [],
-      tick,
-      k;
-    var lesser = 160;
-    var allScales = [];
-    for (var i = 0, len = ticks.length; i < len; ++i) {
-      var coef = 1 - i / (len * 2.5);
-      var delta =
+    const ticks = this.getTickPoitns(count);
+    let x1: number, y1: number, x2: number, y2: number, tick, k: number;
+    const lesser = 160,
+      m: Tick[] = [];
+    const allScales = [];
+    for (let i = 0, len = ticks.length; i < len; ++i) {
+      const coef = 1 - i / (len * 2.5);
+      let delta =
         ((this.frequencyData[i] || 0) - lesser * coef) * this.scene.scaleCoef;
       if (delta < 0) {
         delta = 0;
@@ -135,29 +136,29 @@ export class Framer {
       y2 = y1 * k;
       m.push({ x1: x1, y1: y1, x2: x2, y2: y2 });
       if (i < 20) {
-        var scale = delta / 50;
+        let scale = delta / 50;
         scale = scale < 1 ? 1 : scale;
         allScales.push(scale);
       }
     }
-    var sum =
-      allScales.reduce(function(pv, cv) {
+    const sum =
+      allScales.reduce(function(pv: number, cv: number): number {
         return pv + cv;
       }, 0) / allScales.length;
     this.canvas.style.transform = 'scale(' + sum + ')';
     return m;
   }
 
-  getSize(angle, l, r) {
-    var m = (r - l) / 2;
-    var x = angle - l;
-    var h;
+  getSize(angle: number, l: number, r: number): number {
+    const m = (r - l) / 2;
+    const x = angle - l;
+    let h: number;
 
-    if (x == m) {
+    if (x === m) {
       return this.maxTickSize;
     }
-    var d = Math.abs(m - x);
-    var v = 70 * Math.sqrt(1 / d);
+    const d = Math.abs(m - x);
+    const v = 70 * Math.sqrt(1 / d);
     if (v > this.maxTickSize) {
       h = this.maxTickSize - d;
     } else {
@@ -171,11 +172,11 @@ export class Framer {
     return h;
   }
 
-  getTickPoitns(count) {
-    var coords = [],
+  getTickPoitns(count: number): { x: number; y: number; angle: number }[] {
+    const coords: { x: number; y: number; angle: number }[] = [],
       step = this.PI / count;
-    for (var deg = 0; deg < this.PI; deg += step) {
-      var rad = (deg * Math.PI) / (this.PI / 2);
+    for (let deg = 0; deg < this.PI; deg += step) {
+      const rad = (deg * Math.PI) / (this.PI / 2);
       coords.push({ x: Math.cos(rad), y: -Math.sin(rad), angle: deg });
     }
     return coords;

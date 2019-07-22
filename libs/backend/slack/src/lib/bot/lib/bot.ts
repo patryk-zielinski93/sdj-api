@@ -49,7 +49,7 @@ export class Bot {
     );
   }
 
-  init(...commands) {
+  init(...commands: SlackCommand[]): void {
     const addCommand = this.addCommand.bind(this);
     commands.forEach(addCommand);
     this.start();

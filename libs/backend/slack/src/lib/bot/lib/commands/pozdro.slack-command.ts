@@ -7,8 +7,9 @@ import { TellEvent } from '@sdj/backend/core';
 
 @Injectable()
 export class PozdroSlackCommand implements SlackCommand {
-  description = 'wyślij pozdro swoim ziomeczkom (może też być dla mamy)';
-  type = 'pozdro';
+  description: string =
+    'wyślij pozdro swoim ziomeczkom (może też być dla mamy)';
+  type: string = 'pozdro';
 
   constructor(
     private userRepository: UserRepository,

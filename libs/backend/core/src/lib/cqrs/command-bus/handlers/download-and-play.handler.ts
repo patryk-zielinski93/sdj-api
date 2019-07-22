@@ -10,10 +10,10 @@ export class DownloadAndPlayHandler
   implements ICommandHandler<DownloadAndPlayCommand> {
   constructor(
     private readonly commandBus: CommandBus,
-    private readonly storage: PlaylistStore,
+    private readonly storage: PlaylistStore
   ) {}
 
-  async execute(command: DownloadAndPlayCommand) {
+  async execute(command: DownloadAndPlayCommand): Promise<void> {
     const track = command.queuedTrack.track;
     return this.commandBus.execute(new DownloadTrackCommand(track.id)).then(
       async () => {

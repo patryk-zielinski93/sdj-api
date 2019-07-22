@@ -8,8 +8,8 @@ import { QueuedTrackRepository } from '@sdj/backend/db';
 
 @Injectable()
 export class LsSlackCommand implements SlackCommand {
-  description = 'obczaj listę utworów';
-  type = 'ls';
+  description: string = 'obczaj listę utworów';
+  type: string = 'ls';
 
   constructor(
     private slack: SlackService,

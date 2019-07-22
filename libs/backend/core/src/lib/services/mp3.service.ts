@@ -46,7 +46,7 @@ export class Mp3Service {
    */
   private download(id: string): Observable<string> {
     const sub = new Subject<string>();
-    let filePath = path.join(pathConfig.tracks, id);
+    const filePath = path.join(pathConfig.tracks, id);
 
     ytdl.exec(
       `https://www.youtube.com/watch?v=${id}`,

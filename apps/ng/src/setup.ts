@@ -2,9 +2,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 fs.readFile(path.join(__dirname + '/env.sample.js'), 'utf8', function(
-  err,
-  data
-) {
+  err: unknown,
+  data: string
+): void {
   if (err) {
     return console.log(err);
   }
@@ -15,8 +15,8 @@ fs.readFile(path.join(__dirname + '/env.sample.js'), 'utf8', function(
     .replace(/{{slackClientSecret}}/g, process.env.SLACK_CLIENT_SECRET);
 
   fs.writeFile(path.join(__dirname + '/env.js'), result, 'utf8', function(
-    error
-  ) {
+    error: unknown
+  ): void {
     if (error) return console.log(error);
   });
 });

@@ -1,17 +1,18 @@
 import * as express from 'express';
 import { spawn } from 'child_process';
+import { Request, Response } from 'express';
 
 const app = express();
 
 //TODO VALIDATE ID!!!
-app.get('/start/:id', function(req, res) {
+app.get('/start/:id', function(req: Request, res: Response): void {
   console.log('starting', req.params.id);
 
   const signal = spawn('bash', [
     '-c',
-    `docker-compose run -d  --name slack_dj_ices_${
+    `docker-compose run -d  --name slack_dj_ices_${req.params.id} -e ROOM_ID=${
       req.params.id
-    } -e ROOM_ID=${req.params.id} slack_dj_ices`
+    } slack_dj_ices`
   ]);
 
   signal.stdout.on('data', data => {
@@ -29,7 +30,7 @@ app.get('/start/:id', function(req, res) {
   });
 });
 
-app.get('/remove/:id', function(req, res) {
+app.get('/remove/:id', function(req: Request, res: Response): void {
   console.log('removing', req.params.id);
   const signal = spawn('bash', [
     '-c',
@@ -43,7 +44,7 @@ app.get('/remove/:id', function(req, res) {
   });
 });
 
-app.get('/next/:id', function(req, res) {
+app.get('/next/:id', function(req: Request, res: Response): void {
   console.log('removing', req.params.id);
   const signal = spawn('bash', [
     '-c',

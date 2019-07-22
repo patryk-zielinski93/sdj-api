@@ -1,1 +1,1 @@
-export * from './youtube-id.error'
+export * from './youtube-id.error';

@@ -35,7 +35,6 @@ export class Player {
 
   private analyser: AnalyserNode;
   private destination: AudioDestinationNode;
-  private firstLaunch: boolean;
   private gainNode: GainNode;
   private javascriptNode: ScriptProcessorNode;
   private source: MediaElementAudioSourceNode;
@@ -44,12 +43,11 @@ export class Player {
 
   constructor(private scene: Scene, private framer: Framer) {}
 
-  init() {
+  init(): void {
     (<any>window).AudioContext =
       (<any>window).AudioContext || (<any>window).webkitAudioContext;
     this.context = new AudioContext();
-    this.context.suspend && this.context.suspend();
-    this.firstLaunch = true;
+    if (this.context.suspend) this.context.suspend();
     try {
       this.javascriptNode = this.context.createScriptProcessor(2048, 1, 1);
       this.javascriptNode.connect(this.context.destination);
@@ -96,7 +94,7 @@ export class Player {
     });
   }
 
-  nextTrack() {
+  nextTrack(): void {
     // ++this.currentSongIndex;
     // if (this.currentSongIndex == this.tracks.length) {
     //     this.currentSongIndex = 0;
@@ -108,7 +106,7 @@ export class Player {
     // this.source.start();
   }
 
-  prevTrack() {
+  prevTrack(): void {
     //   --this.currentSongIndex;
     //   if (this.currentSongIndex == -1) {
     //     this.currentSongIndex = this.tracks.length - 1;
@@ -122,31 +120,31 @@ export class Player {
   }
 
   //
-  play() {
-    this.context.resume && this.context.resume();
+  play(): void {
+    if (this.context.resume) this.context.resume();
     this.audio.load();
     this.audio.play();
   }
 
-  stop() {
+  stop(): void {
     this.audio.pause();
     this.context.suspend();
   }
 
-  pause() {
-    this.context.suspend && this.context.suspend();
+  pause(): void {
+    if (this.context.suspend) this.context.suspend();
     this.audio.pause();
   }
 
-  mute() {
+  mute(): void {
     this.gainNode.gain.value = 0;
   }
 
-  unmute() {
+  unmute(): void {
     this.gainNode.gain.value = 1;
   }
 
-  initHandlers() {
+  initHandlers(): void {
     this.javascriptNode.onaudioprocess = () => {
       this.framer.frequencyData = new Uint8Array(
         this.analyser.frequencyBinCount

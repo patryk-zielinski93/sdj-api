@@ -2,16 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '@sdj/backend/config';
-import { Channel, QueuedTrack, QueuedTrackRepository, Track, TrackRepository, UserRepository } from '@sdj/backend/db';
+import {
+  Channel,
+  QueuedTrack,
+  QueuedTrackRepository,
+  Track,
+  TrackRepository,
+  UserRepository
+} from '@sdj/backend/db';
 
 import { PlaylistType, QueueTrackCommand } from '../..';
 import { TellEvent } from '../cqrs/events/tell.event';
 
-
 @Injectable()
 export class PlaylistService {
   type: PlaylistType = PlaylistType.radio;
-  index = 10;
+  index: number = 10;
   list: Track[] = [];
 
   constructor(

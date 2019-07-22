@@ -6,7 +6,7 @@ import { PlayRadioEvent } from '@sdj/backend/core';
 export class PlayRadioHandler implements IEventHandler<PlayRadioEvent> {
   constructor(private readonly gateway: Gateway) {}
 
-  handle(event: PlayRadioEvent) {
+  handle(event: PlayRadioEvent): void {
     console.log(event.channelId, 'radio');
     this.gateway.server.in(event.channelId).emit('play_radio');
   }

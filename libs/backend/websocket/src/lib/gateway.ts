@@ -11,18 +11,14 @@ import { Rooms, Server, Socket } from 'socket.io';
 import { PlaylistStore, HostService } from '@sdj/backend/core';
 import { QueuedTrack } from '@sdj/backend/db';
 
-
-
 @WebSocketGateway()
 export class Gateway implements OnGatewayDisconnect {
   private roomsSnapshot: Rooms;
   @WebSocketServer() server: Server;
 
-  constructor(
-    private readonly playlistStore: PlaylistStore
-  ) {}
+  constructor(private readonly playlistStore: PlaylistStore) {}
 
-  handleDisconnect(client, ...args: any[]): any {
+  handleDisconnect(client: Socket, ...args: any[]): any {
     this.leaveOtherChannels(client);
   }
 
@@ -38,8 +34,8 @@ export class Gateway implements OnGatewayDisconnect {
   }
 
   @SubscribeMessage('queuedTrackList')
-  onQueuedTrackList(client, data): Observable<WsResponse<QueuedTrack[]>> {
-    const queue = this.playlistStore.getQueue(JSON.parse(data));
+  onQueuedTrackList(client: Socket, channel: string): Observable<WsResponse<QueuedTrack[]>> {
+    const queue = this.playlistStore.getQueue(JSON.parse(channel));
     return queue.pipe(
       switchMap(list => {
         return of({ event: 'queuedTrackList', data: list });

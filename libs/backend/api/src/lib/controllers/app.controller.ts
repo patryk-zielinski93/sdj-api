@@ -16,12 +16,12 @@ export class AppController {
   appView(): any {}
 
   @Get('ices/:id')
-  nexSong(@Param() params): any {
+  nexSong(@Param() params: { id: string }): any {
     HostService.nextSong(params.id);
   }
 
   @Get('next/:id')
-  async removeNextSong(@Param() params): Promise<any> {
+  async removeNextSong(@Param() params: { id: string }): Promise<any> {
     const channel = await this.channelRepository.findOrCreate(params.id);
     this.playlist.getNext(channel).then(queuedTrack => {
       if (queuedTrack) {

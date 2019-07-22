@@ -2,23 +2,26 @@ import { AggregateRoot, CommandBus, EventBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Observer } from 'rxjs';
 import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
-import { TrackRepository, QueuedTrackRepository, UserRepository } from '@sdj/backend/db';
+import {
+  TrackRepository,
+  QueuedTrackRepository,
+  UserRepository
+} from '@sdj/backend/db';
 import { connectionConfig } from '@sdj/backend/config';
 
-type RedisSubject = Subject<{ channel: string; message: any } | any>;
+interface RedisData<T> {
+  channel: string;
+  message: T;
+}
+type RedisSubject<T> = Subject<RedisData<T>>;
 
 export class RedisService extends AggregateRoot {
   private redisClient: RedisClient;
   private redisSub: RedisClient;
 
-  constructor(
-    private readonly publisher: EventBus,
-    @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
-    @InjectRepository(QueuedTrackRepository)
-    @InjectRepository(UserRepository) private userRepository: UserRepository
-  ) {
+  constructor(private readonly publisher: EventBus) {
     super();
     this.redisClient = redis.createClient({
       host: connectionConfig.redis.host
@@ -30,14 +33,15 @@ export class RedisService extends AggregateRoot {
     this.redisSub.subscribe('getNext');
   }
 
-  createSubject(event: string): RedisSubject {
-    let observable = new Observable(observer => {
+  createSubject<T>(event: string): RedisSubject<T> {
+    // tslint:disable-next-line: no-shadowed-variable
+    const observable = new Observable((observer: Observer<RedisData<T>>) => {
       this.redisSub.on(event, (channel, message) => {
         observer.next({ channel, message });
       });
     });
 
-    let observer = {
+    const observer = {
       next: (data: string) => {
         this.redisClient.publish(event, data);
       }
@@ -46,11 +50,11 @@ export class RedisService extends AggregateRoot {
     return Subject.create(observer, observable);
   }
 
-  getNextSongSubject(channelId: string): RedisSubject {
+  getNextSongSubject(channelId: string): RedisSubject<string> {
     return this.createSubject(channelId);
   }
 
-  getMessageSubject(): RedisSubject {
+  getMessageSubject(): RedisSubject<string> {
     return this.createSubject('message');
   }
 

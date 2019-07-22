@@ -7,15 +7,15 @@ import { WebSocketService } from './web-socket.service';
   providedIn: 'root'
 })
 export class SpeechService {
-  speeching = new BehaviorSubject(false);
+  speeching: Subject<boolean> = new BehaviorSubject(false);
 
   private synth: SpeechSynthesis;
   private pozdro$: Subject<MessageEvent>;
   private voice: SpeechSynthesisVoice;
 
-  private lang = 'pl-PL';
-  private pitch = 1;
-  private rate = 1;
+  private lang: string = 'pl-PL';
+  private pitch: number = 1;
+  private rate: number = 1;
 
   constructor(private ws: WebSocketService) {
     this.init();
@@ -53,7 +53,7 @@ export class SpeechService {
     this.pozdro$.complete();
   }
 
-  private czytaj(text): void {
+  private czytaj(text: string): void {
     this.speeching.next(true);
 
     const utterThis = new SpeechSynthesisUtterance(text);

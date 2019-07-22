@@ -47,7 +47,7 @@ export class QueuedTrackRepository extends Repository<QueuedTrack> {
   queueTrack(
     track: Track,
     channel: Channel,
-    randomized = false,
+    randomized: boolean = false,
     user?: User
   ): Promise<QueuedTrack> {
     const queuedTrack = new QueuedTrack();

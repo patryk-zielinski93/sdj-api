@@ -8,8 +8,8 @@ import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class ThumbUpSlackCommand implements SlackCommand {
-  description = ' the song will be played more often';
-  type = ':+1:';
+  description: string = ' the song will be played more often';
+  type: string = ':+1:';
 
   constructor(
     private readonly commandBus: CommandBus,

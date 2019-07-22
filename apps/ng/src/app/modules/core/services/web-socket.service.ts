@@ -17,9 +17,9 @@ export class WebSocketService {
   }
 
   createSubject<T>(event: string): Subject<T> {
-    let observable = fromEvent(this.socket, event);
+    const observable = fromEvent(this.socket, event);
 
-    let observer = {
+    const observer = {
       next: (data: Object) => {
         this.socket.emit(event, JSON.stringify(data));
       }

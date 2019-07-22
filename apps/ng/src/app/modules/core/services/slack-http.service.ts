@@ -8,8 +8,8 @@ import { Channel } from '@sdj/shared/common';
   providedIn: 'root'
 })
 export class SlackHttpService {
-  readonly baseSlackUrl = 'https://slack.com/api/';
-  readonly channelList =
+  readonly baseSlackUrl: string = 'https://slack.com/api/';
+  readonly channelList: string =
     this.baseSlackUrl +
     'conversations.list?types=public_channel%2C%20private_channel&pretty=1';
 

@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@ng-environment/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class SlackService {
     }`;
   }
 
-  getAccessToken(code: string) {
+  getAccessToken(code: string): Observable<any> {
     return this.httpClient.get('https://slack.com/api/oauth.access', {
       params: {
         client_id: environment.slack.clientId,

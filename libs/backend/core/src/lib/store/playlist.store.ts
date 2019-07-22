@@ -60,7 +60,10 @@ export class PlaylistStore {
     return (await this.getChannelState(channelId)).currentTrack;
   }
 
-  async setCurrentTrack(channelId: string, queuedTrack: QueuedTrack | null): Promise<void> {
+  async setCurrentTrack(
+    channelId: string,
+    queuedTrack: QueuedTrack | null
+  ): Promise<void> {
     const channelState = await this.getChannelState(channelId);
     this._state.next({
       ...this.state,

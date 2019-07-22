@@ -2,12 +2,12 @@ import { Player } from './player';
 import { Scene } from './scene';
 
 export class Tracker {
-  innerDelta = 20;
-  lineWidth = 7;
-  prevAngle = 0.5;
-  angle = 0;
-  animationCount = 10;
-  pressButton = false;
+  innerDelta: number = 20;
+  lineWidth: number = 7;
+  prevAngle: number = 0.5;
+  angle: number = 0;
+  animationCount: number = 10;
+  pressButton: boolean = false;
   private animateId: any;
   private scene: Scene;
   private context: CanvasRenderingContext2D;
@@ -18,14 +18,14 @@ export class Tracker {
 
   player: Player;
 
-  init(scene) {
+  init(scene: Scene): void {
     this.scene = scene;
     this.context = scene.context;
     this.initHandlers();
   }
 
-  initHandlers() {
-    this.scene.canvas.addEventListener('mousedown', e => {
+  initHandlers(): void {
+    this.scene.canvas.addEventListener('mousedown', (e: MouseEvent) => {
       if (this.isInsideOfSmallCircle(e) || this.isOusideOfBigCircle(e)) {
         return;
       }
@@ -59,13 +59,13 @@ export class Tracker {
     });
   }
 
-  isInsideOfSmallCircle(e) {
+  isInsideOfSmallCircle(e: MouseEvent): boolean {
     const x = Math.abs(e.pageX - this.scene.cx - this.scene.coord.left);
     const y = Math.abs(e.pageY - this.scene.cy - this.scene.coord.top);
     return Math.sqrt(x * x + y * y) < this.scene.radius - 3 * this.innerDelta;
   }
 
-  isOusideOfBigCircle(e) {
+  isOusideOfBigCircle(e: MouseEvent): boolean {
     return (
       Math.abs(e.pageX - this.scene.cx - this.scene.coord.left) >
         this.scene.radius ||
@@ -74,7 +74,7 @@ export class Tracker {
     );
   }
 
-  draw() {
+  draw(): void {
     if (!this.pressButton) {
       this.angle =
         ((this.player.context.currentTime % 60) / 60) * 2 * Math.PI || 0;
@@ -82,7 +82,7 @@ export class Tracker {
     this.drawArc();
   }
 
-  drawArc() {
+  drawArc(): void {
     this.context.save();
     this.context.strokeStyle = 'rgba(254, 67, 101, 0.8)';
     this.context.beginPath();
@@ -101,7 +101,7 @@ export class Tracker {
     this.context.restore();
   }
 
-  calculateAngle(e, animatedInProgress) {
+  calculateAngle(e: MouseEvent, animatedInProgress: boolean): void {
     this.animatedInProgress = animatedInProgress;
     this.mx = e.pageX;
     this.my = e.pageY;
@@ -122,14 +122,14 @@ export class Tracker {
     }
   }
 
-  startAnimation() {
-    var angle = this.angle;
-    var l = Math.abs(this.angle) - Math.abs(this.prevAngle);
-    var step = l / this.animationCount,
-      i = 0;
-    var f = () => {
+  startAnimation(): void {
+    const angle = this.angle;
+    const l = Math.abs(this.angle) - Math.abs(this.prevAngle);
+    const step = l / this.animationCount;
+    let i = 0;
+    const f = () => {
       this.angle += step;
-      if (++i == this.animationCount) {
+      if (++i === this.animationCount) {
         this.angle = angle;
         this.prevAngle = angle;
         this.animatedInProgress = false;
@@ -142,7 +142,7 @@ export class Tracker {
     this.animateId = setTimeout(f, 20);
   }
 
-  stopAnimation() {
+  stopAnimation(): void {
     clearTimeout(this.animateId);
     this.animatedInProgress = false;
   }

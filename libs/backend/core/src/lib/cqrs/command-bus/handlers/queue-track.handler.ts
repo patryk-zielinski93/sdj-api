@@ -3,7 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { PlaylistStore } from '../../../store/playlist.store';
 import { QueueTrackCommand } from '../commands/queue-track.command';
-import { ChannelRepository, QueuedTrackRepository, TrackRepository } from '@sdj/backend/db';
+import {
+  ChannelRepository,
+  QueuedTrackRepository,
+  TrackRepository
+} from '@sdj/backend/db';
 
 @CommandHandler(QueueTrackCommand)
 export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
@@ -17,7 +21,7 @@ export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
     private readonly trackRepository: TrackRepository
   ) {}
 
-  async execute(command: QueueTrackCommand) {
+  async execute(command: QueueTrackCommand): Promise<void> {
     const channel = await this.channelRepository.findOrCreate(
       command.channelId
     );
@@ -28,6 +32,6 @@ export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
       command.randomized,
       command.addedBy
     );
-    this.playlistStore.addToQueue(queuedTrack);
+    await this.playlistStore.addToQueue(queuedTrack);
   }
 }

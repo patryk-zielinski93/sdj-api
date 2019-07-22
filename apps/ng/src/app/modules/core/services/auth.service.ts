@@ -14,11 +14,11 @@ export class AuthService {
     return !!this.token;
   }
 
-  getToken() {
+  getToken(): string {
     return this.token;
   }
 
-  setToken(token: string) {
+  setToken(token: string): void {
     this.token = token;
     localStorage.setItem('token', token);
   }

@@ -7,7 +7,7 @@ import { Gateway } from '../../../gateway';
 export class TellHandler implements IEventHandler<TellEvent> {
   constructor(private readonly gateway: Gateway) {}
 
-  async handle(command: TellEvent) {
+  async handle(command: TellEvent): Promise<void> {
     this.gateway.server.of('/').emit('pozdro', {
       message: command.message
     });

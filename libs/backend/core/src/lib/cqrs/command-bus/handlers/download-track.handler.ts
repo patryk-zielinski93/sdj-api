@@ -17,21 +17,21 @@ export class DownloadTrackHandler
     private readonly trackRepository: TrackRepository
   ) {}
 
-  async execute(command: DownloadTrackCommand) {
+  async execute(command: DownloadTrackCommand): Promise<void> {
     const track = await this.trackRepository.findOneOrFail(command.trackId);
     if (!fs.existsSync(pathConfig.tracks + '/' + track.id + '.mp3')) {
-      return this.mp3.downloadAndNormalize(track.id).subscribe(
-        undefined,
-        async () => {
+      await this.mp3.downloadAndNormalize(track.id).subscribe({
+        complete: async () => {
           console.log("Can't download track " + track.id);
           console.log('Removing ' + track.title);
           await this.commandBus.execute(new DeleteTrackCommand(track.id));
           throwError(new Error("Can't download track "));
         },
-        () => {
+        error: () => {
           return;
         }
-      );
+      });
+      return;
     } else {
       return;
     }

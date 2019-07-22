@@ -10,8 +10,8 @@ import { QueueTrackCommand } from '@sdj/backend/core';
 
 @Injectable()
 export class RefreshSlackCommand implements SlackCommand {
-  description = 'zagram pioseneczkę, która była grana najdawniej';
-  type = 'refresh';
+  description: string = 'zagram pioseneczkę, która była grana najdawniej';
+  type: string = 'refresh';
 
   constructor(
     private commandBus: CommandBus,
@@ -22,7 +22,6 @@ export class RefreshSlackCommand implements SlackCommand {
   ) {}
 
   async handler(command: string[], message: SlackMessage): Promise<void> {
-    // @TODO move this to repository
     const queuedTracksCount = await this.queuedTrackRepository.countTracksInQueueFromUser(
       message.user,
       message.channel

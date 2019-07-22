@@ -1,6 +1,12 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueuedTrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
+import {
+  QueuedTrackRepository,
+  User,
+  UserRepository,
+  Vote,
+  VoteRepository
+} from '@sdj/backend/db';
 
 import { ThumbUpCommand } from '../commands/thumb-up.command';
 
@@ -13,7 +19,7 @@ export class ThumbUpHandler implements ICommandHandler<ThumbUpCommand> {
     @InjectRepository(VoteRepository) private voteRepository: VoteRepository
   ) {}
 
-  async execute(command: ThumbUpCommand) {
+  async execute(command: ThumbUpCommand): Promise<void> {
     const userId = command.userId;
     const user = await this.userRepository.findOne(userId);
     const queuedTrack = await this.queuedTrackRepository.findOneOrFail(
@@ -31,6 +37,7 @@ export class ThumbUpHandler implements ICommandHandler<ThumbUpCommand> {
 
     const thumbUp = new Vote(<User>user, queuedTrack, 1);
     thumbUp.createdAt = new Date();
-    return this.voteRepository.save(thumbUp);
+    await this.voteRepository.save(thumbUp);
+    return;
   }
 }

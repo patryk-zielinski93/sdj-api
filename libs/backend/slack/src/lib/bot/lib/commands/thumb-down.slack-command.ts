@@ -2,7 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '@sdj/backend/config';
 import { HostService, PlaylistStore } from '@sdj/backend/core';
-import { TrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
+import {
+  TrackRepository,
+  User,
+  UserRepository,
+  Vote,
+  VoteRepository
+} from '@sdj/backend/db';
 
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
@@ -10,8 +16,8 @@ import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class ThumbDownSlackCommand implements SlackCommand {
-  description = 'Vote to skip that song';
-  type = ':-1:';
+  description: string = 'Vote to skip that song';
+  type: string = ':-1:';
 
   constructor(
     private slackService: SlackService,

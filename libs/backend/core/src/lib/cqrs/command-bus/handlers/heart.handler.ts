@@ -1,7 +1,13 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HeartCommand } from '../commands/heart.command';
-import { QueuedTrackRepository, UserRepository, VoteRepository, Vote, User } from '@sdj/backend/db';
+import {
+  QueuedTrackRepository,
+  UserRepository,
+  VoteRepository,
+  Vote,
+  User
+} from '@sdj/backend/db';
 
 @CommandHandler(HeartCommand)
 export class HeartHandler implements ICommandHandler<HeartCommand> {
@@ -12,7 +18,7 @@ export class HeartHandler implements ICommandHandler<HeartCommand> {
     @InjectRepository(VoteRepository) private voteRepository: VoteRepository
   ) {}
 
-  async execute(command: HeartCommand) {
+  async execute(command: HeartCommand): Promise<void> {
     const userId = command.userId;
     const user = await this.userRepository.findOne(userId);
     const queuedTrack = await this.queuedTrackRepository.findOneOrFail(
@@ -29,6 +35,6 @@ export class HeartHandler implements ICommandHandler<HeartCommand> {
 
     const thumbUp = new Vote(<User>user, queuedTrack, 3);
     thumbUp.createdAt = new Date();
-    return this.voteRepository.save(thumbUp);
+    await this.voteRepository.save(thumbUp);
   }
 }

@@ -10,10 +10,10 @@ export class Scene {
   scaleCoef: number;
   canvas: HTMLCanvasElement;
 
-  padding = 120;
-  minSize = 740;
-  optimiseHeight = 982;
-  _inProcess = false;
+  padding: number = 120;
+  minSize: number = 740;
+  optimiseHeight: number = 982;
+  _inProcess: boolean = false;
   private width: number;
   private height: number;
   coord: ClientRect | DOMRect;
@@ -24,7 +24,7 @@ export class Scene {
     private controls: Controls
   ) {}
 
-  init() {
+  init(): void {
     this.canvasConfigure();
     this.initHandlers();
 
@@ -35,14 +35,14 @@ export class Scene {
     this.startRender();
   }
 
-  canvasConfigure() {
+  canvasConfigure(): void {
     this.canvas = document.querySelector('canvas');
     this.context = this.canvas.getContext('2d');
     this.context.strokeStyle = '#FE4365';
     this.calculateSize();
   }
 
-  calculateSize() {
+  calculateSize(): void {
     this.scaleCoef = Math.max(0.5, 740 / this.optimiseHeight);
 
     const size = Math.max(this.minSize, 1 /*document.body.clientHeight */);
@@ -58,7 +58,7 @@ export class Scene {
     this.coord = this.canvas.getBoundingClientRect();
   }
 
-  initHandlers() {
+  initHandlers(): void {
     window.onresize = () => {
       this.canvasConfigure();
       this.framer.configure();
@@ -66,7 +66,7 @@ export class Scene {
     };
   }
 
-  render() {
+  render(): void {
     requestAnimationFrame(() => {
       this.clear();
       this.draw();
@@ -76,26 +76,26 @@ export class Scene {
     });
   }
 
-  clear() {
+  clear(): void {
     this.context.clearRect(0, 0, this.width, this.height);
   }
 
-  draw() {
+  draw(): void {
     this.framer.draw();
     this.tracker.draw();
     this.controls.draw();
   }
 
-  startRender() {
+  startRender(): void {
     this._inProcess = true;
     this.render();
   }
 
-  stopRender() {
+  stopRender(): void {
     this._inProcess = false;
   }
 
-  inProcess() {
+  inProcess(): boolean {
     return this._inProcess;
   }
 }

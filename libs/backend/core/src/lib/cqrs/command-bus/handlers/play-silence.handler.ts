@@ -10,10 +10,10 @@ export class PlaySilenceHandler implements ICommandHandler<PlaySilenceCommand> {
   constructor(
     private readonly publisher: EventBus,
     private redisService: RedisService,
-    private readonly playlistStore: PlaylistStore,
+    private readonly playlistStore: PlaylistStore
   ) {}
 
-  async execute(command: PlaySilenceCommand) {
+  async execute(command: PlaySilenceCommand): Promise<void> {
     const count =
       (await this.playlistStore.getChannelState(command.channelId))
         .silenceCount + 1;
@@ -30,6 +30,6 @@ export class PlaySilenceHandler implements ICommandHandler<PlaySilenceCommand> {
     this.redisService
       .getNextSongSubject(command.channelId)
       .next('10-sec-of-silence');
-    this.playlistStore.setCurrentTrack(command.channelId, null);
+    await this.playlistStore.setCurrentTrack(command.channelId, null);
   }
 }

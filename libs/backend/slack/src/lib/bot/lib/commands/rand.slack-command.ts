@@ -10,8 +10,8 @@ import { DownloadTrackCommand, QueueTrackCommand } from '@sdj/backend/core';
 
 @Injectable()
 export class RandSlackCommand implements SlackCommand {
-  description = 'wylosuję pioseneczkę i dodam do listy utworów';
-  type = 'rand';
+  description: string = 'wylosuję pioseneczkę i dodam do listy utworów';
+  type: string = 'rand';
 
   constructor(
     private readonly commandBus: CommandBus,

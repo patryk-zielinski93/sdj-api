@@ -5,9 +5,9 @@ import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class CleanShitSlackCommand implements SlackCommand {
-  description =
+  description: string =
     '`[żeton]` specjalnie dla Ciebie usunę wszystkie utwory w kolejce (żeton kosztuje 2zł)';
-  type = 'cleanShit';
+  type: string = 'cleanShit';
 
   constructor(private slack: SlackService) {}
 

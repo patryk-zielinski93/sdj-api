@@ -7,8 +7,8 @@ import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @Injectable()
 export class FuckYouSlackCommand implements SlackCommand {
-  description = '`-3` do rankingu dla aktualnie granej piosenki (raz dziennie)';
-  type = ':middle_finger:';
+  description: string = '`-3` do rankingu dla aktualnie granej piosenki (raz dziennie)';
+  type: string = ':middle_finger:';
 
   constructor(
     private readonly commandBus: CommandBus,

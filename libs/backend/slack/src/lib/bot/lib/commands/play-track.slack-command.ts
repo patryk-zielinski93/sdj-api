@@ -4,15 +4,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
-import { QueuedTrackRepository, TrackRepository, UserRepository, Track, User } from '@sdj/backend/db';
+import {
+  QueuedTrackRepository,
+  TrackRepository,
+  UserRepository,
+  Track,
+  User
+} from '@sdj/backend/db';
 import { appConfig } from '@sdj/backend/config';
-import { Utils, DownloadTrackCommand, CreateTrackCommand, QueueTrackCommand } from '@sdj/backend/core';
+import {
+  Utils,
+  DownloadTrackCommand,
+  CreateTrackCommand,
+  QueueTrackCommand
+} from '@sdj/backend/core';
 
 @Injectable()
 export class PlayTrackSlackCommand implements SlackCommand {
-  description =
+  description: string =
     '`[youtubeUrl]` - jeżeli chcesz żebym zapuścił Twoją pioseneczkę, koniecznie wypróbuj to polecenie';
-  type = 'play';
+  type: string = 'play';
 
   constructor(
     private readonly commandBus: CommandBus,
@@ -59,10 +70,12 @@ export class PlayTrackSlackCommand implements SlackCommand {
         this.queueTrack(message, track, user);
       });
     } else {
-      this.commandBus.execute(new CreateTrackCommand(id, user)).then(async () => {
-        const newTrack = await this.trackRepository.findOneOrFail(id);
-        this.queueTrack(message, newTrack, user);
-      });
+      this.commandBus
+        .execute(new CreateTrackCommand(id, user))
+        .then(async () => {
+          const newTrack = await this.trackRepository.findOneOrFail(id);
+          this.queueTrack(message, newTrack, user);
+        });
     }
   }
 

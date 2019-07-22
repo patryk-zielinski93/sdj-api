@@ -9,8 +9,8 @@ import { QueuedTrack } from '@sdj/backend/db';
 
 @Injectable()
 export class HeartSlackCommand implements SlackCommand {
-  description = '`+3` do rankingu dla aktualnie granej piosenki (raz dziennie)';
-  type = ':heart:';
+  description: string = '`+3` do rankingu dla aktualnie granej piosenki (raz dziennie)';
+  type: string = ':heart:';
 
   constructor(
     private readonly commandBus: CommandBus,

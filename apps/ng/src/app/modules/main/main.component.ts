@@ -1,4 +1,4 @@
-import { QueuedTrack } from '@sdj/shared/common';
+import { QueuedTrack, Track } from '@sdj/shared/common';
 import {
   AfterViewInit,
   Component,
@@ -24,14 +24,14 @@ import { AwesomePlayerComponent } from './components/awesome-player/awesome-play
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, AfterViewInit {
-  audioSrc = appConfig.externalStream;
+  audioSrc: string = appConfig.externalStream;
   channels$: Observable<Channel[]>;
   currentTrack: Observable<any>;
-  getThumbnail = TrackUtil.getTrackThumbnail;
+  getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   listScrollSubject: Subject<QueuedTrack[]> = new Subject();
   queuedTracks: QueuedTrack[] = [];
   queuedTracks$: Observable<QueuedTrack[]>;
-  readonly queuedTrackskWidth = 210;
+  readonly queuedTrackskWidth: number = 210;
   @ViewChild('playerComponent', { static: false })
   playerComponent: AwesomePlayerComponent;
   @ViewChild('toPlay', { static: false })
@@ -39,8 +39,8 @@ export class MainComponent implements OnInit, AfterViewInit {
   prvTrackId: number;
   selectedChannel: Channel;
 
-  private selectedChannelUnsubscribe = new Subject<void>();
-  tmp = 0;
+  private selectedChannelUnsubscribe: Subject<void> = new Subject<void>();
+  tmp: number = 0;
 
   constructor(
     private channelService: ChannelService,
@@ -92,7 +92,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     ).pipe(takeUntil(this.selectedChannelUnsubscribe));
 
     this.queuedTracks$.subscribe(list => {
-      console.log(list.map(qTrack => qTrack.track))
+      console.log(list.map(qTrack => qTrack.track));
       this.queuedTracks = list;
       const listElement = this.toPlayContainer.nativeElement;
       listElement.scrollLeft +=
