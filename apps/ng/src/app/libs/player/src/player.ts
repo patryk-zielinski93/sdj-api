@@ -84,7 +84,7 @@ export class Player {
   handleTrackChange(): void {
     this._track.subscribe((track: QueuedTrack) => {
       const convertedTrack = {
-        artist: 'DJ PAWEŁ',
+        artist: track && track.addedBy ? track.addedBy.displayName : 'DJ PAWEŁ',
         song: track ? track.track.title : 'OPEN FM'
       };
       document.querySelector('.song .artist').textContent =

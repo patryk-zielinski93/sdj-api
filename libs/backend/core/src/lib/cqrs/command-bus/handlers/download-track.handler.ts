@@ -21,13 +21,13 @@ export class DownloadTrackHandler
     const track = await this.trackRepository.findOneOrFail(command.trackId);
     if (!fs.existsSync(pathConfig.tracks + '/' + track.id + '.mp3')) {
       await this.mp3.downloadAndNormalize(track.id).subscribe({
-        complete: async () => {
-          console.log("Can't download track " + track.id);
+        error: async (err) => {
+          console.log("Can't download track " + track.id, err);
           console.log('Removing ' + track.title);
           await this.commandBus.execute(new DeleteTrackCommand(track.id));
           throwError(new Error("Can't download track "));
         },
-        error: () => {
+        complete: () => {
           return;
         }
       });

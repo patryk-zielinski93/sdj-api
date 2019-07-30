@@ -32,8 +32,8 @@ export class PlayQueuedTrackHandler
       .getNextSongSubject(queuedTrack.playedIn.id)
       .next(<any>track.id);
     this.playlistStore.setCurrentTrack(queuedTrack.playedIn.id, queuedTrack);
+    await this.updateQueuedTrackPlayedAt(queuedTrack);
     this.publisher.publish(new PlayDjEvent(queuedTrack.playedIn.id));
-    this.updateQueuedTrackPlayedAt(queuedTrack);
     return this.playlistStore.setSilenceCount(queuedTrack.playedIn.id, 0);
   }
 

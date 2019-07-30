@@ -1,15 +1,10 @@
-import { AggregateRoot, CommandBus, EventBus } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
+import { EventBus } from '@nestjs/cqrs';
+import { connectionConfig } from '@sdj/backend/config';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
-import { Observable, Subject, Observer } from 'rxjs';
+import { Observable, Observer, Subject } from 'rxjs';
 import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
-import {
-  TrackRepository,
-  QueuedTrackRepository,
-  UserRepository
-} from '@sdj/backend/db';
-import { connectionConfig } from '@sdj/backend/config';
+import { Injectable } from '@nestjs/common';
 
 interface RedisData<T> {
   channel: string;
@@ -17,12 +12,12 @@ interface RedisData<T> {
 }
 type RedisSubject<T> = Subject<RedisData<T>>;
 
-export class RedisService extends AggregateRoot {
+@Injectable()
+export class RedisService {
   private redisClient: RedisClient;
   private redisSub: RedisClient;
 
   constructor(private readonly publisher: EventBus) {
-    super();
     this.redisClient = redis.createClient({
       host: connectionConfig.redis.host
     });

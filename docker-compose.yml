@@ -24,7 +24,7 @@ services:
     image: mariadb
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-      - ./data/db:/var/lib/mysql
+      - db:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -105,7 +105,7 @@ services:
   slack_dj_redis:
     container_name: ${REDIS_CONTAINER_NAME}
     volumes:
-      - ./data/redis:/data
+      - redis:/data
     image: redis:alpine
     networks:
       backend:
@@ -124,3 +124,7 @@ networks:
 
   backend:
     driver: 'bridge'
+
+volumes:
+  db:
+  redis:

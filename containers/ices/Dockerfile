@@ -4,8 +4,6 @@ RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --fix-missing build-essential gcc g++ ca-certificates libmp3lame-dev libxml2-dev libshout-dev libvorbis-dev tcl expect python-dev \
  && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g 'typescript@3.2' 'forever'
-
 RUN mkdir /var/log/ices
 RUN mkdir /etc/ices2
 

@@ -29,7 +29,7 @@ export class PlaySilenceHandler implements ICommandHandler<PlaySilenceCommand> {
     }
     this.redisService
       .getNextSongSubject(command.channelId)
-      .next('10-sec-of-silence');
+      .next(<any>'10-sec-of-silence');
     await this.playlistStore.setCurrentTrack(command.channelId, null);
   }
 }

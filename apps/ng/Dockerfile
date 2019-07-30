@@ -2,6 +2,7 @@ FROM node:lts-jessie as build-stage
 WORKDIR /app
 
 COPY . .
+COPY ./apps/ng/src/env.sample.js ./apps/ng/src/env.js
 RUN npm install -g @angular/cli
 RUN npm set progress=false && npm install
 RUN ng build ng
