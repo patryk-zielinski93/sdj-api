@@ -10,7 +10,10 @@ RUN dpkg -i mp3gain.deb
 COPY ./apps/backend/docker/prod /var/docker
 
 RUN mkdir -p /app
-COPY ./ /app
+COPY angular.json nx.json ormconfig.json package.json pm2.json tsconfig.json /app/
+COPY ./apps/backend /app/apps/backend
+COPY ./libs/backend /app/libs/backend
+COPY ./libs/shared /app/libs/shared
 
 WORKDIR /app
 RUN npm install -g pm2@latest

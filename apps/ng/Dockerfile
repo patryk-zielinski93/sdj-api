@@ -1,8 +1,10 @@
 FROM node:lts-jessie as build-stage
 WORKDIR /app
 
-COPY . .
+COPY angular.json nx.json package.json tsconfig.json /app/
 COPY ./apps/ng/src/env.sample.js ./apps/ng/src/env.js
+COPY ./apps/ng /app/apps/ng
+COPY ./libs/shared /app/libs/shared
 RUN npm install -g @angular/cli
 RUN npm set progress=false && npm install
 RUN ng build ng

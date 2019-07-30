@@ -3,23 +3,9 @@ import { CommandBus, CqrsModule, EventBus, ofType } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DbModule, TrackRepository } from '@sdj/backend/db';
-import { first, tap, switchMap } from 'rxjs/operators';
-import {
-  CommandHandlers,
-  EventHandlers,
-  Mp3Service,
-  PlaylistService,
-  PlaylistStore,
-  RedisService
-} from '../..';
-import {
-  PlaySilenceCommand,
-  RedisGetNextEvent,
-  PlayQueuedTrackCommand,
-  QueueTrackCommand,
-  PlayDjEvent,
-  PlayRadioEvent
-} from '../cqrs';
+import { first, switchMap, tap } from 'rxjs/operators';
+import { CommandHandlers, EventHandlers, Mp3Service, PlaylistService, PlaylistStore, RedisService } from '../..';
+import { PlayDjEvent, PlayRadioEvent, QueueTrackCommand, RedisGetNextEvent } from '../cqrs';
 import { RedisSagas } from '../cqrs/events/sagas/redis.sagas';
 
 describe('Get Next', () => {
