@@ -1,9 +1,9 @@
+import { Utils } from '@sdj/backend/shared';
 import { Observable, Subject } from 'rxjs';
-import { spawn } from 'child_process';
 import { concatMap } from 'rxjs/operators';
 export class IcesManager {
-  commands$: Subject<() => Subject<number>> = new Subject<
-    () => Subject<number>
+  commands$: Subject<() => Observable<number>> = new Subject<
+    () => Observable<number>
   >();
 
   constructor() {
@@ -17,61 +17,40 @@ export class IcesManager {
   }
 
   nextSong(id: string): Observable<number> {
-    const signal$ = new Subject<number>();
-    this.commands$.next(() => {
-      const signal = spawn('bash', [
-        '-c',
-        `docker exec slack_dj_ices_${id} bash -c "pgrep -f ices | xargs kill -s SIGUSR1"`
-      ]);
-
-      signal.on('close', code => {
-        console.log(`next exited with code ${code}`);
-        signal$.next(code);
-        signal$.complete();
-      });
-      return signal$;
-    });
+    const { signal$, execSpawn } = Utils.spawnRx('bash', [
+      '-c',
+      `docker exec slack_dj_ices_${id} bash -c "pgrep -f ices | xargs kill -s SIGUSR1"`
+    ]);
+    this.commands$.next(execSpawn);
+    signal$.subscribe((code: number) =>
+      console.log(`next exited with code ${code}`)
+    );
     return signal$;
   }
   startContainer(id: string): Observable<number> {
-    const signal$ = new Subject<number>();
-    this.commands$.next(() => {
-      const signal = spawn('bash', [
-        '-c',
-        `docker-compose run -d  --name slack_dj_ices_${id} -e ROOM_ID=${id} slack_dj_ices`
-      ]);
+    const { signal$, execSpawn } = Utils.spawnRx('bash', [
+      '-c',
+      `docker-compose run -d  --name slack_dj_ices_${id} -e ROOM_ID=${id} slack_dj_ices`
+    ]);
 
-      signal.stdout.on('data', (data: string) => {
-        console.log(`stdout: ${data}`);
-      });
-
-      signal.on('close', code => {
-        console.log(`starting exited with code ${code}`);
-        signal$.next(code);
-        signal$.complete();
-      });
-      return signal$;
-    });
+    this.commands$.next(execSpawn);
+    signal$.subscribe((code: number) =>
+      console.log(`starting exited with code ${code}`)
+    );
 
     return signal$;
   }
 
   removeContainer(id: string): Observable<number> {
-    const signal$ = new Subject<number>();
-    this.commands$.next(() => {
-      const signal = spawn('bash', ['-c', `docker rm -f slack_dj_ices_${id}`]);
+    const { signal$, execSpawn } = Utils.spawnRx('bash', [
+      '-c',
+      `docker rm -f slack_dj_ices_${id}`
+    ]);
 
-      signal.stdout.on('data', (data: string) => {
-        console.log(`stdout: ${data}`);
-      });
-
-      signal.on('close', code => {
-        console.log(`starting exited with code ${code}`);
-        signal$.next(code);
-        signal$.complete();
-      });
-      return signal$;
-    });
+    signal$.subscribe((code: number) =>
+      console.log(`starting exited with code ${code}`)
+    );
+    this.commands$.next(execSpawn);
     return signal$;
   }
 }

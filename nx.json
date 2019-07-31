@@ -18,7 +18,7 @@
       "tags": ["backend", "backend:app"]
     },
     "host-api": {
-      "tags": ["host-api"]
+      "tags": ["host-api", "node"]
     },
     "backend-slack": {
       "tags": ["backend", "backend:slack"]
@@ -43,6 +43,9 @@
     },
     "shared-common": {
       "tags": ["shared"]
+    },
+    "backend-shared": {
+      "tags": ["backend:shared"]
     }
   }
 }

@@ -468,6 +468,31 @@
           }
         }
       }
+    },
+    "backend-shared": {
+      "root": "libs/backend/shared",
+      "sourceRoot": "libs/backend/shared/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/shared/tsconfig.lib.json",
+              "libs/backend/shared/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/shared/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/shared/jest.config.js",
+            "tsConfig": "libs/backend/shared/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {
