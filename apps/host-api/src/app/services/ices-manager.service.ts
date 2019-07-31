@@ -32,8 +32,11 @@ export class IcesManager {
     const { signal$, execSpawn } = Utils.spawnRx('docker-compose', [
       `run`,
       `-d`,
-      `--name slack_dj_ices_${id}`,
-      `-e ROOM_ID=${id} slack_dj_ices`
+      `--name`,
+      `slack_dj_ices_${id}`,
+      `-e`,
+      `ROOM_ID=${id}`,
+      `slack_dj_ices`
     ]);
 
     this.commands$.next(execSpawn);
@@ -46,7 +49,8 @@ export class IcesManager {
 
   removeContainer(id: string): Observable<number> {
     const { signal$, execSpawn } = Utils.spawnRx('docker', [
-      `rm -f`,
+      `rm`,
+      `-f`,
       `slack_dj_ices_${id}`
     ]);
 

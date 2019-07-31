@@ -9,7 +9,6 @@ class IcesController {
     this.removeContainer = this.removeContainer.bind(this);
     this.nextSong = this.nextSong.bind(this);
   }
-  //TODO VALIDATE ID!!!
   startContainer(req: Request, res: Response): void {
     console.log('starting', req.params.id);
     this.icesManager
