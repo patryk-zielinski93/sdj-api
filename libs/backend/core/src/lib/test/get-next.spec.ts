@@ -61,6 +61,7 @@ describe('Get Next', () => {
   });
 
   afterAll(async () => {
+    // tslint:disable-next-line: no-console
     app.close().catch(console.log);
   });
 });

@@ -4,6 +4,7 @@ import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
 import { UserRepository } from '@sdj/backend/db';
 import { TellEvent } from '@sdj/backend/core';
+import { LoggerService } from '@sdj/backend/logger';
 
 @Injectable()
 export class PozdroSlackCommand implements SlackCommand {
@@ -12,6 +13,7 @@ export class PozdroSlackCommand implements SlackCommand {
   type: string = 'pozdro';
 
   constructor(
+    private readonly logger: LoggerService,
     private userRepository: UserRepository,
     private readonly publisher: EventBus
   ) {}
@@ -27,7 +29,7 @@ export class PozdroSlackCommand implements SlackCommand {
     const user = await this.userRepository.findOne({ id: message.user });
 
     if (user) {
-      console.log(user.realName + ' mowi: ' + pozdro);
+      this.logger.verbose(user.realName + ' mowi: ' + pozdro);
 
       this.publisher.publish(new TellEvent(pozdro));
     }

@@ -7,6 +7,7 @@ import { NestFactory } from '@nestjs/core';
 import * as cors from 'cors';
 
 import { AppModule } from './app/app.module';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -15,7 +16,7 @@ async function bootstrap(): Promise<void> {
   const port = process.env.PORT || 8888;
   app.use(cors());
   await app.listen(port, () => {
-    console.log('Listening at http://localhost:' + port + '/' + globalPrefix);
+    Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });
 }
 

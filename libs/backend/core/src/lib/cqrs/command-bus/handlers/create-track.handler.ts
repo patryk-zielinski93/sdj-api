@@ -8,11 +8,13 @@ import { CreateTrackCommand } from '../..';
 import { Mp3Service } from '../../../services';
 import { TrackRepository, User, Track } from '@sdj/backend/db';
 import { TrackStatus } from '../../../enums';
+import { LoggerService } from '@sdj/backend/logger';
 
 @CommandHandler(CreateTrackCommand)
 export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {
   constructor(
     private readonly mp3: Mp3Service,
+    private readonly logger: LoggerService,
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository
   ) {}
 
@@ -54,7 +56,7 @@ export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {
         this.trackRepository.save(track);
       },
       () => {
-        console.log("Can't download track " + track.id);
+        this.logger.error("Can't download track " + track.id);
       }
     );
   }

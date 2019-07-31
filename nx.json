@@ -46,6 +46,9 @@
     },
     "backend-shared": {
       "tags": ["backend:shared"]
+    },
+    "backend-logger": {
+      "tags": ["backend", "backend:logger"]
     }
   }
 }

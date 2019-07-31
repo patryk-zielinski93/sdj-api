@@ -6,6 +6,7 @@ import { Mp3Service } from '../../../services/mp3.service';
 import { DownloadTrackCommand } from '../commands/download-track.command';
 import { TrackRepository, DeleteTrackCommand } from '@sdj/backend/db';
 import { pathConfig } from '@sdj/backend/config';
+import { LoggerService } from '@sdj/backend/logger';
 
 @CommandHandler(DownloadTrackCommand)
 export class DownloadTrackHandler
@@ -13,6 +14,7 @@ export class DownloadTrackHandler
   constructor(
     private commandBus: CommandBus,
     private mp3: Mp3Service,
+    private readonly logger: LoggerService,
     @InjectRepository(TrackRepository)
     private readonly trackRepository: TrackRepository
   ) {}
@@ -22,8 +24,8 @@ export class DownloadTrackHandler
     if (!fs.existsSync(pathConfig.tracks + '/' + track.id + '.mp3')) {
       await this.mp3.downloadAndNormalize(track.id).subscribe({
         error: async (err) => {
-          console.log("Can't download track " + track.id, err);
-          console.log('Removing ' + track.title);
+          this.logger.error("Can't download track " + track.id, err);
+          this.logger.warn('Removing ' + track.title);
           await this.commandBus.execute(new DeleteTrackCommand(track.id));
           throwError(new Error("Can't download track "));
         },

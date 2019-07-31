@@ -1,10 +1,11 @@
+import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
 import { connectionConfig } from '@sdj/backend/config';
+import { LoggerService } from '@sdj/backend/logger';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
 import { Observable, Observer, Subject } from 'rxjs';
 import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
-import { Injectable } from '@nestjs/common';
 
 interface RedisData<T> {
   channel: string;
@@ -17,7 +18,10 @@ export class RedisService {
   private redisClient: RedisClient;
   private redisSub: RedisClient;
 
-  constructor(private readonly publisher: EventBus) {
+  constructor(
+    private readonly logger: LoggerService,
+    private readonly publisher: EventBus
+  ) {
     this.redisClient = redis.createClient({
       host: connectionConfig.redis.host
     });
@@ -57,7 +61,7 @@ export class RedisService {
     const redisMessage = this.getMessageSubject();
 
     redisMessage.subscribe(({ channel, message }) => {
-      console.log(channel, message);
+      this.logger.log(channel, message);
       this.publisher.publish(new RedisGetNextEvent(message));
     });
   }

@@ -21,7 +21,6 @@ export class ThumbUpSlackCommand implements SlackCommand {
     const currentTrackInQueue = await this.playlistStore.getCurrentTrack(
       message.channel
     );
-    console.log(currentTrackInQueue);
     if (!currentTrackInQueue) {
       return;
     }

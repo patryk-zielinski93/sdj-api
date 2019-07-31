@@ -14,13 +14,14 @@ import { SlackCommand } from './interfaces/slack-command';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Mp3Service } from '@sdj/backend/core';
 import { UserRepository, User } from '@sdj/backend/db';
+import { LoggerService } from '@sdj/backend/logger';
 
 @Injectable()
 export class Bot {
   private commands: { [key: string]: SlackCommand[] } = {};
 
   constructor(
-    private mp3: Mp3Service,
+    private readonly logger: LoggerService,
     private slack: SlackService,
     @InjectRepository(UserRepository) private userRepository: UserRepository,
     cleanC: CleanShitSlackCommand,
@@ -110,7 +111,7 @@ export class Bot {
             return;
           }
         } catch (e) {
-          console.log(e);
+          this.logger.error(e);
           return;
         }
 
@@ -142,7 +143,7 @@ export class Bot {
       if (commands && commands.length) {
         commands.forEach(c => {
           c.handler(command, message).catch(e => {
-            console.log(e.message);
+            this.logger.log(e.message);
             this.sendErrorMessage(message.channel);
           });
         });
@@ -154,7 +155,7 @@ export class Bot {
 
   start(): void {
     this.slack.rtm.on('authenticated', rtmStartData => {
-      console.log(
+      this.logger.log(
         `Logged in as ${rtmStartData.self.name} of team ${
           rtmStartData.team.name
         }.`
