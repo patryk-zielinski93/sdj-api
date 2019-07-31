@@ -1,4 +1,4 @@
-import { VideoMetadata, YoutubeIdError } from '@sdj/backend/common';
+import { VideoMetadata, YoutubeIdError, LoggerService } from '@sdj/backend/common';
 import { connectionConfig } from '@sdj/backend/config';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,7 +8,6 @@ import { CreateTrackCommand } from '../..';
 import { Mp3Service } from '../../../services';
 import { TrackRepository, User, Track } from '@sdj/backend/db';
 import { TrackStatus } from '../../../enums';
-import { LoggerService } from '@nestjs/common';
 
 @CommandHandler(CreateTrackCommand)
 export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {

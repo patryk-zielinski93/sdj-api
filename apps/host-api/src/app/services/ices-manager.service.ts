@@ -17,9 +17,10 @@ export class IcesManager {
   }
 
   nextSong(id: string): Observable<number> {
-    const { signal$, execSpawn } = Utils.spawnRx('bash', [
-      '-c',
-      `docker exec slack_dj_ices_${id} bash -c "pgrep -f ices | xargs kill -s SIGUSR1"`
+    const { signal$, execSpawn } = Utils.spawnRx('docker', [
+      `exec`,
+      `slack_dj_ices_${id}`,
+      `bash -c "pgrep -f ices | xargs kill -s SIGUSR1"`
     ]);
     this.commands$.next(execSpawn);
     signal$.subscribe((code: number) =>
@@ -28,9 +29,11 @@ export class IcesManager {
     return signal$;
   }
   startContainer(id: string): Observable<number> {
-    const { signal$, execSpawn } = Utils.spawnRx('bash', [
-      '-c',
-      `docker-compose run -d  --name slack_dj_ices_${id} -e ROOM_ID=${id} slack_dj_ices`
+    const { signal$, execSpawn } = Utils.spawnRx('docker-compose', [
+      `run`,
+      `-d`,
+      `--name slack_dj_ices_${id}`,
+      `-e ROOM_ID=${id} slack_dj_ices`
     ]);
 
     this.commands$.next(execSpawn);
@@ -42,13 +45,13 @@ export class IcesManager {
   }
 
   removeContainer(id: string): Observable<number> {
-    const { signal$, execSpawn } = Utils.spawnRx('bash', [
-      '-c',
-      `docker rm -f slack_dj_ices_${id}`
+    const { signal$, execSpawn } = Utils.spawnRx('docker', [
+      `rm -f`,
+      `slack_dj_ices_${id}`
     ]);
 
     signal$.subscribe((code: number) =>
-      console.log(`starting exited with code ${code}`)
+      console.log(`removing exited with code ${code}`)
     );
     this.commands$.next(execSpawn);
     return signal$;

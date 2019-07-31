@@ -21,7 +21,6 @@ export class App {
     const server = this.express.listen(port, () => {
       console.log(`Listening at http://localhost:${port}/api`);
     });
-    this.express.all('*', console.log);
     server.on('error', console.error);
   }
 }
