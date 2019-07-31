@@ -493,33 +493,6 @@
           }
         }
       }
-    },
-    "backend-logger": {
-      "projectType": "library",
-      "root": "libs/backend/logger",
-      "sourceRoot": "libs/backend/logger/src",
-      "prefix": "sdj",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/backend/logger/tsconfig.lib.json",
-              "libs/backend/logger/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/backend/logger/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/backend/logger/jest.config.js",
-            "tsConfig": "libs/backend/logger/tsconfig.spec.json",
-            "setupFile": "libs/backend/logger/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {}
     }
   },
   "cli": {

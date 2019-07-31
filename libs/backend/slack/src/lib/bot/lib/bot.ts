@@ -14,7 +14,7 @@ import { SlackCommand } from './interfaces/slack-command';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Mp3Service } from '@sdj/backend/core';
 import { UserRepository, User } from '@sdj/backend/db';
-import { LoggerService } from '@sdj/backend/logger';
+import { LoggerService } from '@sdj/backend/common';
 
 @Injectable()
 export class Bot {

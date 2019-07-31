@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
 import { connectionConfig } from '@sdj/backend/config';
-import { LoggerService } from '@sdj/backend/logger';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
 import { Observable, Observer, Subject } from 'rxjs';
 import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
+import { LoggerService } from '@sdj/backend/common';
 
 interface RedisData<T> {
   channel: string;

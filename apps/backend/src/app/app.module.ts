@@ -4,13 +4,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiModule } from '@sdj/backend/api';
 import { SlackModule } from '@sdj/backend/slack';
-import { LoggerModule } from '@sdj/backend/logger';
 
 @Module({
   imports: [
     ApiModule,
     CoreModule,
-    LoggerModule,
     SlackModule,
     TypeOrmModule.forRoot(),
     WebSocketModule

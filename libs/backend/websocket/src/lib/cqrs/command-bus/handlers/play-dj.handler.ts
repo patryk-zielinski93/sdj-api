@@ -1,7 +1,7 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Gateway } from '../../../gateway';
 import { PlayDjEvent } from '@sdj/backend/core';
-import { LoggerService } from '@sdj/backend/logger';
+import { LoggerService } from '@sdj/backend/common';
 
 @EventsHandler(PlayDjEvent)
 export class PlayDjHandler implements IEventHandler<PlayDjEvent> {

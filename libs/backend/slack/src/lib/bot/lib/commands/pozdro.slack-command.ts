@@ -4,7 +4,7 @@ import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
 import { UserRepository } from '@sdj/backend/db';
 import { TellEvent } from '@sdj/backend/core';
-import { LoggerService } from '@sdj/backend/logger';
+import { LoggerService } from '@sdj/backend/common';
 
 @Injectable()
 export class PozdroSlackCommand implements SlackCommand {

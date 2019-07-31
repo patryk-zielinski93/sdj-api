@@ -1,7 +1,7 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Gateway } from '../../../gateway';
 import { PlayRadioEvent } from '@sdj/backend/core';
-import { LoggerService } from '@sdj/backend/logger';
+import { LoggerService } from '@sdj/backend/common';
 
 @EventsHandler(PlayRadioEvent)
 export class PlayRadioHandler implements IEventHandler<PlayRadioEvent> {

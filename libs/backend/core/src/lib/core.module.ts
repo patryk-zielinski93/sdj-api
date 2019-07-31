@@ -1,7 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { DbModule } from '@sdj/backend/db';
-import { LoggerModule } from '@sdj/backend/logger';
 import { CreateTrackHandler } from './cqrs/command-bus/handlers/create-track.handler';
 import { DownloadAndPlayHandler } from './cqrs/command-bus/handlers/download-and-play.handler';
 import { DownloadTrackHandler } from './cqrs/command-bus/handlers/download-track.handler';

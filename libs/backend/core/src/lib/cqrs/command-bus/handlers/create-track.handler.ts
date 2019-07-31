@@ -8,7 +8,7 @@ import { CreateTrackCommand } from '../..';
 import { Mp3Service } from '../../../services';
 import { TrackRepository, User, Track } from '@sdj/backend/db';
 import { TrackStatus } from '../../../enums';
-import { LoggerService } from '@sdj/backend/logger';
+import { LoggerService } from '@nestjs/common';
 
 @CommandHandler(CreateTrackCommand)
 export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {

@@ -6,7 +6,7 @@ import { Mp3Service } from '../../../services/mp3.service';
 import { DownloadTrackCommand } from '../commands/download-track.command';
 import { TrackRepository, DeleteTrackCommand } from '@sdj/backend/db';
 import { pathConfig } from '@sdj/backend/config';
-import { LoggerService } from '@sdj/backend/logger';
+import { LoggerService } from '@sdj/backend/common';
 
 @CommandHandler(DownloadTrackCommand)
 export class DownloadTrackHandler

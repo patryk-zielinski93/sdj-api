@@ -15,7 +15,7 @@
       "tags": ["ng"]
     },
     "backend": {
-      "tags": ["backend", "backend:app"]
+      "tags": ["backend:app"]
     },
     "host-api": {
       "tags": ["host-api", "node"]
@@ -46,9 +46,6 @@
     },
     "backend-shared": {
       "tags": ["backend:shared"]
-    },
-    "backend-logger": {
-      "tags": ["backend", "backend:logger"]
     }
   }
 }
