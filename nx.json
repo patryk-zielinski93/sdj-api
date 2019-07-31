@@ -1,0 +1,51 @@
+{
+  "npmScope": "sdj",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "ng-e2e": {
+      "tags": ["ng-e2e"]
+    },
+    "ng": {
+      "tags": ["ng"]
+    },
+    "backend": {
+      "tags": ["backend:app"]
+    },
+    "host-api": {
+      "tags": ["host-api", "node"]
+    },
+    "backend-slack": {
+      "tags": ["backend", "backend:slack"]
+    },
+    "backend-api": {
+      "tags": ["backend", "backend:api"]
+    },
+    "backend-websocket": {
+      "tags": ["backend", "backend:websocket"]
+    },
+    "backend-core": {
+      "tags": ["backend", "backend:core"]
+    },
+    "backend-db": {
+      "tags": ["backend", "backend:db"]
+    },
+    "backend-config": {
+      "tags": ["backend", "backend:config"]
+    },
+    "backend-common": {
+      "tags": ["backend", "backend:common"]
+    },
+    "shared-common": {
+      "tags": ["shared"]
+    },
+    "backend-shared": {
+      "tags": ["backend:shared"]
+    }
+  }
+}

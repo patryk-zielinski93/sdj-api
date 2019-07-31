@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "jest"]
+  },
+  "include": [
+    "**/*.ts",
+    "../../libs/backend/api/src/lib/api.module.ts",
+    "../../libs/backend/slack/src/lib/slack.module.ts"
+  ]
+}

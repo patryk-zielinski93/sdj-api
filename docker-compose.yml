@@ -1,14 +1,80 @@
 version: '3.6'
 services:
+
+  slack_dj_backend:
+    container_name: ${BACKEND_CONTAINER_NAME}
+    build:
+      dockerfile: ./apps/backend/Dockerfile
+      context: ./
+      args:
+        - LOCAL_USER_ID=${LOCAL_USER_ID}
+    environment:
+      - PORT=${BACKEND_PORT}
+      - VIRTUAL_HOST=${BACKEND_URL}
+      - VIRTUAL_PORT=${BACKEND_PORT}
+      - LOCAL_USER_ID=${LOCAL_USER_ID}
+      - HOST_IP=${HOST_IP}
+    networks:
+      backend:
+        aliases:
+          - backend
+
+  slack_dj_db:
+    container_name: ${DB_CONTAINER_NAME}
+    image: mariadb
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      backend:
+        aliases:
+          - database
+
+  slack_dj_icecast:
+    container_name: ${ICECAST_CONTAINER_NAME}
+    build:
+      dockerfile: Dockerfile
+      context: ./containers/icecast
+    environment:
+      - VIRTUAL_HOST=${ICECAST_URL}
+      - VIRUTAL_PORT=8000
+    networks:
+      streaming:
+        aliases:
+          - icecast
+
+  slack_dj_ices:
+    container_name: ${ICES_CONTAINER_NAME}-${ROOM_ID}
+    build:
+      dockerfile: Dockerfile
+      context: ./containers/ices
+    volumes:
+      - ./apps/backend/src/assets/tracks:/tracks
+    environment:
+      - ROOM_ID=${ROOM_ID}
+    depends_on:
+      - slack_dj_redis
+      - slack_dj_icecast
+    networks:
+      streaming:
+        aliases:
+          - ices
+      backend:
+        aliases:
+          - ices
+
   slack_dj_ng:
     container_name: ${NG_CONTAINER_NAME}
     build:
-      dockerfile: Dockerfile
-      context: ./containers/ng
+      dockerfile: ./apps/ng/Dockerfile
+      context: ./
       args:
       - LOCAL_USER_ID=${LOCAL_USER_ID}
-    volumes:
-    - ./containers/ng:/app
     environment:
     - VIRTUAL_HOST=${NG_URL}
     - VIRTUAL_PORT=80
@@ -39,7 +105,7 @@ services:
   slack_dj_redis:
     container_name: ${REDIS_CONTAINER_NAME}
     volumes:
-      - ./data/redis:/data
+      - redis:/data
     image: redis:alpine
     networks:
       backend:
@@ -48,74 +114,6 @@ services:
       streaming:
         aliases:
           - redis
-
-  slack_dj_db:
-    container_name: ${DB_CONTAINER_NAME}
-    image: mariadb
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes:
-      - ./data/db:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    networks:
-      backend:
-        aliases:
-          - database
-
-  slack_dj_icecast:
-    container_name: ${ICECAST_CONTAINER_NAME}
-    build:
-      dockerfile: Dockerfile
-      context: ./containers/icecast
-    environment:
-      - VIRTUAL_HOST=${ICECAST_URL}
-      - VIRUTAL_PORT=8000
-    networks:
-      streaming:
-        aliases:
-          - icecast
-
-  slack_dj_ices:
-    container_name: ${ICES_CONTAINER_NAME}-${ROOM_ID}
-    build:
-      dockerfile: Dockerfile
-      context: ./containers/ices
-    volumes:
-      - ./containers/backend/src/public/tracks:/tracks
-    environment:
-      - ROOM_ID=${ROOM_ID}
-    depends_on:
-      - slack_dj_redis
-      - slack_dj_icecast
-    networks:
-      streaming:
-        aliases:
-          - ices
-      backend:
-        aliases:
-          - ices
-
-  slack_dj_backend:
-    container_name: ${BACKEND_CONTAINER_NAME}
-    build:
-      dockerfile: Dockerfile
-      context: ./containers/backend
-      args:
-        - LOCAL_USER_ID=${LOCAL_USER_ID}
-    volumes:
-    - ./containers/backend:/app
-    environment:
-      - VIRTUAL_HOST=${BACKEND_URL}
-      - VIRTUAL_PORT=8888
-      - LOCAL_USER_ID=${LOCAL_USER_ID}
-      - HOST_IP=${HOST_IP}
-    networks:
-      backend:
-        aliases:
-          - backend
 
 networks:
   streaming:
@@ -126,3 +124,7 @@ networks:
 
   backend:
     driver: 'bridge'
+
+volumes:
+  db:
+  redis:

@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "NodemonSchema",
+  "title": "Universal Target",
+  "type": "object",
+  "properties": {
+    "debug": {
+      "default": false,
+      "type": "boolean"
+    }
+  }
+}
