@@ -10,13 +10,13 @@ export const connectionConfig = {
     port: 6379
   },
   slack: {
-    token: 'xoxb-xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx'
+    token: process.env.SLACK_OAUTH_TOKEN
   },
   tracks: {
     directory: path.join(__dirname, 'public', 'tracks'),
     normalizationDb: 92
   },
   youtube: {
-    apiKey: 'xxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    apiKey: process.env.YOUTUBE_API_KEY
   }
 };

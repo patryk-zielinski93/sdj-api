@@ -1,22 +1,14 @@
-import { QueuedTrack, Track } from '@sdj/shared/common';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { environment } from '@ng-environment/environment';
+import { Channel, QueuedTrack, Track } from '@sdj/shared/common';
 import { merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
-
-import { appConfig } from '../../../configs/app.config';
-import { Channel } from '@sdj/shared/common';
 import { ChannelService } from '../core/services/channel.service';
 import { SpeechService } from '../core/services/speech.service';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { TrackUtil } from '../core/utils/track.util';
 import { AwesomePlayerComponent } from './components/awesome-player/awesome-player.component';
+
 
 @Component({
   selector: 'sdj-main',
@@ -24,7 +16,7 @@ import { AwesomePlayerComponent } from './components/awesome-player/awesome-play
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, AfterViewInit {
-  audioSrc: string = appConfig.externalStream;
+  audioSrc: string = environment.externalStream;
   channels$: Observable<Channel[]>;
   currentTrack: Observable<any>;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
@@ -131,7 +123,7 @@ export class MainComponent implements OnInit, AfterViewInit {
           .pipe(takeUntil(this.selectedChannelUnsubscribe))
           .subscribe(() => {
             console.log('radio');
-            this.audioSrc = appConfig.externalStream;
+            this.audioSrc = environment.externalStream;
           });
       });
   }
