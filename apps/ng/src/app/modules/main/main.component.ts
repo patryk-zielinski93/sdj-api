@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { environment } from '@ng-environment/environment';
-import { Channel, QueuedTrack, Track } from '@sdj/shared/common';
+import { Channel, QueuedTrack, Track, WebSocketEvents } from '@sdj/shared/common';
 import { merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 import { ChannelService } from '../core/services/channel.service';
@@ -16,23 +16,24 @@ import { AwesomePlayerComponent } from './components/awesome-player/awesome-play
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, AfterViewInit {
-  audioSrc: string = environment.externalStream;
-  channels$: Observable<Channel[]>;
-  currentTrack: Observable<any>;
-  getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
-  listScrollSubject: Subject<QueuedTrack[]> = new Subject();
-  queuedTracks: QueuedTrack[] = [];
-  queuedTracks$: Observable<QueuedTrack[]>;
-  readonly queuedTrackskWidth: number = 210;
   @ViewChild('playerComponent', { static: false })
   playerComponent: AwesomePlayerComponent;
   @ViewChild('toPlay', { static: false })
   toPlayContainer: ElementRef<HTMLElement>;
+
+  audioSrc: string = environment.externalStream;
+  channels$: Observable<Channel[]>;
+  currentTrack: Observable<any>;
+  listScrollSubject: Subject<QueuedTrack[]> = new Subject();
+  queuedTracks: QueuedTrack[] = [];
+  queuedTracks$: Observable<QueuedTrack[]>;
+  readonly queuedTrackskWidth: number = 210;
   prvTrackId: number;
   selectedChannel: Channel;
 
+  getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
+
   private selectedChannelUnsubscribe: Subject<void> = new Subject<void>();
-  tmp: number = 0;
 
   constructor(
     private channelService: ChannelService,
@@ -104,13 +105,13 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   handleAudioSource(): void {
     this.ws
-      .createSubject('roomIsRunning')
+      .createSubject(WebSocketEvents.roomIsRunning)
       .pipe(first())
       .subscribe(() => {
         console.log('roomIsRunning');
         this.audioSrc = environment.radioStreamUrl + this.selectedChannel.id;
         this.ws
-          .createSubject('play_dj')
+          .createSubject(WebSocketEvents.playDj)
           .pipe(takeUntil(this.selectedChannelUnsubscribe))
           .subscribe(() => {
             console.log('dj');
@@ -119,7 +120,7 @@ export class MainComponent implements OnInit, AfterViewInit {
           });
 
         this.ws
-          .createSubject('play_radio')
+          .createSubject(WebSocketEvents.playRadio)
           .pipe(takeUntil(this.selectedChannelUnsubscribe))
           .subscribe(() => {
             console.log('radio');
@@ -156,8 +157,8 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   handleWsEvents(): void {
-    const connect$ = this.ws.createSubject('connect');
-    const join$ = this.ws.createSubject('join');
+    const connect$ = this.ws.createSubject(WebSocketEvents.connect);
+    const join$ = this.ws.createSubject(WebSocketEvents.join);
     connect$.subscribe(socket => {
       this.handleQueuedTrackList();
       this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
