@@ -1,6 +1,7 @@
 import { Utils } from '@sdj/backend/shared';
 import { Observable, Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
+import { spawn } from '@sikora00/rxjs-overlay';
 export class IcesManager {
   commands$: Subject<() => Observable<number>> = new Subject<
     () => Observable<number>
@@ -17,7 +18,7 @@ export class IcesManager {
   }
 
   nextSong(id: string): Observable<number> {
-    const { signal$, execSpawn } = Utils.spawnRx('docker', [
+    const { signal$, execSpawn } = spawn('docker', [
       `exec`,
       `slack_dj_ices_${id}`,
       `bash -c "pgrep -f ices | xargs kill -s SIGUSR1"`
@@ -29,7 +30,7 @@ export class IcesManager {
     return signal$;
   }
   startContainer(id: string): Observable<number> {
-    const { signal$, execSpawn } = Utils.spawnRx('docker-compose', [
+    const { signal$, execSpawn } = spawn('docker-compose', [
       `run`,
       `-d`,
       `--name`,
@@ -48,7 +49,7 @@ export class IcesManager {
   }
 
   removeContainer(id: string): Observable<number> {
-    const { signal$, execSpawn } = Utils.spawnRx('docker', [
+    const { signal$, execSpawn } = spawn('docker', [
       `rm`,
       `-f`,
       `slack_dj_ices_${id}`
