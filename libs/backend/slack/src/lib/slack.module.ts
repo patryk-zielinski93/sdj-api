@@ -13,9 +13,19 @@ import { RefreshSlackCommand } from './bot/lib/commands/refresh.slack-command';
 import { ThumbDownSlackCommand } from './bot/lib/commands/thumb-down.slack-command';
 import { ThumbUpSlackCommand } from './bot/lib/commands/thumb-up.slack-command';
 import { SlackService } from './services/slack.service';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { connectionConfig } from '@sdj/backend/config';
 
 @Module({
-  imports: [CoreModule],
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'SLACK',
+        ...connectionConfig.microservices
+    }
+    ]),
+    CoreModule
+  ],
   providers: [
     Bot,
     CleanShitSlackCommand,

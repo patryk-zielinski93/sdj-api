@@ -1,9 +1,18 @@
+import { ClientOptions, Transport } from '@nestjs/microservices';
 import * as path from 'path';
 
-export const connectionConfig = {
+export const connectionConfig: {microservices: ClientOptions} | any = {
   ices: {
     host: 'ices',
     port: 8888
+  },
+  microservices: {
+    transport: Transport.RMQ,
+    options: {
+      urls: [`amqp://rabbit:5672`],
+      queue: 'sdj',
+      queueOptions: { durable: false },
+    },
   },
   redis: {
     host: 'redis',
