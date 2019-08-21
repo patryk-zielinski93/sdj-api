@@ -1,11 +1,11 @@
 import { CommandBus, EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { PlaylistService } from '../../../services/playlist.service';
 import { DownloadAndPlayCommand } from '../../command-bus/commands/download-and-play.command';
 import { PlaySilenceCommand } from '../../command-bus/commands/play-silence.command';
 import { RedisGetNextEvent } from '../redis-get-next.event';
 import { ChannelRepository, QueuedTrack } from '@sdj/backend/db';
+import { PlaylistService } from '@sdj/backend/core';
 
 @EventsHandler(RedisGetNextEvent)
 export class RedisGetNextHandler implements IEventHandler<RedisGetNextEvent> {

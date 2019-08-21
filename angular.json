@@ -493,6 +493,33 @@
           }
         }
       }
+    },
+    "backend-redis": {
+      "projectType": "library",
+      "root": "libs/backend/redis",
+      "sourceRoot": "libs/backend/redis/src",
+      "prefix": "Redis",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/redis/tsconfig.lib.json",
+              "libs/backend/redis/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/redis/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/redis/jest.config.js",
+            "tsConfig": "libs/backend/redis/tsconfig.spec.json",
+            "setupFile": "libs/backend/redis/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {}
     }
   },
   "cli": {

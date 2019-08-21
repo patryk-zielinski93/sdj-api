@@ -25,7 +25,8 @@
       "@sdj/backend/common": ["libs/backend/common/src/index.ts"],
       "@sdj/backend/config": ["libs/backend/config/src/index.ts"],
       "@sdj/shared/common": ["libs/shared/common/src/index.ts"],
-      "@sdj/backend/shared": ["libs/backend/shared/src/index.ts"]
+      "@sdj/backend/shared": ["libs/backend/shared/src/index.ts"],
+      "@sdj/backend/redis": ["libs/backend/redis/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

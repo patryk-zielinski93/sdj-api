@@ -1,14 +1,17 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { RedisService } from '../../../services/redis.service';
-import { PlaylistStore } from '../../../store/playlist.store';
-import { PlayRadioEvent } from '../../events/play-radio.event';
+import { PlaylistStore } from '../../../../../../core/src/lib/store/playlist.store';
 import { PlaySilenceCommand } from '../commands/play-silence.command';
+import { PlayRadioEvent } from '../../events/play-radio.event';
+import { Inject } from '@nestjs/common';
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
+import { ClientProxy } from '@nestjs/microservices';
 
 @CommandHandler(PlaySilenceCommand)
 export class PlaySilenceHandler implements ICommandHandler<PlaySilenceCommand> {
   constructor(
-    private readonly publisher: EventBus,
+    @Inject(Injectors.MicroserviceClient) private readonly client: ClientProxy,
     private redisService: RedisService,
     private readonly playlistStore: PlaylistStore
   ) {}
@@ -25,7 +28,9 @@ export class PlaySilenceHandler implements ICommandHandler<PlaySilenceCommand> {
       this.playlistStore.removeFromQueue(prevTrack);
     }
     if (count > 1) {
-      this.publisher.publish(new PlayRadioEvent(command.channelId));
+      this.client
+        .emit(MicroservicePattern.playSilence, command.channelId)
+        .subscribe();
     }
     this.redisService
       .getNextSongSubject(command.channelId)

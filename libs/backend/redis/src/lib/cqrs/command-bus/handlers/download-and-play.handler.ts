@@ -1,8 +1,8 @@
 import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { PlaylistStore } from '../../../store/playlist.store';
+import { PlaylistStore } from '../../../../../../core/src/lib/store/playlist.store';
 import { DownloadAndPlayCommand } from '../commands/download-and-play.command';
-import { DownloadTrackCommand } from '../commands/download-track.command';
+import { DownloadTrackCommand } from '../../../../../../core/src/lib/cqrs/command-bus/commands/download-track.command';
 import { PlayQueuedTrackCommand } from '../commands/play-queued-track.command';
 
 @CommandHandler(DownloadAndPlayCommand)

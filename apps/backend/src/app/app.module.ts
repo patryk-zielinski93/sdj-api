@@ -1,24 +1,13 @@
-import { WebSocketModule } from '@sdj/backend/websocket';
-import { CoreModule } from '@sdj/backend/core';
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiModule } from '@sdj/backend/api';
-import { SlackModule } from '@sdj/backend/slack';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { connectionConfig } from '@sdj/backend/config';
+import { WebSocketModule } from '@sdj/backend/websocket';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    ClientsModule.register([
-      {
-        name: 'APP',
-        ...connectionConfig.microservices
-      }
-    ]),
-    ApiModule,
-    CoreModule,
-    SlackModule,
     TypeOrmModule.forRoot(),
+    // ApiModule,
+    WebSocketModule
   ]
 })
 export class AppModule {}

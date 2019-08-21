@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["node", "jest"]
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "../redis/src/lib/cqrs/command-bus/handlers/play-silence.handler.ts", "../redis/src/lib/cqrs/command-bus/handlers/play-queued-track.handler.ts", "../redis/src/lib/cqrs/command-bus/handlers/download-and-play.handler.ts", "../redis/src/lib/cqrs/play-silence.handler.ts", "../redis/src/lib/cqrs/play-queued-track.handler.ts", "../redis/src/lib/cqrs/download-and-play.handler.ts", "../redis/src/lib/cqrs/play-silence.command.ts", "../redis/src/lib/cqrs/play-queued-track.command.ts", "../redis/src/lib/cqrs/download-and-play.command.ts", "../redis/src/lib/services/redis.service.ts"]
 }

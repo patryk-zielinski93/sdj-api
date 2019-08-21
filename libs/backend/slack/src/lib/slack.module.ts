@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoreModule } from '@sdj/backend/core';
-
 import { Bot } from './bot/lib/bot';
 import { CleanShitSlackCommand } from './bot/lib/commands/clean-shit.slack-command';
 import { FuckYouSlackCommand } from './bot/lib/commands/fuck-you.slack-command';
@@ -13,17 +13,11 @@ import { RefreshSlackCommand } from './bot/lib/commands/refresh.slack-command';
 import { ThumbDownSlackCommand } from './bot/lib/commands/thumb-down.slack-command';
 import { ThumbUpSlackCommand } from './bot/lib/commands/thumb-up.slack-command';
 import { SlackService } from './services/slack.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { connectionConfig } from '@sdj/backend/config';
+
 
 @Module({
   imports: [
-    ClientsModule.register([
-      {
-        name: 'SLACK',
-        ...connectionConfig.microservices
-    }
-    ]),
+    TypeOrmModule.forRoot(),
     CoreModule
   ],
   providers: [

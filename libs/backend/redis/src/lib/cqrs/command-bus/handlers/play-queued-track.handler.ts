@@ -1,16 +1,19 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RedisService } from '../../../services/redis.service';
-import { PlaylistStore } from '../../../store/playlist.store';
-import { PlayDjEvent } from '../../events/play-dj.event';
+import { PlaylistStore } from '../../../../../../core/src/lib/store/playlist.store';
 import { PlayQueuedTrackCommand } from '../commands/play-queued-track.command';
 import { QueuedTrackRepository, QueuedTrack } from '@sdj/backend/db';
+import { PlayDjEvent } from '../../events/play-dj.event';
+import { Inject } from '@nestjs/common';
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
+import { ClientProxy } from '@nestjs/microservices';
 
 @CommandHandler(PlayQueuedTrackCommand)
 export class PlayQueuedTrackHandler
   implements ICommandHandler<PlayQueuedTrackCommand> {
   constructor(
-    private readonly publisher: EventBus,
+    @Inject(Injectors.MicroserviceClient) private readonly client: ClientProxy,
     private readonly playlistStore: PlaylistStore,
     private readonly redisService: RedisService,
     @InjectRepository(QueuedTrackRepository)
@@ -33,7 +36,7 @@ export class PlayQueuedTrackHandler
       .next(<any>track.id);
     this.playlistStore.setCurrentTrack(queuedTrack.playedIn.id, queuedTrack);
     await this.updateQueuedTrackPlayedAt(queuedTrack);
-    this.publisher.publish(new PlayDjEvent(queuedTrack.playedIn.id));
+    this.client.emit(MicroservicePattern.playDj, queuedTrack.playedIn.id).subscribe();
     return this.playlistStore.setSilenceCount(queuedTrack.playedIn.id, 0);
   }
 

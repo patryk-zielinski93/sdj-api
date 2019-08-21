@@ -4,8 +4,8 @@ import { connectionConfig } from '@sdj/backend/config';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
 import { Observable, Observer, Subject } from 'rxjs';
-import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
 import { LoggerService } from '@sdj/backend/common';
+import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
 
 interface RedisData<T> {
   channel: string;
