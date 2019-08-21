@@ -26,8 +26,16 @@ export const CommandHandlers = [
 
 const ClientsModuleRegistered = ClientsModule.register([
   {
-    name: Injectors.MicroserviceClient,
-    ...connectionConfig.microservices
+    name: Injectors.APPSERVICE,
+    ...connectionConfig.microservices.app
+  },
+  {
+    name: Injectors.REDISSERVICE,
+    ...connectionConfig.microservices.redis
+  },
+  {
+    name: Injectors.SLACKSERVICE,
+    ...connectionConfig.microservices.slack
   }
 ]);
 

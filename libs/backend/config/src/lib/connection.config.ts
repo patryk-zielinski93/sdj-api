@@ -1,17 +1,35 @@
 import { ClientOptions, Transport } from '@nestjs/microservices';
 import * as path from 'path';
 
-export const connectionConfig: {microservices: ClientOptions} | any = {
+export const connectionConfig: { microservices: ClientOptions } | any = {
   ices: {
     host: 'ices',
     port: 8888
   },
   microservices: {
-    transport: Transport.RMQ,
-    options: {
-      urls: [`amqp://rabbit:5672`],
-      queue: 'sdj',
-      queueOptions: { durable: false },
+    app: {
+      transport: Transport.RMQ,
+      options: {
+        urls: [`amqp://rabbit:5672`],
+        queue: 'sdj_app',
+        queueOptions: { durable: false }
+      }
+    },
+    redis: {
+      transport: Transport.RMQ,
+      options: {
+        urls: [`amqp://rabbit:5672`],
+        queue: 'sdj_redis',
+        queueOptions: { durable: false }
+      }
+    },
+    slack: {
+      transport: Transport.RMQ,
+      options: {
+        urls: [`amqp://rabbit:5672`],
+        queue: 'sdj_slack',
+        queueOptions: { durable: false }
+      }
     },
   },
   redis: {

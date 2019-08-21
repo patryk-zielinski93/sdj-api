@@ -1,3 +1,5 @@
 export enum Injectors {
-  MicroserviceClient = 'MicroserviceClient'
+  APPSERVICE = 'AppService',
+  SLACKSERVICE = 'SlackService',
+  REDISSERVICE = 'RedisService'
 }

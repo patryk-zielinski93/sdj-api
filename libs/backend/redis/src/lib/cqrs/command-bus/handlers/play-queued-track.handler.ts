@@ -13,7 +13,7 @@ import { ClientProxy } from '@nestjs/microservices';
 export class PlayQueuedTrackHandler
   implements ICommandHandler<PlayQueuedTrackCommand> {
   constructor(
-    @Inject(Injectors.MicroserviceClient) private readonly client: ClientProxy,
+    @Inject(Injectors.APPSERVICE) private readonly client: ClientProxy,
     private readonly playlistStore: PlaylistStore,
     private readonly redisService: RedisService,
     @InjectRepository(QueuedTrackRepository)

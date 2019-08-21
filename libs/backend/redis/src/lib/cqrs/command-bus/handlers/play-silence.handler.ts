@@ -11,7 +11,7 @@ import { ClientProxy } from '@nestjs/microservices';
 @CommandHandler(PlaySilenceCommand)
 export class PlaySilenceHandler implements ICommandHandler<PlaySilenceCommand> {
   constructor(
-    @Inject(Injectors.MicroserviceClient) private readonly client: ClientProxy,
+    @Inject(Injectors.APPSERVICE) private readonly client: ClientProxy,
     private redisService: RedisService,
     private readonly playlistStore: PlaylistStore
   ) {}
