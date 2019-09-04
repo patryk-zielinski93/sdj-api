@@ -4,8 +4,8 @@ import { QueuedTrack } from '@sdj/backend/db';
 import { MessagePattern } from '@nestjs/microservices';
 import { MicroservicePattern } from '@sdj/backend/shared';
 
-@Controller('redis')
-export class RedisController {
+@Controller('ices')
+export class IcesController {
   constructor(private readonly redisService: RedisService) {}
   @MessagePattern(MicroservicePattern.nextSong)
   nextSong(queuedTrack: QueuedTrack): void {

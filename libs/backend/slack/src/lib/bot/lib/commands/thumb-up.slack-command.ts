@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { PlaylistStore, ThumbUpCommand } from '@sdj/backend/core';
+import { ThumbUpCommand } from '@sdj/backend/core';
 
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class ThumbUpSlackCommand implements SlackCommand {
@@ -14,13 +16,14 @@ export class ThumbUpSlackCommand implements SlackCommand {
   constructor(
     private readonly commandBus: CommandBus,
     private slack: SlackService,
-    private readonly playlistStore: PlaylistStore
+    @Inject(Injectors.STORAGESERVICE)
+    private readonly storageService: ClientProxy
   ) {}
 
   async handler(command: string[], message: SlackMessage): Promise<void> {
-    const currentTrackInQueue = await this.playlistStore.getCurrentTrack(
-      message.channel
-    );
+    const currentTrackInQueue = await this.storageService
+      .send(MicroservicePattern.getCurrentTrack, message.channel)
+      .toPromise();
     if (!currentTrackInQueue) {
       return;
     }

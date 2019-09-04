@@ -1,3 +1,5 @@
+import { Inject } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import {
   OnGatewayDisconnect,
   SubscribeMessage,
@@ -5,19 +7,23 @@ import {
   WebSocketServer,
   WsResponse
 } from '@nestjs/websockets';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { Rooms, Server, Socket } from 'socket.io';
-import { PlaylistStore, HostService } from '@sdj/backend/core';
+import { HostService } from '@sdj/backend/core';
 import { QueuedTrack } from '@sdj/backend/db';
-
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
+import { Observable, of, Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
+import { Rooms, Server, Socket } from 'socket.io';
+import { WebSocketEvents } from '@sdj/shared/common';
 @WebSocketGateway()
 export class Gateway implements OnGatewayDisconnect {
+  private clientInRommSubjects = {};
   private roomsSnapshot: Rooms;
   @WebSocketServer() server: Server;
-  
 
-  constructor(private readonly playlistStore: PlaylistStore) {}
+  constructor(
+    @Inject(Injectors.STORAGESERVICE)
+    private readonly storageService: ClientProxy
+  ) {}
 
   handleDisconnect(client: Socket, ...args: any[]): any {
     this.leaveOtherChannels(client);
@@ -35,8 +41,18 @@ export class Gateway implements OnGatewayDisconnect {
   }
 
   @SubscribeMessage('queuedTrackList')
-  onQueuedTrackList(client: Socket, channel: string): Observable<WsResponse<QueuedTrack[]>> {
-    const queue = this.playlistStore.getQueue(JSON.parse(channel));
+  onQueuedTrackList(
+    client: Socket,
+    channel: string
+  ): Observable<WsResponse<QueuedTrack[]>> {
+    if (this.clientInRommSubjects[client.id]) {
+      this.clientInRommSubjects[client.id].next();
+      this.clientInRommSubjects[client.id].complete();
+    }
+    this.clientInRommSubjects[client.id] = new Subject();
+    const queue = this.storageService
+      .send(MicroservicePattern.getQueue, JSON.parse(channel))
+      .pipe(takeUntil(this.clientInRommSubjects[client.id]));
     return queue.pipe(
       switchMap(list => {
         return of({ event: 'queuedTrackList', data: list });
@@ -49,15 +65,21 @@ export class Gateway implements OnGatewayDisconnect {
   }
 
   private joinRoom(client: Socket, room: string): void {
-    if (!this.server.sockets.adapter.rooms[room]) {
+    const roomExisted = !this.server.sockets.adapter.rooms[room];
+    client.join(room);
+
+    if (roomExisted) {
       HostService.startRadioStream(room);
-      this.playlistStore.channelAppear(room).subscribe(() => {
-        this.server.in(room).emit('roomIsRunning');
-      });
+      this.storageService
+        .send(MicroservicePattern.channelAppear, room)
+        .toPromise()
+        .then(() => {
+          this.server.in(room).emit('roomIsRunning');
+        });
     } else {
       this.server.in(room).emit('roomIsRunning');
+      client.emit(WebSocketEvents.playDj);
     }
-    client.join(room);
     this.doRoomsSnapshot();
   }
 
@@ -69,7 +91,7 @@ export class Gateway implements OnGatewayDisconnect {
       client.leave(room);
       if (!this.server.sockets.adapter.rooms[room]) {
         HostService.removeRadioStream(room);
-        this.playlistStore.channelDisappears(room);
+        this.storageService.send(MicroservicePattern.channelDisappears, room);
       }
     });
     this.doRoomsSnapshot();

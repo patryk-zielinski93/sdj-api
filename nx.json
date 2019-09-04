@@ -47,8 +47,11 @@
     "backend-shared": {
       "tags": ["backend:shared"]
     },
-    "backend-redis": {
-      "tags": []
+    "backend-ices": {
+      "tags": ["backend", "backend:ices"]
+    },
+    "backend-storage": {
+      "tags": ["backend", "backend:storage"]
     }
   }
 }

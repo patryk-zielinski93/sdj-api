@@ -1,16 +1,20 @@
 import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { PlaylistStore } from '../../../../../../core/src/lib/store/playlist.store';
+import { Store } from '../../../../../../storage/src/lib/services/store';
 import { DownloadAndPlayCommand } from '../commands/download-and-play.command';
-import { DownloadTrackCommand } from '../../../../../../core/src/lib/cqrs/command-bus/commands/download-track.command';
+import { DownloadTrackCommand } from '@sdj/backend/core';
 import { PlayQueuedTrackCommand } from '../commands/play-queued-track.command';
+import { Inject } from '@nestjs/common';
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
+import { ClientProxy } from '@nestjs/microservices';
 
 @CommandHandler(DownloadAndPlayCommand)
 export class DownloadAndPlayHandler
   implements ICommandHandler<DownloadAndPlayCommand> {
   constructor(
     private readonly commandBus: CommandBus,
-    private readonly storage: PlaylistStore
+    @Inject(Injectors.STORAGESERVICE)
+    private readonly storageService: ClientProxy
   ) {}
 
   async execute(command: DownloadAndPlayCommand): Promise<void> {
@@ -22,7 +26,10 @@ export class DownloadAndPlayHandler
         );
       },
       () => {
-        this.storage.removeFromQueue(command.queuedTrack);
+        this.storageService.send(
+          MicroservicePattern.removeFromQueue,
+          command.queuedTrack
+        );
       }
     );
   }

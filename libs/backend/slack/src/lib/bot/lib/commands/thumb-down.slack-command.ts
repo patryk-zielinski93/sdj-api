@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '@sdj/backend/config';
-import { HostService, PlaylistStore } from '@sdj/backend/core';
+import { HostService } from '@sdj/backend/core';
 import {
   TrackRepository,
   User,
@@ -9,7 +10,7 @@ import {
   Vote,
   VoteRepository
 } from '@sdj/backend/db';
-
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
@@ -21,7 +22,8 @@ export class ThumbDownSlackCommand implements SlackCommand {
 
   constructor(
     private slackService: SlackService,
-    private readonly playlistStore: PlaylistStore,
+    @Inject(Injectors.STORAGESERVICE)
+    private readonly storageService: ClientProxy,
     @InjectRepository(UserRepository) private userRepository: UserRepository,
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
     @InjectRepository(VoteRepository) private voteRepository: VoteRepository
@@ -30,9 +32,9 @@ export class ThumbDownSlackCommand implements SlackCommand {
   async handler(command: string[], message: SlackMessage): Promise<void> {
     const userId = message.user;
     const user = await this.userRepository.findOne(userId);
-    const currentTrackInQueue = await this.playlistStore.getCurrentTrack(
-      message.channel
-    );
+    const currentTrackInQueue = await this.storageService
+      .send(MicroservicePattern.getCurrentTrack, message.channel)
+      .toPromise();
     if (!currentTrackInQueue) {
       return;
     }
@@ -61,7 +63,9 @@ export class ThumbDownSlackCommand implements SlackCommand {
           ' times skipped',
         message.channel
       );
+      //ToDo Move to some event
       HostService.nextSong(message.channel);
+
       currentTrackInQueue.track.skips++;
       this.trackRepository.save(currentTrackInQueue.track);
     } else {
@@ -73,6 +77,7 @@ export class ThumbDownSlackCommand implements SlackCommand {
       );
     }
 
+    // ToDo move to command
     const unlike = new Vote(<User>user, currentTrackInQueue, -1);
     unlike.createdAt = new Date();
     this.voteRepository.save(unlike);

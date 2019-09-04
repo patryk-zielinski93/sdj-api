@@ -1,14 +1,14 @@
 import { async, TestBed } from '@angular/core/testing';
-import { RedisModule } from './redis.module';
+import { IcesModule } from './ices.module';
 
-describe('RedisModule', () => {
+describe('IcesModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RedisModule]
+      imports: [IcesModule]
     }).compileComponents();
   }));
 
   it('should create', () => {
-    expect(RedisModule).toBeDefined();
+    expect(IcesModule).toBeDefined();
   });
 });

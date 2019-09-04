@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RedisController } from './redis.controller';
+import { StorageController } from './storage.controller';
 
-describe('Redis Controller', () => {
-  let controller: RedisController;
+describe('Storage Controller', () => {
+  let controller: StorageController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [RedisController],
+      controllers: [StorageController],
     }).compile();
 
-    controller = module.get<RedisController>(RedisController);
+    controller = module.get<StorageController>(StorageController);
   });
 
   it('should be defined', () => {

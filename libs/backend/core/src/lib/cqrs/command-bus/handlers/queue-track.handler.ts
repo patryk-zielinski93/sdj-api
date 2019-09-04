@@ -1,18 +1,22 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { PlaylistStore } from '../../../store/playlist.store';
+import { Store } from '../../../../../../storage/src/lib/services/store';
 import { QueueTrackCommand } from '../commands/queue-track.command';
 import {
   ChannelRepository,
   QueuedTrackRepository,
   TrackRepository
 } from '@sdj/backend/db';
+import { Inject } from '@nestjs/common';
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
+import { ClientProxy } from '@nestjs/microservices';
 
 @CommandHandler(QueueTrackCommand)
 export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
   constructor(
-    private readonly playlistStore: PlaylistStore,
+    @Inject(Injectors.STORAGESERVICE)
+    private readonly storageService: ClientProxy,
     @InjectRepository(ChannelRepository)
     private channelRepository: ChannelRepository,
     @InjectRepository(QueuedTrackRepository)
@@ -32,6 +36,6 @@ export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
       command.randomized,
       command.addedBy
     );
-    await this.playlistStore.addToQueue(queuedTrack);
+    await this.storageService.send(MicroservicePattern.addToQueue, queuedTrack).toPromise();
   }
 }

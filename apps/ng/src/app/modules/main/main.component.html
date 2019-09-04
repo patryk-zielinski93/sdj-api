@@ -21,6 +21,9 @@
   <mat-sidenav-content>
     <div class="app-content">
       <ul class="queued-tracks-list" #toPlay>
+          <li
+          class="queued-tracks-list__last-element queued-tracks-list__track"
+        ></li>
         <li
           class="queued-tracks-list__track"
           *ngFor="let queuedTrack of queuedTracks.reverse()"
@@ -40,9 +43,6 @@
             ></div>
           </div>
         </li>
-        <li
-          class="queued-tracks-list__last-element queued-tracks-list__track"
-        ></li>
       </ul>
       <sdj-awesome-player
         #playerComponent

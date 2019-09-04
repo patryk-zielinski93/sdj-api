@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, map, filter, first } from 'rxjs/operators';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueuedTrack, QueuedTrackRepository } from '@sdj/backend/db';
@@ -10,7 +10,7 @@ interface ChannelState {
   currentTrack: QueuedTrack | null;
 }
 
-interface PlaylistState {
+interface State {
   [key: string]: ChannelState;
 }
 
@@ -18,12 +18,12 @@ const initialChannelState = { silenceCount: 0, queue: [], currentTrack: null };
 const initialPlaylistState = {};
 
 @Injectable()
-export class PlaylistStore {
-  get state(): PlaylistState {
+export class Store {
+  get state(): State {
     return this._state.getValue();
   }
 
-  private _state: BehaviorSubject<PlaylistState> = new BehaviorSubject(
+  private _state: BehaviorSubject<State> = new BehaviorSubject(
     initialPlaylistState
   );
 
@@ -32,12 +32,13 @@ export class PlaylistStore {
     private readonly queuedTrackRepository: QueuedTrackRepository
   ) {}
 
-  channelAppear(channelId: string): Observable<void> {
-    return this._state.pipe(
-      filter(state => !!state[channelId]),
-      map(channelState => undefined),
-      first()
-    );
+  channelAppear(channelId: string): Observable<unknown> {
+    return !!this.state && !!this.state[channelId]
+      ? of()
+      : this._state.pipe(
+          filter(state => !!state[channelId]),
+          first()
+        );
   }
 
   channelDisappears(channelId: string): void {
@@ -90,18 +91,15 @@ export class PlaylistStore {
     });
   }
 
-  getSilenceCount(channelId: string): Observable<number> {
-    return this._state.pipe(
-      filter((state: PlaylistState) => !!state[channelId]),
-      map((state: PlaylistState) => state[channelId]),
-      map((state: ChannelState) => state.silenceCount)
-    );
+  async getSilenceCount(channelId: string): Promise<number> {
+    await this.getChannelState(channelId);
+    return this.state[channelId].silenceCount;
   }
 
   getQueue(channelId: string): Observable<QueuedTrack[]> {
     return this._state.pipe(
-      filter((state: PlaylistState) => !!state[channelId]),
-      map((state: PlaylistState) => state[channelId]),
+      filter((state: State) => !!state[channelId]),
+      map((state: State) => state[channelId]),
       map((state: ChannelState) => state.queue),
       distinctUntilChanged()
     );

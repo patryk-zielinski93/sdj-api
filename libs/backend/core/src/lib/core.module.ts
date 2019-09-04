@@ -2,7 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ClientsModule } from '@nestjs/microservices';
 import { CommonModule } from '@sdj/backend/common';
-import { connectionConfig } from '@sdj/backend/config';
+import { microservices } from '@sdj/backend/config';
 import { DbModule } from '@sdj/backend/db';
 import { Injectors } from '@sdj/backend/shared';
 import { CreateTrackHandler } from './cqrs/command-bus/handlers/create-track.handler';
@@ -13,7 +13,6 @@ import { QueueTrackHandler } from './cqrs/command-bus/handlers/queue-track.handl
 import { ThumbUpHandler } from './cqrs/command-bus/handlers/thumb-up.handler';
 import { Mp3Service } from './services/mp3.service';
 import { PlaylistService } from './services/playlist.service';
-import { PlaylistStore } from './store/playlist.store';
 
 export const CommandHandlers = [
   CreateTrackHandler,
@@ -27,31 +26,29 @@ export const CommandHandlers = [
 const ClientsModuleRegistered = ClientsModule.register([
   {
     name: Injectors.APPSERVICE,
-    ...connectionConfig.microservices.app
+    ...microservices.app
   },
   {
-    name: Injectors.REDISSERVICE,
-    ...connectionConfig.microservices.redis
+    name: Injectors.ICESSERVICE,
+    ...microservices.ices
   },
   {
     name: Injectors.SLACKSERVICE,
-    ...connectionConfig.microservices.slack
+    ...microservices.slack
+  },
+  {
+    name: Injectors.STORAGESERVICE,
+    ...microservices.storage
   }
 ]);
 
 @Global()
 @Module({
   imports: [DbModule, ClientsModuleRegistered, CommonModule, CqrsModule],
-  providers: [
-    ...CommandHandlers,
-    Mp3Service,
-    PlaylistService,
-    PlaylistStore
-  ],
+  providers: [...CommandHandlers, Mp3Service, PlaylistService],
   exports: [
     Mp3Service,
     PlaylistService,
-    PlaylistStore,
     DbModule,
     ClientsModuleRegistered,
     CqrsModule,
