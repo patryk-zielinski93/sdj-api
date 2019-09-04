@@ -56,6 +56,7 @@ export class Player {
       this.analyser.smoothingTimeConstant = 0.6;
       this.analyser.fftSize = 2048;
       this.audio = new Audio(environment.radioStreamUrl);
+      this.audio.id = 'playerHtmlAudio'
       this.audio.crossOrigin = 'anonymous';
       this.audio.load();
       this.audio.addEventListener('error', () => {

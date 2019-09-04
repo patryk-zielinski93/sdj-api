@@ -1,9 +1,22 @@
-import { getGreeting } from '../support/app.po';
+import {
+  getNavbarList,
+  getChannelListItem,
+  getPlayButton
+} from '../support/app.po';
+import { login, expectPlayingAudio, resolveApp } from '../support/commands';
 
-describe('sdj', () => {
-  beforeEach(() => cy.visit('/'));
+describe('SDJ', () => {
+  beforeEach(() => {
+    resolveApp();
+  });
 
-  it('should display welcome message', () => {
-    getGreeting().contains('Welcome to sdj!');
+  it('should display player', () => {
+    getPlayButton().should('be.visible');
+  });
+
+  it('should countain channels list', () => {
+    getNavbarList().within(() => {
+      getChannelListItem().should('have.length.greaterThan', 1);
+    });
   });
 });
