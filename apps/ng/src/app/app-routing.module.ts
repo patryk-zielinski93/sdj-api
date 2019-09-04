@@ -12,6 +12,14 @@ const routes: Routes = [
     resolve: {
       channel: ChannelResolver
     }
+  },
+  {
+    path: ':channelId',
+    component: MainComponent,
+    canActivate: [AuthGuard],
+    resolve: {
+      channel: ChannelResolver
+    }
   }
 ];
 

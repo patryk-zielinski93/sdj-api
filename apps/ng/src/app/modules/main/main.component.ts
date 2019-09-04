@@ -19,6 +19,7 @@ import { SpeechService } from '../core/services/speech.service';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { TrackUtil } from '../core/utils/track.util';
 import { AwesomePlayerComponent } from './components/awesome-player/awesome-player.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'sdj-main',
@@ -48,11 +49,15 @@ export class MainComponent implements OnInit, AfterViewInit {
   constructor(
     private channelService: ChannelService,
     private ws: WebSocketService,
+    private route: ActivatedRoute,
     private speechService: SpeechService
   ) {}
 
   ngOnInit(): void {
     this.channels$ = this.channelService.getChannels();
+    this.channelService.selectFirstChannel(
+      this.route.snapshot.paramMap.get('channelId')
+    );
     this.handleChannelChanges();
   }
 
