@@ -1,29 +1,17 @@
-import { Inject } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import {
-  OnGatewayDisconnect,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
-  WsResponse
-} from '@nestjs/websockets';
-import { HostService } from '@sdj/backend/core';
+import { OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
+import { HostService, StorageServiceFacade } from '@sdj/backend/core';
 import { QueuedTrack } from '@sdj/backend/db';
-import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
+import { WebSocketEvents } from '@sdj/shared/common';
 import { Observable, of, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { Rooms, Server, Socket } from 'socket.io';
-import { WebSocketEvents } from '@sdj/shared/common';
 @WebSocketGateway()
 export class Gateway implements OnGatewayDisconnect {
-  private clientInRommSubjects = {};
+  private clientInRommSubjects: { [key: string]: Subject<void> } = {};
   private roomsSnapshot: Rooms;
   @WebSocketServer() server: Server;
 
-  constructor(
-    @Inject(Injectors.STORAGESERVICE)
-    private readonly storageService: ClientProxy
-  ) {}
+  constructor(private readonly storageService: StorageServiceFacade) {}
 
   handleDisconnect(client: Socket, ...args: any[]): any {
     this.leaveOtherChannels(client);
@@ -50,10 +38,8 @@ export class Gateway implements OnGatewayDisconnect {
       this.clientInRommSubjects[client.id].complete();
     }
     this.clientInRommSubjects[client.id] = new Subject();
-    const queue = this.storageService
-      .send(MicroservicePattern.getQueue, JSON.parse(channel))
-      .pipe(takeUntil(this.clientInRommSubjects[client.id]));
-    return queue.pipe(
+    return this.storageService.getQueue(JSON.parse(channel)).pipe(
+      takeUntil(this.clientInRommSubjects[client.id]),
       switchMap(list => {
         return of({ event: 'queuedTrackList', data: list });
       })
@@ -70,12 +56,9 @@ export class Gateway implements OnGatewayDisconnect {
 
     if (roomExisted) {
       HostService.startRadioStream(room);
-      this.storageService
-        .send(MicroservicePattern.channelAppear, room)
-        .toPromise()
-        .then(() => {
-          this.server.in(room).emit('roomIsRunning');
-        });
+      this.storageService.channelAppears(room).then(() => {
+        this.server.in(room).emit('roomIsRunning');
+      });
     } else {
       this.server.in(room).emit('roomIsRunning');
       client.emit(WebSocketEvents.playDj);
@@ -91,7 +74,7 @@ export class Gateway implements OnGatewayDisconnect {
       client.leave(room);
       if (!this.server.sockets.adapter.rooms[room]) {
         HostService.removeRadioStream(room);
-        this.storageService.send(MicroservicePattern.channelDisappears, room);
+        this.storageService.channelDisappears(room);
       }
     });
     this.doRoomsSnapshot();

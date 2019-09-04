@@ -1,5 +1,7 @@
-import { App } from "./app";
-
+import { App } from './app';
+import { Logger } from '@nestjs/common';
 
 const app = new App();
-app.bootstrap();
+app.bootstrap().then(() => {
+  Logger.log('Slack Dj is working!!!');
+});

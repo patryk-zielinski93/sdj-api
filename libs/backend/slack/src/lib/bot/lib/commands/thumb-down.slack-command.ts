@@ -1,16 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '@sdj/backend/config';
-import { HostService } from '@sdj/backend/core';
-import {
-  TrackRepository,
-  User,
-  UserRepository,
-  Vote,
-  VoteRepository
-} from '@sdj/backend/db';
-import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
+import { HostService, StorageServiceFacade } from '@sdj/backend/core';
+import { TrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
@@ -22,8 +14,7 @@ export class ThumbDownSlackCommand implements SlackCommand {
 
   constructor(
     private slackService: SlackService,
-    @Inject(Injectors.STORAGESERVICE)
-    private readonly storageService: ClientProxy,
+    private readonly storageService: StorageServiceFacade,
     @InjectRepository(UserRepository) private userRepository: UserRepository,
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
     @InjectRepository(VoteRepository) private voteRepository: VoteRepository
@@ -32,9 +23,9 @@ export class ThumbDownSlackCommand implements SlackCommand {
   async handler(command: string[], message: SlackMessage): Promise<void> {
     const userId = message.user;
     const user = await this.userRepository.findOne(userId);
-    const currentTrackInQueue = await this.storageService
-      .send(MicroservicePattern.getCurrentTrack, message.channel)
-      .toPromise();
+    const currentTrackInQueue = await this.storageService.getCurrentTrack(
+      message.channel
+    );
     if (!currentTrackInQueue) {
       return;
     }

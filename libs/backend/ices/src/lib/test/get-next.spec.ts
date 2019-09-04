@@ -1,34 +1,36 @@
-import { INestApplication } from '@nestjs/common';
-import { CommandBus, CqrsModule, EventBus, ofType } from '@nestjs/cqrs';
+import { INestApplication, INestMicroservice } from '@nestjs/common';
+import { CommandBus, EventBus, ofType } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DbModule, TrackRepository } from '@sdj/backend/db';
+import { CoreModule, QueueTrackCommand } from '@sdj/backend/core';
+import { CommandHandlers, TrackRepository } from '@sdj/backend/db';
 import { first, switchMap, tap } from 'rxjs/operators';
-import { CommandHandlers, EventHandlers, Mp3Service, PlaylistService, PlaylistStore, RedisService } from '../..';
-import { PlayDjEvent, PlayRadioEvent, QueueTrackCommand, RedisGetNextEvent } from '../cqrs';
+import { RedisGetNextHandler } from '../cqrs/events/handlers/redis-get-next.handler';
+import { PlayDjEvent } from '../cqrs/events/play-dj.event';
+import { PlayRadioEvent } from '../cqrs/events/play-radio.event';
+import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
 import { RedisSagas } from '../cqrs/events/sagas/redis.sagas';
+import { RedisService } from '../services/redis.service';
+import { CommonModule } from '@sdj/backend/common';
+import { microservices } from '@sdj/backend/config';
 
 describe('Get Next', () => {
-  let app: INestApplication;
+  let app: INestMicroservice;
   let commandBus: CommandBus;
   let eventBus: EventBus;
   let trackRepository: TrackRepository;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [DbModule, CqrsModule, TypeOrmModule.forRoot()],
-      providers: [
-        ...CommandHandlers,
-        ...EventHandlers,
-        Mp3Service,
-        PlaylistService,
-        PlaylistStore,
-        RedisSagas,
-        RedisService
-      ]
+      imports: [
+        CommonModule,
+        CoreModule,
+        TypeOrmModule.forRoot()
+      ],
+      providers: [RedisSagas, RedisService, RedisGetNextHandler, ...CommandHandlers]
     }).compile();
 
-    app = module.createNestApplication();
+    app = module.createNestMicroservice(microservices.ices);
     await app.init();
     commandBus = module.get<CommandBus>(CommandBus);
     eventBus = module.get<EventBus>(EventBus);
@@ -62,6 +64,6 @@ describe('Get Next', () => {
 
   afterAll(async () => {
     // tslint:disable-next-line: no-console
-    app.close().catch(console.log);
+    app.close().catch(console.error);
   });
 });

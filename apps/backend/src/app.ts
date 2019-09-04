@@ -6,6 +6,8 @@ import { IcesModule } from '@sdj/backend/ices';
 import { StorageModule } from '@sdj/backend/storage';
 import * as cors from 'cors';
 import { microservices } from '@sdj/backend/config';
+import { NestMicroserviceOptions } from '@nestjs/common/interfaces/microservices/nest-microservice-options.interface';
+import { ClientOptions } from '@nestjs/microservices';
 
 export class App {
   app: INestApplication;
@@ -13,8 +15,7 @@ export class App {
   port: number = parseInt(process.env.PORT, 10) || 8888;
 
   async bootstrap(): Promise<unknown> {
-    this.initApp();
-    return this.bootstrapMicroservices();
+    return Promise.all([this.initApp(), this.bootstrapMicroservices()]);
   }
 
   async bootstrapMicroservices(): Promise<unknown> {
@@ -25,27 +26,29 @@ export class App {
     ]);
   }
 
+  private async bootstrapService(
+    module: any,
+    options: ClientOptions,
+    name: string
+  ): Promise<void> {
+    const microservice = await NestFactory.createMicroservice(module, options);
+    await microservice.listenAsync();
+    Logger.log(name + 'Service is listening');
+  }
+
   async bootstrapSlackService(): Promise<void> {
-    const microservice = await NestFactory.createMicroservice(
-      SlackModule,
-      microservices.slack
-    );
-    microservice.listen(() => Logger.log('SlackService is listening'));
+    return this.bootstrapService(SlackModule, microservices.slack, 'Slack');
   }
   async bootstrapIces(): Promise<void> {
-    const microservice = await NestFactory.createMicroservice(
-      IcesModule,
-      microservices.ices
-    );
-    microservice.listen(() => Logger.log('Ices is listening'));
+    return this.bootstrapService(IcesModule, microservices.ices, 'Ices');
   }
 
   async bootstrapStorage(): Promise<void> {
-    const microservice = await NestFactory.createMicroservice(
+    return this.bootstrapService(
       StorageModule,
-      microservices.storage
+      microservices.storage,
+      'Storage'
     );
-    microservice.listen(() => Logger.log('Storage is listening'));
   }
 
   async initApp(): Promise<void> {

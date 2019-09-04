@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
+import { LoggerService } from '@sdj/backend/common';
 import { connectionConfig } from '@sdj/backend/config';
+import { Track } from '@sdj/backend/db';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
 import { Observable, Observer, Subject } from 'rxjs';
-import { LoggerService } from '@sdj/backend/common';
 import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
 
 interface RedisData<T> {
@@ -51,6 +52,10 @@ export class RedisService {
 
   getNextSongSubject(channelId: string): RedisSubject<string> {
     return this.createSubject(channelId);
+  }
+
+  sendNextSong(channelId: string, track: Track): void {
+    this.getNextSongSubject(channelId).next(<any>track.id);
   }
 
   getMessageSubject(): RedisSubject<string> {

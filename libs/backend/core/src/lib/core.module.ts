@@ -13,6 +13,8 @@ import { QueueTrackHandler } from './cqrs/command-bus/handlers/queue-track.handl
 import { ThumbUpHandler } from './cqrs/command-bus/handlers/thumb-up.handler';
 import { Mp3Service } from './services/mp3.service';
 import { PlaylistService } from './services/playlist.service';
+import { AppServiceFacade } from './services/app-service.facade';
+import { StorageServiceFacade } from './services/storage-service.facade';
 
 export const CommandHandlers = [
   CreateTrackHandler,
@@ -45,14 +47,22 @@ const ClientsModuleRegistered = ClientsModule.register([
 @Global()
 @Module({
   imports: [DbModule, ClientsModuleRegistered, CommonModule, CqrsModule],
-  providers: [...CommandHandlers, Mp3Service, PlaylistService],
-  exports: [
+  providers: [
+    AppServiceFacade,
+    ...CommandHandlers,
     Mp3Service,
     PlaylistService,
-    DbModule,
+    StorageServiceFacade
+  ],
+  exports: [
+    AppServiceFacade,
     ClientsModuleRegistered,
+    CommonModule,
     CqrsModule,
-    CommonModule
+    DbModule,
+    Mp3Service,
+    PlaylistService,
+    StorageServiceFacade
   ]
 })
 export class CoreModule {}

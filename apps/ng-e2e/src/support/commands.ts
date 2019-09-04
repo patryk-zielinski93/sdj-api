@@ -28,7 +28,7 @@ import { playerHtmlAudio } from './player.po';
 export function login(): void {
   window.localStorage.setItem(
     'token',
-    'xoxp-331681599316-332762128103-531914387476-69baadcea72d7827a7980cef64af4ee0'
+    'xoxo'
   );
 }
 

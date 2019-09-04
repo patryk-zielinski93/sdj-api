@@ -1,11 +1,10 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { StorageServiceFacade } from '@sdj/backend/core';
+import { QueuedTrackRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
-import { QueuedTrackRepository } from '@sdj/backend/db';
-import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
-import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class LsSlackCommand implements SlackCommand {
@@ -14,8 +13,7 @@ export class LsSlackCommand implements SlackCommand {
 
   constructor(
     private slack: SlackService,
-    @Inject(Injectors.STORAGESERVICE)
-    private readonly storageService: ClientProxy,
+    private readonly storageService: StorageServiceFacade,
     @InjectRepository(QueuedTrackRepository)
     private queuedTrackRepository: QueuedTrackRepository
   ) {}
@@ -27,9 +25,9 @@ export class LsSlackCommand implements SlackCommand {
 
     let msg = '';
 
-    const currentTrack = await this.storageService
-      .send(MicroservicePattern.getCurrentTrack, message.channel)
-      .toPromise();
+    const currentTrack = await this.storageService.getCurrentTrack(
+      message.channel
+    );
     if (currentTrack) {
       msg +=
         `Teraz gram: ${currentTrack.track.title}, dodane przez ${
