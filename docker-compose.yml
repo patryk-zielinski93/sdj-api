@@ -2,6 +2,8 @@ version: '3.6'
 services:
 
   slack_dj_backend:
+    env_file:
+      - .env
     container_name: ${BACKEND_CONTAINER_NAME}
     build:
       dockerfile: ./apps/backend/Dockerfile
@@ -81,6 +83,7 @@ services:
     - VIRTUAL_HOST=${NG_URL}
     - VIRTUAL_PORT=80
     - LOCAL_USER_ID=${LOCAL_USER_ID}
+    - NG_EXTERNAL_STREAM=${NG_EXTERNAL_STREAM}
     - BACKEND_URL=${BACKEND_URL}
     - RADIO_STREAM_URL=${ICECAST_URL}
     - SLACK_CLIENT_ID=${SLACK_CLIENT_ID}
@@ -104,6 +107,17 @@ services:
       - frontend
       - backend
 
+  slack_dj_rabbit:
+    container_name: slack_dj_rabbit
+    hostname: slack_dj_rabbit
+    image: rabbitmq:3-management
+    networks:
+      backend:
+        aliases:
+          - rabbit
+    ports: 
+    - 15672:15672
+  
   slack_dj_redis:
     container_name: ${REDIS_CONTAINER_NAME}
     volumes:

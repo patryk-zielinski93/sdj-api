@@ -7,6 +7,7 @@ const browserWindowEnv = browserWindow['__env'] || {};
 
 export const environment: {
   backendUrl: string;
+  externalStream: string
   radioStreamUrl: string;
   slack: {
     clientId: string;

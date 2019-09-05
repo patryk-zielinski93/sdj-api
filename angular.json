@@ -163,7 +163,7 @@
           "builder": "./builders:nodemon",
           "options": {
             "buildTarget": "backend:build",
-            "debug": true
+            "debug": false
           }
         },
         "lint": {
@@ -493,6 +493,60 @@
           }
         }
       }
+    },
+    "backend-ices": {
+      "projectType": "library",
+      "root": "libs/backend/ices",
+      "sourceRoot": "libs/backend/ices/src",
+      "prefix": "Ices",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/ices/tsconfig.lib.json",
+              "libs/backend/ices/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/ices/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/ices/jest.config.js",
+            "tsConfig": "libs/backend/ices/tsconfig.spec.json",
+            "setupFile": "libs/backend/ices/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {}
+    },
+    "backend-storage": {
+      "projectType": "library",
+      "root": "libs/backend/storage",
+      "sourceRoot": "libs/backend/storage/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/storage/tsconfig.lib.json",
+              "libs/backend/storage/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/storage/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/storage/jest.config.js",
+            "tsConfig": "libs/backend/storage/tsconfig.spec.json",
+            "setupFile": "libs/backend/storage/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {}
     }
   },
   "cli": {

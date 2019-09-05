@@ -46,6 +46,12 @@
     },
     "backend-shared": {
       "tags": ["backend:shared"]
+    },
+    "backend-ices": {
+      "tags": ["backend", "backend:ices"]
+    },
+    "backend-storage": {
+      "tags": ["backend", "backend:storage"]
     }
   }
 }

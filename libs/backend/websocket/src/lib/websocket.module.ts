@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
-
-import { PlayDjHandler } from './cqrs/command-bus/handlers/play-dj.handler';
-import { PlayRadioHandler } from './cqrs/command-bus/handlers/play-radio.handler';
-import { TellHandler } from './cqrs/events/handlers/tell.handler';
+import { CoreModule } from '@sdj/backend/core';
+import { WebSocketController } from './controllers/websocket.controller';
 import { Gateway } from './gateway';
-
-export const CommandHandlers = [TellHandler];
-export const EventHandlers = [PlayDjHandler, PlayRadioHandler];
+import { CommonModule } from '@sdj/backend/common';
 
 @Module({
-  providers: [...CommandHandlers, ...EventHandlers, Gateway],
+  imports: [CommonModule, CoreModule],
+  controllers: [WebSocketController],
+  providers: [Gateway],
   exports: [Gateway]
 })
 export class WebSocketModule {}

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, zip } from 'rxjs';
 import { delay, filter, map } from 'rxjs/operators';
 import { WebSocketService } from './web-socket.service';
+import { WebSocketEvents } from '@sdj/shared/common';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class SpeechService {
   }
 
   public startListening(): void {
-    this.pozdro$ = this.ws.createSubject('pozdro');
+    this.pozdro$ = this.ws.createSubject(WebSocketEvents.pozdro);
     const input = this.pozdro$;
     const signal = this.speeching.pipe(filter(speeching => !speeching));
     const output = zip(input, signal);
@@ -44,7 +45,7 @@ export class SpeechService {
       )
       .subscribe((data: any) => {
         console.log(data.message);
-        this.czytaj(data.message);
+        this.speak(data.message);
       });
   }
 
@@ -53,7 +54,7 @@ export class SpeechService {
     this.pozdro$.complete();
   }
 
-  private czytaj(text: string): void {
+  private speak(text: string): void {
     this.speeching.next(true);
 
     const utterThis = new SpeechSynthesisUtterance(text);
