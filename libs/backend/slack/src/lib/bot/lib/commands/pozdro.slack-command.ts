@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { EventBus } from '@nestjs/cqrs';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { LoggerService } from '@sdj/backend/common';
+import { UserRepository } from '@sdj/backend/db';
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
-import { UserRepository } from '@sdj/backend/db';
-import { TellEvent } from '@sdj/backend/core';
-import { LoggerService } from '@sdj/backend/common';
 
 @Injectable()
 export class PozdroSlackCommand implements SlackCommand {
@@ -15,7 +15,7 @@ export class PozdroSlackCommand implements SlackCommand {
   constructor(
     private readonly logger: LoggerService,
     private userRepository: UserRepository,
-    private readonly publisher: EventBus
+    @Inject(Injectors.APPSERVICE) private readonly client: ClientProxy
   ) {}
 
   async handler(command: string[], message: SlackMessage): Promise<void> {
@@ -30,8 +30,7 @@ export class PozdroSlackCommand implements SlackCommand {
 
     if (user) {
       this.logger.verbose(user.realName + ' mowi: ' + pozdro);
-
-      this.publisher.publish(new TellEvent(pozdro));
+      this.client.emit(MicroservicePattern.pozdro, pozdro).subscribe();
     }
   }
 }

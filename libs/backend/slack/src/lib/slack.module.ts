@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoreModule } from '@sdj/backend/core';
-
 import { Bot } from './bot/lib/bot';
 import { CleanShitSlackCommand } from './bot/lib/commands/clean-shit.slack-command';
 import { FuckYouSlackCommand } from './bot/lib/commands/fuck-you.slack-command';
@@ -14,8 +14,12 @@ import { ThumbDownSlackCommand } from './bot/lib/commands/thumb-down.slack-comma
 import { ThumbUpSlackCommand } from './bot/lib/commands/thumb-up.slack-command';
 import { SlackService } from './services/slack.service';
 
+
 @Module({
-  imports: [CoreModule],
+  imports: [
+    TypeOrmModule.forRoot(),
+    CoreModule
+  ],
   providers: [
     Bot,
     CleanShitSlackCommand,

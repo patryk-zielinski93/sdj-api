@@ -21,7 +21,9 @@ export class IcesManager {
     const { signal$, execSpawn } = spawn('docker', [
       `exec`,
       `slack_dj_ices_${id}`,
-      `bash -c "pgrep -f ices | xargs kill -s SIGUSR1"`
+      `bash`,
+      `-c`,
+      `pgrep -f ices | xargs kill -s SIGUSR1`
     ]);
     this.commands$.next(execSpawn);
     signal$.subscribe((code: number) =>

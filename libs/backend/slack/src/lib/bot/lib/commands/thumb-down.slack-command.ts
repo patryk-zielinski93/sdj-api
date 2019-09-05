@@ -1,15 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '@sdj/backend/config';
-import { HostService, PlaylistStore } from '@sdj/backend/core';
-import {
-  TrackRepository,
-  User,
-  UserRepository,
-  Vote,
-  VoteRepository
-} from '@sdj/backend/db';
-
+import { HostService, StorageServiceFacade } from '@sdj/backend/core';
+import { TrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
@@ -21,7 +14,7 @@ export class ThumbDownSlackCommand implements SlackCommand {
 
   constructor(
     private slackService: SlackService,
-    private readonly playlistStore: PlaylistStore,
+    private readonly storageService: StorageServiceFacade,
     @InjectRepository(UserRepository) private userRepository: UserRepository,
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
     @InjectRepository(VoteRepository) private voteRepository: VoteRepository
@@ -30,7 +23,7 @@ export class ThumbDownSlackCommand implements SlackCommand {
   async handler(command: string[], message: SlackMessage): Promise<void> {
     const userId = message.user;
     const user = await this.userRepository.findOne(userId);
-    const currentTrackInQueue = await this.playlistStore.getCurrentTrack(
+    const currentTrackInQueue = await this.storageService.getCurrentTrack(
       message.channel
     );
     if (!currentTrackInQueue) {
@@ -61,7 +54,9 @@ export class ThumbDownSlackCommand implements SlackCommand {
           ' times skipped',
         message.channel
       );
+      //ToDo Move to some event
       HostService.nextSong(message.channel);
+
       currentTrackInQueue.track.skips++;
       this.trackRepository.save(currentTrackInQueue.track);
     } else {
@@ -73,6 +68,7 @@ export class ThumbDownSlackCommand implements SlackCommand {
       );
     }
 
+    // ToDo move to command
     const unlike = new Vote(<User>user, currentTrackInQueue, -1);
     unlike.createdAt = new Date();
     this.voteRepository.save(unlike);

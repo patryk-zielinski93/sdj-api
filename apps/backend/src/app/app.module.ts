@@ -1,16 +1,12 @@
-import { WebSocketModule } from '@sdj/backend/websocket';
-import { CoreModule } from '@sdj/backend/core';
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiModule } from '@sdj/backend/api';
-import { SlackModule } from '@sdj/backend/slack';
+import { WebSocketModule } from '@sdj/backend/websocket';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    ApiModule,
-    CoreModule,
-    SlackModule,
     TypeOrmModule.forRoot(),
+    ApiModule,
     WebSocketModule
   ]
 })

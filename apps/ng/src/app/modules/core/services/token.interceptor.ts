@@ -2,17 +2,20 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest
+  HttpRequest,
+  HttpResponse
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { tap } from 'rxjs/operators';
+import { SlackApiErrorsHandler } from './slack-api-errors-handler';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, private slackApiErrorHandler: SlackApiErrorsHandler) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -25,6 +28,12 @@ export class TokenInterceptor implements HttpInterceptor {
         }
       });
     }
-    return next.handle(request);
+    return next.handle(request).pipe(
+      tap((event: HttpEvent<any>) => {
+        if (event instanceof HttpResponse && event.body.error) {
+          this.slackApiErrorHandler.handle(event.body.error);
+        }
+      })
+    );
   }
 }

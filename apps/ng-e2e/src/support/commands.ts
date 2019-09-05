@@ -23,3 +23,27 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import { playerHtmlAudio } from './player.po';
+
+export function login(): void {
+  window.localStorage.setItem(
+    'token',
+    'xoxo'
+  );
+}
+
+export const expectPlayingAudio = () => {
+  playerHtmlAudio().then((el: any) => {
+    console.log(el);
+    console.log(el.duration, el.paused, el.muted);
+
+    expect(el.duration > 0 && !el.paused && !el.muted).to.eq(false);
+  });
+};
+
+export const resolveApp = () => {
+  login();
+  cy.server();
+  cy.route('**/api/conversations.list/*').as('channels');
+  cy.visit('/');
+};

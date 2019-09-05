@@ -1,6 +1,17 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { environment } from '@ng-environment/environment';
-import { Channel, QueuedTrack, Track, WebSocketEvents } from '@sdj/shared/common';
+import {
+  Channel,
+  QueuedTrack,
+  Track,
+  WebSocketEvents
+} from '@sdj/shared/common';
 import { merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 import { ChannelService } from '../core/services/channel.service';
@@ -8,7 +19,7 @@ import { SpeechService } from '../core/services/speech.service';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { TrackUtil } from '../core/utils/track.util';
 import { AwesomePlayerComponent } from './components/awesome-player/awesome-player.component';
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'sdj-main',
@@ -38,11 +49,15 @@ export class MainComponent implements OnInit, AfterViewInit {
   constructor(
     private channelService: ChannelService,
     private ws: WebSocketService,
+    private route: ActivatedRoute,
     private speechService: SpeechService
   ) {}
 
   ngOnInit(): void {
     this.channels$ = this.channelService.getChannels();
+    this.channelService.selectFirstChannel(
+      this.route.snapshot.paramMap.get('channelId')
+    );
     this.handleChannelChanges();
   }
 
@@ -88,8 +103,11 @@ export class MainComponent implements OnInit, AfterViewInit {
       console.log(list.map(qTrack => qTrack.track));
       this.queuedTracks = list;
       const listElement = this.toPlayContainer.nativeElement;
-      listElement.scrollLeft +=
-        listElement.scrollWidth - listElement.clientWidth;
+      setTimeout(
+        () =>
+          (listElement.scrollLeft +=
+            listElement.scrollWidth - listElement.clientWidth)
+      );
     });
 
     this.currentTrack = wsSubject.pipe(
