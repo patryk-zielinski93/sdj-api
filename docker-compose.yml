@@ -8,6 +8,8 @@ services:
       context: ./
       args:
         - LOCAL_USER_ID=${LOCAL_USER_ID}
+    volumes:
+      - ./apps/backend/src/assets/tracks:/app/apps/backend/src/assets/tracks
     environment:
       - PORT=${BACKEND_PORT}
       - VIRTUAL_HOST=${BACKEND_URL}
@@ -24,7 +26,7 @@ services:
     image: mariadb
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-      - db:/var/lib/mysql
+      - ./data/db:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
