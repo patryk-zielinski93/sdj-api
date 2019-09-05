@@ -1,8 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
 import { LoggerService } from '@sdj/backend/common';
+import { AppServiceFacade } from '@sdj/backend/core';
 import { UserRepository } from '@sdj/backend/db';
-import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
 
@@ -15,7 +14,7 @@ export class PozdroSlackCommand implements SlackCommand {
   constructor(
     private readonly logger: LoggerService,
     private userRepository: UserRepository,
-    @Inject(Injectors.APPSERVICE) private readonly client: ClientProxy
+    private readonly appService: AppServiceFacade
   ) {}
 
   async handler(command: string[], message: SlackMessage): Promise<void> {
@@ -30,7 +29,7 @@ export class PozdroSlackCommand implements SlackCommand {
 
     if (user) {
       this.logger.verbose(user.realName + ' mowi: ' + pozdro);
-      this.client.emit(MicroservicePattern.pozdro, pozdro).subscribe();
+      this.appService.pozdro(message.channel, pozdro);
     }
   }
 }

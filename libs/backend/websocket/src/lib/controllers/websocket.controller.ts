@@ -1,10 +1,9 @@
 import { Controller } from '@nestjs/common';
-import { EventPattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { LoggerService } from '@sdj/backend/common';
 import { MicroservicePattern } from '@sdj/backend/shared';
 import { WebSocketEvents } from '@sdj/shared/common';
 import { Gateway } from '../gateway';
-
 
 @Controller()
 export class WebSocketController {
@@ -14,10 +13,10 @@ export class WebSocketController {
     private readonly gateway: Gateway
   ) {}
 
-  @EventPattern(MicroservicePattern.pozdro)
-  pozdro(data: string): void {
-    this.gateway.server.of('/').emit('pozdro', {
-      message: data
+  @MessagePattern(MicroservicePattern.pozdro)
+  pozdro(data: { channelId: string; text: string }): void {
+    this.gateway.server.in(data.channelId).emit('pozdro', {
+      message: data.text
     });
   }
 
