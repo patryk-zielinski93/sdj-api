@@ -7,19 +7,20 @@ import { MainComponent } from './modules/main/main.component';
 const routes: Routes = [
   {
     path: '',
-    component: MainComponent,
     canActivate: [AuthGuard],
     resolve: {
       channel: ChannelResolver
-    }
-  },
-  {
-    path: ':channelId',
-    component: MainComponent,
-    canActivate: [AuthGuard],
-    resolve: {
-      channel: ChannelResolver
-    }
+    },
+    children: [
+      {
+        component: MainComponent,
+        path: ''
+      },
+      {
+        component: MainComponent,
+        path: ':channelId'
+      }
+    ]
   }
 ];
 

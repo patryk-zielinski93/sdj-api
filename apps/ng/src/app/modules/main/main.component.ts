@@ -6,12 +6,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { environment } from '@ng-environment/environment';
-import {
-  Channel,
-  QueuedTrack,
-  Track,
-  WebSocketEvents
-} from '@sdj/shared/common';
+import { QueuedTrack, Track, WebSocketEvents } from '@sdj/shared/common';
 import { merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 import { ChannelService } from '../core/services/channel.service';
@@ -20,6 +15,7 @@ import { WebSocketService } from '../core/services/web-socket.service';
 import { TrackUtil } from '../core/utils/track.util';
 import { AwesomePlayerComponent } from './components/awesome-player/awesome-player.component';
 import { ActivatedRoute } from '@angular/router';
+import { Channel } from '../core/resources/interfaces/channel.interface';
 
 @Component({
   selector: 'sdj-main',
@@ -63,7 +59,8 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.handleSpeeching();
-    this.handleWsEvents();
+    this.handleQueuedTrackList();
+    this.handleSelectedChannelChange();
   }
 
   handleChannelChanges(): void {
@@ -174,19 +171,15 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
   }
 
-  handleWsEvents(): void {
-    const connect$ = this.ws.createSubject(WebSocketEvents.connect);
+  handleSelectedChannelChange(): void {
     const join$ = this.ws.createSubject(WebSocketEvents.join);
-    connect$.subscribe(socket => {
+    this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
+      this.selectedChannelUnsubscribe.next();
+      this.selectedChannelUnsubscribe.complete();
+      this.selectedChannelUnsubscribe = new Subject();
       this.handleQueuedTrackList();
-      this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
-        this.selectedChannelUnsubscribe.next();
-        this.selectedChannelUnsubscribe.complete();
-        this.selectedChannelUnsubscribe = new Subject();
-        this.handleQueuedTrackList();
-        this.handleAudioSource();
-        join$.next({ room: channel.id });
-      });
+      this.handleAudioSource();
+      join$.next({ room: channel.id });
     });
   }
 

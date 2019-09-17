@@ -8,20 +8,23 @@
     <mat-nav-list>
       <mat-list-item
         [ngStyle]="
-          channel.id === selectedChannel.id && { backgroundColor: '#777' }
+          channel.id === selectedChannel.id && { backgroundColor: '#b3e5fc' }
         "
         (click)="selectChannel(channel)"
         routerLinkActive="list-item-active"
         *ngFor="let channel of (channels$ | async)"
       >
-        # {{ channel.name }}
+        <mat-icon mat-list-icon *ngIf="channel.id !== selectedChannel.id">star_border</mat-icon>
+        <mat-icon mat-list-icon *ngIf="channel.id === selectedChannel.id">star</mat-icon>
+        <h4 mat-line>{{ channel.name }}</h4>
+        <p mat-line>{{ channel.users }}</p>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="app-content">
       <ul class="queued-tracks-list" #toPlay>
-          <li
+        <li
           class="queued-tracks-list__last-element queued-tracks-list__track"
         ></li>
         <li
