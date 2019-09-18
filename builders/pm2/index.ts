@@ -1,5 +1,4 @@
 import { BuilderOutput, createBuilder } from '@angular-devkit/architect';
-import { spawn } from '@sikora00/rxjs-overlay';
 import { OptionsT } from './schema';
 import SpawnService from './spawn.service';
 

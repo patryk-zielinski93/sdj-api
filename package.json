@@ -48,6 +48,7 @@
     "@nestjs/typeorm": "^6.1.3",
     "@nestjs/websockets": "^6.5.2",
     "@nrwl/angular": "8.2.0",
+    "@pm2/io": "^4.3.2",
     "@sikora00/rxjs-overlay": "^1.4.0",
     "@slack/client": "^4.3.1",
     "@slack/events-api": "^1.0.1",

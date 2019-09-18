@@ -1,3 +1,13 @@
+const io = require('@pm2/io');
+
+io.init({
+  metrics: {
+    network: {
+      ports: true
+    }
+  }
+});
+
 import { INestApplication, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ClientOptions } from '@nestjs/microservices';
