@@ -1,16 +1,56 @@
 {
   "apps": [
+    {
+        "name": "app",
+        "script": "node",
+        "args": " --require ts-node/register -r tsconfig-paths/register ./apps/backend/src/main.ts",
+        "watch": true,
+        "ignore_watch": ["./apps/backend/src/assets", "./.git"],
+        "instances": "1",
+        "exec_mode": "fork",
+        "env": {
+          "production": true,
+          "TS_NODE_PROJECT": "apps/backend/tsconfig.app.json"
+        }
+      },
       {
-          "name": "backend",
-          "script": "/usr/local/lib/node_modules/pm2/node_modules/.bin/ts-node",
-          "args":"--project apps/backend/tsconfig.app.json -r tsconfig-paths/register ./apps/backend/src/main.ts",
-          "watch": true,
-          "ignore_watch":["./apps/backend/src/assets"],
-          "instances": "1",
-          "exec_mode": "fork",
-          "env": {
-              "production": true
-          }
+        "name": "ices",
+        "script": "node",
+        "args": " --require ts-node/register -r tsconfig-paths/register ./apps/backend/src/ices.main.ts",
+        "watch": true,
+        "ignore_watch": ["./apps/backend/src/assets", "./.git"],
+        "instances": "1",
+        "exec_mode": "fork",
+        "env": {
+          "production": true,
+          "TS_NODE_PROJECT": "apps/backend/tsconfig.app.json"
+        }
+      },
+      {
+        "name": "slack",
+        "script": "node",
+        "args": " --require ts-node/register -r tsconfig-paths/register ./apps/backend/src/slack.main.ts",
+        "watch": true,
+        "ignore_watch": ["./apps/backend/src/assets", "./.git"],
+        "instances": "1",
+        "exec_mode": "fork",
+        "env": {
+          "production": true,
+          "TS_NODE_PROJECT": "apps/backend/tsconfig.app.json"
+        }
+      },
+      {
+        "name": "storage",
+        "script": "node",
+        "args": " --require ts-node/register -r tsconfig-paths/register ./apps/backend/src/storage.main.ts",
+        "watch": true,
+        "ignore_watch": ["./apps/backend/src/assets", "./.git"],
+        "instances": "1",
+        "exec_mode": "fork",
+        "env": {
+          "production": true,
+          "TS_NODE_PROJECT": "apps/backend/tsconfig.app.json"
+        }
       }
   ]
 }

@@ -1,3 +1,2 @@
 #!/usr/bin/env bash
-pm2 start pm2.json
-pm2 logs
+ng run backend:serve

@@ -1,22 +1,23 @@
 "use strict";
-exports.__esModule = true;
-var architect_1 = require("@angular-devkit/architect");
-var childProcess = require("child_process");
-exports["default"] = architect_1.createBuilder(function (options, context) {
-    return new Promise(function (resolve) {
-        var args = [];
+Object.defineProperty(exports, "__esModule", { value: true });
+const architect_1 = require("@angular-devkit/architect");
+const childProcess = require("child_process");
+exports.default = architect_1.createBuilder((options, context) => {
+    return new Promise(resolve => {
+        let args = [];
         if (options.debug) {
             args = args.concat(['--config', 'nodemon-debug.json']);
         }
-        var child = childProcess.spawn('nodemon', args);
-        child.stdout.on('data', function (data) {
+        const child = childProcess.spawn('nodemon', args);
+        child.stdout.on('data', data => {
             context.logger.info(data.toString());
         });
-        child.stderr.on('data', function (data) {
+        child.stderr.on('data', data => {
             context.logger.error(data.toString());
         });
-        child.on('close', function (code) {
+        child.on('close', code => {
             resolve({ success: true });
         });
     });
 });
+//# sourceMappingURL=index.js.map

@@ -1,26 +1,15 @@
-import {
-  BuilderOutput,
-  createBuilder,
-  targetFromTargetString
-} from '@angular-devkit/architect';
-import * as childProcess from 'child_process';
+import { BuilderOutput, createBuilder } from '@angular-devkit/architect';
+import { spawn } from '@sikora00/rxjs-overlay';
 import { OptionsT } from './schema';
+import SpawnService from './spawn.service';
 
 export default createBuilder((options: OptionsT, context) => {
   return new Promise<BuilderOutput>(resolve => {
-    let args = [];
-    if (options.debug) {
-      args = args.concat(['--config', 'nodemon-debug.json']);
-    }
-    const child = childProcess.spawn('nodemon', args);
-    child.stdout.on('data', data => {
-      context.logger.info(data.toString());
-    });
-    child.stderr.on('data', data => {
-      context.logger.error(data.toString());
-    });
-    child.on('close', code => {
-      resolve({ success: true });
+    SpawnService.spawn('pm2-runtime', ['start', 'pm2.json']).subscribe({
+      next: data => context.logger.info(data.toString()),
+      error: data => context.logger.error(data),
+
+          complete: () => resolve({ success: true })
     });
   });
 });

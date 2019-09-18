@@ -13,11 +13,11 @@ RUN mkdir -p /app
 COPY angular.json nx.json ormconfig.json package.json pm2.json tsconfig.json /app/
 COPY ./apps/backend /app/apps/backend
 COPY ./libs/backend /app/libs/backend
+COPY ./builders /app/builders
 COPY ./libs/shared /app/libs/shared
 
 WORKDIR /app
-RUN npm install -g pm2@latest
-RUN pm2 install typescript
+RUN npm install -g pm2 typescript @angular/cli
 RUN npm install
 
 EXPOSE 8888

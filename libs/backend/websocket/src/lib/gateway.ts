@@ -14,7 +14,7 @@ import { Rooms, Server, Socket } from 'socket.io';
 @WebSocketGateway()
 export class Gateway implements OnGatewayDisconnect {
   private clientInRommSubjects: { [key: string]: Subject<void> } = {};
-  private roomsSnapshot: Rooms;
+  private roomsSnapshot: Rooms = {};
   @WebSocketServer() server: Server;
 
   constructor(private readonly storageService: StorageServiceFacade) {}
