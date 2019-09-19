@@ -17,6 +17,7 @@ import { SlackModule } from '@sdj/backend/slack';
 import { StorageModule } from '@sdj/backend/storage';
 import * as cors from 'cors';
 import { AppModule } from './app/app.module';
+import { SdjCqrsModule } from '@sdj/backend/cqrs';
 
 export class App {
   app: INestApplication;
@@ -45,11 +46,16 @@ export class App {
     Logger.log(name + 'Service is listening');
   }
 
-  async bootstrapSlackService(): Promise<void> {
-    return this.bootstrapService(SlackModule, microservices.slack, 'Slack');
+  async bootstrapCqrs(): Promise<void> {
+    this.bootstrapService(SdjCqrsModule, microservices.cqrs, 'CQRS');
   }
+
   async bootstrapIces(): Promise<void> {
     return this.bootstrapService(IcesModule, microservices.ices, 'Ices');
+  }
+
+  async bootstrapSlackService(): Promise<void> {
+    return this.bootstrapService(SlackModule, microservices.slack, 'Slack');
   }
 
   async bootstrapStorage(): Promise<void> {

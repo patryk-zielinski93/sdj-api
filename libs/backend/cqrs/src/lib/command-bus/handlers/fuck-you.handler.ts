@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FuckYouCommand } from '../commands/fuck-you.command';
-import { HeartCommand } from '../commands/heart.command';
+import { FuckYouCommand } from '../../../../../core/src/lib/cqrs/commands/fuck-you.command';
+import { HeartCommand } from '../../../../../core/src/lib/cqrs/commands/heart.command';
 import {
   QueuedTrackRepository,
   UserRepository,
@@ -31,7 +31,7 @@ export class FuckYouHandler implements ICommandHandler<FuckYouCommand> {
     );
 
     if (fucksFromUser > 0) {
-      return;
+      throw Error('To much Fucks')
     }
 
     const thumbUp = new Vote(<User>user, queuedTrack, -3);

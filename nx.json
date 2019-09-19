@@ -52,6 +52,9 @@
     },
     "backend-storage": {
       "tags": ["backend", "backend:storage"]
+    },
+    "backend-cqrs": {
+      "tags": ["backend", "backend:cqrs"]
     }
   }
 }

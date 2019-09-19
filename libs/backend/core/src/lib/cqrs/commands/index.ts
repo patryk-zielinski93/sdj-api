@@ -4,3 +4,6 @@ export * from './fuck-you.command';
 export * from './heart.command';
 export * from './queue-track.command';
 export * from './thumb-up.command';
+export * from './delete-track.command';
+export * from './play-track.command';
+export * from './thumb-down.command';

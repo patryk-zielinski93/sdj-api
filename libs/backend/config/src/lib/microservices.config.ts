@@ -9,6 +9,14 @@ export const microservices: { [key: string]: ClientOptions } = {
       queueOptions: { durable: false }
     }
   },
+  cqrs: {
+    transport: Transport.RMQ,
+    options: {
+      urls: [`amqp://rabbit:5672`],
+      queue: 'sdj_cqrs',
+      queueOptions: { durable: false }
+    }
+  },
   ices: {
     transport: Transport.RMQ,
     options: {

@@ -27,7 +27,8 @@
       "@sdj/shared/common": ["libs/shared/common/src/index.ts"],
       "@sdj/backend/shared": ["libs/backend/shared/src/index.ts"],
       "@sdj/backend/ices": ["libs/backend/ices/src/index.ts"],
-      "@sdj/backend/storage": ["libs/backend/storage/src/index.ts"]
+      "@sdj/backend/storage": ["libs/backend/storage/src/index.ts"],
+      "@sdj/backend/cqrs": ["libs/backend/cqrs/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

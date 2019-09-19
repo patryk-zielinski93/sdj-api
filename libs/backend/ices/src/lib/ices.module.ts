@@ -7,6 +7,7 @@ import { PlaySilenceHandler } from './cqrs/command-bus/handlers/play-silence.han
 import { RedisGetNextHandler } from './cqrs/events/handlers/redis-get-next.handler';
 import { RedisSagas } from './cqrs/events/sagas/redis.sagas';
 import { RedisService } from './services/redis.service';
+import { CqrsModule } from '@nestjs/cqrs';
 
 export const CommandHandlers = [
   DownloadAndPlayHandler,
@@ -14,10 +15,7 @@ export const CommandHandlers = [
   PlaySilenceHandler
 ];
 @Module({
-  imports: [
-    CoreModule,
-    TypeOrmModule.forRoot()
-  ],
+  imports: [CoreModule, CqrsModule, TypeOrmModule.forRoot()],
   providers: [RedisSagas, RedisService, RedisGetNextHandler, ...CommandHandlers]
 })
 export class IcesModule {}

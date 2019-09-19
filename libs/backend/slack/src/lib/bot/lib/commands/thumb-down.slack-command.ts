@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '@sdj/backend/config';
-import { HostService, StorageServiceFacade } from '@sdj/backend/core';
-import { TrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
+import { CqrsServiceFacade, HostService, StorageServiceFacade, ThumbDownCommand } from '@sdj/backend/core';
+import { TrackRepository, VoteRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
@@ -14,35 +14,24 @@ export class ThumbDownSlackCommand implements SlackCommand {
 
   constructor(
     private slackService: SlackService,
+    private readonly cqrsServiceFacade: CqrsServiceFacade,
     private readonly storageService: StorageServiceFacade,
-    @InjectRepository(UserRepository) private userRepository: UserRepository,
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
     @InjectRepository(VoteRepository) private voteRepository: VoteRepository
   ) {}
 
   async handler(command: string[], message: SlackMessage): Promise<void> {
-    const userId = message.user;
-    const user = await this.userRepository.findOne(userId);
+    const channelId = message.channel;
     const currentTrackInQueue = await this.storageService.getCurrentTrack(
-      message.channel
+      channelId
     );
-    if (!currentTrackInQueue) {
-      return;
-    }
-
-    const unlikesCountFromUser = await this.voteRepository.countUnlikesFromUserToQueuedTrack(
-      currentTrackInQueue.id,
-      userId,
-      message.channel
-    );
-
-    if (unlikesCountFromUser > 0) {
-      return;
-    }
-
     const unlikesCount = await this.voteRepository.countUnlinksForQueuedTrack(
       currentTrackInQueue.id,
-      message.channel
+      channelId
+    );
+
+    await this.cqrsServiceFacade.thumbDown(
+      new ThumbDownCommand(currentTrackInQueue.id, message.user)
     );
 
     if (unlikesCount + 1 >= appConfig.nextSongVoteQuantity) {
@@ -52,10 +41,10 @@ export class ThumbDownSlackCommand implements SlackCommand {
           '\n' +
           (currentTrackInQueue.track.skips + 1) +
           ' times skipped',
-        message.channel
+        channelId
       );
       //ToDo Move to some event
-      HostService.nextSong(message.channel);
+      HostService.nextSong(channelId);
 
       currentTrackInQueue.track.skips++;
       this.trackRepository.save(currentTrackInQueue.track);
@@ -64,13 +53,8 @@ export class ThumbDownSlackCommand implements SlackCommand {
         'Left ' +
           (appConfig.nextSongVoteQuantity - (unlikesCount + 1)) +
           ' before skip',
-        message.channel
+        channelId
       );
     }
-
-    // ToDo move to command
-    const unlike = new Vote(<User>user, currentTrackInQueue, -1);
-    unlike.createdAt = new Date();
-    this.voteRepository.save(unlike);
   }
 }

@@ -66,6 +66,7 @@
               "backend:db",
               "backend:config",
               "backend:common",
+              "backend:cqrs",
               "backend:shared",
               "shared"
             ]

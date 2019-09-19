@@ -14,6 +14,19 @@
         }
       },
       {
+        "name": "cqrs",
+        "script": "node",
+        "args": " --require ts-node/register -r tsconfig-paths/register ./apps/backend/src/cqrs.main.ts",
+        "watch": true,
+        "ignore_watch": ["./apps/backend/src/assets", "./.git"],
+        "instances": "3",
+        "exec_mode": "fork",
+        "env": {
+          "production": true,
+          "TS_NODE_PROJECT": "apps/backend/tsconfig.app.json"
+        }
+      },
+      {
         "name": "ices",
         "script": "node",
         "args": " --require ts-node/register -r tsconfig-paths/register ./apps/backend/src/ices.main.ts",

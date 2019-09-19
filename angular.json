@@ -548,6 +548,33 @@
         }
       },
       "schematics": {}
+    },
+    "backend-cqrs": {
+      "projectType": "library",
+      "root": "libs/backend/cqrs",
+      "sourceRoot": "libs/backend/cqrs/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/cqrs/tsconfig.lib.json",
+              "libs/backend/cqrs/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/cqrs/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/cqrs/jest.config.js",
+            "tsConfig": "libs/backend/cqrs/tsconfig.spec.json",
+            "setupFile": "libs/backend/cqrs/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {}
     }
   },
   "cli": {

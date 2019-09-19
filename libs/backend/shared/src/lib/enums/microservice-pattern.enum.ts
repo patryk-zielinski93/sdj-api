@@ -11,5 +11,14 @@ export enum MicroservicePattern {
   setSilenceCount = "setSilenceCount",
   getQueue = "getQueue",
   removeFromQueue = "removeFromQueue",
-  getSilenceCount = "getSilenceCount"
+  getSilenceCount = "getSilenceCount",
+  createTrack = "createTrack",
+  downloadTrack = "downloadTrack",
+  fuckYou = "fuckYou",
+  heart = "heart",
+  queueTrack = "queueTrack",
+  thumbUp = "thumbUp",
+  deleteTrack = "deleteTrack",
+  playTrack = "playTrack",
+  thumbDown = "thumbDown"
 }

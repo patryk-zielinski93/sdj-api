@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
-import { FuckYouCommand, StorageServiceFacade } from '@sdj/backend/core';
+import { StorageServiceFacade, FuckYouCommand } from '@sdj/backend/core';
+import { CqrsServiceFacade } from 'libs/backend/core/src/lib/services/cqrs-service.facade';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
@@ -12,7 +12,7 @@ export class FuckYouSlackCommand implements SlackCommand {
   type: string = ':middle_finger:';
 
   constructor(
-    private readonly commandBus: CommandBus,
+    private readonly cqrsServiceFacade: CqrsServiceFacade,
     private readonly storageService: StorageServiceFacade,
     private readonly slackService: SlackService
   ) {}
@@ -22,21 +22,20 @@ export class FuckYouSlackCommand implements SlackCommand {
       message.channel
     );
     if (currentTrackInQueue) {
-      this.commandBus
-        .execute(new FuckYouCommand(currentTrackInQueue.id, message.user))
-        .then(value => {
-          if (value) {
-            this.slackService.rtm.sendMessage(
-              'Jebać ' + currentTrackInQueue.track.title,
-              message.channel
-            );
-          } else {
-            this.slackService.rtm.sendMessage(
-              'Wyraziłeś już dość swojej nienawiści na dziś ',
-              message.channel
-            );
-          }
-        });
+      this.cqrsServiceFacade
+        .fuckYou(new FuckYouCommand(currentTrackInQueue.id, message.user))
+        .then(_ =>
+          this.slackService.rtm.sendMessage(
+            'Jebać ' + currentTrackInQueue.track.title,
+            message.channel
+          )
+        )
+        .catch(_ =>
+          this.slackService.rtm.sendMessage(
+            'Wyraziłeś już dość swojej nienawiści na dziś ',
+            message.channel
+          )
+        );
     }
     return;
   }

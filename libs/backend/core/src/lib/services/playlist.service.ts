@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { appConfig } from '@sdj/backend/config';
 import {
@@ -7,12 +6,11 @@ import {
   QueuedTrack,
   QueuedTrackRepository,
   Track,
-  TrackRepository,
-  UserRepository
+  TrackRepository
 } from '@sdj/backend/db';
-
 import { PlaylistType, QueueTrackCommand } from '../..';
-import { TellEvent } from '../cqrs/events/tell.event';
+import { CqrsServiceFacade } from './cqrs-service.facade';
+import { AppServiceFacade } from './app-service.facade';
 
 @Injectable()
 export class PlaylistService {
@@ -21,12 +19,11 @@ export class PlaylistService {
   list: Track[] = [];
 
   constructor(
-    private readonly commandBus: CommandBus,
-    private readonly publisher: EventBus,
+    private readonly cqrsServiceFacade: CqrsServiceFacade,
+    private readonly appServiceFacade: AppServiceFacade,
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
     @InjectRepository(QueuedTrackRepository)
-    private queuedTrackRepository: QueuedTrackRepository,
-    @InjectRepository(UserRepository) private userRepository: UserRepository
+    private queuedTrackRepository: QueuedTrackRepository
   ) {}
 
   async getNext(channel: Channel): Promise<QueuedTrack | undefined> {
@@ -48,9 +45,10 @@ export class PlaylistService {
             const randTrack = await this.trackRepository.getRandomTrack(
               channel.id
             );
-            return this.commandBus.execute(
+            const newQueuedTrack = await this.cqrsServiceFacade.queueTrack(
               new QueueTrackCommand(randTrack.id, channel.id, undefined, true)
             );
+            return this.queuedTrackRepository.findOneOrFail(newQueuedTrack.id);
           }
           break;
       }
@@ -72,7 +70,7 @@ export class PlaylistService {
       this.type = PlaylistType.radio;
       return;
     }
-    this.publisher.publish(new TellEvent('Numer ' + (this.index + 1)));
+    this.appServiceFacade.pozdro(channel.id, 'Numer ' + (this.index + 1));
     return this.queuedTrackRepository.queueTrack(
       this.list[this.index],
       channel
@@ -92,7 +90,7 @@ export class PlaylistService {
       this.type = PlaylistType.radio;
       return;
     }
-    this.publisher.publish(new TellEvent('Numer ' + (this.index + 1)));
+    this.appServiceFacade.pozdro(channel.id, 'Numer ' + (this.index + 1));
     return this.queuedTrackRepository.queueTrack(
       this.list[this.index],
       channel

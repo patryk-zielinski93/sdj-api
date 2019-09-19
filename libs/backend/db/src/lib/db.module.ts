@@ -1,9 +1,5 @@
-import { Module, OnModuleInit } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
-import { CommandBus } from '@nestjs/cqrs';
-import { TypeOrmModule, InjectRepository } from '@nestjs/typeorm';
-
-import { DeleteTrackHandler } from './cqrs/command-bus/handlers/DeleteTrackHandler';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Channel } from './entities/channel.entity';
 import { QueuedTrack } from './entities/queued-track.entity';
 import { Track } from './entities/track.entity';
@@ -15,7 +11,7 @@ import { TrackRepository } from './repositories/track.repository';
 import { UserRepository } from './repositories/user.repository';
 import { VoteRepository } from './repositories/vote.repository';
 
-export const CommandHandlers = [DeleteTrackHandler];
+
 export const Repositories = [
   ChannelRepository,
   QueuedTrackRepository,
@@ -34,7 +30,6 @@ const typeormModule = TypeOrmModule.forFeature([
 
 @Module({
   imports: [typeormModule],
-  providers: [...CommandHandlers],
   exports: [typeormModule]
 })
 export class DbModule {}

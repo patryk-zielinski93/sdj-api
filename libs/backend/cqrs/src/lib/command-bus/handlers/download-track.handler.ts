@@ -1,12 +1,11 @@
 import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LoggerService } from '@sdj/backend/common';
+import { pathConfig } from '@sdj/backend/config';
+import { TrackRepository } from '@sdj/backend/db';
 import * as fs from 'fs';
 import { throwError } from 'rxjs';
-import { Mp3Service } from '../../../services/mp3.service';
-import { DownloadTrackCommand } from '../commands/download-track.command';
-import { TrackRepository, DeleteTrackCommand } from '@sdj/backend/db';
-import { pathConfig } from '@sdj/backend/config';
-import { LoggerService } from '@sdj/backend/common';
+import { DownloadTrackCommand, DeleteTrackCommand, Mp3Service } from '@sdj/backend/core';
 
 @CommandHandler(DownloadTrackCommand)
 export class DownloadTrackHandler
@@ -22,20 +21,17 @@ export class DownloadTrackHandler
   async execute(command: DownloadTrackCommand): Promise<void> {
     const track = await this.trackRepository.findOneOrFail(command.trackId);
     if (!fs.existsSync(pathConfig.tracks + '/' + track.id + '.mp3')) {
-      await this.mp3.downloadAndNormalize(track.id).subscribe({
+      this.mp3.downloadAndNormalize(track.id).subscribe({
         error: async (err: Object) => {
-          this.logger.error("Can't download track " + track.id, JSON.stringify(err));
+          this.logger.error(
+            "Can't download track " + track.id,
+            JSON.stringify(err)
+          );
           this.logger.warn('Removing ' + track.title);
           await this.commandBus.execute(new DeleteTrackCommand(track.id));
           throwError(new Error("Can't download track "));
-        },
-        complete: () => {
-          return;
         }
       });
-      return;
-    } else {
-      return;
     }
   }
 }

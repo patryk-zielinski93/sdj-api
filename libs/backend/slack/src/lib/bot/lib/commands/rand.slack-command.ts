@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { appConfig } from '@sdj/backend/config';
+import { CqrsServiceFacade, DownloadTrackCommand, QueueTrackCommand } from '@sdj/backend/core';
+import { QueuedTrackRepository, Track, TrackRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
-import { QueuedTrackRepository, TrackRepository, Track } from '@sdj/backend/db';
-import { appConfig } from '@sdj/backend/config';
-import { DownloadTrackCommand, QueueTrackCommand } from '@sdj/backend/core';
 
 @Injectable()
 export class RandSlackCommand implements SlackCommand {
@@ -14,7 +13,7 @@ export class RandSlackCommand implements SlackCommand {
   type: string = 'rand';
 
   constructor(
-    private readonly commandBus: CommandBus,
+    private readonly cqrsServiceFacade: CqrsServiceFacade,
     private slack: SlackService,
     @InjectRepository(QueuedTrackRepository)
     private queuedTrackRepository: QueuedTrackRepository,
@@ -42,8 +41,8 @@ export class RandSlackCommand implements SlackCommand {
     );
 
     if (randTrack) {
-      this.commandBus
-        .execute(new DownloadTrackCommand(randTrack.id))
+      this.cqrsServiceFacade
+        .downloadTrack(new DownloadTrackCommand(randTrack.id))
         .then(() => {
           this.queueTrack(message, randTrack);
         });
@@ -51,8 +50,8 @@ export class RandSlackCommand implements SlackCommand {
   }
 
   private async queueTrack(message: any, track: Track): Promise<void> {
-    this.commandBus
-      .execute(
+    this.cqrsServiceFacade
+      .queueTrack(
         new QueueTrackCommand(track.id, message.channel, message.user, true)
       )
       .then(() => {

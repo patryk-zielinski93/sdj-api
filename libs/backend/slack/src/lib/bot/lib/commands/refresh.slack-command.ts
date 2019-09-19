@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { appConfig } from '@sdj/backend/config';
+import { CqrsServiceFacade, QueueTrackCommand } from '@sdj/backend/core';
+import { QueuedTrackRepository, Track, TrackRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
-import { QueuedTrackRepository, TrackRepository, Track } from '@sdj/backend/db';
-import { appConfig } from '@sdj/backend/config';
-import { QueueTrackCommand } from '@sdj/backend/core';
 
 @Injectable()
 export class RefreshSlackCommand implements SlackCommand {
@@ -14,7 +13,7 @@ export class RefreshSlackCommand implements SlackCommand {
   type: string = 'refresh';
 
   constructor(
-    private commandBus: CommandBus,
+    private readonly cqrsServiceFacade: CqrsServiceFacade,
     private slack: SlackService,
     @InjectRepository(QueuedTrackRepository)
     private queuedTrackRepository: QueuedTrackRepository,
@@ -64,12 +63,18 @@ export class RefreshSlackCommand implements SlackCommand {
   }
 
   private async queueTrack(message: any, track: Track): Promise<void> {
-    await this.commandBus.execute(
-      new QueueTrackCommand(track.id, message.channel, message.user, true)
-    );
-    this.slack.rtm.sendMessage(
-      `Odświeżamy! Dodałem ${track.title} do playlisty :)`,
-      message.channel
-    );
+    this.cqrsServiceFacade
+      .queueTrack(
+        new QueueTrackCommand(track.id, message.channel, message.user, true)
+      )
+      .then(_ =>
+        this.slack.rtm.sendMessage(
+          `Odświeżamy! Dodałem ${track.title} do playlisty :)`,
+          message.channel
+        )
+      )
+      .catch(error => {
+        this.slack.rtm.sendMessage(error.message, message.channel);
+      });
   }
 }

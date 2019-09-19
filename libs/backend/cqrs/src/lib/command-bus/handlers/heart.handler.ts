@@ -1,17 +1,16 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { HeartCommand } from '../../../../../core/src/lib/cqrs/commands/heart.command';
 import {
   QueuedTrackRepository,
-  User,
   UserRepository,
+  VoteRepository,
   Vote,
-  VoteRepository
+  User
 } from '@sdj/backend/db';
 
-import { ThumbUpCommand } from '../commands/thumb-up.command';
-
-@CommandHandler(ThumbUpCommand)
-export class ThumbUpHandler implements ICommandHandler<ThumbUpCommand> {
+@CommandHandler(HeartCommand)
+export class HeartHandler implements ICommandHandler<HeartCommand> {
   constructor(
     @InjectRepository(QueuedTrackRepository)
     private queuedTrackRepository: QueuedTrackRepository,
@@ -19,25 +18,23 @@ export class ThumbUpHandler implements ICommandHandler<ThumbUpCommand> {
     @InjectRepository(VoteRepository) private voteRepository: VoteRepository
   ) {}
 
-  async execute(command: ThumbUpCommand): Promise<void> {
+  async execute(command: HeartCommand): Promise<void> {
     const userId = command.userId;
     const user = await this.userRepository.findOne(userId);
     const queuedTrack = await this.queuedTrackRepository.findOneOrFail(
       command.queuedTrackId
     );
-
-    const thumbUpFromUser = await this.voteRepository.countPositiveVotesFromUserToQueuedTrack(
-      queuedTrack.id,
-      userId
+    const heartsFromUser = await this.voteRepository.countTodayHeartsFromUser(
+      userId,
+      queuedTrack.playedIn.id
     );
 
-    if (thumbUpFromUser > 0) {
-      return;
+    if (heartsFromUser > 0) {
+      throw Error('To much hearts');
     }
 
-    const thumbUp = new Vote(<User>user, queuedTrack, 1);
+    const thumbUp = new Vote(<User>user, queuedTrack, 3);
     thumbUp.createdAt = new Date();
     await this.voteRepository.save(thumbUp);
-    return;
   }
 }
