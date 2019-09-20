@@ -4,9 +4,11 @@ import { appConfig } from '@sdj/backend/config';
 import { CqrsServiceFacade, QueueTrackCommand } from '@sdj/backend/core';
 import { QueuedTrackRepository, Track, TrackRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
+import { SlackCommandHandler } from '../bot';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
 
+@SlackCommandHandler()
 @Injectable()
 export class RefreshSlackCommand implements SlackCommand {
   description: string = 'zagram pioseneczkę, która była grana najdawniej';

@@ -4,9 +4,11 @@ import { appConfig } from '@sdj/backend/config';
 import { CqrsServiceFacade, HostService, StorageServiceFacade, ThumbDownCommand } from '@sdj/backend/core';
 import { TrackRepository, VoteRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
+import { SlackCommandHandler } from '../bot';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
 
+@SlackCommandHandler()
 @Injectable()
 export class ThumbDownSlackCommand implements SlackCommand {
   description: string = 'Vote to skip that song';
@@ -37,10 +39,10 @@ export class ThumbDownSlackCommand implements SlackCommand {
     if (unlikesCount + 1 >= appConfig.nextSongVoteQuantity) {
       this.slackService.rtm.sendMessage(
         'Skipping ' +
-          currentTrackInQueue.track.title +
-          '\n' +
-          (currentTrackInQueue.track.skips + 1) +
-          ' times skipped',
+        currentTrackInQueue.track.title +
+        '\n' +
+        (currentTrackInQueue.track.skips + 1) +
+        ' times skipped',
         channelId
       );
       //ToDo Move to some event
@@ -51,8 +53,8 @@ export class ThumbDownSlackCommand implements SlackCommand {
     } else {
       this.slackService.rtm.sendMessage(
         'Left ' +
-          (appConfig.nextSongVoteQuantity - (unlikesCount + 1)) +
-          ' before skip',
+        (appConfig.nextSongVoteQuantity - (unlikesCount + 1)) +
+        ' before skip',
         channelId
       );
     }

@@ -3,9 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CqrsServiceFacade, PlayTrackCommand, Utils } from '@sdj/backend/core';
 import { TrackRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
+import { SlackCommandHandler } from '../bot';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
 
+@SlackCommandHandler()
 @Injectable()
 export class PlayTrackSlackCommand implements SlackCommand {
   description: string =

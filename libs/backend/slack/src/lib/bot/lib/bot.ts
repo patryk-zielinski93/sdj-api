@@ -1,20 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { SlackService } from '../../services/slack.service';
-import { CleanShitSlackCommand } from './commands/clean-shit.slack-command';
-import { FuckYouSlackCommand } from './commands/fuck-you.slack-command';
-import { HeartSlackCommand } from './commands/heart.slack-command';
-import { LsSlackCommand } from './commands/ls.slack-command';
-import { PlayTrackSlackCommand } from './commands/play-track.slack-command';
-import { PozdroSlackCommand } from './commands/pozdro.slack-command';
-import { RandSlackCommand } from './commands/rand.slack-command';
-import { RefreshSlackCommand } from './commands/refresh.slack-command';
-import { ThumbDownSlackCommand } from './commands/thumb-down.slack-command';
-import { ThumbUpSlackCommand } from './commands/thumb-up.slack-command';
-import { SlackCommand } from './interfaces/slack-command';
+import { Injectable, Type } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Mp3Service } from '@sdj/backend/core';
-import { UserRepository, User } from '@sdj/backend/db';
 import { LoggerService } from '@sdj/backend/common';
+import { User, UserRepository } from '@sdj/backend/db';
+import { SlackService } from '../../services/slack.service';
+import { SlackCommand } from './interfaces/slack-command';
+
+const commandsCollection: Type<SlackCommand>[] = [];
+
+export function SlackCommandHandler() {
+  return (target: Type<SlackCommand>) => {
+    commandsCollection.push(<Type<SlackCommand>>target);
+  };
+}
 
 @Injectable()
 export class Bot {
@@ -24,35 +22,15 @@ export class Bot {
     private readonly logger: LoggerService,
     private slack: SlackService,
     @InjectRepository(UserRepository) private userRepository: UserRepository,
-    cleanC: CleanShitSlackCommand,
-    fuckYouC: FuckYouSlackCommand,
-    heartC: HeartSlackCommand,
-    lsC: LsSlackCommand,
-    playtrackC: PlayTrackSlackCommand,
-    pozdroC: PozdroSlackCommand,
-    randC: RandSlackCommand,
-    refreshC: RefreshSlackCommand,
-    thumbUpC: ThumbUpSlackCommand,
-    thumbDownC: ThumbDownSlackCommand
+    private readonly moduleRef: ModuleRef
   ) {
     this.handleMessage = this.handleMessage.bind(this);
-    this.init(
-      cleanC,
-      lsC,
-      playtrackC,
-      pozdroC,
-      randC,
-      refreshC,
-      thumbUpC,
-      thumbDownC,
-      heartC,
-      fuckYouC
-    );
+    this.init(...commandsCollection);
   }
 
-  init(...commands: SlackCommand[]): void {
+  init(...commands: Type<SlackCommand>[]): void {
     const addCommand = this.addCommand.bind(this);
-    commands.forEach(addCommand);
+    commands.map(type => this.moduleRef.get(type)).forEach(addCommand);
     this.start();
   }
 
