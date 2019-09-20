@@ -1,24 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { appConfig } from '@sdj/backend/config';
+import { CreateTrackCommand, DownloadTrackCommand, QueueTrackCommand, Utils } from '@sdj/backend/core';
+import { QueuedTrackRepository, Track, TrackRepository, User, UserRepository } from '@sdj/backend/db';
 import { SlackService } from '../../../services/slack.service';
+import { SlackCommandHandler } from '../bot';
 import { SlackCommand } from '../interfaces/slack-command';
 import { SlackMessage } from '../interfaces/slack-message.interface';
-import {
-  QueuedTrackRepository,
-  TrackRepository,
-  UserRepository,
-  Track,
-  User
-} from '@sdj/backend/db';
-import { appConfig } from '@sdj/backend/config';
-import {
-  Utils,
-  DownloadTrackCommand,
-  CreateTrackCommand,
-  QueueTrackCommand
-} from '@sdj/backend/core';
 
+@SlackCommandHandler()
 @Injectable()
 export class PlayTrackSlackCommand implements SlackCommand {
   description: string =

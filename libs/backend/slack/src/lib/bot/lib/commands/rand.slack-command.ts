@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SlackService } from '../../../services/slack.service';
-import { SlackCommand } from '../interfaces/slack-command';
-import { SlackMessage } from '../interfaces/slack-message.interface';
-import { QueuedTrackRepository, TrackRepository, Track } from '@sdj/backend/db';
 import { appConfig } from '@sdj/backend/config';
 import { DownloadTrackCommand, QueueTrackCommand } from '@sdj/backend/core';
+import { QueuedTrackRepository, Track, TrackRepository } from '@sdj/backend/db';
+import { SlackService } from '../../../services/slack.service';
+import { SlackCommandHandler } from '../bot';
+import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
+@SlackCommandHandler()
 @Injectable()
 export class RandSlackCommand implements SlackCommand {
   description: string = 'wylosuję pioseneczkę i dodam do listy utworów';
