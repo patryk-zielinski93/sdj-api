@@ -3,7 +3,7 @@ ARG LOCAL_USER_ID
 
 RUN apt-get update -y && apt-get upgrade -y && apt-get install -y --fix-missing build-essential gcc g++ ca-certificates curl dos2unix ffmpeg sox libsox-fmt-mp3 mp3info libasound2-dev
 
-RUN npm install -g ts-node nodemon typescript @angular/cli
+RUN npm install -g pm2 typescript @angular/cli
 RUN mkdir -p /app
 
 COPY ./apps/backend/docker/dev /var/docker

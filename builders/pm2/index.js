@@ -1,22 +1,14 @@
 "use strict";
-exports.__esModule = true;
-var architect_1 = require("@angular-devkit/architect");
-var childProcess = require("child_process");
-exports["default"] = architect_1.createBuilder(function (options, context) {
-    return new Promise(function (resolve) {
-        var args = [];
-        if (options.debug) {
-            args = args.concat(['--config', 'nodemon-debug.json']);
-        }
-        var child = childProcess.spawn('nodemon', args);
-        child.stdout.on('data', function (data) {
-            context.logger.info(data.toString());
-        });
-        child.stderr.on('data', function (data) {
-            context.logger.error(data.toString());
-        });
-        child.on('close', function (code) {
-            resolve({ success: true });
+Object.defineProperty(exports, "__esModule", { value: true });
+const architect_1 = require("@angular-devkit/architect");
+const spawn_service_1 = require("./spawn.service");
+exports.default = architect_1.createBuilder((options, context) => {
+    return new Promise(resolve => {
+        spawn_service_1.default.spawn('pm2-runtime', ['start', 'pm2.json']).subscribe({
+            next: data => context.logger.info(data.toString()),
+            error: data => context.logger.error(data),
+            complete: () => resolve({ success: true })
         });
     });
 });
+//# sourceMappingURL=index.js.map

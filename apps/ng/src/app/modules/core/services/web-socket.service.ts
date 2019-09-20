@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { QueuedTrack } from '@sdj/shared/common';
+import { QueuedTrack, WebSocketEvents } from '@sdj/shared/common';
 import { fromEvent, Subject } from 'rxjs';
 import * as io from 'socket.io-client';
 import { environment } from '../../../../environments/environment';
@@ -14,6 +14,8 @@ export class WebSocketService {
 
   constructor() {
     this.socket = io(environment.backendUrl);
+    this.socket.connect();
+    this.socket.on('connect', () => console.log('elo'));
   }
 
   createSubject<T>(event: string): Subject<T> {
@@ -31,7 +33,7 @@ export class WebSocketService {
   getQueuedTrackListSubject(): Subject<QueuedTrack[]> {
     if (!this.queuedTrackList$) {
       this.queuedTrackList$ = this.createSubject<QueuedTrack[]>(
-        'queuedTrackList'
+        WebSocketEvents.queuedTrackList
       );
     }
     return this.queuedTrackList$;

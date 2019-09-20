@@ -1,4 +1,10 @@
-import { OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
+import {
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+  WsResponse
+} from '@nestjs/websockets';
 import { HostService, StorageServiceFacade } from '@sdj/backend/core';
 import { QueuedTrack } from '@sdj/backend/db';
 import { WebSocketEvents } from '@sdj/shared/common';
@@ -8,7 +14,7 @@ import { Rooms, Server, Socket } from 'socket.io';
 @WebSocketGateway()
 export class Gateway implements OnGatewayDisconnect {
   private clientInRommSubjects: { [key: string]: Subject<void> } = {};
-  private roomsSnapshot: Rooms;
+  private roomsSnapshot: Rooms = {};
   @WebSocketServer() server: Server;
 
   constructor(private readonly storageService: StorageServiceFacade) {}
@@ -23,7 +29,9 @@ export class Gateway implements OnGatewayDisconnect {
     if (!client.rooms[room]) {
       this.joinRoom(client, room);
       this.leaveOtherChannels(client, room);
-      this.server.in(room).emit('newUser', 'New Player in ' + room);
+      this.server
+        .of('/')
+        .emit(WebSocketEvents.channels, this.server.sockets.adapter.rooms);
     }
     return;
   }

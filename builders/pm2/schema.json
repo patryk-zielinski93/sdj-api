@@ -4,5 +4,9 @@
   "title": "Universal Target",
   "type": "object",
   "properties": {
+    "logMethod": {
+      "default": "logs",
+      "type": "string"
+    }
   }
 }

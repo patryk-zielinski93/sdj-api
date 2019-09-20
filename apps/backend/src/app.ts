@@ -1,13 +1,22 @@
+const io = require('@pm2/io');
+
+io.init({
+  metrics: {
+    network: {
+      ports: true
+    }
+  }
+});
+
 import { INestApplication, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { SlackModule } from '@sdj/backend/slack';
-import { AppModule } from './app/app.module';
+import { ClientOptions } from '@nestjs/microservices';
+import { microservices } from '@sdj/backend/config';
 import { IcesModule } from '@sdj/backend/ices';
+import { SlackModule } from '@sdj/backend/slack';
 import { StorageModule } from '@sdj/backend/storage';
 import * as cors from 'cors';
-import { microservices } from '@sdj/backend/config';
-import { NestMicroserviceOptions } from '@nestjs/common/interfaces/microservices/nest-microservice-options.interface';
-import { ClientOptions } from '@nestjs/microservices';
+import { AppModule } from './app/app.module';
 
 export class App {
   app: INestApplication;

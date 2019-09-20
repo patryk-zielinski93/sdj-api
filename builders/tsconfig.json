@@ -1,0 +1,9 @@
+{
+  "extends": "./../apps/backend/tsconfig.app.json",
+  "compilerOptions": {
+    "outDir": ".",
+    "rootDir": ".",
+    "types": ["node", "jest"]
+  },
+  "include": ["**/*.ts"]
+}

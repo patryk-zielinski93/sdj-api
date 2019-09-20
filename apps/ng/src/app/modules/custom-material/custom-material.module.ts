@@ -5,13 +5,15 @@ import {
   MatIconModule,
   MatListModule,
   MatSidenavModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatBadgeModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
     BrowserAnimationsModule,
+    MatBadgeModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatListModule,
@@ -22,6 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
   exports: [
     BrowserAnimationsModule,
+    MatBadgeModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatListModule,

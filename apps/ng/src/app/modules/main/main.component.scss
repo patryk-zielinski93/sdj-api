@@ -19,7 +19,7 @@
   width: 36%;
   &__last-element {
     width: 100%;
-    height: 100%
+    height: 100%;
   }
   &__track {
     display: inline-block;
@@ -28,6 +28,9 @@
   sdj-awesome-player {
     height: 800px;
   }
+}
+.mat-list-icon {
+  color: rgba(0, 0, 0, 0.54);
 }
 .queued-track {
   align-items: center;

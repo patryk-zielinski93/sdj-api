@@ -154,16 +154,17 @@
           }
         },
         "serve": {
-          "builder": "./builders:nodemon",
+          "builder": "./builders:pm2",
           "options": {
-            "buildTarget": "backend:build"
+            "buildTarget": "backend:build",
+            "logMethod": "monit"
           }
         },
         "serve-dev": {
-          "builder": "./builders:nodemon",
+          "builder": "./builders:pm2",
           "options": {
             "buildTarget": "backend:build",
-            "debug": false
+            "logMethod": "monit"
           }
         },
         "lint": {
