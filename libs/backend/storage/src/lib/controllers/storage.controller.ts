@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
+import { InjectRepository } from '@nestjs/typeorm';
 import { QueuedTrack, QueuedTrackRepository } from '@sdj/backend/db';
+import { MicroservicePattern } from '@sdj/backend/shared';
 import { Observable } from 'rxjs';
 import { Store } from '../services';
-import { MessagePattern } from '@nestjs/microservices';
-import { MicroservicePattern } from '@sdj/backend/shared';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Controller('storage')
 export class StorageController {
@@ -12,7 +12,8 @@ export class StorageController {
     private readonly store: Store,
     @InjectRepository(QueuedTrackRepository)
     private queuedTrackRepository: QueuedTrackRepository
-  ) {}
+  ) {
+  }
 
   @MessagePattern(MicroservicePattern.channelAppear)
   channelAppear(channelId: string): Observable<unknown> {
@@ -47,12 +48,13 @@ export class StorageController {
     channelId: string;
     value: number;
   }): Promise<void> {
-    this.store.setSilenceCount(data.channelId, data.value)
+    await this.store.setSilenceCount(data.channelId, data.value);
   }
 
   @MessagePattern(MicroservicePattern.getSilenceCount)
-  getSilenceCount(channelId: string): Promise<number> {
-    return this.store.getSilenceCount(channelId);
+  async getSilenceCount(channelId: string): Promise<string> {
+    const amount = await this.store.getSilenceCount(channelId);
+    return amount.toString();
   }
 
   @MessagePattern(MicroservicePattern.getQueue)

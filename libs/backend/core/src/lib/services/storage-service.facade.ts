@@ -3,6 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { QueuedTrack } from '@sdj/backend/db';
 import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class StorageServiceFacade {
@@ -36,6 +37,7 @@ export class StorageServiceFacade {
   getSilenceCount(channelId: string): Promise<number> {
     return this.client
       .send(MicroservicePattern.getSilenceCount, channelId)
+      .pipe(map(value => +value))
       .toPromise();
   }
 
