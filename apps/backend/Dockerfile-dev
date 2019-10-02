@@ -4,6 +4,12 @@ ARG LOCAL_USER_ID
 RUN apt-get update -y && apt-get upgrade -y && apt-get install -y --fix-missing build-essential gcc g++ ca-certificates curl dos2unix ffmpeg sox libsox-fmt-mp3 mp3info libasound2-dev
 
 RUN npm install -g pm2 typescript @angular/cli
+RUN npm install -g pm2 typescript @angular/cli
+RUN pm2 install pm2-server-monit
+RUN pm2 install pm2-redis
+RUN pm2 set pm2-redis:ip redis
+RUN pm2 install pm2-rabbitmq
+RUN pm2 set pm2-rabbitmq:hostname  rabbit:15672
 RUN mkdir -p /app
 
 COPY ./apps/backend/docker/dev /var/docker

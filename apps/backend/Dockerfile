@@ -17,8 +17,13 @@ COPY ./builders /app/builders
 COPY ./libs/shared /app/libs/shared
 
 WORKDIR /app
-RUN npm install -g pm2 typescript @angular/cli
 RUN npm install
+RUN npm install -g pm2 typescript @angular/cli
+RUN pm2 install pm2-server-monit
+RUN pm2 install pm2-redis
+RUN pm2 set pm2-redis:ip redis
+RUN pm2 install pm2-rabbitmq
+RUN pm2 set pm2-rabbitmq:hostname  rabbit:15672
 
 EXPOSE 8888
 
