@@ -15,7 +15,6 @@ export class WebSocketService {
   constructor() {
     this.socket = io(environment.backendUrl);
     this.socket.connect();
-    this.socket.on('connect', () => console.log('elo'));
   }
 
   createSubject<T>(event: string): Subject<T> {

@@ -6,7 +6,7 @@ import {
   MatListModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatBadgeModule
+  MatBadgeModule, MatTableModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -19,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatListModule,
     MatIconModule,
     MatSidenavModule,
+    MatTableModule,
     MatToolbarModule
   ],
 
@@ -30,6 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatListModule,
     MatIconModule,
     MatSidenavModule,
+    MatTableModule,
     MatToolbarModule
   ]
 })

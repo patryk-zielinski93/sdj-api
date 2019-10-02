@@ -22,37 +22,6 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="app-content">
-      <ul class="queued-tracks-list" #toPlay>
-        <li
-          class="queued-tracks-list__last-element queued-tracks-list__track"
-        ></li>
-        <li
-          class="queued-tracks-list__track"
-          *ngFor="let queuedTrack of queuedTracks.reverse()"
-        >
-          <div class="queued-track">
-            <img
-              class="queued-track__thumbnail"
-              [src]="getThumbnail(queuedTrack.track)"
-            />
-            <div
-              class="queued-track__title"
-              [innerHTML]="queuedTrack.track.title"
-            ></div>
-            <div
-              *ngIf="queuedTrack.addedBy && queuedTrack.addedBy.displayName"
-              [innerHTML]="'~' + queuedTrack.addedBy.displayName"
-            ></div>
-          </div>
-        </li>
-      </ul>
-      <sdj-awesome-player
-        #playerComponent
-        [src]="audioSrc"
-        [track$]="currentTrack"
-      >
-      </sdj-awesome-player>
-    </div>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
