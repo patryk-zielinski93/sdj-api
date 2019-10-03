@@ -1,21 +1,15 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from '@ng-environment/environment';
 import { QueuedTrack, Track, WebSocketEvents } from '@sdj/shared/common';
 import { merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
+import { Channel } from '../core/resources/interfaces/channel.interface';
 import { ChannelService } from '../core/services/channel.service';
 import { SpeechService } from '../core/services/speech.service';
 import { WebSocketService } from '../core/services/web-socket.service';
 import { TrackUtil } from '../core/utils/track.util';
 import { AwesomePlayerComponent } from './components/awesome-player/awesome-player.component';
-import { ActivatedRoute } from '@angular/router';
-import { Channel } from '../core/resources/interfaces/channel.interface';
 
 @Component({
   selector: 'sdj-main',
@@ -55,12 +49,12 @@ export class MainComponent implements OnInit, AfterViewInit {
       this.route.snapshot.paramMap.get('channelId')
     );
     this.handleChannelChanges();
+    this.handleQueuedTrackList();
+    this.handleSelectedChannelChange();
   }
 
   ngAfterViewInit(): void {
     this.handleSpeeching();
-    this.handleQueuedTrackList();
-    this.handleSelectedChannelChange();
   }
 
   handleChannelChanges(): void {
@@ -108,13 +102,8 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
 
     this.currentTrack = wsSubject.pipe(
-      map(list => list[0]),
-      filter(
-        (track: QueuedTrack) =>
-          (!track && !!this.prvTrackId) ||
-          (!!track && track.id !== this.prvTrackId)
-      ),
-      tap((track: QueuedTrack) => (this.prvTrackId = track ? track.id : null))
+      map(list => list[0])
+
     );
   }
 
