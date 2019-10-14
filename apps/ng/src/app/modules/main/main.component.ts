@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { Channel } from '../core/resources/interfaces/channel.interface';
 import { ChannelService } from '../core/services/channel.service';
@@ -22,6 +22,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     private channelService: ChannelService,
     private ws: WebSocketService,
     private route: ActivatedRoute,
+    private router: Router,
     private speechService: SpeechService
   ) {
   }
@@ -56,5 +57,13 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   selectChannel(channel: Channel): void {
     this.channelService.selectChannel(channel);
+  }
+
+  navigateToMostPlated() {
+    this.router.navigate([this.selectedChannel.id, 'most-played']);
+  }
+
+  navigateToRadio() {
+    this.router.navigate([this.selectedChannel.id]);
   }
 }

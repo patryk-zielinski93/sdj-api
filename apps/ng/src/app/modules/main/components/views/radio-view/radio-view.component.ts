@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { environment } from '@ng-environment/environment';
 import { QueuedTrack, Track, WebSocketEvents } from '@sdj/shared/common';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 import { merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 import { Channel } from '../../../../core/resources/interfaces/channel.interface';
@@ -15,7 +16,7 @@ import { AwesomePlayerComponent } from '../../awesome-player/awesome-player.comp
   templateUrl: './radio-view.component.html',
   styleUrls: ['./radio-view.component.scss']
 })
-export class RadioViewComponent implements OnInit, AfterViewInit {
+export class RadioViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('playerComponent', { static: false })
   playerComponent: AwesomePlayerComponent;
@@ -40,8 +41,11 @@ export class RadioViewComponent implements OnInit, AfterViewInit {
   ) {
   }
 
+  ngOnDestroy(): void {
+  }
+
   ngOnInit(): void {
-    this.handleChannelChanges();
+    this.handleSelectedChannelChange();
   }
 
   ngAfterViewInit(): void {
@@ -75,12 +79,6 @@ export class RadioViewComponent implements OnInit, AfterViewInit {
       });
   }
 
-  handleChannelChanges(): void {
-    this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
-      this.selectedChannel = channel;
-      this.handleSelectedChannelChange();
-    });
-  }
 
   handleQueuedTrackList(): void {
     const wsSubject = this.ws
@@ -144,14 +142,17 @@ export class RadioViewComponent implements OnInit, AfterViewInit {
   handleSelectedChannelChange(): void {
     const join$ = this.ws.createSubject(WebSocketEvents.join);
 
-    this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
-      this.selectedChannelUnsubscribe.next();
-      this.selectedChannelUnsubscribe.complete();
-      this.selectedChannelUnsubscribe = new Subject();
-      join$.next({ room: channel.id });
-      this.handleQueuedTrackList();
-      this.handleAudioSource();
-    });
+    this.channelService.getSelectedChannel()
+      .pipe(untilDestroyed(this))
+      .subscribe((channel: Channel) => {
+        this.selectedChannel = channel;
+        this.selectedChannelUnsubscribe.next();
+        this.selectedChannelUnsubscribe.complete();
+        this.selectedChannelUnsubscribe = new Subject();
+        join$.next({ room: channel.id });
+        this.handleQueuedTrackList();
+        this.handleAudioSource();
+      });
   }
 
   handleSpeeching(): void {
