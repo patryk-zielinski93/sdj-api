@@ -8,7 +8,8 @@
       "ignore_watch": [
         "./apps/backend/src/assets",
         "./.git",
-        "./.idea"
+        "./.idea",
+        "./schema.gql"
       ],
         "instances": "1",
         "exec_mode": "fork",
@@ -25,7 +26,8 @@
         "ignore_watch": [
           "./apps/backend/src/assets",
           "./.git",
-          "./.idea"
+          "./.idea",
+          "./schema.gql"
         ],
         "instances": "1",
         "exec_mode": "fork",
@@ -42,7 +44,8 @@
         "ignore_watch": [
           "./apps/backend/src/assets",
           "./.git",
-          "./.idea"
+          "./.idea",
+          "./schema.gql"
         ],
         "instances": "1",
         "exec_mode": "fork",
@@ -59,7 +62,8 @@
         "ignore_watch": [
           "./apps/backend/src/assets",
           "./.git",
-          "./.idea"
+          "./.idea",
+          "./schema.gql"
         ],
         "instances": "1",
         "exec_mode": "fork",
@@ -76,7 +80,8 @@
         "ignore_watch": [
           "./apps/backend/src/assets",
           "./.git",
-          "./.idea"
+          "./.idea",
+          "./schema.gql"
         ],
         "instances": "1",
         "exec_mode": "fork",

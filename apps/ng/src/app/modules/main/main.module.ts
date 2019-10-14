@@ -5,7 +5,6 @@ import { AwesomePlayerComponent } from './components/awesome-player/awesome-play
 import { MiniPlayerComponent } from './components/navbar/mini-player/mini-player.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { UserProfileComponent } from './components/navbar/user-profile/user-profile.component';
-import { MostPlayedTracksResolver } from './components/views/most-played-view/most-played-tracks.resolver';
 import { MostPlayedViewComponent } from './components/views/most-played-view/most-played-view.component';
 import { RadioViewComponent } from './components/views/radio-view/radio-view.component';
 import { MainComponent } from './main.component';
@@ -22,8 +21,7 @@ import { MainComponent } from './main.component';
     MostPlayedViewComponent,
     NavbarComponent,
     RadioViewComponent,
-    UserProfileComponent],
-  providers: [MostPlayedTracksResolver]
+    UserProfileComponent]
 })
 export class MainModule {
 

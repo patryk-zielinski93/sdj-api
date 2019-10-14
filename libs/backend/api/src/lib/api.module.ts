@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './controllers/app.controller';
 import { CoreModule } from '@sdj/backend/core';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from './controllers/app.controller';
+import { TrackResolver } from './controllers/track.resolver';
 
 @Module({
   imports: [CoreModule],
-  controllers: [AppController]
+  controllers: [AppController],
+  providers: [TrackResolver]
 })
 export class ApiModule {}

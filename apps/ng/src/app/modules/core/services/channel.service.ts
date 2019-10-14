@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebSocketEvents } from '@sdj/shared/common';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map, switchMap, startWith } from 'rxjs/operators';
+import { map, startWith, switchMap } from 'rxjs/operators';
+import { Channel } from '../resources/interfaces/channel.interface';
 import { SlackHttpService } from './slack-http.service';
 import { WebSocketService } from './web-socket.service';
-import { Channel } from '../resources/interfaces/channel.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -82,6 +82,12 @@ export class ChannelService {
   selectChannel(channel: Channel): void {
     const oldChannel = this.selectedChannel$.value;
     this.selectedChannel$.next(channel);
-    this.router.navigateByUrl(this.router.url.replace(oldChannel.id, channel.id));
+    if (this.router.url.includes(oldChannel.id)) {
+      this.router.navigateByUrl(this.router.url.replace(oldChannel.id, channel.id));
+    } else if (this.router.url.includes(channel.id)) {
+      return;
+    } else {
+      this.router.navigate([channel.id]);
+    }
   }
 }

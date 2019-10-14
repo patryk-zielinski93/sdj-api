@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  Resolve,
-  RouterStateSnapshot
-} from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Channel } from '@sdj/shared/common';
-import { filter, first, skip, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter, first, switchMap, tap } from 'rxjs/operators';
 import { ChannelService } from '../core/services/channel.service';
 
 @Injectable({ providedIn: 'root' })
@@ -14,11 +10,26 @@ export class ChannelResolver implements Resolve<Channel[]> {
   constructor(private channelService: ChannelService) {
   }
 
+  findChannelIdParam(route: ActivatedRouteSnapshot) {
+
+    let channelId = route.paramMap.get('channelId');
+    if (channelId) {
+      return channelId;
+    } else {
+      route.children.some(r => {
+        channelId = this.findChannelIdParam(r);
+        return !!channelId;
+      });
+    }
+
+    return channelId;
+  }
+
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
-    const channelIdParam = route.paramMap.get('channelId');
+    const channelIdParam = this.findChannelIdParam(route);
 
     return this.channelService.getChannels()
       .pipe(tap(channels => {

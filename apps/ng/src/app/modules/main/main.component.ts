@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { WebSocketEvents } from '@sdj/shared/common';
 import { Observable, Subject } from 'rxjs';
 import { Channel } from '../core/resources/interfaces/channel.interface';
 import { ChannelService } from '../core/services/channel.service';
@@ -48,12 +47,10 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   handleSelectedChannelChange(): void {
-    const join$ = this.ws.createSubject(WebSocketEvents.join);
     this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
       this.selectedChannelUnsubscribe.next();
       this.selectedChannelUnsubscribe.complete();
       this.selectedChannelUnsubscribe = new Subject();
-      join$.next({ room: channel.id });
     });
   }
 

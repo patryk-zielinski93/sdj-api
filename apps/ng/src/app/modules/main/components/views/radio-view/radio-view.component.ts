@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { environment } from '@ng-environment/environment';
 import { QueuedTrack, Track, WebSocketEvents } from '@sdj/shared/common';
 import { merge, Observable, Subject } from 'rxjs';
@@ -43,7 +42,7 @@ export class RadioViewComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.handleChannelChanges()
+    this.handleChannelChanges();
   }
 
   ngAfterViewInit(): void {
@@ -150,10 +149,13 @@ export class RadioViewComponent implements OnInit, AfterViewInit {
   }
 
   handleSelectedChannelChange(): void {
+    const join$ = this.ws.createSubject(WebSocketEvents.join);
+
     this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
       this.selectedChannelUnsubscribe.next();
       this.selectedChannelUnsubscribe.complete();
       this.selectedChannelUnsubscribe = new Subject();
+      join$.next({ room: channel.id });
       this.handleQueuedTrackList();
       this.handleAudioSource();
     });
