@@ -26,7 +26,6 @@ export class RadioViewComponent implements OnInit, AfterViewInit {
   currentTrack: Observable<any>;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   listScrollSubject: Subject<QueuedTrack[]> = new Subject();
-  prvTrackId: number;
   queuedTracks: QueuedTrack[] = [];
   queuedTracks$: Observable<QueuedTrack[]>;
   readonly queuedTracksWidth: number = 210;
@@ -122,13 +121,7 @@ export class RadioViewComponent implements OnInit, AfterViewInit {
     });
 
     this.currentTrack = wsSubject.pipe(
-      map(list => list[0]),
-      filter(
-        (track: QueuedTrack) =>
-          (!track && !!this.prvTrackId) ||
-          (!!track && track.id !== this.prvTrackId)
-      ),
-      tap((track: QueuedTrack) => (this.prvTrackId = track ? track.id : null))
+      map(list => list[0])
     );
   }
 

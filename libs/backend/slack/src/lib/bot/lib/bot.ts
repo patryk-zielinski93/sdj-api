@@ -28,9 +28,10 @@ export class Bot {
     this.init(...commandsCollection);
   }
 
-  init(...commands: Type<SlackCommand>[]): void {
+  async init(...commands: Type<SlackCommand>[]): Promise<void> {
     const addCommand = this.addCommand.bind(this);
-    commands.map(type => this.moduleRef.get(type)).forEach(addCommand);
+    const commandHandlers = await Promise.all(commands.map(type => this.moduleRef.create(type)));
+    commandHandlers.forEach(addCommand);
     this.start();
   }
 
