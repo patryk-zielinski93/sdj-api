@@ -1,9 +1,10 @@
 import { environment } from '@ng-environment/environment.prod';
+import { QueuedTrack } from '@sdj/shared/common';
+import { UserUtils } from '@sdj/shared/utils';
 import { Observable } from 'rxjs';
 
 import { Framer } from './framer';
 import { Scene } from './scene';
-import { QueuedTrack } from '@sdj/shared/common';
 
 export class Player {
   get src(): string {
@@ -41,13 +42,16 @@ export class Player {
   private _src: string;
   private _track: Observable<any>;
 
-  constructor(private scene: Scene, private framer: Framer) {}
+  constructor(private scene: Scene, private framer: Framer) {
+  }
 
   init(): void {
     (<any>window).AudioContext =
       (<any>window).AudioContext || (<any>window).webkitAudioContext;
     this.context = new AudioContext();
-    if (this.context.suspend) this.context.suspend();
+    if (this.context.suspend) {
+      this.context.suspend();
+    }
     try {
       this.javascriptNode = this.context.createScriptProcessor(2048, 1, 1);
       this.javascriptNode.connect(this.context.destination);
@@ -56,7 +60,7 @@ export class Player {
       this.analyser.smoothingTimeConstant = 0.6;
       this.analyser.fftSize = 2048;
       this.audio = new Audio(environment.radioStreamUrl);
-      this.audio.id = 'playerHtmlAudio'
+      this.audio.id = 'playerHtmlAudio';
       this.audio.crossOrigin = 'anonymous';
       this.audio.load();
       this.audio.addEventListener('error', () => {
@@ -83,9 +87,9 @@ export class Player {
   }
 
   handleTrackChange(): void {
-    this._track.subscribe((track: QueuedTrack) => {
+    this._track.subscribe((track: QueuedTrack | undefined) => {
       const convertedTrack = {
-        artist: track && track.addedBy ? track.addedBy.displayName : 'DJ PAWEŁ',
+        artist: track && track.addedBy ? UserUtils.getUserName(track.addedBy) : 'DJ PAWEŁ',
         song: track ? track.track.title : 'OPEN FM'
       };
       document.querySelector('.song .artist').textContent =
@@ -122,7 +126,9 @@ export class Player {
 
   //
   play(): void {
-    if (this.context.resume) this.context.resume();
+    if (this.context.resume) {
+      this.context.resume();
+    }
     this.audio.load();
     this.audio.play();
   }
@@ -133,7 +139,9 @@ export class Player {
   }
 
   pause(): void {
-    if (this.context.suspend) this.context.suspend();
+    if (this.context.suspend) {
+      this.context.suspend();
+    }
     this.audio.pause();
   }
 

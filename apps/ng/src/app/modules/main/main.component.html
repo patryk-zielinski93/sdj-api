@@ -40,9 +40,10 @@
               class="queued-track__title"
               [innerHTML]="queuedTrack.track.title"
             ></div>
+            <!--              TODO why user is sometimes a string-->
             <div
-              *ngIf="queuedTrack.addedBy && queuedTrack.addedBy.displayName"
-              [innerHTML]="'~' + queuedTrack.addedBy.displayName"
+              *ngIf="queuedTrack.addedBy && getUserName(queuedTrack.addedBy)"
+              [innerHTML]="'~' + getUserName(queuedTrack.addedBy)"
             ></div>
           </div>
         </li>

@@ -55,6 +55,9 @@
     },
     "backend-cqrs": {
       "tags": ["backend", "backend:cqrs"]
+    },
+    "shared-utils": {
+      "tags": []
     }
   }
 }

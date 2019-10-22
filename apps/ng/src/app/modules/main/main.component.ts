@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '@ng-environment/environment';
 import { QueuedTrack, Track, WebSocketEvents } from '@sdj/shared/common';
+import { UserUtils } from '@sdj/shared/utils';
 import { merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 import { Channel } from '../core/resources/interfaces/channel.interface';
@@ -25,6 +26,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   audioSrc: string = environment.externalStream;
   channels$: Observable<Channel[]>;
   currentTrack: Observable<any>;
+  getUserName = UserUtils.getUserName;
   listScrollSubject: Subject<QueuedTrack[]> = new Subject();
   queuedTracks: QueuedTrack[] = [];
   queuedTracks$: Observable<QueuedTrack[]>;
@@ -41,7 +43,8 @@ export class MainComponent implements OnInit, AfterViewInit {
     private ws: WebSocketService,
     private route: ActivatedRoute,
     private speechService: SpeechService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.channels$ = this.channelService.getChannels();
@@ -103,7 +106,6 @@ export class MainComponent implements OnInit, AfterViewInit {
 
     this.currentTrack = wsSubject.pipe(
       map(list => list[0])
-
     );
   }
 
