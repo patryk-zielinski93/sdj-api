@@ -2,8 +2,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": []
+    "types": [],
+    "target": "es5",
+    "module": "es2015"
   },
+  "lib": [
+    "es2018",
+    "dom"
+  ],
   "include": ["**/*.ts"],
   "exclude": ["src/test-setup.ts", "**/*.spec.ts", "src/setup.ts"],
   "angularCompilerOptions": {

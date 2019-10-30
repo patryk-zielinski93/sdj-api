@@ -1,19 +1,11 @@
 <div class="most-played-view-container">
-  <table mat-table [dataSource]="tracks" class="mat-elevation-z8">
+  <h1>The most played tracks on {{channel.name}} of the week</h1>
+  <mat-advanced-audio-player *ngIf="tracks.length > 2; else nothingToShow" [playlist]="tracks" [displayTitle]="true"
+                             [displayPlaylist]="true" [pageSizeOptions]="[10]"
+                             [displayVolumeControls]="true" [expanded]="true">
+  </mat-advanced-audio-player>
 
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> No.</th>
-      <td mat-cell *matCellDef="let element; let i = index;"> {{i}} </td>
-    </ng-container>
-
-
-    <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef> Title</th>
-      <td mat-cell *matCellDef="let track"> {{track.title}} </td>
-    </ng-container>
-
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+  <ng-template #nothingToShow>
+    <h3>There is not enough tracks</h3>
+  </ng-template>
 </div>

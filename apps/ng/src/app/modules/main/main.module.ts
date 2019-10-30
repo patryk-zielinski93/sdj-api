@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { NgxAudioPlayerModule } from 'ngx-audio-player';
 import { SharedModule } from '../shared/shared.module';
 import { AwesomePlayerComponent } from './components/awesome-player/awesome-player.component';
 import { MiniPlayerComponent } from './components/navbar/mini-player/mini-player.component';
@@ -12,7 +13,8 @@ import { MainComponent } from './main.component';
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    NgxAudioPlayerModule
   ],
   declarations: [
     AwesomePlayerComponent,

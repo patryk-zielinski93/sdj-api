@@ -10,7 +10,6 @@ export class TrackResolver {
 
   @Query(returns => [Track])
   async mostPlayedTracks(@Args('channelId')channelId: string): Promise<Track[]> {
-    console.log(channelId, await this.trackRepository.findMostPlayedTracks(channelId, 0, 10));
-    return this.trackRepository.findWeeklyMostPlayedTracks(channelId);
+    return this.trackRepository.findMostPlayedTracks(channelId);
   }
 }

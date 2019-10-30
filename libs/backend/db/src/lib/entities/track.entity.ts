@@ -17,6 +17,7 @@ export class Track implements ITrack {
   @Column('int')
   duration: number;
 
+  @Field()
   @PrimaryColumn('varchar')
   id: string;
 

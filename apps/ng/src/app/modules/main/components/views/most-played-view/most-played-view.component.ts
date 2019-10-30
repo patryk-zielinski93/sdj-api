@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { environment } from '@ng-environment/environment.prod';
 import { Channel, Track } from '@sdj/shared/common';
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
+import { Track as MatTrack } from 'ngx-audio-player';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ChannelService } from '../../../../core/services/channel.service';
 import { WebSocketService } from '../../../../core/services/web-socket.service';
@@ -14,8 +16,8 @@ import { WebSocketService } from '../../../../core/services/web-socket.service';
 })
 export class MostPlayedViewComponent implements OnInit, OnDestroy {
 
-  displayedColumns: string[] = ['position', 'title'];
-  tracks: Track[];
+  channel: Channel;
+  tracks: MatTrack[] = [];
 
   constructor(private channelService: ChannelService, private apollo: Apollo, private ws: WebSocketService) {
   }
@@ -31,6 +33,7 @@ export class MostPlayedViewComponent implements OnInit, OnDestroy {
     this.channelService.getSelectedChannel()
       .pipe(untilDestroyed(this))
       .subscribe((channel: Channel) => {
+        this.channel = channel;
         this.loadMostPlayedTracks(channel);
       });
   }
@@ -40,13 +43,16 @@ export class MostPlayedViewComponent implements OnInit, OnDestroy {
       query: gql`
           {
               mostPlayedTracks(channelId: "${channel.id}") {
-                  title
+                  title,
+                  id
               }
           }
       `
     }).valueChanges.subscribe((result: ApolloQueryResult<{ mostPlayedTracks: Track[] }>) => {
       const { data, loading, errors } = result;
-      this.tracks = data.mostPlayedTracks;
+      this.tracks = data.mostPlayedTracks.map((track: Track) => {
+        return { title: track.title, link: environment.backendUrl + 'tracks/' + track.id + '.mp3' };
+      });
     });
   }
 }
