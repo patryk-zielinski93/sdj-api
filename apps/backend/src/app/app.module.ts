@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiModule } from '@sdj/backend/api';
 import { WebSocketModule } from '@sdj/backend/websocket';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({ synchronize: true }),
     ApiModule,
     WebSocketModule
   ]

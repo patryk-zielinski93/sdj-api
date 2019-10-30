@@ -1,16 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn
-} from 'typeorm';
+import { QueuedTrack as IQueuedTrack } from '@sdj/shared/common';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Channel } from './channel.entity';
 import { Track } from './track.entity';
 import { User } from './user.entity';
 import { Vote } from './vote.entity';
-import { QueuedTrack as IQueuedTrack } from '@sdj/shared/common';
 
 @Entity()
 export class QueuedTrack implements IQueuedTrack {
@@ -49,5 +42,5 @@ export class QueuedTrack implements IQueuedTrack {
   track: Track;
 
   @OneToMany(type => Vote, (vote: Vote) => vote.track)
-  votes: Vote[];
+  votes: Promise<Vote[]>;
 }
