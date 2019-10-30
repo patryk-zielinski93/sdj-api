@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Controls } from '../../../../libs/player/src/controls';
 import { Framer } from '../../../../libs/player/src/framer';
@@ -11,7 +11,7 @@ import { Tracker } from '../../../../libs/player/src/tracker';
   templateUrl: './awesome-player.component.html',
   styleUrls: ['./awesome-player.component.scss']
 })
-export class AwesomePlayerComponent implements OnInit, AfterViewInit {
+export class AwesomePlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   get src(): string {
     return this._src;
   }
@@ -44,6 +44,10 @@ export class AwesomePlayerComponent implements OnInit, AfterViewInit {
   private _track$: Observable<any>;
 
   constructor() {}
+
+  ngOnDestroy(): void {
+    this.player.destroy();
+  }
 
   ngOnInit(): void {}
 
