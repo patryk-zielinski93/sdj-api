@@ -2,35 +2,31 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { environment } from '@ng-environment/environment';
+import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
+import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './modules/core/core.module';
 import { TokenInterceptor } from './modules/core/services/token.interceptor';
-import { CustomMaterialModule } from './modules/custom-material/custom-material.module';
-import { AwesomePlayerComponent } from './modules/main/components/awesome-player/awesome-player.component';
-import { MiniPlayerComponent } from './modules/main/components/navbar/mini-player/mini-player.component';
-import { NavbarComponent } from './modules/main/components/navbar/navbar.component';
-import { UserProfileComponent } from './modules/main/components/navbar/user-profile/user-profile.component';
-import { MainComponent } from './modules/main/main.component';
+import { MainModule } from './modules/main/main.module';
 import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NavbarComponent,
-    MainComponent,
-    MiniPlayerComponent,
-    UserProfileComponent,
-    AwesomePlayerComponent
+    AppComponent
   ],
   imports: [
+    ApolloModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     CoreModule,
-    CustomMaterialModule,
+    MainModule,
     HttpClientModule,
+    HttpLinkModule,
     SharedModule
   ],
   providers: [
@@ -38,6 +34,17 @@ import { SharedModule } from './modules/shared/shared.module';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
+    }, {
+      provide: APOLLO_OPTIONS,
+      useFactory: (httpLink: HttpLink) => {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: environment.backendUrl + 'graphql'
+          })
+        };
+      },
+      deps: [HttpLink]
     }
   ],
   bootstrap: [AppComponent]

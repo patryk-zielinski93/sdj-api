@@ -2,6 +2,10 @@
   <button mat-icon-button (click)="sidenav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
+  <span class="spacer"></span>
+  <button mat-icon-button [matMenuTriggerFor]="appMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
 </mat-toolbar>
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="side">
@@ -22,38 +26,11 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="app-content">
-      <ul class="queued-tracks-list" #toPlay>
-        <li
-          class="queued-tracks-list__last-element queued-tracks-list__track"
-        ></li>
-        <li
-          class="queued-tracks-list__track"
-          *ngFor="let queuedTrack of queuedTracks.reverse()"
-        >
-          <div class="queued-track">
-            <img
-              class="queued-track__thumbnail"
-              [src]="getThumbnail(queuedTrack.track)"
-            />
-            <div
-              class="queued-track__title"
-              [innerHTML]="queuedTrack.track.title"
-            ></div>
-            <!--              TODO why user is sometimes a string-->
-            <div
-              *ngIf="queuedTrack.addedBy && getUserName(queuedTrack.addedBy)"
-              [innerHTML]="'~' + getUserName(queuedTrack.addedBy)"
-            ></div>
-          </div>
-        </li>
-      </ul>
-      <sdj-awesome-player
-        #playerComponent
-        [src]="audioSrc"
-        [track$]="currentTrack"
-      >
-      </sdj-awesome-player>
-    </div>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<mat-menu #appMenu="matMenu">
+  <button mat-menu-item (click)="navigateToRadio()">Radio</button>
+  <button mat-menu-item (click)="navigateToMostPlated()">Most played</button>
+</mat-menu>

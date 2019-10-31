@@ -1,6 +1,7 @@
 import { environment } from '@ng-environment/environment.prod';
 import { QueuedTrack } from '@sdj/shared/common';
 import { UserUtils } from '@sdj/shared/utils';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Observable } from 'rxjs';
 
 import { Framer } from './framer';
@@ -45,6 +46,10 @@ export class Player {
   constructor(private scene: Scene, private framer: Framer) {
   }
 
+  destroy(): void {
+    this.audio.remove();
+  }
+
   init(): void {
     (<any>window).AudioContext =
       (<any>window).AudioContext || (<any>window).webkitAudioContext;
@@ -59,8 +64,8 @@ export class Player {
       this.analyser.connect(this.javascriptNode);
       this.analyser.smoothingTimeConstant = 0.6;
       this.analyser.fftSize = 2048;
-      this.audio = new Audio(environment.radioStreamUrl);
-      this.audio.id = 'playerHtmlAudio';
+      this.audio = <HTMLAudioElement>document.getElementById('playerHtmlAudio');
+      this.audio.src = environment.radioStreamUrl;
       this.audio.crossOrigin = 'anonymous';
       this.audio.load();
       this.audio.addEventListener('error', () => {
@@ -87,7 +92,7 @@ export class Player {
   }
 
   handleTrackChange(): void {
-    this._track.subscribe((track: QueuedTrack | undefined) => {
+    this._track.pipe(untilDestroyed(this, 'destroy')).subscribe((track: QueuedTrack | undefined) => {
       const convertedTrack = {
         artist: track && track.addedBy ? UserUtils.getUserName(track.addedBy) : 'DJ PAWEŁ',
         song: track ? track.track.title : 'OPEN FM'

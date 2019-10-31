@@ -6,49 +6,7 @@
 .sidenav-container {
   height: calc(100vh - 64px);
 }
-.app-content {
-  align-items: center;
-  display: flex;
-  height: 100vh;
-  width: 100%;
-}
-.queued-tracks-list {
-  overflow: hidden;
-  padding-right: 0;
-  white-space: nowrap;
-  width: 36%;
-  &__last-element {
-    width: 100%;
-    height: 100%;
-  }
-  &__track {
-    display: inline-block;
-  }
 
-  sdj-awesome-player {
-    height: 800px;
-  }
-}
-.mat-list-icon {
-  color: rgba(0, 0, 0, 0.54);
-}
-.queued-track {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 0 10px 0 10px;
-  max-width: 200px;
-  &__thumbnail {
-    border-radius: 50%;
-    font-size: 177px;
-    height: 1em;
-    object-fit: none;
-    width: 1em;
-  }
-  &__title {
-    max-width: 100%;
-    text-align: center;
-    white-space: normal;
-  }
+.spacer {
+  flex: 1 1 auto;
 }

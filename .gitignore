@@ -43,3 +43,4 @@ ormconfig.json
 .env
 data/
 docker-compose.override.yml
+schema.gql

@@ -9,11 +9,13 @@ export class AppController {
     private playlist: PlaylistService,
     @InjectRepository(ChannelRepository)
     private readonly channelRepository: ChannelRepository
-  ) {}
+  ) {
+  }
 
   @Get()
   @Render('index.hbs')
-  appView(): any {}
+  appView(): any {
+  }
 
   @Get('ices/:id')
   nexSong(@Param() params: { id: string }): any {

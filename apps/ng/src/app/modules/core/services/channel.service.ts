@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebSocketEvents } from '@sdj/shared/common';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map, switchMap, startWith } from 'rxjs/operators';
+import { map, startWith, switchMap } from 'rxjs/operators';
+import { Channel } from '../resources/interfaces/channel.interface';
 import { SlackHttpService } from './slack-http.service';
 import { WebSocketService } from './web-socket.service';
-import { Channel } from '../resources/interfaces/channel.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChannelService {
-  private selectedChannel$: Subject<Channel> = new BehaviorSubject(null);
+  private selectedChannel$: BehaviorSubject<Channel> = new BehaviorSubject(null);
   private channels: Channel[];
   private channels$: Subject<Channel[]> = new BehaviorSubject([]);
 
@@ -23,12 +23,15 @@ export class ChannelService {
     }
     return this._webSocketChannels;
   }
+
   private _webSocketChannels: Observable<Channel[]>;
+
   constructor(
     private router: Router,
     private slackHttpService: SlackHttpService,
     private webSocketService: WebSocketService
-  ) {}
+  ) {
+  }
 
   getChannels(): Observable<Channel[]> {
     return this.channels$.pipe(
@@ -56,30 +59,35 @@ export class ChannelService {
   loadChannels(): Observable<Channel[]> {
     const source = this.slackHttpService.getChannelList();
     source.subscribe((channels: Channel[]) => {
-      this.channels$.next(channels);
       this.channels = channels;
+      this.channels$.next(channels);
     });
     return <any>source;
   }
 
   selectFirstChannel(channelId: string | null): void {
     if (channelId) {
-      this.selectedChannel$.next(
-        this.channels.find((channel: Channel) => channel.id === channelId)
-      );
+      const channel = this.channels.find((channel: Channel) => channel.id === channelId);
+      this.selectChannel(channel);
     } else {
       this.selectGeneral();
     }
   }
 
   selectGeneral(): void {
-    this.selectedChannel$.next(
-      this.channels.find((channel: Channel) => channel.is_general)
-    );
+    const channel = this.channels.find((channel: Channel) => channel.is_general);
+    this.selectChannel(channel);
   }
 
   selectChannel(channel: Channel): void {
+    const oldChannel = this.selectedChannel$.value;
     this.selectedChannel$.next(channel);
-    this.router.navigate([channel.id]);
+    if (this.router.url.includes(oldChannel.id)) {
+      this.router.navigateByUrl(this.router.url.replace(oldChannel.id, channel.id));
+    } else if (this.router.url.includes(channel.id)) {
+      return;
+    } else {
+      this.router.navigate([channel.id]);
+    }
   }
 }

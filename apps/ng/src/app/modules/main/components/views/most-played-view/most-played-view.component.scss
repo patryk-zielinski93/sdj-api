@@ -1,0 +1,12 @@
+.most-played-view-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 64px);
+  width: 100%;
+}
+
+mat-advanced-audio-player {
+  padding-top: 100px;
+  width: 50%;
+}

@@ -8,19 +8,21 @@ io.init({
   }
 });
 
-import { INestApplication, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ClientOptions } from '@nestjs/microservices';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { microservices } from '@sdj/backend/config';
+import { SdjCqrsModule } from '@sdj/backend/cqrs';
 import { IcesModule } from '@sdj/backend/ices';
 import { SlackModule } from '@sdj/backend/slack';
 import { StorageModule } from '@sdj/backend/storage';
 import * as cors from 'cors';
+import { join } from 'path';
 import { AppModule } from './app/app.module';
-import { SdjCqrsModule } from '@sdj/backend/cqrs';
 
 export class App {
-  app: INestApplication;
+  app: NestExpressApplication;
   globalPrefix: string = 'api';
   port: number = parseInt(process.env.PORT, 10) || 8888;
 
@@ -67,11 +69,13 @@ export class App {
   }
 
   async initApp(): Promise<void> {
-    this.app = await NestFactory.create(AppModule);
+    this.app = await NestFactory.create<NestExpressApplication>(AppModule);
     this.app.setGlobalPrefix(this.globalPrefix);
     this.app.use(cors());
     this.app.connectMicroservice(microservices.app);
     this.app.startAllMicroservices();
+    this.app.useStaticAssets(join(__dirname, 'assets'));
+
     return this.app.listen(this.port, () => {
       Logger.log(
         'Listening at http://localhost:' + this.port + '/' + this.globalPrefix

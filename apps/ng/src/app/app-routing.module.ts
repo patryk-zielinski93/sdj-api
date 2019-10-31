@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { ChannelResolver } from './modules/main/channel.resolver';
+import { MostPlayedViewComponent } from './modules/main/components/views/most-played-view/most-played-view.component';
+import { RadioViewComponent } from './modules/main/components/views/radio-view/radio-view.component';
 import { MainComponent } from './modules/main/main.component';
 
 const routes: Routes = [
@@ -18,7 +20,17 @@ const routes: Routes = [
       },
       {
         component: MainComponent,
-        path: ':channelId'
+        path: ':channelId',
+        children: [
+          {
+            component: RadioViewComponent,
+            path: ''
+          },
+          {
+            component: MostPlayedViewComponent,
+            path: 'most-played'
+          }
+        ]
       }
     ]
   }

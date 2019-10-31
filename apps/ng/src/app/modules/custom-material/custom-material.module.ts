@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import {
+  MatBadgeModule,
   MatButtonModule,
   MatButtonToggleModule,
   MatIconModule,
   MatListModule,
+  MatMenuModule,
   MatSidenavModule,
-  MatToolbarModule,
-  MatBadgeModule
+  MatTableModule,
+  MatToolbarModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -18,7 +20,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatButtonToggleModule,
     MatListModule,
     MatIconModule,
+    MatMenuModule,
     MatSidenavModule,
+    MatTableModule,
     MatToolbarModule
   ],
 
@@ -29,7 +33,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatButtonToggleModule,
     MatListModule,
     MatIconModule,
+    MatMenuModule,
     MatSidenavModule,
+    MatTableModule,
     MatToolbarModule
   ]
 })
