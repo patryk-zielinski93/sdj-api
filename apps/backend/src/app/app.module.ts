@@ -8,8 +8,7 @@ import { WebSocketModule } from '@sdj/backend/websocket';
   imports: [
     TypeOrmModule.forRoot({ synchronize: true }),
     GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql',
-      installSubscriptionHandlers: true
+      autoSchemaFile: 'schema.gql'
     }),
     ApiModule,
     WebSocketModule
