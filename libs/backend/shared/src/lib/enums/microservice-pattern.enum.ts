@@ -5,6 +5,7 @@ export enum MicroservicePattern {
   playDj = "playDj",
   channelAppear = "channelAppear",
   channelDisappears = "channelDisppear",
+  deleteQueuedTrack = 'deleteQueuedTrack',
   getCurrentTrack = "getCurrentTrack",
   setCurrentTrack = "setCurrentTrack",
   addToQueue = "addToQueue",

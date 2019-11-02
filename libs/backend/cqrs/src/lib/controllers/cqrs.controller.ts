@@ -1,10 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { MessagePattern, RpcException } from '@nestjs/microservices';
-import { QueuedTrack } from '@sdj/backend/db';
-import { MicroservicePattern } from '@sdj/backend/shared';
 import {
   CreateTrackCommand,
+  DeleteQueuedTrackCommand,
   DeleteTrackCommand,
   DownloadTrackCommand,
   FuckYouCommand,
@@ -14,6 +13,8 @@ import {
   ThumbDownCommand,
   ThumbUpCommand
 } from '@sdj/backend/core';
+import { QueuedTrack } from '@sdj/backend/db';
+import { MicroservicePattern } from '@sdj/backend/shared';
 
 @Controller()
 export class CqrsController {
@@ -29,6 +30,11 @@ export class CqrsController {
   @MessagePattern(MicroservicePattern.deleteTrack)
   deleteTrack(command: DeleteTrackCommand): Promise<unknown> {
     return this.commandBus.execute(new DownloadTrackCommand(command.trackId));
+  }
+
+  @MessagePattern(MicroservicePattern.deleteQueuedTrack)
+  deleteQueuedTrack(command: DeleteQueuedTrackCommand): Promise<unknown> {
+    return this.commandBus.execute(new DeleteQueuedTrackCommand(command.queuedTrackId));
   }
 
   @MessagePattern(MicroservicePattern.downloadTrack)

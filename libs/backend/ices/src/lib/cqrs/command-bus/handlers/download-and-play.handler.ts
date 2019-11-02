@@ -1,9 +1,5 @@
-import { CommandHandler, ICommandHandler, CommandBus } from '@nestjs/cqrs';
-import {
-  CqrsServiceFacade,
-  DownloadTrackCommand,
-  StorageServiceFacade
-} from '@sdj/backend/core';
+import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CqrsServiceFacade, DeleteQueuedTrackCommand, DownloadTrackCommand } from '@sdj/backend/core';
 import { DownloadAndPlayCommand } from '../commands/download-and-play.command';
 import { PlayQueuedTrackCommand } from '../commands/play-queued-track.command';
 
@@ -12,8 +8,7 @@ export class DownloadAndPlayHandler
   implements ICommandHandler<DownloadAndPlayCommand> {
   constructor(
     private readonly commandBus: CommandBus,
-    private readonly cqrsServiceFacade: CqrsServiceFacade,
-    private readonly storageService: StorageServiceFacade
+    private readonly cqrsServiceFacade: CqrsServiceFacade
   ) {}
 
   async execute(command: DownloadAndPlayCommand): Promise<void> {
@@ -27,8 +22,9 @@ export class DownloadAndPlayHandler
           );
         },
         () => {
-          this.storageService.removeFromQueue(command.queuedTrack);
+          this.cqrsServiceFacade.deleteQueuedTrackCommand(new DeleteQueuedTrackCommand(command.queuedTrack.id));
         }
       );
   }
 }
+
