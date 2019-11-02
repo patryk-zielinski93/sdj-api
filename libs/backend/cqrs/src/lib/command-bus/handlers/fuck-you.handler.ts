@@ -1,14 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QueuedTrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
 import { FuckYouCommand } from '../../../../../core/src/lib/cqrs/commands/fuck-you.command';
 import { HeartCommand } from '../../../../../core/src/lib/cqrs/commands/heart.command';
-import {
-  QueuedTrackRepository,
-  UserRepository,
-  VoteRepository,
-  Vote,
-  User
-} from '@sdj/backend/db';
 
 @CommandHandler(FuckYouCommand)
 export class FuckYouHandler implements ICommandHandler<FuckYouCommand> {
@@ -31,7 +25,7 @@ export class FuckYouHandler implements ICommandHandler<FuckYouCommand> {
     );
 
     if (fucksFromUser > 0) {
-      throw Error('To much Fucks')
+      throw Error('To much Fucks');
     }
 
     const thumbUp = new Vote(<User>user, queuedTrack, -3);

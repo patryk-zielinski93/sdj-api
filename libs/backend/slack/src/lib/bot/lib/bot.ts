@@ -30,7 +30,9 @@ export class Bot {
 
   async init(...commands: Type<SlackCommand>[]): Promise<void> {
     const addCommand = this.addCommand.bind(this);
-    const commandHandlers = await Promise.all(commands.map(type => this.moduleRef.create(type)));
+    const commandHandlers = await Promise.all(
+      commands.map(type => this.moduleRef.create(type))
+    );
     commandHandlers.forEach(addCommand);
     this.start();
   }

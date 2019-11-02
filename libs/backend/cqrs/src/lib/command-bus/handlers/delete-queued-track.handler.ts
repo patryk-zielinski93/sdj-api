@@ -4,7 +4,8 @@ import { DeleteQueuedTrackCommand, StorageServiceFacade } from '@sdj/backend/cor
 import { QueuedTrackRepository } from '@sdj/backend/db';
 
 @CommandHandler(DeleteQueuedTrackCommand)
-export class DeleteQueuedTrackHandler implements ICommandHandler<DeleteQueuedTrackCommand> {
+export class DeleteQueuedTrackHandler
+  implements ICommandHandler<DeleteQueuedTrackCommand> {
   constructor(
     @InjectRepository(QueuedTrackRepository)
     private readonly queuedTrackRepository: QueuedTrackRepository,
@@ -14,7 +15,9 @@ export class DeleteQueuedTrackHandler implements ICommandHandler<DeleteQueuedTra
 
   async execute(command: DeleteQueuedTrackCommand): Promise<unknown> {
     // TODO CASCADE DELETE
-    const queuedTrack = await this.queuedTrackRepository.findOneOrFail(command.queuedTrackId);
+    const queuedTrack = await this.queuedTrackRepository.findOneOrFail(
+      command.queuedTrackId
+    );
     await this.queuedTrackRepository.remove(queuedTrack);
     return this.storageService.removeFromQueue(queuedTrack);
   }

@@ -1,7 +1,9 @@
-import { INestApplication, INestMicroservice } from '@nestjs/common';
+import { INestMicroservice } from '@nestjs/common';
 import { CommandBus, EventBus, ofType } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CommonModule } from '@sdj/backend/common';
+import { microservices } from '@sdj/backend/config';
 import { CoreModule, QueueTrackCommand } from '@sdj/backend/core';
 import { CommandHandlers, TrackRepository } from '@sdj/backend/db';
 import { first, switchMap, tap } from 'rxjs/operators';
@@ -11,8 +13,6 @@ import { PlayRadioEvent } from '../cqrs/events/play-radio.event';
 import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
 import { RedisSagas } from '../cqrs/events/sagas/redis.sagas';
 import { RedisService } from '../services/redis.service';
-import { CommonModule } from '@sdj/backend/common';
-import { microservices } from '@sdj/backend/config';
 
 describe('Get Next', () => {
   let app: INestMicroservice;
@@ -22,12 +22,13 @@ describe('Get Next', () => {
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [
-        CommonModule,
-        CoreModule,
-        TypeOrmModule.forRoot()
-      ],
-      providers: [RedisSagas, RedisService, RedisGetNextHandler, ...CommandHandlers]
+      imports: [CommonModule, CoreModule, TypeOrmModule.forRoot()],
+      providers: [
+        RedisSagas,
+        RedisService,
+        RedisGetNextHandler,
+        ...CommandHandlers
+      ]
     }).compile();
 
     app = module.createNestMicroservice(microservices.ices);

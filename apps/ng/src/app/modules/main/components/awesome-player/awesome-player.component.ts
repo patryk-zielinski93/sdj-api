@@ -11,7 +11,8 @@ import { Tracker } from '../../../../libs/player/src/tracker';
   templateUrl: './awesome-player.component.html',
   styleUrls: ['./awesome-player.component.scss']
 })
-export class AwesomePlayerComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AwesomePlayerComponent
+  implements OnInit, OnDestroy, AfterViewInit {
   get src(): string {
     return this._src;
   }

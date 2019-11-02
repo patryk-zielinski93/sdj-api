@@ -27,7 +27,9 @@ export class CqrsServiceFacade {
       .toPromise();
   }
 
-  deleteQueuedTrackCommand(command: DeleteQueuedTrackCommand): Promise<unknown> {
+  deleteQueuedTrackCommand(
+    command: DeleteQueuedTrackCommand
+  ): Promise<unknown> {
     return this.client
       .send(MicroservicePattern.deleteQueuedTrack, command)
       .toPromise();

@@ -11,11 +11,7 @@ import { RadioViewComponent } from './components/views/radio-view/radio-view.com
 import { MainComponent } from './main.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SharedModule,
-    NgxAudioPlayerModule
-  ],
+  imports: [CommonModule, SharedModule, NgxAudioPlayerModule],
   declarations: [
     AwesomePlayerComponent,
     MainComponent,
@@ -23,8 +19,7 @@ import { MainComponent } from './main.component';
     MostPlayedViewComponent,
     NavbarComponent,
     RadioViewComponent,
-    UserProfileComponent]
+    UserProfileComponent
+  ]
 })
-export class MainModule {
-
-}
+export class MainModule {}

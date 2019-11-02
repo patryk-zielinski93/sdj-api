@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-
 fs.readFile(path.join(__dirname + '/env.sample.js'), 'utf8', function(
   err: unknown,
   data: string

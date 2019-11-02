@@ -15,9 +15,7 @@ import { MainModule } from './modules/main/main.module';
 import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     ApolloModule,
     AppRoutingModule,
@@ -34,7 +32,8 @@ import { SharedModule } from './modules/shared/shared.module';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }, {
+    },
+    {
       provide: APOLLO_OPTIONS,
       useFactory: (httpLink: HttpLink) => {
         return {

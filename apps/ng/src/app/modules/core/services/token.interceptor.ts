@@ -1,21 +1,19 @@
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpResponse
-} from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
 import { tap } from 'rxjs/operators';
+import { AuthService } from './auth.service';
 import { SlackApiErrorsHandler } from './slack-api-errors-handler';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(public auth: AuthService, private slackApiErrorHandler: SlackApiErrorsHandler) {}
+  constructor(
+    public auth: AuthService,
+    private slackApiErrorHandler: SlackApiErrorsHandler
+  ) {
+  }
 
   intercept(
     request: HttpRequest<any>,

@@ -5,13 +5,7 @@ import { CustomMaterialModule } from '../custom-material/custom-material.module'
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule,
-    CustomMaterialModule,
-    RouterModule
-  ],
-  exports: [
-    CustomMaterialModule,
-    RouterModule
-  ]
+  imports: [CommonModule, CustomMaterialModule, RouterModule],
+  exports: [CustomMaterialModule, RouterModule]
 })
 export class SharedModule {}

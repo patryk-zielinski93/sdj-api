@@ -1,4 +1,1 @@
-
-export namespace Utils {
-
-}
+export namespace Utils {}

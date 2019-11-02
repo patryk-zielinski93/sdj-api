@@ -11,7 +11,9 @@ import { WebSocketService } from './web-socket.service';
   providedIn: 'root'
 })
 export class ChannelService {
-  private selectedChannel$: BehaviorSubject<Channel> = new BehaviorSubject(null);
+  private selectedChannel$: BehaviorSubject<Channel> = new BehaviorSubject(
+    null
+  );
   private channels: Channel[];
   private channels$: Subject<Channel[]> = new BehaviorSubject([]);
 
@@ -67,7 +69,9 @@ export class ChannelService {
 
   selectFirstChannel(channelId: string | null): void {
     if (channelId) {
-      const channel = this.channels.find((channel: Channel) => channel.id === channelId);
+      const channel = this.channels.find(
+        (channel: Channel) => channel.id === channelId
+      );
       this.selectChannel(channel);
     } else {
       this.selectGeneral();
@@ -75,7 +79,9 @@ export class ChannelService {
   }
 
   selectGeneral(): void {
-    const channel = this.channels.find((channel: Channel) => channel.is_general);
+    const channel = this.channels.find(
+      (channel: Channel) => channel.is_general
+    );
     this.selectChannel(channel);
   }
 
@@ -83,7 +89,9 @@ export class ChannelService {
     const oldChannel = this.selectedChannel$.value;
     this.selectedChannel$.next(channel);
     if (this.router.url.includes(oldChannel.id)) {
-      this.router.navigateByUrl(this.router.url.replace(oldChannel.id, channel.id));
+      this.router.navigateByUrl(
+        this.router.url.replace(oldChannel.id, channel.id)
+      );
     } else if (this.router.url.includes(channel.id)) {
       return;
     } else {

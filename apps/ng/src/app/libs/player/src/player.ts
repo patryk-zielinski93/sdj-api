@@ -92,16 +92,21 @@ export class Player {
   }
 
   handleTrackChange(): void {
-    this._track.pipe(untilDestroyed(this, 'destroy')).subscribe((track: QueuedTrack | undefined) => {
-      const convertedTrack = {
-        artist: track && track.addedBy ? UserUtils.getUserName(track.addedBy) : 'DJ PAWEŁ',
-        song: track ? track.track.title : 'OPEN FM'
-      };
-      document.querySelector('.song .artist').textContent =
-        convertedTrack.artist;
-      document.querySelector('.song .name').textContent = convertedTrack.song;
-      // this.currentSongIndex = index;
-    });
+    this._track
+      .pipe(untilDestroyed(this, 'destroy'))
+      .subscribe((track: QueuedTrack | undefined) => {
+        const convertedTrack = {
+          artist:
+            track && track.addedBy
+              ? UserUtils.getUserName(track.addedBy)
+              : 'DJ PAWEŁ',
+          song: track ? track.track.title : 'OPEN FM'
+        };
+        document.querySelector('.song .artist').textContent =
+          convertedTrack.artist;
+        document.querySelector('.song .name').textContent = convertedTrack.song;
+        // this.currentSongIndex = index;
+      });
   }
 
   nextTrack(): void {

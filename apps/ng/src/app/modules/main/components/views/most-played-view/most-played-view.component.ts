@@ -15,11 +15,14 @@ import { WebSocketService } from '../../../../core/services/web-socket.service';
   styleUrls: ['./most-played-view.component.scss']
 })
 export class MostPlayedViewComponent implements OnInit, OnDestroy {
-
   channel: Channel;
   tracks: MatTrack[] = [];
 
-  constructor(private channelService: ChannelService, private apollo: Apollo, private ws: WebSocketService) {
+  constructor(
+    private channelService: ChannelService,
+    private apollo: Apollo,
+    private ws: WebSocketService
+  ) {
   }
 
   ngOnDestroy(): void {
@@ -30,7 +33,8 @@ export class MostPlayedViewComponent implements OnInit, OnDestroy {
   }
 
   handleSelectedChannelChange(): void {
-    this.channelService.getSelectedChannel()
+    this.channelService
+      .getSelectedChannel()
       .pipe(untilDestroyed(this))
       .subscribe((channel: Channel) => {
         this.channel = channel;
@@ -39,7 +43,8 @@ export class MostPlayedViewComponent implements OnInit, OnDestroy {
   }
 
   loadMostPlayedTracks(channel: Channel): void {
-    this.apollo.watchQuery({
+    this.apollo
+    .watchQuery({
       query: gql`
           {
               mostPlayedTracks(channelId: "${channel.id}") {
@@ -48,11 +53,17 @@ export class MostPlayedViewComponent implements OnInit, OnDestroy {
               }
           }
       `
-    }).valueChanges.subscribe((result: ApolloQueryResult<{ mostPlayedTracks: Track[] }>) => {
-      const { data, loading, errors } = result;
-      this.tracks = data.mostPlayedTracks.map((track: Track) => {
-        return { title: track.title, link: environment.backendUrl + 'tracks/' + track.id + '.mp3' };
-      });
-    });
+    })
+    .valueChanges.subscribe(
+      (result: ApolloQueryResult<{ mostPlayedTracks: Track[] }>) => {
+        const { data, loading, errors } = result;
+        this.tracks = data.mostPlayedTracks.map((track: Track) => {
+          return {
+            title: track.title,
+            link: environment.backendUrl + 'tracks/' + track.id + '.mp3'
+          };
+        });
+      }
+    );
   }
 }

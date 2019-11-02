@@ -29,9 +29,7 @@ export class PlaylistService {
     } else {
       const tracksInDb = await this.trackRepository.countTracks(channel.id);
       if (tracksInDb >= appConfig.trackLengthToStartOwnRadio) {
-        const randTrack = await this.trackRepository.getRandomTrack(
-          channel.id
-        );
+        const randTrack = await this.trackRepository.getRandomTrack(channel.id);
         const newQueuedTrack = await this.cqrsServiceFacade.queueTrack(
           new QueueTrackCommand(randTrack.id, channel.id, undefined, true)
         );

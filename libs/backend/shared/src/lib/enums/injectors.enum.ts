@@ -4,4 +4,4 @@ export enum Injectors {
   ICESSERVICE = 'RedisService',
   SLACKSERVICE = 'SlackService',
   STORAGESERVICE = 'StorageService'
-  }
+}

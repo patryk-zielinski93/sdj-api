@@ -11,7 +11,6 @@ import { TrackRepository } from './repositories/track.repository';
 import { UserRepository } from './repositories/user.repository';
 import { VoteRepository } from './repositories/vote.repository';
 
-
 export const Repositories = [
   ChannelRepository,
   QueuedTrackRepository,

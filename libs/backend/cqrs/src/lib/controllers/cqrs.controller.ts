@@ -34,7 +34,9 @@ export class CqrsController {
 
   @MessagePattern(MicroservicePattern.deleteQueuedTrack)
   deleteQueuedTrack(command: DeleteQueuedTrackCommand): Promise<unknown> {
-    return this.commandBus.execute(new DeleteQueuedTrackCommand(command.queuedTrackId));
+    return this.commandBus.execute(
+      new DeleteQueuedTrackCommand(command.queuedTrackId)
+    );
   }
 
   @MessagePattern(MicroservicePattern.downloadTrack)

@@ -11,7 +11,6 @@ export class ChannelResolver implements Resolve<Channel[]> {
   }
 
   findChannelIdParam(route: ActivatedRouteSnapshot) {
-
     let channelId = route.paramMap.get('channelId');
     if (channelId) {
       return channelId;
@@ -31,21 +30,22 @@ export class ChannelResolver implements Resolve<Channel[]> {
   ): Observable<any> {
     const channelIdParam = this.findChannelIdParam(route);
 
-    return this.channelService.getChannels()
-      .pipe(tap(channels => {
-          if (!channels || !channels.length) {
-            this.channelService.loadChannels();
-          }
-        }),
-        filter(channels => !!channels && !!channels.length),
-        first(),
-        switchMap(_ => this.channelService.getSelectedChannel()),
-        tap((channel: Channel) => {
-          if (!channel) {
-            this.channelService.selectFirstChannel(channelIdParam);
-          }
-        }),
-        filter((channel: Channel) => !!channel),
-        first());
+    return this.channelService.getChannels().pipe(
+      tap(channels => {
+        if (!channels || !channels.length) {
+          this.channelService.loadChannels();
+        }
+      }),
+      filter(channels => !!channels && !!channels.length),
+      first(),
+      switchMap(_ => this.channelService.getSelectedChannel()),
+      tap((channel: Channel) => {
+        if (!channel) {
+          this.channelService.selectFirstChannel(channelIdParam);
+        }
+      }),
+      filter((channel: Channel) => !!channel),
+      first()
+    );
   }
 }

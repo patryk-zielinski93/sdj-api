@@ -26,10 +26,7 @@
 import { playerHtmlAudio } from './player.po';
 
 export function login(): void {
-  window.localStorage.setItem(
-    'token',
-    'xoxo'
-  );
+  window.localStorage.setItem('token', 'xoxo');
 }
 
 export const expectPlayingAudio = () => {

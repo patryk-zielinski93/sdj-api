@@ -32,11 +32,11 @@ class IcesController {
   nextSong(req: Request, res: Response): void {
     console.log('next song', req.params.id);
     this.icesManager
-    .nextSong(req.params.id)
-    .pipe(last())
-    .subscribe((code: number) => {
-      code === 0 ? res.sendStatus(204) : res.sendStatus(500);
-    });
+      .nextSong(req.params.id)
+      .pipe(last())
+      .subscribe((code: number) => {
+        code === 0 ? res.sendStatus(204) : res.sendStatus(500);
+      });
   }
 }
 

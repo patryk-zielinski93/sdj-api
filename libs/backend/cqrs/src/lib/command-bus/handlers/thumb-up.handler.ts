@@ -1,12 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  QueuedTrackRepository,
-  User,
-  UserRepository,
-  Vote,
-  VoteRepository
-} from '@sdj/backend/db';
+import { QueuedTrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
 
 import { ThumbUpCommand } from '../../../../../core/src/lib/cqrs/commands/thumb-up.command';
 
@@ -32,7 +26,7 @@ export class ThumbUpHandler implements ICommandHandler<ThumbUpCommand> {
     );
 
     if (thumbUpFromUser > 0) {
-      throw Error('To much thumbs')
+      throw Error('To much thumbs');
     }
 
     const thumbUp = new Vote(<User>user, queuedTrack, 1);

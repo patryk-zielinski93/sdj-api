@@ -22,9 +22,10 @@ export class DownloadAndPlayHandler
           );
         },
         () => {
-          this.cqrsServiceFacade.deleteQueuedTrackCommand(new DeleteQueuedTrackCommand(command.queuedTrack.id));
+          this.cqrsServiceFacade.deleteQueuedTrackCommand(
+            new DeleteQueuedTrackCommand(command.queuedTrack.id)
+          );
         }
       );
   }
 }
-

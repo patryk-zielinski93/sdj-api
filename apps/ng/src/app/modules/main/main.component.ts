@@ -12,7 +12,6 @@ import { WebSocketService } from '../core/services/web-socket.service';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, AfterViewInit {
-
   channels$: Observable<Channel[]>;
   selectedChannel: Channel;
 

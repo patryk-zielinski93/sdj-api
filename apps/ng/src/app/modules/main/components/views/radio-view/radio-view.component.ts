@@ -18,7 +18,6 @@ import { AwesomePlayerComponent } from '../../awesome-player/awesome-player.comp
   styleUrls: ['./radio-view.component.scss']
 })
 export class RadioViewComponent implements OnInit, OnDestroy, AfterViewInit {
-
   @ViewChild('playerComponent', { static: false })
   playerComponent: AwesomePlayerComponent;
   @ViewChild('toPlay', { static: false })
@@ -119,9 +118,7 @@ export class RadioViewComponent implements OnInit, OnDestroy, AfterViewInit {
       );
     });
 
-    this.currentTrack = wsSubject.pipe(
-      map(list => list[0])
-    );
+    this.currentTrack = wsSubject.pipe(map(list => list[0]));
   }
 
   handleScrollList(newList: QueuedTrack[]): void {
@@ -143,7 +140,8 @@ export class RadioViewComponent implements OnInit, OnDestroy, AfterViewInit {
   handleSelectedChannelChange(): void {
     const join$ = this.ws.createSubject(WebSocketEvents.join);
 
-    this.channelService.getSelectedChannel()
+    this.channelService
+      .getSelectedChannel()
       .pipe(untilDestroyed(this))
       .subscribe((channel: Channel) => {
         this.selectedChannel = channel;

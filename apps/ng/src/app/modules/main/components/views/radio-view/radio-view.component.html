@@ -1,8 +1,6 @@
 <div class="app-content">
   <ul class="queued-tracks-list" #toPlay>
-    <li
-      class="queued-tracks-list__last-element queued-tracks-list__track"
-    ></li>
+    <li class="queued-tracks-list__last-element queued-tracks-list__track"></li>
     <li
       class="queued-tracks-list__track"
       *ngFor="let queuedTrack of queuedTracks.reverse()"
@@ -24,10 +22,6 @@
       </div>
     </li>
   </ul>
-  <sdj-awesome-player
-    #playerComponent
-    [src]="audioSrc"
-    [track$]="currentTrack"
-  >
+  <sdj-awesome-player #playerComponent [src]="audioSrc" [track$]="currentTrack">
   </sdj-awesome-player>
 </div>

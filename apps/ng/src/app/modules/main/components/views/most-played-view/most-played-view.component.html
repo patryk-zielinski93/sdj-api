@@ -1,8 +1,14 @@
 <div class="most-played-view-container">
-  <h1>The most played tracks on {{channel.name}} of the week</h1>
-  <mat-advanced-audio-player *ngIf="tracks.length > 2; else nothingToShow" [playlist]="tracks" [displayTitle]="true"
-                             [displayPlaylist]="true" [pageSizeOptions]="[10]"
-                             [displayVolumeControls]="true" [expanded]="true">
+  <h1>The most played tracks on {{ channel.name }} of the week</h1>
+  <mat-advanced-audio-player
+    *ngIf="tracks.length > 2; else nothingToShow"
+    [playlist]="tracks"
+    [displayTitle]="true"
+    [displayPlaylist]="true"
+    [pageSizeOptions]="[10]"
+    [displayVolumeControls]="true"
+    [expanded]="true"
+  >
   </mat-advanced-audio-player>
 
   <ng-template #nothingToShow>

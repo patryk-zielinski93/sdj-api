@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteTrackCommand } from '@sdj/backend/core';
-import { Track, QueuedTrack, VoteRepository, QueuedTrackRepository, TrackRepository } from '@sdj/backend/db';
+import { QueuedTrack, QueuedTrackRepository, Track, TrackRepository, VoteRepository } from '@sdj/backend/db';
 
 @CommandHandler(DeleteTrackCommand)
 export class DeleteTrackHandler implements ICommandHandler<DeleteTrackCommand> {
