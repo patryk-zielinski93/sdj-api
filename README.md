@@ -16,10 +16,10 @@
 ## Run production
 - Run host api for spawning ices containers
 `ng build host-api && node dist/host-api/main.js`
-- Run `docker-compose up`
+- Run `CURRENT_UID=$(id -u):$(id -g) docker-compose up`
 
 
 ## Run Development
 - Run host api for spawning ices containers `ng serve host-api`
 - Copy  ./docker-compose.override.yml-sample
-- Run `docker-compose up`
+- Run `CURRENT_UID=$(id -u):$(id -g) docker-compose up`
