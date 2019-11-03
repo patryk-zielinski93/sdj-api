@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import { last } from 'rxjs/operators';
-import icesManagerService, { IcesManager } from '../services/ices-manager.service';
+import { Request, Response } from "express";
+import { last } from "rxjs/operators";
+import icesManagerService, { IcesManager } from "../services/ices-manager.service";
 
 class IcesController {
   icesManager: IcesManager = icesManagerService;

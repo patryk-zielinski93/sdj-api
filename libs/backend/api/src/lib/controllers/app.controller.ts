@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Render } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { HostService, PlaylistService } from '@sdj/backend/core';
-import { ChannelRepository } from '@sdj/backend/db';
+import { Controller, Get, Param, Render } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { HostService, PlaylistService } from "@sdj/backend/core";
+import { ChannelRepository } from "@sdj/backend/db";
 
 @Controller()
 export class AppController {
@@ -9,13 +9,11 @@ export class AppController {
     private playlist: PlaylistService,
     @InjectRepository(ChannelRepository)
     private readonly channelRepository: ChannelRepository
-  ) {
-  }
+  ) {}
 
   @Get()
   @Render('index.hbs')
-  appView(): any {
-  }
+  appView(): any {}
 
   @Get('ices/:id')
   nexSong(@Param() params: { id: string }): any {

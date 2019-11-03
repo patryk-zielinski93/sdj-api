@@ -12,14 +12,14 @@
 - run npm install
 - add virtual hosts from .env to your configuration
 
-
 ## Run production
+
 - Run host api for spawning ices containers
-`ng build host-api && node dist/host-api/main.js`
+  `ng build host-api && node dist/host-api/main.js`
 - Run `CURRENT_UID=$(id -u):$(id -g) docker-compose up`
 
-
 ## Run Development
+
 - Run host api for spawning ices containers `ng serve host-api`
-- Copy  ./docker-compose.override.yml-sample
+- Copy ./docker-compose.override.yml-sample
 - Run `CURRENT_UID=$(id -u):$(id -g) docker-compose up`

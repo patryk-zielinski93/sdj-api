@@ -1,6 +1,5 @@
-import { ICommand } from '@nestjs/cqrs';
+import { ICommand } from "@nestjs/cqrs";
 
 export class DeleteQueuedTrackCommand implements ICommand {
-  constructor(public queuedTrackId: number) {
-  }
+  constructor(public queuedTrackId: number) {}
 }

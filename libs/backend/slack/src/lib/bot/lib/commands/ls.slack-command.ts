@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { StorageServiceFacade } from '@sdj/backend/core';
-import { QueuedTrackRepository } from '@sdj/backend/db';
-import { SlackService } from '../../../services/slack.service';
-import { SlackCommandHandler } from '../bot';
-import { SlackCommand } from '../interfaces/slack-command';
-import { SlackMessage } from '../interfaces/slack-message.interface';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { StorageServiceFacade } from "@sdj/backend/core";
+import { QueuedTrackRepository } from "@sdj/backend/db";
+import { SlackService } from "../../../services/slack.service";
+import { SlackCommandHandler } from "../bot";
+import { SlackCommand } from "../interfaces/slack-command";
+import { SlackMessage } from "../interfaces/slack-message.interface";
 
 @SlackCommandHandler()
 @Injectable()
@@ -18,8 +18,7 @@ export class LsSlackCommand implements SlackCommand {
     private readonly storageService: StorageServiceFacade,
     @InjectRepository(QueuedTrackRepository)
     private queuedTrackRepository: QueuedTrackRepository
-  ) {
-  }
+  ) {}
 
   async handler(command: string[], message: SlackMessage): Promise<void> {
     const queuedTracks = await this.queuedTrackRepository.findQueuedTracks(

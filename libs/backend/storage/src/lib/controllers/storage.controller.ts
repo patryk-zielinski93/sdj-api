@@ -1,10 +1,10 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
-import { InjectRepository } from '@nestjs/typeorm';
-import { QueuedTrack, QueuedTrackRepository } from '@sdj/backend/db';
-import { MicroservicePattern } from '@sdj/backend/shared';
-import { Observable } from 'rxjs';
-import { Store } from '../services';
+import { Controller } from "@nestjs/common";
+import { MessagePattern } from "@nestjs/microservices";
+import { InjectRepository } from "@nestjs/typeorm";
+import { QueuedTrack, QueuedTrackRepository } from "@sdj/backend/db";
+import { MicroservicePattern } from "@sdj/backend/shared";
+import { Observable } from "rxjs";
+import { Store } from "../services";
 
 @Controller('storage')
 export class StorageController {
@@ -12,8 +12,7 @@ export class StorageController {
     private readonly store: Store,
     @InjectRepository(QueuedTrackRepository)
     private queuedTrackRepository: QueuedTrackRepository
-  ) {
-  }
+  ) {}
 
   @MessagePattern(MicroservicePattern.channelAppear)
   channelAppear(channelId: string): Observable<unknown> {

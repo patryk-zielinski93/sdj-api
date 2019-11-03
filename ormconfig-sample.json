@@ -7,15 +7,9 @@
   "database": "slack_dj",
   "synchronize": true,
   "logging": false,
-  "entities": [
-    "libs/backend/db/src/lib/entities/**/*.ts"
-  ],
-  "migrations": [
-    "libs/backend/db/src/lib/migrations/**/*.ts"
-  ],
-  "subscribers": [
-    "libs/backend/db/src/lib/**/*.ts"
-  ],
+  "entities": ["libs/backend/db/src/lib/entities/**/*.ts"],
+  "migrations": ["libs/backend/db/src/lib/migrations/**/*.ts"],
+  "subscribers": ["libs/backend/db/src/lib/**/*.ts"],
   "cli": {
     "entitiesDir": "libs/backend/db/src/lib/entities",
     "migrationsDir": "libs/backend/db/src/lib/migrations",

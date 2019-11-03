@@ -1,7 +1,7 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteQueuedTrackCommand, StorageServiceFacade } from '@sdj/backend/core';
-import { QueuedTrackRepository } from '@sdj/backend/db';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DeleteQueuedTrackCommand, StorageServiceFacade } from "@sdj/backend/core";
+import { QueuedTrackRepository } from "@sdj/backend/db";
 
 @CommandHandler(DeleteQueuedTrackCommand)
 export class DeleteQueuedTrackHandler
@@ -10,8 +10,7 @@ export class DeleteQueuedTrackHandler
     @InjectRepository(QueuedTrackRepository)
     private readonly queuedTrackRepository: QueuedTrackRepository,
     private readonly storageService: StorageServiceFacade
-  ) {
-  }
+  ) {}
 
   async execute(command: DeleteQueuedTrackCommand): Promise<unknown> {
     // TODO CASCADE DELETE

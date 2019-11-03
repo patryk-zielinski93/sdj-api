@@ -1,5 +1,5 @@
-import { spawn as spawnL, SpawnOptions } from 'child_process';
-import { Observable, Subject } from 'rxjs';
+import { spawn as spawnL, SpawnOptions } from "child_process";
+import { Observable, Subject } from "rxjs";
 
 class SpawnService {
   spawn(
@@ -10,9 +10,7 @@ class SpawnService {
     const child = spawnL(command, [...args], options);
     const result = new Subject();
     child.stdout.on('data', data => result.next(data));
-    child.stderr.on('data', data =>
-      result.next(data.toString())
-    );
+    child.stderr.on('data', data => result.next(data.toString()));
     child.on('close', code => {
       result.complete();
     });

@@ -1,0 +1,17 @@
+<sdj-navbar
+  (navigateToMostPlayed)="onNavigateToMostPlayed()"
+  (navigateToRadio)="onNavigateToRadio()"
+  (toggleMenu)="onToggleMenu()"
+></sdj-navbar>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side">
+    <sdj-sidenav
+      [channels$]="channels$"
+      [selectedChannel]="selectedChannel"
+      (selectChannel)="onSelectChannel($event)"
+    ></sdj-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

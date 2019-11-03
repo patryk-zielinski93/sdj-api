@@ -4,12 +4,9 @@
     "outDir": "../../dist/out-tsc",
     "types": [],
     "target": "es5",
-    "module": "es2015"
+    "module": "esnext"
   },
-  "lib": [
-    "es2018",
-    "dom"
-  ],
+  "lib": ["es2018", "dom"],
   "include": ["**/*.ts"],
   "exclude": ["src/test-setup.ts", "**/*.spec.ts", "src/setup.ts"],
   "angularCompilerOptions": {

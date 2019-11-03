@@ -9,13 +9,9 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es5",
-    "module": "es2015",
+    "module": "esnext",
     "typeRoots": ["node_modules/@types"],
-    "lib": [
-      "es2017",
-      "dom",
-      "esnext.asynciterable"
-    ],
+    "lib": ["es2017", "dom", "esnext.asynciterable"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
@@ -32,12 +28,18 @@
       "@sdj/backend/shared": ["libs/backend/shared/src/index.ts"],
       "@sdj/backend/ices": ["libs/backend/ices/src/index.ts"],
       "@sdj/backend/storage": ["libs/backend/storage/src/index.ts"],
-      "@sdj/backend/cqrs": [
-        "libs/backend/cqrs/src/index.ts"
+      "@sdj/backend/cqrs": ["libs/backend/cqrs/src/index.ts"],
+      "@sdj/shared/utils": ["libs/shared/utils/src/index.ts"],
+      "@sdj/ng/shell": ["libs/ng/shell/src/index.ts"],
+      "@sdj/ng/radio/feature": ["libs/ng/radio/feature/src/index.ts"],
+      "@sdj/ng/most-played/feature": [
+        "libs/ng/most-played/feature/src/index.ts"
       ],
-      "@sdj/shared/utils": [
-        "libs/shared/utils/src/index.ts"
-      ]
+      "@sdj/ng/top-rated/feature": ["libs/ng/top-rated/feature/src/index.ts"],
+      "@sdj/ng/shared/ui/players": ["libs/ng/shared/ui/players/src/index.ts"],
+      "@sdj/ng/shared/ui/common": ["libs/ng/shared/ui/common/src/index.ts"],
+      "@sdj/ng/shared/domain": ["libs/ng/shared/domain/src/index.ts"],
+      "@sdj/ng/shared/app/core": ["libs/ng/shared/app/core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

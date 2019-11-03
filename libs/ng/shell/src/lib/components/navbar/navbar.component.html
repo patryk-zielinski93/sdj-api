@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="onOpenMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="spacer"></span>
+  <button mat-icon-button [matMenuTriggerFor]="appMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-menu #appMenu="matMenu">
+  <button mat-menu-item (click)="onNavigateToRadio()">Radio</button>
+  <button mat-menu-item (click)="onNavigateToMostPlated()">Most played</button>
+</mat-menu>

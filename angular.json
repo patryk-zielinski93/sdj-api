@@ -589,10 +589,7 @@
               "libs/shared/utils/tsconfig.lib.json",
               "libs/shared/utils/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/shared/utils/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/shared/utils/**"]
           }
         },
         "test": {
@@ -601,6 +598,261 @@
             "jestConfig": "libs/shared/utils/jest.config.js",
             "tsConfig": "libs/shared/utils/tsconfig.spec.json"
           }
+        }
+      }
+    },
+    "ng-shell": {
+      "projectType": "library",
+      "root": "libs/ng/shell",
+      "sourceRoot": "libs/ng/shell/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shell/tsconfig.lib.json",
+              "libs/ng/shell/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/shell/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shell/jest.config.js",
+            "tsConfig": "libs/ng/shell/tsconfig.spec.json",
+            "setupFile": "libs/ng/shell/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-feature": {
+      "projectType": "library",
+      "root": "libs/ng/radio/feature",
+      "sourceRoot": "libs/ng/radio/feature/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/feature/tsconfig.lib.json",
+              "libs/ng/radio/feature/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/radio/feature/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/feature/jest.config.js",
+            "tsConfig": "libs/ng/radio/feature/tsconfig.spec.json",
+            "setupFile": "libs/ng/radio/feature/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-most-played-feature": {
+      "projectType": "library",
+      "root": "libs/ng/most-played/feature",
+      "sourceRoot": "libs/ng/most-played/feature/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/most-played/feature/tsconfig.lib.json",
+              "libs/ng/most-played/feature/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/most-played/feature/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/most-played/feature/jest.config.js",
+            "tsConfig": "libs/ng/most-played/feature/tsconfig.spec.json",
+            "setupFile": "libs/ng/most-played/feature/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-top-rated-feature": {
+      "projectType": "library",
+      "root": "libs/ng/top-rated/feature",
+      "sourceRoot": "libs/ng/top-rated/feature/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/top-rated/feature/tsconfig.lib.json",
+              "libs/ng/top-rated/feature/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/top-rated/feature/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/top-rated/feature/jest.config.js",
+            "tsConfig": "libs/ng/top-rated/feature/tsconfig.spec.json",
+            "setupFile": "libs/ng/top-rated/feature/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-ui-players": {
+      "projectType": "library",
+      "root": "libs/ng/shared/ui/players",
+      "sourceRoot": "libs/ng/shared/ui/players/src",
+      "prefix": "sdj",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/ng/shared/ui/players/tsconfig.lib.json",
+            "project": "libs/ng/shared/ui/players/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/ui/players/tsconfig.lib.json",
+              "libs/ng/shared/ui/players/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/shared/ui/players/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/ui/players/jest.config.js",
+            "tsConfig": "libs/ng/shared/ui/players/tsconfig.spec.json",
+            "setupFile": "libs/ng/shared/ui/players/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-ui-common": {
+      "projectType": "library",
+      "root": "libs/ng/shared/ui/common",
+      "sourceRoot": "libs/ng/shared/ui/common/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/ui/common/tsconfig.lib.json",
+              "libs/ng/shared/ui/common/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/shared/ui/common/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/ui/common/jest.config.js",
+            "tsConfig": "libs/ng/shared/ui/common/tsconfig.spec.json",
+            "setupFile": "libs/ng/shared/ui/common/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-domain": {
+      "projectType": "library",
+      "root": "libs/ng/shared/domain",
+      "sourceRoot": "libs/ng/shared/domain/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/domain/tsconfig.lib.json",
+              "libs/ng/shared/domain/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/shared/domain/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/domain/jest.config.js",
+            "tsConfig": "libs/ng/shared/domain/tsconfig.spec.json",
+            "setupFile": "libs/ng/shared/domain/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-app-core": {
+      "projectType": "library",
+      "root": "libs/ng/shared/app/core",
+      "sourceRoot": "libs/ng/shared/app/core/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/app/core/tsconfig.lib.json",
+              "libs/ng/shared/app/core/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/shared/app/core/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/app/core/jest.config.js",
+            "tsConfig": "libs/ng/shared/app/core/tsconfig.spec.json",
+            "setupFile": "libs/ng/shared/app/core/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
         }
       }
     }

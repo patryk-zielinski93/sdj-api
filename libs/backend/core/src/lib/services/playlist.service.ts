@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { appConfig } from '@sdj/backend/config';
-import { Channel, QueuedTrack, QueuedTrackRepository, Track, TrackRepository } from '@sdj/backend/db';
-import { QueueTrackCommand } from '../cqrs/commands';
-import { AppServiceFacade } from './app-service.facade';
-import { CqrsServiceFacade } from './cqrs-service.facade';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { appConfig } from "@sdj/backend/config";
+import { Channel, QueuedTrack, QueuedTrackRepository, Track, TrackRepository } from "@sdj/backend/db";
+import { QueueTrackCommand } from "../cqrs/commands";
+import { AppServiceFacade } from "./app-service.facade";
+import { CqrsServiceFacade } from "./cqrs-service.facade";
 
 @Injectable()
 export class PlaylistService {
@@ -17,8 +17,7 @@ export class PlaylistService {
     @InjectRepository(TrackRepository) private trackRepository: TrackRepository,
     @InjectRepository(QueuedTrackRepository)
     private queuedTrackRepository: QueuedTrackRepository
-  ) {
-  }
+  ) {}
 
   async getNext(channel: Channel): Promise<QueuedTrack | undefined> {
     const queuedTrack = await this.queuedTrackRepository.getNextSongInQueue(

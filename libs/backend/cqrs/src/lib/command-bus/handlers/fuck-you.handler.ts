@@ -1,8 +1,8 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { QueuedTrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
-import { FuckYouCommand } from '../../../../../core/src/lib/cqrs/commands/fuck-you.command';
-import { HeartCommand } from '../../../../../core/src/lib/cqrs/commands/heart.command';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { InjectRepository } from "@nestjs/typeorm";
+import { QueuedTrackRepository, User, UserRepository, Vote, VoteRepository } from "@sdj/backend/db";
+import { FuckYouCommand } from "../../../../../core/src/lib/cqrs/commands/fuck-you.command";
+import { HeartCommand } from "../../../../../core/src/lib/cqrs/commands/heart.command";
 
 @CommandHandler(FuckYouCommand)
 export class FuckYouHandler implements ICommandHandler<FuckYouCommand> {

@@ -1,9 +1,9 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { appConfig } from '@sdj/backend/config';
-import { ChannelRepository, QueuedTrack, QueuedTrackRepository, TrackRepository } from '@sdj/backend/db';
-import { QueueTrackCommand } from '../../../../../core/src/lib/cqrs/commands/queue-track.command';
-import { StorageServiceFacade } from '../../../../../core/src/lib/services/storage-service.facade';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { InjectRepository } from "@nestjs/typeorm";
+import { appConfig } from "@sdj/backend/config";
+import { ChannelRepository, QueuedTrack, QueuedTrackRepository, TrackRepository } from "@sdj/backend/db";
+import { QueueTrackCommand } from "../../../../../core/src/lib/cqrs/commands/queue-track.command";
+import { StorageServiceFacade } from "../../../../../core/src/lib/services/storage-service.facade";
 
 @CommandHandler(QueueTrackCommand)
 export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
@@ -15,8 +15,7 @@ export class QueueTrackHandler implements ICommandHandler<QueueTrackCommand> {
     private queuedTrackRepository: QueuedTrackRepository,
     @InjectRepository(TrackRepository)
     private readonly trackRepository: TrackRepository
-  ) {
-  }
+  ) {}
 
   async execute(command: QueueTrackCommand): Promise<QueuedTrack> {
     const channel = await this.channelRepository.findOrCreate(

@@ -1,13 +1,13 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LoggerService, VideoMetadata, YoutubeIdError } from '@sdj/backend/common';
-import { connectionConfig } from '@sdj/backend/config';
-import { Track, TrackRepository, User } from '@sdj/backend/db';
-import * as parseIsoDuration from 'parse-iso-duration';
-import * as requestPromise from 'request-promise-native';
-import { CreateTrackCommand } from '../../../../../core/src/lib/cqrs/commands';
-import { TrackStatus } from '../../../../../core/src/lib/enums';
-import { Mp3Service } from '../../../../../core/src/lib/services';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { InjectRepository } from "@nestjs/typeorm";
+import { LoggerService, VideoMetadata, YoutubeIdError } from "@sdj/backend/common";
+import { connectionConfig } from "@sdj/backend/config";
+import { Track, TrackRepository, User } from "@sdj/backend/db";
+import * as parseIsoDuration from "parse-iso-duration";
+import * as requestPromise from "request-promise-native";
+import { CreateTrackCommand } from "../../../../../core/src/lib/cqrs/commands";
+import { TrackStatus } from "../../../../../core/src/lib/enums";
+import { Mp3Service } from "../../../../../core/src/lib/services";
 
 @CommandHandler(CreateTrackCommand)
 export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {

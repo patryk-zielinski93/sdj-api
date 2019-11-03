@@ -1,11 +1,11 @@
-import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LoggerService } from '@sdj/backend/common';
-import { pathConfig } from '@sdj/backend/config';
-import { DeleteTrackCommand, DownloadTrackCommand, Mp3Service } from '@sdj/backend/core';
-import { TrackRepository } from '@sdj/backend/db';
-import * as fs from 'fs';
-import { throwError } from 'rxjs';
+import { CommandBus, CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { InjectRepository } from "@nestjs/typeorm";
+import { LoggerService } from "@sdj/backend/common";
+import { pathConfig } from "@sdj/backend/config";
+import { DeleteTrackCommand, DownloadTrackCommand, Mp3Service } from "@sdj/backend/core";
+import { TrackRepository } from "@sdj/backend/db";
+import * as fs from "fs";
+import { throwError } from "rxjs";
 
 @CommandHandler(DownloadTrackCommand)
 export class DownloadTrackHandler

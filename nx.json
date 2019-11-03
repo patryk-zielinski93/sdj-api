@@ -58,6 +58,30 @@
     },
     "shared-utils": {
       "tags": []
+    },
+    "ng-shell": {
+      "tags": ["scope:ng", "type:shell"]
+    },
+    "ng-radio-feature": {
+      "tags": ["scope:radio", "type:feature"]
+    },
+    "ng-most-played-feature": {
+      "tags": ["scope:most-played", "type:feature"]
+    },
+    "ng-top-rated-feature": {
+      "tags": ["scope:top-rated", "type:feature"]
+    },
+    "ng-shared-ui-players": {
+      "tags": ["scope:ng-shared", "type:ui"]
+    },
+    "ng-shared-ui-common": {
+      "tags": ["scope:ng-shared", "type:ui"]
+    },
+    "ng-shared-domain": {
+      "tags": ["scope:ng-shared", "type:domain"]
+    },
+    "ng-shared-app-core": {
+      "tags": ["scope:ng-shared", "type:core"]
     }
   }
 }
