@@ -7,16 +7,16 @@ import {
   OnDestroy,
   OnInit,
   ViewChild
-} from "@angular/core";
-import { environment } from "@ng-environment/environment";
-import { ChannelService, SpeechService, WebSocketService } from "@sdj/ng/shared/app/core";
-import { Channel, QueuedTrack, Track } from "@sdj/ng/shared/domain";
-import { AwesomePlayerComponent } from "@sdj/ng/shared/ui/players";
-import { WebSocketEvents } from "@sdj/shared/common";
-import { TrackUtil, UserUtils } from "@sdj/shared/utils";
-import { untilDestroyed } from "ngx-take-until-destroy";
-import { merge, Observable, Subject } from "rxjs";
-import { filter, first, map, takeUntil, tap } from "rxjs/operators";
+} from '@angular/core';
+import { environment } from '@ng-environment/environment';
+import { ChannelService, SpeechService, WebSocketService } from '@sdj/ng/shared/app/core';
+import { Channel, QueuedTrack, Track } from '@sdj/ng/shared/domain';
+import { AwesomePlayerComponent } from '@sdj/ng/shared/ui/players';
+import { User, WebSocketEvents } from '@sdj/shared/domain';
+import { TrackUtil, UserUtils } from '@sdj/shared/utils';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { merge, Observable, Subject } from 'rxjs';
+import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'sdj-radio',
@@ -33,7 +33,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   audioSrc: string = environment.externalStream;
   currentTrack: Observable<any>;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
-  getUserName = UserUtils.getUserName;
+  getUserName: (user: User) => string = UserUtils.getUserName;
   listScrollSubject: Subject<QueuedTrack[]> = new Subject();
   queuedTracks: QueuedTrack[] = [];
   queuedTracks$: Observable<QueuedTrack[]>;

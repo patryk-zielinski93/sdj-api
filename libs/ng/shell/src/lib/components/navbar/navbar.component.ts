@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'sdj-navbar',
@@ -8,17 +8,17 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from "@angul
 })
 export class NavbarComponent {
   @Output()
-  navigateToMostPlayed = new EventEmitter<void>();
+  navigateToMostPlayed: EventEmitter<void> = new EventEmitter<void>();
   @Output()
-  navigateToRadio = new EventEmitter<void>();
+  navigateToRadio: EventEmitter<void> = new EventEmitter<void>();
   @Output()
-  toggleMenu = new EventEmitter<void>();
+  toggleMenu: EventEmitter<void> = new EventEmitter<void>();
 
   onOpenMenu(): void {
     this.toggleMenu.emit();
   }
 
-  onNavigateToRadio() {
+  onNavigateToRadio(): void {
     this.navigateToRadio.emit();
   }
 

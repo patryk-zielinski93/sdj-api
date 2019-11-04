@@ -1,9 +1,9 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
-import { AuthService } from "../services/auth.service";
-import { SlackApiErrorsHandler } from "../services/slack-api-errors-handler";
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { AuthService } from '../services/auth.service';
+import { SlackApiErrorsHandler } from '../services/slack-api-errors-handler';
 
 @Injectable({
   providedIn: 'root'

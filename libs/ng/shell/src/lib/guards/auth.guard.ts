@@ -1,9 +1,8 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
-import { Observable, of } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
-import { AuthService } from "../../../../shared/app/core/src/lib/services/auth.service";
-import { SlackService } from "../../../../shared/app/core/src/lib/services/slack.service";
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { AuthService, SlackService } from '@sdj/ng/shared/app/core';
+import { Observable, of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

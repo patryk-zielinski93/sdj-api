@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { connectionConfig } from '@sdj/backend/shared/config';
 import { RTMClient, WebClient } from '@slack/client';
-import { connectionConfig } from '@sdj/backend/config';
 
 @Injectable()
 export class SlackService {

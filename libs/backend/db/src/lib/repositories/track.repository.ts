@@ -1,6 +1,6 @@
-import { EntityRepository, Repository, Brackets } from 'typeorm';
+import { appConfig } from '@sdj/backend/shared/config';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 import { Track } from '../entities/track.entity';
-import { appConfig } from '@sdj/backend/config';
 
 require('datejs');
 const DateJS = <any>Date;

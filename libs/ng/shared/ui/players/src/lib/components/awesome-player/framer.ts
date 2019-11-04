@@ -1,5 +1,5 @@
-import { Scene } from "./scene";
-import { Tracker } from "./tracker";
+import { Scene } from './scene';
+import { Tracker } from './tracker';
 
 interface Tick {
   x1: number;

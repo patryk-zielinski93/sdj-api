@@ -27,7 +27,10 @@
               "apps/ng/src/env.js",
               "apps/ng/src/assets"
             ],
-            "styles": ["apps/ng/src/styles.scss"],
+            "styles": [
+              "apps/ng/src/styles.scss",
+              "apps/ng/src/styles-app-loading.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -395,9 +398,9 @@
         }
       }
     },
-    "backend-common": {
-      "root": "libs/backend/common",
-      "sourceRoot": "libs/backend/common/src",
+    "backend-shared-config": {
+      "root": "libs/backend/shared/config",
+      "sourceRoot": "libs/backend/shared/config/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -405,24 +408,24 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/backend/common/tsconfig.lib.json",
-              "libs/backend/common/tsconfig.spec.json"
+              "libs/backend/shared/config/tsconfig.lib.json",
+              "libs/backend/shared/config/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/backend/common/**"]
+            "exclude": ["**/node_modules/**", "!libs/backend/shared/config/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/backend/common/jest.config.js",
-            "tsConfig": "libs/backend/common/tsconfig.spec.json"
+            "jestConfig": "libs/backend/shared/config/jest.config.js",
+            "tsConfig": "libs/backend/shared/config/tsconfig.spec.json"
           }
         }
       }
     },
-    "backend-config": {
-      "root": "libs/backend/config",
-      "sourceRoot": "libs/backend/config/src",
+    "shared-domain": {
+      "root": "libs/shared/domain",
+      "sourceRoot": "libs/shared/domain/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -430,24 +433,24 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/backend/config/tsconfig.lib.json",
-              "libs/backend/config/tsconfig.spec.json"
+              "libs/shared/domain/tsconfig.lib.json",
+              "libs/shared/domain/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/backend/config/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/domain/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/backend/config/jest.config.js",
-            "tsConfig": "libs/backend/config/tsconfig.spec.json"
+            "jestConfig": "libs/shared/domain/jest.config.js",
+            "tsConfig": "libs/shared/domain/tsconfig.spec.json"
           }
         }
       }
     },
-    "shared-common": {
-      "root": "libs/shared/common",
-      "sourceRoot": "libs/shared/common/src",
+    "backend-shared-domain": {
+      "root": "libs/backend/shared/domain",
+      "sourceRoot": "libs/backend/shared/domain/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -455,42 +458,17 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/shared/common/tsconfig.lib.json",
-              "libs/shared/common/tsconfig.spec.json"
+              "libs/backend/shared/domain/tsconfig.lib.json",
+              "libs/backend/shared/domain/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/common/**"]
+            "exclude": ["**/node_modules/**", "!libs/backend/shared/domain/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/shared/common/jest.config.js",
-            "tsConfig": "libs/shared/common/tsconfig.spec.json"
-          }
-        }
-      }
-    },
-    "backend-shared": {
-      "root": "libs/backend/shared",
-      "sourceRoot": "libs/backend/shared/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/backend/shared/tsconfig.lib.json",
-              "libs/backend/shared/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/backend/shared/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/backend/shared/jest.config.js",
-            "tsConfig": "libs/backend/shared/tsconfig.spec.json"
+            "jestConfig": "libs/backend/shared/domain/jest.config.js",
+            "tsConfig": "libs/backend/shared/domain/tsconfig.spec.json"
           }
         }
       }
@@ -853,6 +831,31 @@
       "schematics": {
         "@nrwl/angular:component": {
           "styleext": "scss"
+        }
+      }
+    },
+    "backend-shared-logger": {
+      "root": "libs/backend/shared/logger",
+      "sourceRoot": "libs/backend/shared/logger/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/shared/logger/tsconfig.lib.json",
+              "libs/backend/shared/logger/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/shared/logger/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/shared/logger/jest.config.js",
+            "tsConfig": "libs/backend/shared/logger/tsconfig.spec.json"
+          }
         }
       }
     }

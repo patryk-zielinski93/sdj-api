@@ -14,7 +14,7 @@ import {
   ThumbUpCommand
 } from '@sdj/backend/core';
 import { QueuedTrack } from '@sdj/backend/db';
-import { MicroservicePattern } from '@sdj/backend/shared';
+import { MicroservicePattern } from '@sdj/backend/shared/domain';
 
 @Controller()
 export class CqrsController {

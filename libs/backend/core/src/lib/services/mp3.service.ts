@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { connectionConfig, pathConfig } from '@sdj/backend/shared/config';
 import { exec } from 'child_process';
 import * as path from 'path';
 import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
 import { finalize, switchMap } from 'rxjs/operators';
 import * as ytdl from 'youtube-dl';
-import { connectionConfig, pathConfig } from '@sdj/backend/config';
 
 @Injectable()
 export class Mp3Service {

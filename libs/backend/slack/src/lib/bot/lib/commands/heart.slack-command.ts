@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { CqrsServiceFacade, HeartCommand, StorageServiceFacade } from "@sdj/backend/core";
-import { SlackService } from "../../../services/slack.service";
-import { SlackCommandHandler } from "../bot";
-import { SlackCommand } from "../interfaces/slack-command";
-import { SlackMessage } from "../interfaces/slack-message.interface";
+import { Injectable } from '@nestjs/common';
+import { CqrsServiceFacade, HeartCommand, StorageServiceFacade } from '@sdj/backend/core';
+import { SlackService } from '../../../services/slack.service';
+import { SlackCommandHandler } from '../bot';
+import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @SlackCommandHandler()
 @Injectable()

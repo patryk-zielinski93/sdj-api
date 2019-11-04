@@ -1,15 +1,15 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
-import { ChannelService } from "@sdj/ng/shared/app/core";
-import { Channel } from "@sdj/shared/common";
-import { Observable } from "rxjs";
-import { filter, first, switchMap, tap } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ChannelService } from '@sdj/ng/shared/app/core';
+import { Channel } from '@sdj/shared/domain';
+import { Observable } from 'rxjs';
+import { filter, first, switchMap, tap } from 'rxjs/operators';
 
 @Injectable()
 export class ChannelResolver implements Resolve<Channel[]> {
   constructor(private channelService: ChannelService) {}
 
-  findChannelIdParam(route: ActivatedRouteSnapshot) {
+  findChannelIdParam(route: ActivatedRouteSnapshot): string {
     let channelId = route.paramMap.get('channelId');
     if (channelId) {
       return channelId;

@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { QueuedTrack, QueuedTrackRepository } from "@sdj/backend/db";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { distinctUntilChanged, filter, first, map } from "rxjs/operators";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { QueuedTrack, QueuedTrackRepository } from '@sdj/backend/db';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { distinctUntilChanged, filter, first, map } from 'rxjs/operators';
 
 interface ChannelState {
   silenceCount: number;
@@ -44,7 +44,6 @@ export class Store {
   channelDisappears(channelId: string): void {
     const state = this.state;
     delete state[channelId];
-    console.log('disappers', state);
     this._state.next(state);
   }
 

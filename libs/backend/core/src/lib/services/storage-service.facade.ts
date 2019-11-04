@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { QueuedTrack } from '@sdj/backend/db';
-import { Injectors, MicroservicePattern } from '@sdj/backend/shared';
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared/domain';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 

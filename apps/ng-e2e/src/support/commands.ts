@@ -31,7 +31,9 @@ export function login(): void {
 
 export const expectPlayingAudio = () => {
   playerHtmlAudio().then((el: any) => {
+    // tslint:disable-next-line
     console.log(el);
+    // tslint:disable-next-line
     console.log(el.duration, el.paused, el.muted);
 
     expect(el.duration > 0 && !el.paused && !el.muted).to.eq(false);

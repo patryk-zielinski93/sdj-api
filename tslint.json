@@ -56,28 +56,83 @@
         "allow": [],
         "depConstraints": [
           {
-            "sourceTag": "backend:app",
-            "onlyDependOnLibsWithTags": ["backend"]
+            "sourceTag": "type:application",
+            "onlyDependOnLibsWithTags": ["*"]
           },
           {
-            "sourceTag": "backend",
+            "sourceTag": "type:feature",
+            "onlyDependOnLibsWithTags": ["*"]
+          },
+          {
+            "sourceTag": "type:shell",
+            "onlyDependOnLibsWithTags": ["*"]
+          },
+          {
+            "sourceTag": "type:service",
             "onlyDependOnLibsWithTags": [
-              "backend:core",
-              "backend:db",
-              "backend:config",
-              "backend:common",
-              "backend:cqrs",
-              "backend:shared",
-              "shared"
+              "type:util",
+              "type:config",
+              "type:domain",
+              "type:core"
             ]
           },
           {
-            "sourceTag": "ng",
-            "onlyDependOnLibsWithTags": ["shared"]
+            "sourceTag": "type:config",
+            "onlyDependOnLibsWithTags": ["type:config"]
           },
           {
-            "sourceTag": "node",
-            "onlyDependOnLibsWithTags": ["shared", "backend:shared"]
+            "sourceTag": "type:util",
+            "onlyDependOnLibsWithTags": [
+              "type:util",
+              "type:config",
+              "type:domain"
+            ]
+          },
+          {
+            "sourceTag": "type:ui",
+            "onlyDependOnLibsWithTags": [
+              "type:ui",
+              "type:config",
+              "type:util",
+              "type:domain"
+            ]
+          },
+          {
+            "sourceTag": "type:core",
+            "onlyDependOnLibsWithTags": [
+              "type:config",
+              "type:util",
+              "type:domain",
+              "type:core"
+            ]
+          },
+          {
+            "sourceTag": "type:domain",
+            "onlyDependOnLibsWithTags": ["type:domain"]
+          },
+          {
+            "sourceTag": "scope:backend",
+            "onlyDependOnLibsWithTags": [
+              "scope:backend",
+              "scope:backend-shared",
+              "scope:shared"
+            ]
+          },
+          {
+            "sourceTag": "scope:backend-shared",
+            "onlyDependOnLibsWithTags": ["scope:backend-shared", "scope:shared"]
+          },
+          {
+            "sourceTag": "scope:ng",
+            "onlyDependOnLibsWithTags": [
+              "scope:ng",
+              "scope:ng-shared",
+              "scope:shared"
+            ]
+          },
+          {
+            "sourceTag": "scope:ng-shared",
+            "onlyDependOnLibsWithTags": ["scope:ng-shared", "scope:shared"]
           }
         ]
       }

@@ -1,8 +1,10 @@
+@import 'apps/ng/src/assets/styles/variables';
+
 .most-played-view-container {
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 64px);
+  height: calc(100vh - #{$navbar-height});
   width: 100%;
 }
 

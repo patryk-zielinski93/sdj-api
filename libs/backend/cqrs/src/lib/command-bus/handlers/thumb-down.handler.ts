@@ -1,15 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  QueuedTrackRepository,
-  User,
-  UserRepository,
-  Vote,
-  VoteRepository
-} from '@sdj/backend/db';
-import { ThumbDownCommand } from '../../../../../core/src/lib/cqrs/commands/thumb-down.command';
-import { appConfig } from '@sdj/backend/config';
-import { HostService } from '@sdj/backend/core';
+import { ThumbDownCommand } from '@sdj/backend/core';
+import { QueuedTrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
 
 @CommandHandler(ThumbDownCommand)
 export class ThumbDownHandler implements ICommandHandler<ThumbDownCommand> {

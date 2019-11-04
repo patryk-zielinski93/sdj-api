@@ -1,16 +1,11 @@
-import {
-  OnGatewayDisconnect,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
-  WsResponse
-} from '@nestjs/websockets';
+import { OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
 import { HostService, StorageServiceFacade } from '@sdj/backend/core';
 import { QueuedTrack } from '@sdj/backend/db';
-import { WebSocketEvents } from '@sdj/shared/common';
+import { WebSocketEvents } from '@sdj/shared/domain';
 import { Observable, of, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { Rooms, Server, Socket } from 'socket.io';
+
 @WebSocketGateway()
 export class Gateway implements OnGatewayDisconnect {
   private clientInRommSubjects: { [key: string]: Subject<void> } = {};

@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
-import { LoggerService } from '@sdj/backend/common';
-import { MicroservicePattern } from '@sdj/backend/shared';
-import { WebSocketEvents } from '@sdj/shared/common';
+import { MicroservicePattern } from '@sdj/backend/shared/domain';
+import { LoggerService } from '@sdj/backend/shared/logger';
+import { WebSocketEvents } from '@sdj/shared/domain';
 import { Gateway } from '../gateway';
 
 @Controller()

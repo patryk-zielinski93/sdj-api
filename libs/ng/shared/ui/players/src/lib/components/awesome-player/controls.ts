@@ -1,6 +1,6 @@
-import { Player } from "./player";
-import { Scene } from "./scene";
-import { Tracker } from "./tracker";
+import { Player } from './player';
+import { Scene } from './scene';
+import { Tracker } from './tracker';
 
 export class Controls {
   playing: boolean = false;

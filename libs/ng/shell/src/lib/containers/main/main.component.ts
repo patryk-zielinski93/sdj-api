@@ -1,9 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from "@angular/core";
-import { MatSidenav } from "@angular/material";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ChannelService, SpeechService, WebSocketService } from "@sdj/ng/shared/app/core";
-import { Channel } from "@sdj/ng/shared/domain";
-import { Observable, Subject } from "rxjs";
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ChannelService, SpeechService, WebSocketService } from '@sdj/ng/shared/app/core';
+import { Channel } from '@sdj/ng/shared/domain';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'sdj-main',
@@ -56,7 +56,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onNavigateToRadio() {
+  onNavigateToRadio(): void {
     this.router.navigate([this.selectedChannel.id]);
   }
 
@@ -68,7 +68,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.channelService.selectChannel(channel);
   }
 
-  onNavigateToMostPlayed() {
+  onNavigateToMostPlayed(): void {
     this.router.navigate([this.selectedChannel.id, 'most-played']);
   }
 }

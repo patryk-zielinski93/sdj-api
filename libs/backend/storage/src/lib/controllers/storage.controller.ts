@@ -1,10 +1,10 @@
-import { Controller } from "@nestjs/common";
-import { MessagePattern } from "@nestjs/microservices";
-import { InjectRepository } from "@nestjs/typeorm";
-import { QueuedTrack, QueuedTrackRepository } from "@sdj/backend/db";
-import { MicroservicePattern } from "@sdj/backend/shared";
-import { Observable } from "rxjs";
-import { Store } from "../services";
+import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
+import { InjectRepository } from '@nestjs/typeorm';
+import { QueuedTrack, QueuedTrackRepository } from '@sdj/backend/db';
+import { MicroservicePattern } from '@sdj/backend/shared/domain';
+import { Observable } from 'rxjs';
+import { Store } from '../services';
 
 @Controller('storage')
 export class StorageController {
@@ -30,16 +30,16 @@ export class StorageController {
   }
 
   @MessagePattern(MicroservicePattern.setCurrentTrack)
-  async setCurrentTrack(data: {
+  setCurrentTrack(data: {
     channelId: string;
     queuedTrack: QueuedTrack | null;
   }): Promise<void> {
-    this.store.setCurrentTrack(data.channelId, data.queuedTrack);
+    return this.store.setCurrentTrack(data.channelId, data.queuedTrack);
   }
 
   @MessagePattern(MicroservicePattern.addToQueue)
-  async addToQueue(queuedTrack: QueuedTrack): Promise<void> {
-    this.store.addToQueue(queuedTrack);
+  addToQueue(queuedTrack: QueuedTrack): Promise<void> {
+    return this.store.addToQueue(queuedTrack);
   }
 
   @MessagePattern(MicroservicePattern.setSilenceCount)

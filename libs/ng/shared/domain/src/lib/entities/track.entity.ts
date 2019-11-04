@@ -1,3 +1,5 @@
-import { Track as ITrack } from "@sdj/shared/common";
+import { Track as ITrack } from '@sdj/shared/domain';
 
-export interface Track extends ITrack {}
+export interface Track extends ITrack {
+  playedCount: number;
+}

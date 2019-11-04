@@ -2,10 +2,9 @@ import { INestMicroservice } from '@nestjs/common';
 import { CommandBus, EventBus, ofType } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommonModule } from '@sdj/backend/common';
-import { microservices } from '@sdj/backend/config';
 import { CoreModule, QueueTrackCommand } from '@sdj/backend/core';
 import { CommandHandlers, TrackRepository } from '@sdj/backend/db';
+import { microservices } from '@sdj/backend/shared/config';
 import { first, switchMap, tap } from 'rxjs/operators';
 import { RedisGetNextHandler } from '../cqrs/events/handlers/redis-get-next.handler';
 import { PlayDjEvent } from '../cqrs/events/play-dj.event';
@@ -22,7 +21,7 @@ describe('Get Next', () => {
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [CommonModule, CoreModule, TypeOrmModule.forRoot()],
+      imports: [CoreModule, TypeOrmModule.forRoot()],
       providers: [
         RedisSagas,
         RedisService,

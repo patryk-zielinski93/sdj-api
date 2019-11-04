@@ -1,15 +1,15 @@
 import { Global, Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 import { ClientsModule } from '@nestjs/microservices';
-import { CommonModule } from '@sdj/backend/common';
-import { microservices } from '@sdj/backend/config';
 import { DbModule } from '@sdj/backend/db';
-import { Injectors } from '@sdj/backend/shared';
+import { microservices } from '@sdj/backend/shared/config';
+import { Injectors } from '@sdj/backend/shared/domain';
+import { LoggerModule } from '@sdj/backend/shared/logger';
 import { AppServiceFacade } from './services/app-service.facade';
 import { CqrsServiceFacade } from './services/cqrs-service.facade';
 import { Mp3Service } from './services/mp3.service';
 import { PlaylistService } from './services/playlist.service';
 import { StorageServiceFacade } from './services/storage-service.facade';
-import { CqrsModule } from '@nestjs/cqrs';
 
 const ClientsModuleRegistered = ClientsModule.register([
   {
@@ -36,7 +36,7 @@ const ClientsModuleRegistered = ClientsModule.register([
 
 @Global()
 @Module({
-  imports: [DbModule, ClientsModuleRegistered, CqrsModule, CommonModule],
+  imports: [DbModule, ClientsModuleRegistered, CqrsModule, LoggerModule],
   providers: [
     AppServiceFacade,
     CqrsServiceFacade,
@@ -48,12 +48,12 @@ const ClientsModuleRegistered = ClientsModule.register([
     AppServiceFacade,
     ClientsModuleRegistered,
     CqrsModule,
-    CommonModule,
     CqrsServiceFacade,
     DbModule,
     Mp3Service,
     PlaylistService,
-    StorageServiceFacade
+    StorageServiceFacade,
+    LoggerModule
   ]
 })
 export class CoreModule {}

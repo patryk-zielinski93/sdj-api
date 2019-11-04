@@ -1,4 +1,4 @@
-import { User } from '@sdj/shared/common';
+import { User } from '@sdj/shared/domain';
 
 export class UserUtils {
   static getUserName(user: User): string {

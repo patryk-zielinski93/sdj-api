@@ -1,11 +1,11 @@
-import { environment } from "@ng-environment/environment.prod";
-import { QueuedTrack } from "@sdj/shared/common";
-import { UserUtils } from "@sdj/shared/utils";
-import { untilDestroyed } from "ngx-take-until-destroy";
-import { Observable } from "rxjs";
+import { environment } from '@ng-environment/environment.prod';
+import { QueuedTrack } from '@sdj/shared/domain';
+import { UserUtils } from '@sdj/shared/utils';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { Observable } from 'rxjs';
 
-import { Framer } from "./framer";
-import { Scene } from "./scene";
+import { Framer } from './framer';
+import { Scene } from './scene';
 
 export class Player {
   get src(): string {

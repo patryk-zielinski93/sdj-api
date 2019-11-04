@@ -1,6 +1,6 @@
+import { appConfig } from '@sdj/backend/shared/config';
 import { EntityRepository, Repository } from 'typeorm';
 import { Vote } from '../entities/vote.entity';
-import { appConfig } from '@sdj/backend/config';
 
 require('datejs');
 const DateJS = <any>Date;

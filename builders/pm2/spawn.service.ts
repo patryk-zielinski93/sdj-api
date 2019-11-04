@@ -1,5 +1,5 @@
-import { spawn as spawnL, SpawnOptions } from "child_process";
-import { Observable, Subject } from "rxjs";
+import { spawn as spawnL, SpawnOptions } from 'child_process';
+import { Observable, Subject } from 'rxjs';
 
 class SpawnService {
   spawn(

@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { Channel } from "@sdj/ng/shared/domain";
-import { WebSocketEvents } from "@sdj/shared/common";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { map, startWith, switchMap } from "rxjs/operators";
-import { SlackService } from "./slack.service";
-import { WebSocketService } from "./web-socket.service";
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Channel } from '@sdj/ng/shared/domain';
+import { WebSocketEvents } from '@sdj/shared/domain';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { map, startWith, switchMap } from 'rxjs/operators';
+import { SlackService } from './slack.service';
+import { WebSocketService } from './web-socket.service';
 
 @Injectable({
   providedIn: 'root'

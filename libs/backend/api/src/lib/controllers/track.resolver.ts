@@ -1,6 +1,6 @@
-import { Args, Query, Resolver } from "@nestjs/graphql";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Track, TrackRepository } from "@sdj/backend/db";
+import { Args, Query, Resolver } from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Track, TrackRepository } from '@sdj/backend/db';
 
 @Resolver(Track)
 export class TrackResolver {

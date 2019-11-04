@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FuckYouCommand, StorageServiceFacade } from '@sdj/backend/core';
-import { CqrsServiceFacade } from 'libs/backend/core/src/lib/services/cqrs-service.facade';
+import { CqrsServiceFacade, FuckYouCommand, StorageServiceFacade } from '@sdj/backend/core';
 import { SlackService } from '../../../services/slack.service';
 import { SlackCommandHandler } from '../bot';
 import { SlackCommand } from '../interfaces/slack-command';

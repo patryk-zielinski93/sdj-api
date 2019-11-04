@@ -1,7 +1,7 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { ClientProxy } from "@nestjs/microservices";
-import { QueuedTrack } from "@sdj/backend/db";
-import { Injectors, MicroservicePattern } from "@sdj/backend/shared";
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { QueuedTrack } from '@sdj/backend/db';
+import { Injectors, MicroservicePattern } from '@sdj/backend/shared/domain';
 import {
   CreateTrackCommand,
   DeleteQueuedTrackCommand,
@@ -12,7 +12,7 @@ import {
   QueueTrackCommand,
   ThumbDownCommand,
   ThumbUpCommand
-} from "../..";
+} from '../..';
 
 @Injectable()
 export class CqrsServiceFacade {

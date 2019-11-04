@@ -1,12 +1,12 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { appConfig } from "@sdj/backend/config";
-import { CqrsServiceFacade, HostService, StorageServiceFacade, ThumbDownCommand } from "@sdj/backend/core";
-import { TrackRepository, VoteRepository } from "@sdj/backend/db";
-import { SlackService } from "../../../services/slack.service";
-import { SlackCommandHandler } from "../bot";
-import { SlackCommand } from "../interfaces/slack-command";
-import { SlackMessage } from "../interfaces/slack-message.interface";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CqrsServiceFacade, HostService, StorageServiceFacade, ThumbDownCommand } from '@sdj/backend/core';
+import { TrackRepository, VoteRepository } from '@sdj/backend/db';
+import { appConfig } from '@sdj/backend/shared/config';
+import { SlackService } from '../../../services/slack.service';
+import { SlackCommandHandler } from '../bot';
+import { SlackCommand } from '../interfaces/slack-command';
+import { SlackMessage } from '../interfaces/slack-message.interface';
 
 @SlackCommandHandler()
 @Injectable()

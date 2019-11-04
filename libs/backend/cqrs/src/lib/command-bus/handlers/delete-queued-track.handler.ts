@@ -1,7 +1,7 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { InjectRepository } from "@nestjs/typeorm";
-import { DeleteQueuedTrackCommand, StorageServiceFacade } from "@sdj/backend/core";
-import { QueuedTrackRepository } from "@sdj/backend/db";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteQueuedTrackCommand, StorageServiceFacade } from '@sdj/backend/core';
+import { QueuedTrackRepository } from '@sdj/backend/db';
 
 @CommandHandler(DeleteQueuedTrackCommand)
 export class DeleteQueuedTrackHandler

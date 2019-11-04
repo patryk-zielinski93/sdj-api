@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Render } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { HostService, PlaylistService } from "@sdj/backend/core";
-import { ChannelRepository } from "@sdj/backend/db";
+import { Controller, Get, Param, Render } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { HostService, PlaylistService } from '@sdj/backend/core';
+import { ChannelRepository } from '@sdj/backend/db';
 
 @Controller()
 export class AppController {

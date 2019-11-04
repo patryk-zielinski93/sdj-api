@@ -1,13 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HeartCommand } from '../../../../../core/src/lib/cqrs/commands/heart.command';
-import {
-  QueuedTrackRepository,
-  UserRepository,
-  VoteRepository,
-  Vote,
-  User
-} from '@sdj/backend/db';
+import { HeartCommand } from '@sdj/backend/core';
+import { QueuedTrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
 
 @CommandHandler(HeartCommand)
 export class HeartHandler implements ICommandHandler<HeartCommand> {

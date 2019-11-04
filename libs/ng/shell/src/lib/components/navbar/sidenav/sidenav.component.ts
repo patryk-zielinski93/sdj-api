@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
-import { Channel } from "@sdj/ng/shared/domain";
-import { Observable } from "rxjs";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Channel } from '@sdj/ng/shared/domain';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'sdj-sidenav',

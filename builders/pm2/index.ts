@@ -1,6 +1,6 @@
-import { BuilderOutput, createBuilder } from "@angular-devkit/architect";
-import { OptionsT } from "./schema";
-import SpawnService from "./spawn.service";
+import { BuilderOutput, createBuilder } from '@angular-devkit/architect';
+import { OptionsT } from './schema';
+import SpawnService from './spawn.service';
 
 export default createBuilder((options: OptionsT, context) => {
   return new Promise<BuilderOutput>(resolve => {

@@ -1,8 +1,8 @@
-import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
-import { NgxAudioPlayerModule } from "ngx-audio-player";
-import { MostPlayedComponent } from "./containers/most-played/most-played.component";
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { NgxAudioPlayerModule } from 'ngx-audio-player';
+import { MostPlayedComponent } from './containers/most-played/most-played.component';
 
 @NgModule({
   imports: [

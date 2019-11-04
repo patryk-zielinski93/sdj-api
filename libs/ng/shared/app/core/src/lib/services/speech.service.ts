@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { WebSocketEvents } from "@sdj/shared/common";
-import { BehaviorSubject, Subject, zip } from "rxjs";
-import { delay, filter, map } from "rxjs/operators";
-import { WebSocketService } from "./web-socket.service";
+import { Injectable } from '@angular/core';
+import { WebSocketEvents } from '@sdj/shared/domain';
+import { BehaviorSubject, Subject, zip } from 'rxjs';
+import { delay, filter, map } from 'rxjs/operators';
+import { WebSocketService } from './web-socket.service';
 
 @Injectable({
   providedIn: 'root'

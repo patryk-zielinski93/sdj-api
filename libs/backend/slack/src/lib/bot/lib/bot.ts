@@ -1,14 +1,14 @@
 import { Injectable, Type } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoggerService } from '@sdj/backend/common';
 import { User, UserRepository } from '@sdj/backend/db';
+import { LoggerService } from '@sdj/backend/shared/logger';
 import { SlackService } from '../../services/slack.service';
 import { SlackCommand } from './interfaces/slack-command';
 
 const commandsCollection: Type<SlackCommand>[] = [];
 
-export function SlackCommandHandler() {
+export function SlackCommandHandler(): (target: Type<SlackCommand>) => void {
   return (target: Type<SlackCommand>) => {
     commandsCollection.push(<Type<SlackCommand>>target);
   };

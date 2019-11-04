@@ -1,5 +1,5 @@
-import { async, TestBed } from "@angular/core/testing";
-import { PlayersModule } from "./players.module";
+import { async, TestBed } from '@angular/core/testing';
+import { PlayersModule } from './players.module';
 
 describe('PlayersModule', () => {
   beforeEach(async(() => {

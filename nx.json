@@ -12,64 +12,58 @@
       "tags": ["ng-e2e"]
     },
     "ng": {
-      "tags": ["ng"]
+      "tags": ["scope:ng", "type:application"]
     },
     "backend": {
-      "tags": ["backend:app"]
+      "tags": ["scope:backend", "type:application"]
     },
     "host-api": {
-      "tags": ["host-api", "node"]
+      "tags": ["scope:host-api", "type:application"]
     },
     "backend-slack": {
-      "tags": ["backend", "backend:slack"]
+      "tags": ["scope:backend", "backend:slack"]
     },
     "backend-api": {
-      "tags": ["backend", "backend:api"]
+      "tags": ["scope:backend", "type:service"]
     },
     "backend-websocket": {
-      "tags": ["backend", "backend:websocket"]
+      "tags": ["scope:backend", "type:service"]
     },
     "backend-core": {
-      "tags": ["backend", "backend:core"]
+      "tags": ["scope:backend-shared", "type:core"]
     },
     "backend-db": {
-      "tags": ["backend", "backend:db"]
+      "tags": ["scope:backend-shared", "type:core"]
     },
-    "backend-config": {
-      "tags": ["backend", "backend:config"]
-    },
-    "backend-common": {
-      "tags": ["backend", "backend:common"]
-    },
-    "shared-common": {
-      "tags": ["shared"]
-    },
-    "backend-shared": {
-      "tags": ["backend:shared"]
+    "backend-shared-config": {
+      "tags": ["scope:backend-shared", "type:config"]
     },
     "backend-ices": {
-      "tags": ["backend", "backend:ices"]
+      "tags": ["scope:backend", "type:service"]
     },
     "backend-storage": {
-      "tags": ["backend", "backend:storage"]
+      "tags": ["scope:backend", "type:service"]
     },
     "backend-cqrs": {
-      "tags": ["backend", "backend:cqrs"]
+      "tags": ["scope:backend", "type:service"]
     },
-    "shared-utils": {
-      "tags": []
+    "backend-shared-domain": {
+      "tags": ["scope:backend-shared", "type:domain"]
+    },
+    "backend-shared-logger": {
+      "tags": ["scope:backend-shared", "type:util"]
     },
     "ng-shell": {
       "tags": ["scope:ng", "type:shell"]
     },
     "ng-radio-feature": {
-      "tags": ["scope:radio", "type:feature"]
+      "tags": ["scope:ng", "type:feature"]
     },
     "ng-most-played-feature": {
-      "tags": ["scope:most-played", "type:feature"]
+      "tags": ["scope:ng", "type:feature"]
     },
     "ng-top-rated-feature": {
-      "tags": ["scope:top-rated", "type:feature"]
+      "tags": ["scope:ng", "type:feature"]
     },
     "ng-shared-ui-players": {
       "tags": ["scope:ng-shared", "type:ui"]
@@ -82,6 +76,12 @@
     },
     "ng-shared-app-core": {
       "tags": ["scope:ng-shared", "type:core"]
+    },
+    "shared-domain": {
+      "tags": ["scope:shared", "type:domain"]
+    },
+    "shared-utils": {
+      "tags": ["scope:shared", "type:util"]
     }
   }
 }

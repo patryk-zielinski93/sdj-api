@@ -1,8 +1,8 @@
-import { Track as ITrack } from "@sdj/shared/common";
-import { Field, ObjectType } from "type-graphql";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
-import { QueuedTrack } from "./queued-track.entity";
-import { User } from "./user.entity";
+import { Track as ITrack } from '@sdj/shared/domain';
+import { Field, ObjectType } from 'type-graphql';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { QueuedTrack } from './queued-track.entity';
+import { User } from './user.entity';
 
 @ObjectType()
 @Entity()
@@ -39,4 +39,11 @@ export class Track implements ITrack {
 
   @OneToMany(type => QueuedTrack, queuedTrack => queuedTrack.track)
   queuedTracks: Promise<QueuedTrack[]>;
+
+  @Field(type => Number)
+  async playedCount(): Promise<number> {
+    return (await this.queuedTracks).filter(
+      queuedTrack => !queuedTrack.randomized
+    ).length;
+  }
 }

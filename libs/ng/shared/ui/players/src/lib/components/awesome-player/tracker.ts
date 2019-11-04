@@ -1,5 +1,5 @@
-import { Player } from "./player";
-import { Scene } from "./scene";
+import { Player } from './player';
+import { Scene } from './scene';
 
 export class Tracker {
   innerDelta: number = 20;

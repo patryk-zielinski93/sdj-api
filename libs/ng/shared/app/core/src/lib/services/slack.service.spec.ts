@@ -1,6 +1,6 @@
-import { TestBed } from "@angular/core/testing";
+import { TestBed } from '@angular/core/testing';
 
-import { SlackService } from "./slack.service";
+import { SlackService } from './slack.service';
 
 describe('SlackService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
-import { LoggerService } from '@sdj/backend/common';
-import { connectionConfig } from '@sdj/backend/config';
 import { Track } from '@sdj/backend/db';
+import { connectionConfig } from '@sdj/backend/shared/config';
+import { LoggerService } from '@sdj/backend/shared/logger';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
 import { Observable, Observer, Subject } from 'rxjs';

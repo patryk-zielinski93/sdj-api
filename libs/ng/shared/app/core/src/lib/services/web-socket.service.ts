@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { environment } from "@ng-environment/environment";
-import { QueuedTrack, WebSocketEvents } from "@sdj/shared/common";
-import { fromEvent, Subject } from "rxjs";
-import * as io from "socket.io-client";
+import { Injectable } from '@angular/core';
+import { environment } from '@ng-environment/environment';
+import { QueuedTrack, WebSocketEvents } from '@sdj/shared/domain';
+import { fromEvent, Subject } from 'rxjs';
+import * as io from 'socket.io-client';
 import Socket = SocketIOClient.Socket;
 
 @Injectable({

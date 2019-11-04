@@ -22,10 +22,9 @@
       "@sdj/backend/websocket": ["libs/backend/websocket/src/index.ts"],
       "@sdj/backend/core": ["libs/backend/core/src/index.ts"],
       "@sdj/backend/db": ["libs/backend/db/src/index.ts"],
-      "@sdj/backend/common": ["libs/backend/common/src/index.ts"],
-      "@sdj/backend/config": ["libs/backend/config/src/index.ts"],
-      "@sdj/shared/common": ["libs/shared/common/src/index.ts"],
-      "@sdj/backend/shared": ["libs/backend/shared/src/index.ts"],
+      "@sdj/backend/shared/config": ["libs/backend/shared/config/src/index.ts"],
+      "@sdj/shared/domain": ["libs/shared/domain/src/index.ts"],
+      "@sdj/backend/shared/domain": ["libs/backend/shared/domain/src/index.ts"],
       "@sdj/backend/ices": ["libs/backend/ices/src/index.ts"],
       "@sdj/backend/storage": ["libs/backend/storage/src/index.ts"],
       "@sdj/backend/cqrs": ["libs/backend/cqrs/src/index.ts"],
@@ -39,7 +38,8 @@
       "@sdj/ng/shared/ui/players": ["libs/ng/shared/ui/players/src/index.ts"],
       "@sdj/ng/shared/ui/common": ["libs/ng/shared/ui/common/src/index.ts"],
       "@sdj/ng/shared/domain": ["libs/ng/shared/domain/src/index.ts"],
-      "@sdj/ng/shared/app/core": ["libs/ng/shared/app/core/src/index.ts"]
+      "@sdj/ng/shared/app/core": ["libs/ng/shared/app/core/src/index.ts"],
+      "@sdj/backend/shared/logger": ["libs/backend/shared/logger/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

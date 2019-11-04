@@ -1,21 +1,7 @@
-import { CommandHandler, ICommandHandler, CommandBus } from '@nestjs/cqrs';
+import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Utils } from '@sdj/backend/core';
-import {
-  QueuedTrack,
-  QueuedTrackRepository,
-  TrackRepository,
-  UserRepository,
-  Track,
-  User,
-  Channel
-} from '@sdj/backend/db';
-import {
-  PlayTrackCommand,
-  DownloadTrackCommand,
-  CreateTrackCommand,
-  QueueTrackCommand
-} from '../../../../../core/src/lib/cqrs/commands';
+import { CreateTrackCommand, DownloadTrackCommand, PlayTrackCommand, QueueTrackCommand, Utils } from '@sdj/backend/core';
+import { Track, TrackRepository, User, UserRepository } from '@sdj/backend/db';
 
 @CommandHandler(PlayTrackCommand)
 export class PlayTrackHandler implements ICommandHandler<PlayTrackCommand> {

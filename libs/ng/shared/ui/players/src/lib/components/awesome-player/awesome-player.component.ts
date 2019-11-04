@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
-import { Controls } from "./controls";
-import { Framer } from "./framer";
-import { Player } from "./player";
-import { Scene } from "./scene";
-import { Tracker } from "./tracker";
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Controls } from './controls';
+import { Framer } from './framer';
+import { Player } from './player';
+import { Scene } from './scene';
+import { Tracker } from './tracker';
 
 @Component({
   selector: 'sdj-awesome-player',

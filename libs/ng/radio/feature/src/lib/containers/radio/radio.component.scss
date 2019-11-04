@@ -1,7 +1,8 @@
+@import 'apps/ng/src/assets/styles/variables';
 .app-content {
   align-items: center;
   display: flex;
-  height: 100vh;
+  height: calc(100vh - #{$navbar-height});
   width: 100%;
 }
 

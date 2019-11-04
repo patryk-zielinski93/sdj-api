@@ -1,6 +1,6 @@
-import { Controls } from "./controls";
-import { Framer } from "./framer";
-import { Tracker } from "./tracker";
+import { Controls } from './controls';
+import { Framer } from './framer';
+import { Tracker } from './tracker';
 
 export class Scene {
   context: CanvasRenderingContext2D;

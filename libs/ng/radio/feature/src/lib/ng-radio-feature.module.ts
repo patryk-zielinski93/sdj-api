@@ -1,8 +1,8 @@
-import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
-import { NgSharedUiCommonModule } from "@sdj/ng/shared/ui/common";
-import { RadioComponent } from "./containers/radio/radio.component";
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { NgSharedUiCommonModule } from '@sdj/ng/shared/ui/common';
+import { RadioComponent } from './containers/radio/radio.component';
 
 @NgModule({
   imports: [

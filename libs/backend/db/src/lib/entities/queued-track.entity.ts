@@ -1,9 +1,9 @@
-import { QueuedTrack as IQueuedTrack } from "@sdj/shared/common";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Channel } from "./channel.entity";
-import { Track } from "./track.entity";
-import { User } from "./user.entity";
-import { Vote } from "./vote.entity";
+import { QueuedTrack as IQueuedTrack } from '@sdj/shared/domain';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Channel } from './channel.entity';
+import { Track } from './track.entity';
+import { User } from './user.entity';
+import { Vote } from './vote.entity';
 
 @Entity()
 export class QueuedTrack implements IQueuedTrack {

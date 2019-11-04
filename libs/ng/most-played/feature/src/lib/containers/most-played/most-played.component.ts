@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { environment } from "@ng-environment/environment.prod";
-import { ChannelService } from "@sdj/ng/shared/app/core";
-import { Channel, Track } from "@sdj/shared/common";
-import { Apollo } from "apollo-angular";
-import { ApolloQueryResult } from "apollo-client";
-import gql from "graphql-tag";
-import { Track as MatTrack } from "ngx-audio-player";
-import { untilDestroyed } from "ngx-take-until-destroy";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { environment } from '@ng-environment/environment.prod';
+import { ChannelService } from '@sdj/ng/shared/app/core';
+import { Channel, Track } from '@sdj/ng/shared/domain';
+import { Apollo } from 'apollo-angular';
+import { ApolloQueryResult } from 'apollo-client';
+import gql from 'graphql-tag';
+import { Track as MatTrack } from 'ngx-audio-player';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'sdj-most-played',
@@ -47,7 +47,8 @@ export class MostPlayedComponent implements OnInit, OnDestroy {
           {
               mostPlayedTracks(channelId: "${channel.id}") {
                   title,
-                  id
+                  id,
+                  playedCount
               }
           }
       `
@@ -57,7 +58,7 @@ export class MostPlayedComponent implements OnInit, OnDestroy {
           const { data, loading, errors } = result;
           this.tracks = data.mostPlayedTracks.map((track: Track) => {
             return {
-              title: track.title,
+              title: `${track.title}. Played ${track.playedCount} times`,
               link: environment.backendUrl + 'tracks/' + track.id + '.mp3'
             };
           });
