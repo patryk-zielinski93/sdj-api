@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/Sikora00/sdj-api/compare/v0.1.1...v0.1.2) (2019-11-05)
+
+
+### Bug Fixes
+
+* **ng:** add missing fields in prod environment ([5e47134](https://github.com/Sikora00/sdj-api/commit/5e47134bbafae4ccb9818b3e673f41fa0cf6b02d))
+
 ### [0.1.1](https://github.com/Sikora00/sdj-api/compare/v0.1.0...v0.1.1) (2019-11-04)
 
 
