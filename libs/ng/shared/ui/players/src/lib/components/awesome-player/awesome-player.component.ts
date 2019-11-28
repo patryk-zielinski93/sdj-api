@@ -79,8 +79,10 @@ export class AwesomePlayerComponent
     this.player.init();
     this.player.src = this.src;
     this.player.isLoadingChange$
-      .pipe(distinctUntilChanged(), switchMap((value => of(value).pipe(
-        delay(500)))))
+      .pipe(
+        distinctUntilChanged(),
+        switchMap(value => of(value).pipe(delay(500)))
+      )
       .subscribe((isLoading: boolean) => {
         this.isPlayerLoading = isLoading;
         this.chD.markForCheck();

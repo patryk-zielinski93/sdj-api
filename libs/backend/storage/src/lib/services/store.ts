@@ -74,13 +74,19 @@ export class Store {
 
   async addToQueue(queuedTrack: QueuedTrack): Promise<void> {
     const channelState = await this.getChannelState(queuedTrack.playedIn.id);
-    this._state.next({
-      ...this.state,
-      [queuedTrack.playedIn.id]: {
-        ...channelState,
-        queue: channelState.queue.concat(queuedTrack)
-      }
-    });
+    const isTrackAlreadyInQueue =
+      channelState.queue.findIndex(
+        (trackInQueue: QueuedTrack) => trackInQueue.id === queuedTrack.id
+      ) !== -1;
+    if (!isTrackAlreadyInQueue) {
+      this._state.next({
+        ...this.state,
+        [queuedTrack.playedIn.id]: {
+          ...channelState,
+          queue: channelState.queue.concat(queuedTrack)
+        }
+      });
+    }
   }
 
   async setSilenceCount(channelId: string, value: number): Promise<void> {
