@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Resolve,
+  RouterStateSnapshot
+} from '@angular/router';
 import { ChannelService } from '@sdj/ng/shared/app/core';
 import { Channel } from '@sdj/shared/domain';
 import { Observable } from 'rxjs';

@@ -44,8 +44,7 @@ export class Player {
   private _src: string;
   private _track: QueuedTrack;
 
-  constructor(private scene: Scene, private framer: Framer) {
-  }
+  constructor(private scene: Scene, private framer: Framer) {}
 
   destroy(): void {
     this.audio.remove();
@@ -179,8 +178,7 @@ export class Player {
     setTimeout(() => {
       this.audio.load();
       if (this.context.state === 'running') {
-        this.audio.play().catch(() => {
-        });
+        this.audio.play().catch(() => {});
       }
     }, 1000);
   }

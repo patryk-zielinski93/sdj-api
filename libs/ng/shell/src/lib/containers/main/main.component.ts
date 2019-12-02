@@ -1,7 +1,17 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MatSidenav } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChannelService, SpeechService, WebSocketService } from '@sdj/ng/shared/app/core';
+import {
+  ChannelService,
+  SpeechService,
+  WebSocketService
+} from '@sdj/ng/shared/app/core';
 import { Channel } from '@sdj/ng/shared/domain';
 import { Observable, Subject } from 'rxjs';
 

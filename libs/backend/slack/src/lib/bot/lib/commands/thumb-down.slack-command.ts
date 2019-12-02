@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CqrsServiceFacade, HostService, StorageServiceFacade, ThumbDownCommand } from '@sdj/backend/core';
+import {
+  CqrsServiceFacade,
+  HostService,
+  StorageServiceFacade,
+  ThumbDownCommand
+} from '@sdj/backend/core';
 import { TrackRepository, VoteRepository } from '@sdj/backend/db';
 import { appConfig } from '@sdj/backend/shared/config';
 import { SlackService } from '../../../services/slack.service';

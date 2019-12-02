@@ -1,7 +1,12 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueueTrackCommand, StorageServiceFacade } from '@sdj/backend/core';
-import { ChannelRepository, QueuedTrack, QueuedTrackRepository, TrackRepository } from '@sdj/backend/db';
+import {
+  ChannelRepository,
+  QueuedTrack,
+  QueuedTrackRepository,
+  TrackRepository
+} from '@sdj/backend/db';
 import { appConfig } from '@sdj/backend/shared/config';
 
 @CommandHandler(QueueTrackCommand)

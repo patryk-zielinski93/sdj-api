@@ -1,6 +1,12 @@
 import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateTrackCommand, DownloadTrackCommand, PlayTrackCommand, QueueTrackCommand, Utils } from '@sdj/backend/core';
+import {
+  CreateTrackCommand,
+  DownloadTrackCommand,
+  PlayTrackCommand,
+  QueueTrackCommand,
+  Utils
+} from '@sdj/backend/core';
 import { Track, TrackRepository, User, UserRepository } from '@sdj/backend/db';
 
 @CommandHandler(PlayTrackCommand)

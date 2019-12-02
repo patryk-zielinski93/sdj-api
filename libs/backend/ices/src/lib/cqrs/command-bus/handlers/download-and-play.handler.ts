@@ -1,5 +1,9 @@
 import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { CqrsServiceFacade, DeleteQueuedTrackCommand, DownloadTrackCommand } from '@sdj/backend/core';
+import {
+  CqrsServiceFacade,
+  DeleteQueuedTrackCommand,
+  DownloadTrackCommand
+} from '@sdj/backend/core';
 import { DownloadAndPlayCommand } from '../commands/download-and-play.command';
 import { PlayQueuedTrackCommand } from '../commands/play-queued-track.command';
 

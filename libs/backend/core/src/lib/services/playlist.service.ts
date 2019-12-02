@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Channel, QueuedTrack, QueuedTrackRepository, Track, TrackRepository } from '@sdj/backend/db';
+import {
+  Channel,
+  QueuedTrack,
+  QueuedTrackRepository,
+  Track,
+  TrackRepository
+} from '@sdj/backend/db';
 import { appConfig } from '@sdj/backend/shared/config';
 import { QueueTrackCommand } from '../cqrs/commands';
 import { AppServiceFacade } from './app-service.facade';

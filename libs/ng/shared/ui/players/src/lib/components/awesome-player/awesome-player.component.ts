@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import { QueuedTrack } from '@sdj/ng/shared/domain';
 import { of } from 'rxjs';
 import { delay, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -49,8 +57,7 @@ export class AwesomePlayerComponent
   private _src: string;
   private _track: QueuedTrack;
 
-  constructor(private chD: ChangeDetectorRef) {
-  }
+  constructor(private chD: ChangeDetectorRef) {}
 
   ngOnDestroy(): void {
     this.player.destroy();

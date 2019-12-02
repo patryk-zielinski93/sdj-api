@@ -2,7 +2,13 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { ThumbUpCommand } from '@sdj/backend/core';
-import { QueuedTrackRepository, User, UserRepository, Vote, VoteRepository } from '@sdj/backend/db';
+import {
+  QueuedTrackRepository,
+  User,
+  UserRepository,
+  Vote,
+  VoteRepository
+} from '@sdj/backend/db';
 
 @CommandHandler(ThumbUpCommand)
 export class ThumbUpHandler implements ICommandHandler<ThumbUpCommand> {

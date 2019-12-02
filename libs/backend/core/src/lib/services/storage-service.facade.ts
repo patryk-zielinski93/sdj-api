@@ -24,8 +24,10 @@ export class StorageServiceFacade {
       .toPromise();
   }
 
-  channelDisappears(room: string): void {
-    this.client.send(MicroservicePattern.channelDisappears, room);
+  channelDisappears(room: string): Promise<unknown> {
+    return this.client
+      .send(MicroservicePattern.channelDisappears, room)
+      .toPromise();
   }
 
   getCurrentTrack(channelId: string): Promise<QueuedTrack | null> {

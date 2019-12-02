@@ -1,6 +1,10 @@
 import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteTrackCommand, DownloadTrackCommand, Mp3Service } from '@sdj/backend/core';
+import {
+  DeleteTrackCommand,
+  DownloadTrackCommand,
+  Mp3Service
+} from '@sdj/backend/core';
 import { TrackRepository } from '@sdj/backend/db';
 import { pathConfig } from '@sdj/backend/shared/config';
 import { LoggerService } from '@sdj/backend/shared/logger';
@@ -25,13 +29,13 @@ export class DownloadTrackHandler
         this.mp3.downloadAndNormalize(track.id).subscribe({
           error: async (err: Object) => {
             this.logger.error(
-              'Can\'t download track ' + track.id,
+              "Can't download track " + track.id,
               JSON.stringify(err)
             );
             this.logger.warn('Removing ' + track.title);
             await this.commandBus.execute(new DeleteTrackCommand(track.id));
             reject();
-            throwError(new Error('Can\'t download track '));
+            throwError(new Error("Can't download track "));
           },
           complete: resolve
         })

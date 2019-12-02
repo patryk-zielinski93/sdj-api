@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import { environment } from '@ng-environment/environment.prod';
 import { ChannelService } from '@sdj/ng/shared/app/core';
 import { Channel, Track } from '@sdj/ng/shared/domain';

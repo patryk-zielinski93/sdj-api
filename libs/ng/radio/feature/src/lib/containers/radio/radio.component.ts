@@ -9,7 +9,11 @@ import {
   ViewChild
 } from '@angular/core';
 import { environment } from '@ng-environment/environment';
-import { ChannelService, SpeechService, WebSocketService } from '@sdj/ng/shared/app/core';
+import {
+  ChannelService,
+  SpeechService,
+  WebSocketService
+} from '@sdj/ng/shared/app/core';
 import { Channel, QueuedTrack, Track } from '@sdj/ng/shared/domain';
 import { AwesomePlayerComponent } from '@sdj/ng/shared/ui/players';
 import { User, WebSocketEvents } from '@sdj/shared/domain';

@@ -1,6 +1,13 @@
 import { Track as ITrack } from '@sdj/shared/domain';
 import { Field, ObjectType } from 'type-graphql';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn
+} from 'typeorm';
 import { QueuedTrack } from './queued-track.entity';
 import { User } from './user.entity';
 
