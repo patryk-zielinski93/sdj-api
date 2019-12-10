@@ -54,6 +54,9 @@ export class Player {
   init(): void {
     (<any>window).AudioContext =
       (<any>window).AudioContext || (<any>window).webkitAudioContext;
+    if (!AudioContext) {
+      return;
+    }
     this.context = new AudioContext();
     if (this.context.suspend) {
       this.context.suspend();

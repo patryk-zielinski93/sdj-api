@@ -1,9 +1,9 @@
 import {
-  getNavbarList,
   getChannelListItem,
+  getNavbarList,
   getPlayButton
 } from '../support/app.po';
-import { login, expectPlayingAudio, resolveApp } from '../support/commands';
+import { resolveApp } from '../support/commands';
 
 describe('SDJ', () => {
   beforeEach(() => {

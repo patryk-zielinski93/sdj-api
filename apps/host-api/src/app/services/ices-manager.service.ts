@@ -1,6 +1,7 @@
 import { spawn } from '@sikora00/rxjs-overlay';
 import { Observable, Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
+
 export class IcesManager {
   commands$: Subject<() => Observable<number>> = new Subject<
     () => Observable<number>

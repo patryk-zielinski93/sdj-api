@@ -34,7 +34,7 @@ jobs:
     - name: affected:build
       run: npm run affected:build -- --base origin/develop
     - name: affected:test
-      run: npm run affected:test -- --base origin/develop
+      run: npm run affected:test -- --base origin/develop --passWithNoTests
     - name: affected:e2e
       run: npm run affected:e2e -- --base origin/develop
     - name: affected:lint

@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { QueuedTrack } from './queued-track.entity';
 
 @Entity()

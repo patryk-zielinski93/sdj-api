@@ -1,5 +1,4 @@
 import { ICommand } from '@nestjs/cqrs';
-import { User } from '@sdj/backend/db';
 
 export class PlayTrackCommand implements ICommand {
   constructor(

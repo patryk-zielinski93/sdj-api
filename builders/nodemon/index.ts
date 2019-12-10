@@ -1,8 +1,4 @@
-import {
-  BuilderOutput,
-  createBuilder,
-  targetFromTargetString
-} from '@angular-devkit/architect';
+import { BuilderOutput, createBuilder } from '@angular-devkit/architect';
 import * as childProcess from 'child_process';
 import { OptionsT } from './schema';
 

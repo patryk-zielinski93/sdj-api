@@ -1,5 +1,5 @@
 <div class="most-played-view-container">
-  <h1>The most played tracks on {{ channel.name }}</h1>
+  <h1>The most played tracks on {{ channel?.name }}</h1>
   <ng-container *ngIf="!loading; else loader">
     <mat-advanced-audio-player
       *ngIf="tracks.length > 2; else nothingToShow"

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { Store } from './services/store';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoreModule } from '@sdj/backend/core';
 import { StorageController } from './controllers/storage.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Store } from './services/store';
 
 @Module({
   imports: [CoreModule, TypeOrmModule.forRoot()],

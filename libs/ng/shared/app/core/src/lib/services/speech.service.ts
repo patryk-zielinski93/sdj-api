@@ -23,14 +23,16 @@ export class SpeechService {
   }
 
   public init(): void {
-    new Promise(
-      resolve => (window.speechSynthesis.onvoiceschanged = resolve)
-    ).then(() => {
-      this.synth = window.speechSynthesis;
-      this.voice = this.synth
-        .getVoices()
-        .find(voice => voice.lang === this.lang);
-    });
+    new Promise(resolve => (window.speechSynthesis.onvoiceschanged = resolve))
+      .then(() => {
+        this.synth = window.speechSynthesis;
+        this.voice = this.synth
+          .getVoices()
+          .find(voice => voice.lang === this.lang);
+      })
+      .catch(() => {
+        console.error(`Browser doesn't support speechSynthesis`);
+      });
   }
 
   public startListening(): void {

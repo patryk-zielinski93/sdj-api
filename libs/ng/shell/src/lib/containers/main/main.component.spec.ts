@@ -1,4 +1,11 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSidenavModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockComponent } from 'ng-mocks';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { SidenavComponent } from '../../components/navbar/sidenav/sidenav.component';
 
 import { MainComponent } from './main.component';
 
@@ -8,7 +15,17 @@ describe('MainComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MainComponent]
+      imports: [
+        MatSidenavModule,
+        RouterTestingModule,
+        HttpClientTestingModule,
+        NoopAnimationsModule
+      ],
+      declarations: [
+        MainComponent,
+        MockComponent(NavbarComponent),
+        MockComponent(SidenavComponent)
+      ]
     }).compileComponents();
   }));
 

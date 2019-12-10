@@ -23,6 +23,7 @@ export class PlayQueuedTrackHandler
     const channelId = queuedTrack.playedIn.id;
     const track = queuedTrack.track;
     const prevTrack = await this.storageService.getCurrentTrack(channelId);
+    console.log('prevTrack', !!prevTrack);
     if (prevTrack) {
       this.storageService.removeFromQueue(prevTrack);
     }
