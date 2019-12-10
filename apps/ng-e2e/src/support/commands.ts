@@ -43,6 +43,10 @@ export const expectPlayingAudio = () => {
 export const resolveApp = () => {
   login();
   cy.server();
-  cy.route('**/api/conversations.list/*').as('channels');
+  cy.route(
+    'GET',
+    'https://slack.com/api/conversations.list*',
+    'fixture:slack-channels.response.json'
+  ).as('channels');
   cy.visit('/');
 };
