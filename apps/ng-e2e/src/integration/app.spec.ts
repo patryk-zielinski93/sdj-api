@@ -4,8 +4,15 @@ import {
   getPlayButton
 } from '../support/app.po';
 import { resolveApp } from '../support/commands';
+import { closeWSServer, setupMockWSServer } from '../support/websocket';
 
 describe('SDJ', () => {
+  before(() => {
+    setupMockWSServer();
+  });
+  after(() => {
+    closeWSServer();
+  });
   beforeEach(() => {
     resolveApp();
   });

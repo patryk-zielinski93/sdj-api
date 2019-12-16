@@ -8,7 +8,7 @@ describe('Player', () => {
 
   it('should play radio', () => {
     getPlayButton().click();
-    cy.wait(10000);
+    cy.wait(2000);
     expectPlayingAudio();
   });
 });

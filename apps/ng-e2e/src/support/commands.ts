@@ -1,4 +1,5 @@
 // ***********************************************
+import { mockConfig } from './configs';
 // This example commands.js shows you how to
 // create various custom commands and overwrite
 // existing commands.
@@ -30,13 +31,12 @@ export function login(): void {
 }
 
 export const expectPlayingAudio = () => {
-  playerHtmlAudio().then((el: any) => {
-    // tslint:disable-next-line
-    console.log(el);
-    // tslint:disable-next-line
-    console.log(el.duration, el.paused, el.muted);
-
-    expect(el.duration > 0 && !el.paused && !el.muted).to.eq(false);
+  playerHtmlAudio().should((els: JQuery<HTMLAudioElement>) => {
+    let isPlaying = false;
+    els.each((index: number, el: HTMLAudioElement) => {
+      isPlaying = el.duration > 0 && !el.paused && !el.muted;
+    });
+    expect(isPlaying).to.eq(true);
   });
 };
 
@@ -48,5 +48,14 @@ export const resolveApp = () => {
     'https://slack.com/api/conversations.list*',
     'fixture:slack-channels.response.json'
   ).as('channels');
-  cy.visit('/');
+
+  cy.visit('/', {
+    onBeforeLoad(win: Window): void {
+      // @ts-ignore
+      win.__env = {
+        backendUrl: mockConfig.backendUrl,
+        externalStream: mockConfig.externalStream
+      };
+    }
+  });
 };
