@@ -6,6 +6,7 @@ import { LoggerService } from '@sdj/backend/shared/logger';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
 import { Observable, Observer, Subject } from 'rxjs';
+import { AnonymousSubject } from 'rxjs/internal-compatibility';
 import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
 
 interface RedisData<T> {
@@ -34,20 +35,24 @@ export class RedisService {
   }
 
   createSubject<T>(event: string): RedisSubject<T> {
-    // tslint:disable-next-line: no-shadowed-variable
-    const observable = new Observable((observer: Observer<RedisData<T>>) => {
-      this.redisSub.on(event, (channel, message) => {
-        observer.next({ channel, message });
-      });
-    });
-
-    const observer = {
-      next: (data: string) => {
-        this.redisClient.publish(event, data);
+    const observable = new Observable<RedisData<T>>(
+      (observer1: Observer<RedisData<T>>) => {
+        this.redisSub.on(event, (channel, message) => {
+          observer1.next({ channel, message });
+        });
       }
+    );
+
+    const observer: Observer<RedisData<T>> = {
+      // ToDo this always will be string
+      next: (data: any) => {
+        this.redisClient.publish(event, data);
+      },
+      error: () => {},
+      complete: () => {}
     };
 
-    return Subject.create(observer, observable);
+    return new AnonymousSubject<RedisData<T>>(observer, observable);
   }
 
   getNextSongSubject(channelId: string): RedisSubject<string> {

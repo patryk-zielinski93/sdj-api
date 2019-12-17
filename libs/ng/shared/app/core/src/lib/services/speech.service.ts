@@ -31,6 +31,7 @@ export class SpeechService {
           .find(voice => voice.lang === this.lang);
       })
       .catch(() => {
+        // tslint:disable-next-line: no-console
         console.error(`Browser doesn't support speechSynthesis`);
       });
   }
@@ -46,7 +47,6 @@ export class SpeechService {
         delay(0)
       )
       .subscribe((data: any) => {
-        console.log(data.message);
         this.speak(data.message);
       });
   }

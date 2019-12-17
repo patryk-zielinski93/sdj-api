@@ -68,13 +68,11 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
       .createSubject(WebSocketEvents.roomIsRunning)
       .pipe(first())
       .subscribe(() => {
-        console.log('roomIsRunning');
         this.audioSrc = environment.radioStreamUrl + this.selectedChannel.id;
         this.ws
           .createSubject(WebSocketEvents.playDj)
           .pipe(takeUntil(this.selectedChannelUnsubscribe))
           .subscribe(() => {
-            console.log('dj');
             this.audioSrc =
               environment.radioStreamUrl + this.selectedChannel.id;
             this.chD.markForCheck();
@@ -84,7 +82,6 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
           .createSubject(WebSocketEvents.playRadio)
           .pipe(takeUntil(this.selectedChannelUnsubscribe))
           .subscribe(() => {
-            console.log('radio');
             this.audioSrc = environment.externalStream;
             this.chD.markForCheck();
           });
@@ -119,7 +116,6 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
     ).pipe(takeUntil(this.selectedChannelUnsubscribe));
 
     this.queuedTracks$.subscribe(list => {
-      console.log(list.map(qTrack => qTrack.track));
       this.queuedTracks = list;
       const listElement = this.toPlayContainer.nativeElement;
       setTimeout(() => {

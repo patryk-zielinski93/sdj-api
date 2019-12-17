@@ -68,9 +68,7 @@ export class ChannelService {
 
   selectFirstChannel(channelId: string | null): void {
     if (channelId) {
-      const channel = this.channels.find(
-        (channel: Channel) => channel.id === channelId
-      );
+      const channel = this.channels.find((ch: Channel) => ch.id === channelId);
       this.selectChannel(channel);
     } else {
       this.selectGeneral();
@@ -78,9 +76,7 @@ export class ChannelService {
   }
 
   selectGeneral(): void {
-    const channel = this.channels.find(
-      (channel: Channel) => channel.is_general
-    );
+    const channel = this.channels.find((ch: Channel) => ch.is_general);
     this.selectChannel(channel);
   }
 

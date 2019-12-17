@@ -48,7 +48,7 @@ export class AwesomePlayerComponent
     }
   }
 
-  isPlayerLoading = false;
+  isPlayerLoading: boolean = false;
 
   public player: Player;
   private framer: Framer;

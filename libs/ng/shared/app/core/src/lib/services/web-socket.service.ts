@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@ng-environment/environment';
 import { QueuedTrack, WebSocketEvents } from '@sdj/shared/domain';
-import { fromEvent, Subject } from 'rxjs';
+import { fromEvent, Observer, Subject } from 'rxjs';
+import { AnonymousSubject } from 'rxjs/internal-compatibility';
 import * as io from 'socket.io-client';
 import Socket = SocketIOClient.Socket;
 
@@ -18,15 +19,17 @@ export class WebSocketService {
   }
 
   createSubject<T>(event: string): Subject<T> {
-    const observable = fromEvent(this.socket, event);
+    const observable = fromEvent<T>(this.socket, event);
 
-    const observer = {
+    const observer: Observer<T> = {
       next: (data: Object) => {
         this.socket.emit(event, JSON.stringify(data));
-      }
+      },
+      error: () => {},
+      complete: () => {}
     };
 
-    return Subject.create(observer, observable);
+    return new AnonymousSubject<T>(observer, observable);
   }
 
   getQueuedTrackListSubject(): Subject<QueuedTrack[]> {

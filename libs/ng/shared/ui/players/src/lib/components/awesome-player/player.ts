@@ -31,7 +31,7 @@ export class Player {
     this.handleTrackChange(value);
   }
 
-  isLoadingChange$ = new Subject();
+  isLoadingChange$: Subject<boolean> = new Subject<boolean>();
 
   public audio: HTMLAudioElement;
   public context: AudioContext;
@@ -161,6 +161,8 @@ export class Player {
     this.audio.addEventListener('progress', this.emitIsNotLoading.bind(this));
     this.audio.addEventListener('waiting', this.emitIsLoading.bind(this));
 
+    // ToDo onaudioprocess is deprecated
+    // tslint:disable-next-line
     this.javascriptNode.onaudioprocess = () => {
       this.framer.frequencyData = new Uint8Array(
         this.analyser.frequencyBinCount
@@ -177,7 +179,7 @@ export class Player {
     this.isLoadingChange$.next(false);
   }
 
-  private replayStream() {
+  private replayStream(): void {
     setTimeout(() => {
       this.audio.load();
       if (this.context.state === 'running') {

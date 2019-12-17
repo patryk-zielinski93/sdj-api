@@ -22,7 +22,7 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
 })
 export class MostPlayedComponent implements OnInit, OnDestroy {
   channel: Channel;
-  loading = true;
+  loading: boolean = true;
   tracks: MatTrack[] = [];
 
   constructor(

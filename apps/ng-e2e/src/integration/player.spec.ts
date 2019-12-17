@@ -1,7 +1,15 @@
 import { getPlayButton } from '../support/app.po';
 import { expectPlayingAudio, resolveApp } from '../support/commands';
+import { closeWSServer, setupMockWSServer } from '../support/websocket';
 
 describe('Player', () => {
+  before(() => {
+    setupMockWSServer();
+  });
+  after(() => {
+    closeWSServer();
+  });
+
   beforeEach(() => {
     resolveApp();
   });
