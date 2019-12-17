@@ -35,7 +35,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   toPlayContainer: ElementRef<HTMLElement>;
 
   audioSrc: string = environment.externalStream;
-  currentTrack: Observable<QueuedTrack>;
+  currentTrack$: Observable<QueuedTrack>;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   getUserName: (user: User) => string = UserUtils.getUserName;
   listScrollSubject: Subject<QueuedTrack[]> = new Subject();
@@ -124,13 +124,13 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     });
 
-    this.currentTrack = wsSubject.pipe(
+    this.currentTrack$ = wsSubject.pipe(
       map(list => {
         return list[0];
       })
     );
 
-    merge(this.queuedTracks$, this.currentTrack)
+    merge(this.queuedTracks$, this.currentTrack$)
       .pipe(takeUntil(this.selectedChannelUnsubscribe))
       .subscribe(() => this.chD.markForCheck());
   }

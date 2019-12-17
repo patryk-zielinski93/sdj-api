@@ -3,7 +3,7 @@
     <li class="queued-tracks-list__last-element queued-tracks-list__track"></li>
     <li
       class="queued-tracks-list__track"
-      *ngFor="let queuedTrack of queuedTracks.reverse()"
+      *ngFor="let queuedTrack of queuedTracks.slice().reverse()"
     >
       <div class="queued-track">
         <img
@@ -25,7 +25,7 @@
   <sdj-awesome-player
     #playerComponent
     [src]="audioSrc"
-    [track]="currentTrack | async"
+    [track]="currentTrack$ | async"
   >
   </sdj-awesome-player>
 </div>
