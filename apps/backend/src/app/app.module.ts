@@ -6,7 +6,14 @@ import { WebSocketModule } from '@sdj/backend/websocket';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({ synchronize: true }),
+    TypeOrmModule.forRoot({
+      'type': 'mysql',
+      'host': 'database',
+      'port': 3306,
+      'username': 'sdj',
+      'password': 'sdj123123',
+      'database': 'slack_dj', autoLoadEntities: true
+    }),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql'
     }),

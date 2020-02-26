@@ -165,10 +165,9 @@
           }
         },
         "serve-dev": {
-          "builder": "./builders:pm2",
+          "builder": "@nrwl/node:execute",
           "options": {
-            "buildTarget": "backend:build",
-            "logMethod": "monit"
+            "buildTarget": "backend:build"
           }
         },
         "lint": {
