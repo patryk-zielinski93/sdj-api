@@ -9,7 +9,8 @@
   },
   "projects": {
     "ng-e2e": {
-      "tags": ["scope:ng", "type:e2e"]
+      "tags": ["scope:ng", "type:e2e"],
+      "implicitDependencies": ["ng"]
     },
     "ng": {
       "tags": ["scope:ng", "type:application"]
@@ -84,10 +85,7 @@
       "tags": ["scope:shared", "type:util"]
     },
     "ng-shared-ui-sdj-loader": {
-      "tags": [
-        "scope:ng-shared",
-        "type:ui"
-      ]
+      "tags": ["scope:ng-shared", "type:ui"]
     }
   }
 }

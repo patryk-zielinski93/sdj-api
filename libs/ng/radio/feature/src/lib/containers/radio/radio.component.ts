@@ -29,9 +29,9 @@ import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('playerComponent', { static: false })
+  @ViewChild('playerComponent')
   playerComponent: AwesomePlayerComponent;
-  @ViewChild('toPlay', { static: false })
+  @ViewChild('toPlay')
   toPlayContainer: ElementRef<HTMLElement>;
 
   audioSrc: string = environment.externalStream;
