@@ -95,7 +95,8 @@
           "options": {
             "jestConfig": "apps/ng/jest.config.js",
             "tsConfig": "apps/ng/tsconfig.spec.json",
-            "setupFile": "apps/ng/src/test-setup.ts"
+            "setupFile": "apps/ng/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       }
@@ -184,7 +185,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/backend/jest.config.js",
-            "tsConfig": "apps/backend/tsconfig.spec.json"
+            "tsConfig": "apps/backend/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -238,7 +240,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/host-api/jest.config.js",
-            "tsConfig": "apps/host-api/tsconfig.spec.json"
+            "tsConfig": "apps/host-api/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -264,7 +267,8 @@
           "options": {
             "jestConfig": "libs/backend/slack/jest.config.js",
             "tsConfig": "libs/backend/slack/tsconfig.spec.json",
-            "setupFile": "libs/backend/slack/src/test-setup.ts"
+            "setupFile": "libs/backend/slack/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -295,7 +299,8 @@
           "options": {
             "jestConfig": "libs/backend/api/jest.config.js",
             "tsConfig": "libs/backend/api/tsconfig.spec.json",
-            "setupFile": "libs/backend/api/src/test-setup.ts"
+            "setupFile": "libs/backend/api/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -326,7 +331,8 @@
           "options": {
             "jestConfig": "libs/backend/websocket/jest.config.js",
             "tsConfig": "libs/backend/websocket/tsconfig.spec.json",
-            "setupFile": "libs/backend/websocket/src/test-setup.ts"
+            "setupFile": "libs/backend/websocket/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -357,7 +363,8 @@
           "options": {
             "jestConfig": "libs/backend/core/jest.config.js",
             "tsConfig": "libs/backend/core/tsconfig.spec.json",
-            "setupFile": "libs/backend/core/src/test-setup.ts"
+            "setupFile": "libs/backend/core/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -388,7 +395,8 @@
           "options": {
             "jestConfig": "libs/backend/db/jest.config.js",
             "tsConfig": "libs/backend/db/tsconfig.spec.json",
-            "setupFile": "libs/backend/db/src/test-setup.ts"
+            "setupFile": "libs/backend/db/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -418,7 +426,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/backend/shared/config/jest.config.js",
-            "tsConfig": "libs/backend/shared/config/tsconfig.spec.json"
+            "tsConfig": "libs/backend/shared/config/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -443,7 +452,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/domain/jest.config.js",
-            "tsConfig": "libs/shared/domain/tsconfig.spec.json"
+            "tsConfig": "libs/shared/domain/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -468,7 +478,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/backend/shared/domain/jest.config.js",
-            "tsConfig": "libs/backend/shared/domain/tsconfig.spec.json"
+            "tsConfig": "libs/backend/shared/domain/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -494,7 +505,8 @@
           "options": {
             "jestConfig": "libs/backend/ices/jest.config.js",
             "tsConfig": "libs/backend/ices/tsconfig.spec.json",
-            "setupFile": "libs/backend/ices/src/test-setup.ts"
+            "setupFile": "libs/backend/ices/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -521,7 +533,8 @@
           "options": {
             "jestConfig": "libs/backend/storage/jest.config.js",
             "tsConfig": "libs/backend/storage/tsconfig.spec.json",
-            "setupFile": "libs/backend/storage/src/test-setup.ts"
+            "setupFile": "libs/backend/storage/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -548,7 +561,8 @@
           "options": {
             "jestConfig": "libs/backend/cqrs/jest.config.js",
             "tsConfig": "libs/backend/cqrs/tsconfig.spec.json",
-            "setupFile": "libs/backend/cqrs/src/test-setup.ts"
+            "setupFile": "libs/backend/cqrs/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -574,7 +588,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/utils/jest.config.js",
-            "tsConfig": "libs/shared/utils/tsconfig.spec.json"
+            "tsConfig": "libs/shared/utils/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -600,7 +615,8 @@
           "options": {
             "jestConfig": "libs/ng/shell/jest.config.js",
             "tsConfig": "libs/ng/shell/tsconfig.spec.json",
-            "setupFile": "libs/ng/shell/src/test-setup.ts"
+            "setupFile": "libs/ng/shell/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -631,7 +647,8 @@
           "options": {
             "jestConfig": "libs/ng/radio/feature/jest.config.js",
             "tsConfig": "libs/ng/radio/feature/tsconfig.spec.json",
-            "setupFile": "libs/ng/radio/feature/src/test-setup.ts"
+            "setupFile": "libs/ng/radio/feature/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -662,7 +679,8 @@
           "options": {
             "jestConfig": "libs/ng/most-played/feature/jest.config.js",
             "tsConfig": "libs/ng/most-played/feature/tsconfig.spec.json",
-            "setupFile": "libs/ng/most-played/feature/src/test-setup.ts"
+            "setupFile": "libs/ng/most-played/feature/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -693,7 +711,8 @@
           "options": {
             "jestConfig": "libs/ng/top-rated/feature/jest.config.js",
             "tsConfig": "libs/ng/top-rated/feature/tsconfig.spec.json",
-            "setupFile": "libs/ng/top-rated/feature/src/test-setup.ts"
+            "setupFile": "libs/ng/top-rated/feature/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -724,7 +743,8 @@
           "options": {
             "jestConfig": "libs/ng/shared/ui/players/jest.config.js",
             "tsConfig": "libs/ng/shared/ui/players/tsconfig.spec.json",
-            "setupFile": "libs/ng/shared/ui/players/src/test-setup.ts"
+            "setupFile": "libs/ng/shared/ui/players/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -755,7 +775,8 @@
           "options": {
             "jestConfig": "libs/ng/shared/ui/common/jest.config.js",
             "tsConfig": "libs/ng/shared/ui/common/tsconfig.spec.json",
-            "setupFile": "libs/ng/shared/ui/common/src/test-setup.ts"
+            "setupFile": "libs/ng/shared/ui/common/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -786,7 +807,8 @@
           "options": {
             "jestConfig": "libs/ng/shared/domain/jest.config.js",
             "tsConfig": "libs/ng/shared/domain/tsconfig.spec.json",
-            "setupFile": "libs/ng/shared/domain/src/test-setup.ts"
+            "setupFile": "libs/ng/shared/domain/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -817,7 +839,8 @@
           "options": {
             "jestConfig": "libs/ng/shared/app/core/jest.config.js",
             "tsConfig": "libs/ng/shared/app/core/tsconfig.spec.json",
-            "setupFile": "libs/ng/shared/app/core/src/test-setup.ts"
+            "setupFile": "libs/ng/shared/app/core/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
@@ -847,7 +870,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/backend/shared/logger/jest.config.js",
-            "tsConfig": "libs/backend/shared/logger/tsconfig.spec.json"
+            "tsConfig": "libs/backend/shared/logger/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -876,7 +900,8 @@
           "options": {
             "jestConfig": "libs/ng/shared/ui/sdj-loader/jest.config.js",
             "tsConfig": "libs/ng/shared/ui/sdj-loader/tsconfig.spec.json",
-            "setupFile": "libs/ng/shared/ui/sdj-loader/src/test-setup.ts"
+            "setupFile": "libs/ng/shared/ui/sdj-loader/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       },
