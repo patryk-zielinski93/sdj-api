@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoreModule } from '@sdj/backend/core';
 import { DownloadAndPlayHandler } from './cqrs/command-bus/handlers/download-and-play.handler';
 import { PlayQueuedTrackHandler } from './cqrs/command-bus/handlers/play-queued-track.handler';
@@ -15,7 +14,7 @@ export const CommandHandlers = [
   PlaySilenceHandler
 ];
 @Module({
-  imports: [CoreModule, CqrsModule, TypeOrmModule.forRoot()],
+  imports: [CoreModule, CqrsModule],
   providers: [RedisSagas, RedisService, RedisGetNextHandler, ...CommandHandlers]
 })
 export class IcesModule {}

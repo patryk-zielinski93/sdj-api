@@ -28,7 +28,14 @@ export const CommandHandlers = [
 ];
 
 @Module({
-  imports: [CqrsModule, CoreModule, TypeOrmModule.forRoot()],
+  imports: [CqrsModule, CoreModule, TypeOrmModule.forRoot({
+    'type': 'mysql',
+    'host': 'database',
+    'port': 3306,
+    'username': 'sdj',
+    'password': 'sdj123123',
+    'database': 'slack_dj', autoLoadEntities: true
+  })],
   providers: [...CommandHandlers],
   controllers: [CqrsController]
 })

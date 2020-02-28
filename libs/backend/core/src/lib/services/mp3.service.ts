@@ -111,9 +111,10 @@ export class Mp3Service {
    */
   private normalize(filePath: string): Observable<void> {
     const sub = new Subject<void>();
+    const normalizationDb = 92
 
     exec(
-      `mp3gain -c -p -r -d ${connectionConfig.tracks.normalizationDb -
+      `mp3gain -c -p -r -d ${normalizationDb -
         89} ${filePath} && \\
 sox ${filePath} ${filePath}.temp.mp3 silence 1 0.1 1% reverse silence 1 0.1 1% reverse && \\
 rm ${filePath} && \\
