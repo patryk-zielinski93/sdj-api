@@ -61,7 +61,7 @@ services:
       dockerfile: Dockerfile
       context: ./containers/ices
     volumes:
-      - ./apps/backend/src/assets/tracks:/tracks
+      - ./dist/apps/backend/assets/tracks:/tracks
     environment:
       - ROOM_ID=${ROOM_ID}
     user: ${CURRENT_UID}

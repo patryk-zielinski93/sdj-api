@@ -12,11 +12,9 @@ export const connectionConfig = {
   slack: {
     token: process.env.SLACK_OAUTH_TOKEN
   },
-  tracks: {
-    directory: path.join(__dirname, 'public', 'tracks'),
-    normalizationDb: 92
-  },
   youtube: {
     apiKey: process.env.YOUTUBE_API_KEY
+  },
+  rabbit: { host: 'rabbit', port: 5672
   }
 };
