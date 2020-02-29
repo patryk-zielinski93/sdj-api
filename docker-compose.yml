@@ -113,17 +113,17 @@ services:
       - frontend
       - backend
 
-  slack_dj_rabbit:
-    container_name: slack_dj_rabbit
-    hostname: slack_dj_rabbit
-    image: rabbitmq:3-management
-    user: ${CURRENT_UID}
-    networks:
-      backend:
-        aliases:
-          - rabbit
-    ports:
-    - 15672:15672
+#  slack_dj_rabbit:
+#    container_name: slack_dj_rabbit
+#    hostname: slack_dj_rabbit
+#    image: rabbitmq:3-management
+#    user: ${CURRENT_UID}
+#    networks:
+#      backend:
+#        aliases:
+#          - rabbit
+#    ports:
+#    - 15672:15672
 
   slack_dj_redis:
     container_name: ${REDIS_CONTAINER_NAME}

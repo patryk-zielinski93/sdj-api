@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { environment } from '@ng-environment/environment';
 import { NgSharedAppCoreModule } from '@sdj/ng/shared/app/core';
+import { dynamicEnv } from '@sdj/ng/shared/domain';
 import { NgShellModule } from '@sdj/ng/shell';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
@@ -35,7 +35,7 @@ import { AppComponent } from './app.component';
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({
-            uri: environment.backendUrl + 'graphql'
+            uri: dynamicEnv.backendUrl + 'graphql'
           })
         };
       },

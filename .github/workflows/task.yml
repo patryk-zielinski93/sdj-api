@@ -7,7 +7,8 @@ on:
       - develop
 
 jobs:
-  setup:
+
+  build:
     runs-on: ubuntu-latest
 
     strategy:
@@ -21,8 +22,82 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm install
-      run: |
-        npm ci
+      run: npm ci
+    - name: affected:build
+      run: npm run affected:build -- --base origin/develop
+    env:
+      CI: true
+
+  e2e:
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: npm ci
+    - name: affected:e2e
+      run: npm run affected:e2e -- --base origin/develop
+    env:
+      CI: true
+
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: npm ci
+    - name: affected:lint
+      run: npm run affected:lint -- --base origin/develop
+      env:
+        CI: true
+
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: npm ci
+    - name: affected:test
+      run: npm run affected:test -- --base origin/develop --passWithNoTests
+    env:
+      CI: true
+
+  vaidate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: npm ci
     - name: validate branch
       run: node ./node_modules/@valueadd/dev validate-branch `echo ${GITHUB_REF#refs/heads/}`
     - name: validate commits
@@ -31,13 +106,5 @@ jobs:
       run: node ./node_modules/@valueadd/dev validate-nx-tags
     - name: prettier check
       run: node ./node_modules/@valueadd/dev prettier-check `git diff origin/develop  --cached --name-only --diff-filter=AM | tr '\r\n' ','`
-    - name: affected:build
-      run: npm run affected:build -- --base origin/develop
-    - name: affected:test
-      run: npm run affected:test -- --base origin/develop --passWithNoTests
-    - name: affected:e2e
-      run: npm run affected:e2e -- --base origin/develop
-    - name: affected:lint
-      run: npm run affected:lint -- --base origin/develop
-      env:
-        CI: true
+    env:
+      CI: true

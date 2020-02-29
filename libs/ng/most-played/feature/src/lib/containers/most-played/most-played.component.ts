@@ -5,9 +5,8 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { environment } from '@ng-environment/environment.prod';
 import { ChannelService } from '@sdj/ng/shared/app/core';
-import { Channel, Track } from '@sdj/ng/shared/domain';
+import { Channel, dynamicEnv, Track } from '@sdj/ng/shared/domain';
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
@@ -66,7 +65,7 @@ export class MostPlayedComponent implements OnInit, OnDestroy {
           this.tracks = data.mostPlayedTracks.map((track: Track) => {
             return {
               title: `${track.title}. Played ${track.playedCount} times`,
-              link: environment.backendUrl + 'tracks/' + track.id + '.mp3'
+              link: dynamicEnv.backendUrl + 'tracks/' + track.id + '.mp3'
             };
           });
           this.loading = loading;

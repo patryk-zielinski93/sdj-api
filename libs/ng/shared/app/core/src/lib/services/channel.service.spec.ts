@@ -12,7 +12,7 @@ describe('ChannelService', () => {
   );
 
   it('should be created', () => {
-    const service: ChannelService = TestBed.get(ChannelService);
+    const service: ChannelService = TestBed.inject(ChannelService);
     expect(service).toBeTruthy();
   });
 });

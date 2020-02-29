@@ -8,13 +8,12 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { environment } from '@ng-environment/environment';
 import {
   ChannelService,
   SpeechService,
   WebSocketService
 } from '@sdj/ng/shared/app/core';
-import { Channel, QueuedTrack, Track } from '@sdj/ng/shared/domain';
+import { Channel, dynamicEnv, QueuedTrack, Track } from '@sdj/ng/shared/domain';
 import { AwesomePlayerComponent } from '@sdj/ng/shared/ui/players';
 import { User, WebSocketEvents } from '@sdj/shared/domain';
 import { TrackUtil, UserUtils } from '@sdj/shared/utils';
@@ -34,7 +33,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('toPlay')
   toPlayContainer: ElementRef<HTMLElement>;
 
-  audioSrc: string = environment.externalStream;
+  audioSrc: string = dynamicEnv.externalStream;
   currentTrack$: Observable<QueuedTrack>;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   getUserName: (user: User) => string = UserUtils.getUserName;
@@ -68,13 +67,12 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
       .createSubject(WebSocketEvents.roomIsRunning)
       .pipe(first())
       .subscribe(() => {
-        this.audioSrc = environment.radioStreamUrl + this.selectedChannel.id;
+        this.audioSrc = dynamicEnv.radioStreamUrl + this.selectedChannel.id;
         this.ws
           .createSubject(WebSocketEvents.playDj)
           .pipe(takeUntil(this.selectedChannelUnsubscribe))
           .subscribe(() => {
-            this.audioSrc =
-              environment.radioStreamUrl + this.selectedChannel.id;
+            this.audioSrc = dynamicEnv.radioStreamUrl + this.selectedChannel.id;
             this.chD.markForCheck();
           });
 
@@ -82,7 +80,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
           .createSubject(WebSocketEvents.playRadio)
           .pipe(takeUntil(this.selectedChannelUnsubscribe))
           .subscribe(() => {
-            this.audioSrc = environment.externalStream;
+            this.audioSrc = dynamicEnv.externalStream;
             this.chD.markForCheck();
           });
       });
@@ -169,7 +167,6 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   handleSpeeching(): void {
-    this.speechService.startListening();
     this.speechService.speeching.subscribe((speeching: boolean) => {
       if (speeching) {
         this.playerComponent.player.audio.volume = 0.1;

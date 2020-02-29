@@ -16,18 +16,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ng-environment/*": ["apps/ng/src/environments/*"],
-      "@sdj/backend/slack": ["libs/backend/slack/src/index.ts"],
-      "@sdj/backend/api": ["libs/backend/api/src/index.ts"],
-      "@sdj/backend/websocket": ["libs/backend/websocket/src/index.ts"],
       "@sdj/backend/core": ["libs/backend/core/src/index.ts"],
-      "@sdj/backend/db": ["libs/backend/db/src/index.ts"],
-      "@sdj/backend/shared/config": ["libs/backend/shared/config/src/index.ts"],
       "@sdj/shared/domain": ["libs/shared/domain/src/index.ts"],
       "@sdj/backend/shared/domain": ["libs/backend/shared/domain/src/index.ts"],
-      "@sdj/backend/ices": ["libs/backend/ices/src/index.ts"],
-      "@sdj/backend/storage": ["libs/backend/storage/src/index.ts"],
-      "@sdj/backend/cqrs": ["libs/backend/cqrs/src/index.ts"],
       "@sdj/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@sdj/ng/shell": ["libs/ng/shell/src/index.ts"],
       "@sdj/ng/radio/feature": ["libs/ng/radio/feature/src/index.ts"],
@@ -39,11 +30,45 @@
       "@sdj/ng/shared/ui/common": ["libs/ng/shared/ui/common/src/index.ts"],
       "@sdj/ng/shared/domain": ["libs/ng/shared/domain/src/index.ts"],
       "@sdj/ng/shared/app/core": ["libs/ng/shared/app/core/src/index.ts"],
-      "@sdj/backend/shared/logger": [
-        "libs/backend/shared/logger/src/index.ts"
-      ],
       "@sdj/ng/shared/ui/sdj-loader": [
         "libs/ng/shared/ui/sdj-loader/src/index.ts"
+      ],
+      "@sdj/backend/radio/core/application-services": [
+        "libs/backend/radio/core/application-services/src/index.ts"
+      ],
+      "@sdj/backend/radio/core/domain": [
+        "libs/backend/radio/core/domain/src/index.ts"
+      ],
+      "@sdj/backend/radio/ui-rest": ["libs/backend/radio/ui-rest/src/index.ts"],
+      "@sdj/backend/radio/ui-web-socket": [
+        "libs/backend/radio/ui-web-socket/src/index.ts"
+      ],
+      "@sdj/backend/radio/ui-slack": [
+        "libs/backend/radio/ui-slack/src/index.ts"
+      ],
+      "@sdj/backend/radio/core/domain-service": [
+        "libs/backend/radio/core/domain-service/src/index.ts"
+      ],
+      "@sdj/backend/radio/infrastructure": [
+        "libs/backend/radio/infrastructure/src/index.ts"
+      ],
+      "@sdj/backend/radio/shell": ["libs/backend/radio/shell/src/index.ts"],
+      "@sdj/backend/shared/util-you-tube": [
+        "libs/backend/shared/util-you-tube/src/index.ts"
+      ],
+      "@sdj/backend/shared/util-mp3": [
+        "libs/backend/shared/util-mp3/src/index.ts"
+      ],
+      "@sdj/backend/shared/core": ["libs/backend/shared/core/src/index.ts"],
+      "@sdj/backend/radio/ui-redis": [
+        "libs/backend/radio/ui-redis/src/index.ts"
+      ],
+      "@sdj/backend/shared/infrastructure-logger": [
+        "libs/backend/shared/infrastructure-logger/src/index.ts"
+      ],
+      "@sdj/backend/shared/port": ["libs/backend/shared/port/src/index.ts"],
+      "@sdj/backend/shared/infrastructure": [
+        "libs/backend/shared/infrastructure/src/index.ts"
       ]
     }
   },

@@ -9,7 +9,7 @@ describe('SlackService', () => {
   );
 
   it('should be created', () => {
-    const service: SlackService = TestBed.get(SlackService);
+    const service: SlackService = TestBed.inject(SlackService);
     expect(service).toBeTruthy();
   });
 });

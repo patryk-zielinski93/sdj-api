@@ -6,7 +6,7 @@ describe('WebSocketService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: WebSocketService = TestBed.get(WebSocketService);
+    const service: WebSocketService = TestBed.inject(WebSocketService);
     expect(service).toBeTruthy();
   });
 });

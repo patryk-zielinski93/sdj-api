@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '@ng-environment/environment';
+import { dynamicEnv } from '@sdj/ng/shared/domain';
 import { QueuedTrack, WebSocketEvents } from '@sdj/shared/domain';
 import { fromEvent, Observer, Subject } from 'rxjs';
 import { AnonymousSubject } from 'rxjs/internal-compatibility';
@@ -14,7 +14,7 @@ export class WebSocketService {
   private socket: Socket;
 
   constructor() {
-    this.socket = io(environment.backendUrl);
+    this.socket = io(dynamicEnv.backendUrl);
     this.socket.connect();
   }
 
