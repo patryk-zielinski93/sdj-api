@@ -169,7 +169,6 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   handleSpeeching(): void {
-    this.speechService.startListening();
     this.speechService.speeching.subscribe((speeching: boolean) => {
       if (speeching) {
         this.playerComponent.player.audio.volume = 0.1;

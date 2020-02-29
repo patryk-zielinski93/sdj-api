@@ -5,7 +5,7 @@
     "
     (click)="onSelectChannel(channel)"
     routerLinkActive="list-item-active"
-    *ngFor="let channel of (channels$ | async)"
+    *ngFor="let channel of channels$ | async"
   >
     <mat-icon mat-list-icon *ngIf="channel.id !== selectedChannel.id"
       >star_border

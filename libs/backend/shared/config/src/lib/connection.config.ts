@@ -1,5 +1,3 @@
-import * as path from 'path';
-
 export const connectionConfig = {
   ices: {
     host: 'ices',
@@ -15,6 +13,5 @@ export const connectionConfig = {
   youtube: {
     apiKey: process.env.YOUTUBE_API_KEY
   },
-  rabbit: { host: 'rabbit', port: 5672
-  }
+  rabbit: { host: 'rabbit', port: 5672 }
 };

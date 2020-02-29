@@ -1,11 +1,13 @@
 import { ClientOptions, Transport } from '@nestjs/microservices';
-import { connectionConfig } from '@sdj/backend/shared/config';
+import { connectionConfig } from './connection.config';
 
 export const microservices: { [key: string]: ClientOptions } = {
   app: {
     transport: Transport.RMQ,
     options: {
-      urls: [`amqp://${connectionConfig.rabbit.host}:${connectionConfig.rabbit.port}`],
+      urls: [
+        `amqp://${connectionConfig.rabbit.host}:${connectionConfig.rabbit.port}`
+      ],
       queue: 'sdj_app',
       queueOptions: { durable: false }
     }
@@ -13,7 +15,9 @@ export const microservices: { [key: string]: ClientOptions } = {
   cqrs: {
     transport: Transport.RMQ,
     options: {
-      urls: [`amqp://${connectionConfig.rabbit.host}:${connectionConfig.rabbit.port}`],
+      urls: [
+        `amqp://${connectionConfig.rabbit.host}:${connectionConfig.rabbit.port}`
+      ],
       queue: 'sdj_cqrs',
       queueOptions: { durable: false }
     }
@@ -21,7 +25,9 @@ export const microservices: { [key: string]: ClientOptions } = {
   ices: {
     transport: Transport.RMQ,
     options: {
-      urls: [`amqp://${connectionConfig.rabbit.host}:${connectionConfig.rabbit.port}`],
+      urls: [
+        `amqp://${connectionConfig.rabbit.host}:${connectionConfig.rabbit.port}`
+      ],
       queue: 'sdj_ices',
       queueOptions: { durable: false }
     }
@@ -29,7 +35,9 @@ export const microservices: { [key: string]: ClientOptions } = {
   slack: {
     transport: Transport.RMQ,
     options: {
-      urls: [`amqp://${connectionConfig.rabbit.host}:${connectionConfig.rabbit.port}`],
+      urls: [
+        `amqp://${connectionConfig.rabbit.host}:${connectionConfig.rabbit.port}`
+      ],
       queue: 'sdj_slack',
       queueOptions: { durable: false }
     }

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
-import { Track } from '@sdj/backend/db';
+import { Track } from '@sdj/backend/radio/core/domain';
 import { connectionConfig } from '@sdj/backend/shared/config';
 import { LoggerService } from '@sdj/backend/shared/logger';
 import * as redis from 'redis';
 import { RedisClient } from 'redis';
 import { Observable, Observer, Subject } from 'rxjs';
 import { AnonymousSubject } from 'rxjs/internal-compatibility';
-import { RedisGetNextEvent } from '../cqrs/events/redis-get-next.event';
+import { RedisGetNextEvent } from '../cqrs/events/regis-get-next/redis-get-next.event';
 
 interface RedisData<T> {
   channel: string;

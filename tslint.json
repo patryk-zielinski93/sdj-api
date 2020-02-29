@@ -11,10 +11,7 @@
       "severity": "warn"
     },
     "forin": true,
-    "import-blacklist": [
-      true,
-      "rxjs/Rx"
-    ],
+    "import-blacklist": [true, "rxjs/Rx"],
     "interface-over-type-literal": true,
     "member-access": false,
     "member-ordering": [
@@ -30,18 +27,14 @@
     ],
     "no-arg": true,
     "no-bitwise": true,
-    "no-console": [
-      true
-    ],
+    "no-console": [true],
     "no-construct": true,
     "no-debugger": true,
     "no-duplicate-super": true,
     "no-empty": false,
     "no-empty-interface": true,
     "no-eval": true,
-    "no-inferrable-types": [
-      false
-    ],
+    "no-inferrable-types": [false],
     "no-misused-new": true,
     "no-non-null-assertion": true,
     "no-shadowed-variable": true,
@@ -54,10 +47,7 @@
     "object-literal-sort-keys": false,
     "prefer-const": true,
     "radix": true,
-    "triple-equals": [
-      true,
-      "allow-null-check"
-    ],
+    "triple-equals": [true, "allow-null-check"],
     "unified-signatures": true,
     "variable-name": false,
     "nx-enforce-module-boundaries": [
@@ -67,21 +57,15 @@
         "depConstraints": [
           {
             "sourceTag": "type:application",
-            "onlyDependOnLibsWithTags": [
-              "*"
-            ]
+            "onlyDependOnLibsWithTags": ["*"]
           },
           {
             "sourceTag": "type:feature",
-            "onlyDependOnLibsWithTags": [
-              "*"
-            ]
+            "onlyDependOnLibsWithTags": ["*"]
           },
           {
             "sourceTag": "type:shell",
-            "onlyDependOnLibsWithTags": [
-              "*"
-            ]
+            "onlyDependOnLibsWithTags": ["*"]
           },
           {
             "sourceTag": "type:service",
@@ -94,9 +78,7 @@
           },
           {
             "sourceTag": "type:config",
-            "onlyDependOnLibsWithTags": [
-              "type:config"
-            ]
+            "onlyDependOnLibsWithTags": ["type:config"]
           },
           {
             "sourceTag": "type:util",
@@ -126,9 +108,7 @@
           },
           {
             "sourceTag": "type:domain",
-            "onlyDependOnLibsWithTags": [
-              "type:domain"
-            ]
+            "onlyDependOnLibsWithTags": ["type:domain"]
           },
           {
             "sourceTag": "scope:backend",
@@ -140,10 +120,7 @@
           },
           {
             "sourceTag": "scope:backend-shared",
-            "onlyDependOnLibsWithTags": [
-              "scope:backend-shared",
-              "scope:shared"
-            ]
+            "onlyDependOnLibsWithTags": ["scope:backend-shared", "scope:shared"]
           },
           {
             "sourceTag": "scope:ng",
@@ -155,17 +132,11 @@
           },
           {
             "sourceTag": "scope:ng-shared",
-            "onlyDependOnLibsWithTags": [
-              "scope:ng-shared",
-              "scope:shared"
-            ]
+            "onlyDependOnLibsWithTags": ["scope:ng-shared", "scope:shared"]
           },
           {
             "sourceTag": "scope:host-api",
-            "onlyDependOnLibsWithTags": [
-              "scope:backend-shared",
-              "scope:shared"
-            ]
+            "onlyDependOnLibsWithTags": ["scope:backend-shared", "scope:shared"]
           },
           {
             "sourceTag": "type:e2e",
@@ -175,18 +146,8 @@
         "enforceBuildableLibDependency": true
       }
     ],
-    "directive-selector": [
-      true,
-      "attribute",
-      "app",
-      "camelCase"
-    ],
-    "component-selector": [
-      true,
-      "element",
-      "app",
-      "kebab-case"
-    ],
+    "directive-selector": [true, "attribute", "app", "camelCase"],
+    "component-selector": [true, "element", "app", "kebab-case"],
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,
     "no-input-rename": true,

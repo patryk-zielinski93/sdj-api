@@ -21,31 +21,13 @@
     "host-api": {
       "tags": ["scope:host-api", "type:application"]
     },
-    "backend-slack": {
-      "tags": ["scope:backend", "type:service"]
-    },
-    "backend-api": {
-      "tags": ["scope:backend", "type:service"]
-    },
-    "backend-websocket": {
-      "tags": ["scope:backend", "type:service"]
-    },
     "backend-core": {
-      "tags": ["scope:backend-shared", "type:core"]
-    },
-    "backend-db": {
       "tags": ["scope:backend-shared", "type:core"]
     },
     "backend-shared-config": {
       "tags": ["scope:backend-shared", "type:config"]
     },
     "backend-ices": {
-      "tags": ["scope:backend", "type:service"]
-    },
-    "backend-storage": {
-      "tags": ["scope:backend", "type:service"]
-    },
-    "backend-cqrs": {
       "tags": ["scope:backend", "type:service"]
     },
     "backend-shared-domain": {
@@ -86,6 +68,39 @@
     },
     "ng-shared-ui-sdj-loader": {
       "tags": ["scope:ng-shared", "type:ui"]
+    },
+    "backend-radio-core-application-services": {
+      "tags": ["scope:backend", "type:service"]
+    },
+    "backend-radio-core-domain": {
+      "tags": ["scope:backend-shared", "type:core"]
+    },
+    "backend-radio-ui-rest": {
+      "tags": ["scope:backend", "type:service"]
+    },
+    "backend-radio-ui-web-socket": {
+      "tags": ["scope:backend", "type:service"]
+    },
+    "backend-radio-ui-slack": {
+      "tags": ["scope:backend", "type:service"]
+    },
+    "backend-radio-core-domain-service": {
+      "tags": ["platform:backend", "scope:radio", "type:domain-services"]
+    },
+    "backend-radio-infrastructure": {
+      "tags": ["platform:backend", "scope:radio", "type:infrastructure"]
+    },
+    "backend-radio-shell": {
+      "tags": ["platform:backend", "scope:radio", "type:shell"]
+    },
+    "backend-shared-util-you-tube": {
+      "tags": ["platform:backend", "scope:shared", "type:util"]
+    },
+    "backend-shared-util-mp3": {
+      "tags": ["platform:backend", "scope:shared", "type:util"]
+    },
+    "backend-shared-core": {
+      "tags": ["platform:backend", "scope:shared", "type:core"]
     }
   }
 }
