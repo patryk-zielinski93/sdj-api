@@ -9,98 +9,208 @@
   },
   "projects": {
     "ng-e2e": {
-      "tags": ["type:e2e"],
-      "implicitDependencies": ["ng"]
+      "tags": [
+        "type:e2e"
+      ],
+      "implicitDependencies": [
+        "ng"
+      ]
     },
     "ng": {
-      "tags": ["platform:ng", "type:application"]
+      "tags": [
+        "platform:ng",
+        "type:application"
+      ]
     },
     "backend": {
-      "tags": ["platform:backend", "type:application"]
+      "tags": [
+        "platform:backend",
+        "type:application"
+      ]
     },
     "host-api": {
-      "tags": ["scope:host-api", "type:application"]
+      "tags": [
+        "scope:host-api",
+        "type:application"
+      ]
     },
     "backend-shared-domain": {
-      "tags": ["platform:backend", "scope:shared", "type:domain"]
-    },
-    "ng-shell": {
-      "tags": ["platform:ng", "type:shell"]
-    },
-    "ng-radio-feature": {
-      "tags": ["platform:ng", "type:feature"]
-    },
-    "ng-most-played-feature": {
-      "tags": ["platform:ng", "type:feature"]
-    },
-    "ng-top-rated-feature": {
-      "tags": ["platform:ng", "type:feature"]
-    },
-    "ng-shared-ui-players": {
-      "tags": ["platform:ng", "scope:shared", "type:presentation"]
-    },
-    "ng-shared-ui-common": {
-      "tags": ["platform:ng", "scope:shared", "type:presentation"]
-    },
-    "ng-shared-domain": {
-      "tags": ["platform:ng", "scope:shared", "type:domain"]
-    },
-    "ng-shared-app-core": {
-      "tags": ["platform:ng", "scope:shared", "type:core"]
+      "tags": [
+        "platform:backend",
+        "scope:shared",
+        "type:domain"
+      ]
     },
     "shared-domain": {
-      "tags": ["platform:any", "scope:shared", "type:domain"]
+      "tags": [
+        "platform:any",
+        "scope:shared",
+        "type:domain"
+      ]
     },
     "shared-utils": {
-      "tags": ["platform:any", "scope:shared", "type:util"]
-    },
-    "ng-shared-ui-sdj-loader": {
-      "tags": ["platform:ng", "scope:shared", "type:presentation"]
+      "tags": [
+        "platform:any",
+        "scope:shared",
+        "type:util"
+      ]
     },
     "backend-radio-core-application-services": {
-      "tags": ["platform:backend", "scope:radio", "type:application-services"]
+      "tags": [
+        "platform:backend",
+        "scope:radio",
+        "type:application-services"
+      ]
     },
     "backend-radio-core-domain": {
-      "tags": ["platform:backend", "scope:radio", "type:domain"]
+      "tags": [
+        "platform:backend",
+        "scope:radio",
+        "type:domain"
+      ]
     },
     "backend-radio-ui-rest": {
-      "tags": ["platform:backend", "scope:radio", "type:ui"]
+      "tags": [
+        "platform:backend",
+        "scope:radio",
+        "type:ui"
+      ]
     },
     "backend-radio-ui-web-socket": {
-      "tags": ["platform:backend", "scope:radio", "type:ui"]
+      "tags": [
+        "platform:backend",
+        "scope:radio",
+        "type:ui"
+      ]
     },
     "backend-radio-ui-slack": {
-      "tags": ["platform:backend", "scope:radio", "type:ui"]
+      "tags": [
+        "platform:backend",
+        "scope:radio",
+        "type:ui"
+      ]
     },
     "backend-radio-core-domain-service": {
-      "tags": ["platform:backend", "scope:radio", "type:domain-services"]
+      "tags": [
+        "platform:backend",
+        "scope:radio",
+        "type:domain-services"
+      ]
     },
     "backend-radio-infrastructure": {
-      "tags": ["platform:backend", "scope:radio", "type:infrastructure"]
+      "tags": [
+        "platform:backend",
+        "scope:radio",
+        "type:infrastructure"
+      ]
     },
     "backend-radio-shell": {
-      "tags": ["platform:backend", "scope:radio", "type:shell"]
+      "tags": [
+        "platform:backend",
+        "scope:radio",
+        "type:shell"
+      ]
     },
     "backend-shared-util-you-tube": {
-      "tags": ["platform:backend", "scope:shared", "type:util"]
+      "tags": [
+        "platform:backend",
+        "scope:shared",
+        "type:util"
+      ]
     },
     "backend-shared-util-mp3": {
-      "tags": ["platform:backend", "scope:shared", "type:util"]
-    },
-    "backend-shared-core": {
-      "tags": ["platform:backend", "scope:shared", "type:core"]
+      "tags": [
+        "platform:backend",
+        "scope:shared",
+        "type:util"
+      ]
     },
     "backend-radio-ui-redis": {
-      "tags": ["platform:backend", "scope:radio", "type:ui"]
+      "tags": [
+        "platform:backend",
+        "scope:radio",
+        "type:ui"
+      ]
     },
     "backend-shared-infrastructure-logger": {
-      "tags": ["platform:backend", "scope:shared", "type:util"]
+      "tags": [
+        "platform:backend",
+        "scope:shared",
+        "type:util"
+      ]
     },
     "backend-shared-port": {
-      "tags": ["platform:backend", "scope:shared", "type:port"]
+      "tags": [
+        "platform:backend",
+        "scope:shared",
+        "type:port"
+      ]
     },
     "backend-shared-infrastructure": {
-      "tags": ["platform:backend", "scope:shared", "type:infrastructure"]
+      "tags": [
+        "platform:backend",
+        "scope:shared",
+        "type:infrastructure"
+      ]
+    },
+    "ng-presentation-main-radio-feature": {
+      "tags": [
+        "platform:ng",
+        "type:feature"
+      ]
+    },
+    "ng-presentation-main-most-played-feature": {
+      "tags": [
+        "platform:ng",
+        "type:feature"
+      ]
+    },
+    "ng-presentation-shared-presentation-sdj-loader": {
+      "tags": [
+        "platform:ng",
+        "scope:shared",
+        "type:presentation"
+      ]
+    },
+    "ng-presentation-shared-presentation-players": {
+      "tags": [
+        "platform:ng",
+        "scope:shared",
+        "type:presentation"
+      ]
+    },
+    "ng-core-radio-domain": {
+      "tags": [
+        "platform:ng",
+        "scope:shared",
+        "type:domain"
+      ]
+    },
+    "ng-presentation-main-shell": {
+      "tags": [
+        "platform:ng",
+        "type:shell"
+      ]
+    },
+    "ng-presentation-main-top-rated-feature": {
+      "tags": [
+        "platform:ng",
+        "type:feature"
+      ]
+    },
+    "ng-core-shared-kernel": {
+      "tags": [
+        "platform:ng",
+        "scope:shared",
+        "type:kernel"
+      ]
+    },
+    "backend-shared-kernel": {
+      "tags": [
+        "platform:backend",
+        "scope:shared",
+        "type:kernel"
+      ]
     }
   }
 }

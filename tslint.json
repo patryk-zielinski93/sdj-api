@@ -81,7 +81,7 @@
           },
           {
             "sourceTag": "type:application",
-            "onlyDependOnLibsWithTags": ["type:ui", "type:core"]
+            "onlyDependOnLibsWithTags": ["type:ui", "type:kernel"]
           },
           {
             "sourceTag": "type:application-services",
@@ -93,7 +93,7 @@
             ]
           },
           {
-            "sourceTag": "type:core",
+            "sourceTag": "type:kernel",
             "onlyDependOnLibsWithTags": [
               "type:port",
               "type:domain",

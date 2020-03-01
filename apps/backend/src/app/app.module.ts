@@ -3,11 +3,11 @@ import { BackendRadioUiRedisModule } from '@sdj/backend/radio/ui-redis';
 import { BackendRadioUiRestModule } from '@sdj/backend/radio/ui-rest';
 import { SlackModule } from '@sdj/backend/radio/ui-slack';
 import { WebSocketModule } from '@sdj/backend/radio/ui-web-socket';
-import { BackendSharedCoreModule } from '@sdj/backend/shared/core';
+import { BackendSharedKernelModule } from '@sdj/backend/shared/kernel';
 
 @Module({
   imports: [
-    BackendSharedCoreModule,
+    BackendSharedKernelModule,
     BackendRadioUiRestModule,
     WebSocketModule,
     BackendRadioUiRedisModule,

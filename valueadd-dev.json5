@@ -118,7 +118,7 @@
       'scope:shared',
       'type:application',
       'type:config',
-      'type:core',
+      'type:kernel',
       'type:data-access',
       'type:domain',
       'type:feature',
