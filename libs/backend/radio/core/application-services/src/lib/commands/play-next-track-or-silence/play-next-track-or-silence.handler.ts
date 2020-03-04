@@ -1,5 +1,4 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { QueueTrackCommand } from '../queue-track/queue-track.command';
 import { QueuedTrack } from '@sdj/backend/radio/core/domain';
 import {
   ChannelDomainRepository,
@@ -10,6 +9,7 @@ import { appConfig } from '@sdj/backend/shared/domain';
 import { PlaySilenceEvent } from '../../events/play-silence/play-silence.event';
 import { RadioFacade } from '../../radio.facade';
 import { DownloadAndPlayCommand } from '../download-and-play/download-and-play.command';
+import { QueueTrackCommand } from '../queue-track/queue-track.command';
 import { PlayNextTrackOrSilenceCommand } from './play-next-track-or-silence.command';
 
 @CommandHandler(PlayNextTrackOrSilenceCommand)

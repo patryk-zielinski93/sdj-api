@@ -1,5 +1,5 @@
-import { Channel as IChannel } from '@sdj/shared/domain';
-
-export interface Channel extends IChannel {
+export interface Channel {
+  id: string;
+  name: string;
   users: number;
 }

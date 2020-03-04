@@ -68,6 +68,10 @@
             "onlyDependOnLibsWithTags": ["platform:any", "platform:ng"]
           },
           {
+            "sourceTag": "scope:auth",
+            "onlyDependOnLibsWithTags": ["scope:auth", "scope:shared"]
+          },
+          {
             "sourceTag": "scope:host-api",
             "onlyDependOnLibsWithTags": ["scope:host-api", "scope:shared"]
           },
@@ -81,7 +85,7 @@
           },
           {
             "sourceTag": "type:application",
-            "onlyDependOnLibsWithTags": ["type:ui", "type:kernel"]
+            "onlyDependOnLibsWithTags": ["type:kernel", "type:shell", "type:ui"]
           },
           {
             "sourceTag": "type:application-services",
@@ -125,6 +129,7 @@
               "type:application-services",
               "type:domain",
               "type:domain-services",
+              "type:port",
               "type:shell",
               "type:util"
             ]
@@ -180,12 +185,7 @@
     "no-outputs-metadata-property": true,
     "template-banana-in-box": true,
     "template-no-negated-async": true,
-    "typedef": [
-      true,
-      "call-signature",
-      "parameter",
-      "member-variable-declaration"
-    ],
+    "typedef": [true, "call-signature", "property-declaration"],
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true
   }

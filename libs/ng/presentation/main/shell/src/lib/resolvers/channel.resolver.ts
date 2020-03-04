@@ -4,14 +4,15 @@ import {
   Resolve,
   RouterStateSnapshot
 } from '@angular/router';
-import { ChannelService } from '@sdj/ng/core/shared/kernel';
-import { Channel } from '@sdj/shared/domain';
+import { ChannelFacade } from '@sdj/ng/core/radio/application-services';
+import { Channel } from '@sdj/ng/core/radio/domain';
+import { SlackChannel } from '@sdj/shared/domain';
 import { Observable } from 'rxjs';
 import { filter, first, switchMap, tap } from 'rxjs/operators';
 
 @Injectable()
-export class ChannelResolver implements Resolve<Channel[]> {
-  constructor(private channelService: ChannelService) {}
+export class ChannelResolver implements Resolve<SlackChannel[]> {
+  constructor(private channelFacade: ChannelFacade) {}
 
   findChannelIdParam(route: ActivatedRouteSnapshot): string {
     let channelId = route.paramMap.get('channelId');
@@ -33,18 +34,18 @@ export class ChannelResolver implements Resolve<Channel[]> {
   ): Observable<any> {
     const channelIdParam = this.findChannelIdParam(route);
 
-    return this.channelService.getChannels().pipe(
+    return this.channelFacade.channels$.pipe(
       tap(channels => {
         if (!channels || !channels.length) {
-          this.channelService.loadChannels();
+          this.channelFacade.loadChannels();
         }
       }),
       filter(channels => !!channels && !!channels.length),
       first(),
-      switchMap(_ => this.channelService.getSelectedChannel()),
+      switchMap(_ => this.channelFacade.selectedChannel$),
       tap((channel: Channel) => {
         if (!channel) {
-          this.channelService.selectFirstChannel(channelIdParam);
+          this.channelFacade.selectFirstChannel(channelIdParam);
         }
       }),
       filter((channel: Channel) => !!channel),

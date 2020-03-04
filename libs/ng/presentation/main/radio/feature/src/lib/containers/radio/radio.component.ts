@@ -9,13 +9,18 @@ import {
   ViewChild
 } from '@angular/core';
 import {
-  ChannelService,
-  SpeechService,
-  WebSocketService
-} from '@sdj/ng/core/shared/kernel';
-import { Channel, dynamicEnv, QueuedTrack, Track } from '@sdj/ng/core/radio/domain';
+  ChannelFacade,
+  QueuedTrackFacade,
+  RadioFacade
+} from '@sdj/ng/core/radio/application-services';
+import {
+  Channel,
+  dynamicEnv,
+  QueuedTrack,
+  Track
+} from '@sdj/ng/core/radio/domain';
 import { AwesomePlayerComponent } from '@sdj/ng/presentation/shared/presentation-players';
-import { User, WebSocketEvents } from '@sdj/shared/domain';
+import { User } from '@sdj/shared/domain';
 import { TrackUtil, UserUtils } from '@sdj/shared/utils';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { merge, Observable, Subject } from 'rxjs';
@@ -34,7 +39,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   toPlayContainer: ElementRef<HTMLElement>;
 
   audioSrc: string = dynamicEnv.externalStream;
-  currentTrack$: Observable<QueuedTrack>;
+  currentTrack$ = this.queuedTrackFacade.currentTrack$;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   getUserName: (user: User) => string = UserUtils.getUserName;
   listScrollSubject: Subject<QueuedTrack[]> = new Subject();
@@ -46,52 +51,49 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   private selectedChannelUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
+    private channelFacade: ChannelFacade,
     private chD: ChangeDetectorRef,
-    private channelService: ChannelService,
-    private speechService: SpeechService,
-    private ws: WebSocketService
+    private queuedTrackFacade: QueuedTrackFacade,
+    private radioFacade: RadioFacade
   ) {}
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.radioFacade.stopListeningForPozdro();
+  }
 
   ngOnInit(): void {
-    this.handleSelectedChannelChange();
+    this.radioFacade.startListeningForPozdro();
   }
 
   ngAfterViewInit(): void {
     this.handleSpeeching();
+    this.handleSelectedChannelChange();
   }
 
   handleAudioSource(): void {
-    this.ws
-      .createSubject(WebSocketEvents.roomIsRunning)
-      .pipe(first())
-      .subscribe(() => {
-        this.audioSrc = dynamicEnv.radioStreamUrl + this.selectedChannel.id;
-        this.ws
-          .createSubject(WebSocketEvents.playDj)
-          .pipe(takeUntil(this.selectedChannelUnsubscribe))
-          .subscribe(() => {
-            this.audioSrc = dynamicEnv.radioStreamUrl + this.selectedChannel.id;
-            this.chD.markForCheck();
-          });
-
-        this.ws
-          .createSubject(WebSocketEvents.playRadio)
-          .pipe(takeUntil(this.selectedChannelUnsubscribe))
-          .subscribe(() => {
-            this.audioSrc = dynamicEnv.externalStream;
-            this.chD.markForCheck();
-          });
-      });
+    this.channelFacade.roomIsRunning$.pipe(first()).subscribe(() => {
+      this.audioSrc = dynamicEnv.radioStreamUrl + this.selectedChannel.id;
+      this.channelFacade.playDj$
+        .pipe(takeUntil(this.selectedChannelUnsubscribe))
+        .subscribe(() => {
+          this.audioSrc = dynamicEnv.radioStreamUrl + this.selectedChannel.id;
+          this.chD.markForCheck();
+        });
+      this.channelFacade.playRadio$
+        .pipe(takeUntil(this.selectedChannelUnsubscribe))
+        .subscribe(() => {
+          this.audioSrc = dynamicEnv.externalStream;
+          this.chD.markForCheck();
+        });
+    });
   }
 
   handleQueuedTrackList(): void {
-    const wsSubject = this.ws
-      .getQueuedTrackListSubject()
-      .pipe(takeUntil(this.selectedChannelUnsubscribe));
-    this.ws.getQueuedTrackListSubject().next(<any>this.selectedChannel.id);
-    const trackWillBePlayed$ = wsSubject.pipe(
+    this.queuedTrackFacade.loadQueuedTracks(this.selectedChannel.id);
+    const queuedTracks$ = this.queuedTrackFacade.queuedTracks$.pipe(
+      takeUntil(this.selectedChannelUnsubscribe)
+    );
+    const trackWillBePlayed$ = queuedTracks$.pipe(
       map(list => list.slice(1)),
       filter(
         newList =>
@@ -101,7 +103,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
     );
     trackWillBePlayed$.subscribe();
 
-    const newTrackAddedToQueue$ = wsSubject.pipe(
+    const newTrackAddedToQueue$ = queuedTracks$.pipe(
       map(list => list.slice(1)),
       filter(
         newList =>
@@ -121,16 +123,6 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
           listElement.scrollWidth - listElement.clientWidth;
       });
     });
-
-    this.currentTrack$ = wsSubject.pipe(
-      map(list => {
-        return list[0];
-      })
-    );
-
-    merge(this.queuedTracks$, this.currentTrack$)
-      .pipe(takeUntil(this.selectedChannelUnsubscribe))
-      .subscribe(() => this.chD.markForCheck());
   }
 
   handleScrollList(newList: QueuedTrack[]): void {
@@ -150,24 +142,21 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   handleSelectedChannelChange(): void {
-    const join$ = this.ws.createSubject(WebSocketEvents.join);
-
-    this.channelService
-      .getSelectedChannel()
+    this.channelFacade.selectedChannel$
       .pipe(untilDestroyed(this))
       .subscribe((channel: Channel) => {
         this.selectedChannel = channel;
         this.selectedChannelUnsubscribe.next();
         this.selectedChannelUnsubscribe.complete();
         this.selectedChannelUnsubscribe = new Subject();
-        join$.next({ room: channel.id });
+        this.channelFacade.join(channel.id);
         this.handleQueuedTrackList();
         this.handleAudioSource();
       });
   }
 
   handleSpeeching(): void {
-    this.speechService.speeching.subscribe((speeching: boolean) => {
+    this.radioFacade.speeching$.subscribe((speeching: boolean) => {
       if (speeching) {
         this.playerComponent.player.audio.volume = 0.1;
       } else {

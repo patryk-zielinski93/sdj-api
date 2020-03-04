@@ -3,8 +3,8 @@ import {
   QueuedTrackDomainRepository,
   TrackDomainRepository
 } from '@sdj/backend/radio/core/domain-service';
-import { QueuedTrackSkippedEvent } from '../../events/queued-track-skiepped/queued-track-skipped.event';
 import { HostService } from '@sdj/backend/shared/port';
+import { QueuedTrackSkippedEvent } from '../../events/queued-track-skiepped/queued-track-skipped.event';
 import { SkipQueuedTrackCommand } from './skip-queued-track.command';
 
 @CommandHandler(SkipQueuedTrackCommand)

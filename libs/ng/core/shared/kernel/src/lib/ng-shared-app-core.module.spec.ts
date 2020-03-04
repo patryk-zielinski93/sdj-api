@@ -1,14 +1,14 @@
 import { async, TestBed } from '@angular/core/testing';
-import { NgSharedAppCoreModule } from './ng-shared-app-core.module';
+import { NgCoreSharedKernelModule } from './ng-core-shared-kernel.module';
 
 describe('NgSharedAppCoreModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NgSharedAppCoreModule]
+      imports: [NgCoreSharedKernelModule]
     }).compileComponents();
   }));
 
   it('should create', () => {
-    expect(NgSharedAppCoreModule).toBeDefined();
+    expect(NgCoreSharedKernelModule).toBeDefined();
   });
 });

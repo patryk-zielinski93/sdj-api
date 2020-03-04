@@ -1,4 +1,4 @@
-export interface Channel {
+export interface SlackChannel {
   created: number;
   creator: string;
   id: string;

@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { ChannelService } from '@sdj/ng/core/shared/kernel';
+import { ChannelFacade } from '@sdj/ng/core/radio/application-services';
 import { Channel, dynamicEnv, Track } from '@sdj/ng/core/radio/domain';
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
@@ -26,7 +26,7 @@ export class MostPlayedComponent implements OnInit, OnDestroy {
 
   constructor(
     private chD: ChangeDetectorRef,
-    private channelService: ChannelService,
+    private channelFacade: ChannelFacade,
     private apollo: Apollo
   ) {}
 
@@ -37,8 +37,7 @@ export class MostPlayedComponent implements OnInit, OnDestroy {
   }
 
   handleSelectedChannelChange(): void {
-    this.channelService
-      .getSelectedChannel()
+    this.channelFacade.selectedChannel$
       .pipe(untilDestroyed(this))
       .subscribe((channel: Channel) => {
         this.channel = channel;

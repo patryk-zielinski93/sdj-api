@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Track, User } from '@sdj/backend/radio/core/domain';
+import { Track, TrackStatus, User } from '@sdj/backend/radio/core/domain';
 import { TrackDomainRepository } from '@sdj/backend/radio/core/domain-service';
 import {
   connectionConfig,
@@ -10,7 +10,6 @@ import { LoggerService } from '@sdj/backend/shared/infrastructure-logger';
 import { downloadAndNormalize } from '@sdj/backend/shared/util-mp3';
 import parseIsoDuration from 'parse-iso-duration';
 import * as requestPromise from 'request-promise-native';
-import { TrackStatus } from '@sdj/backend/radio/core/domain';
 import { CreateTrackCommand } from './create-track.command';
 
 @CommandHandler(CreateTrackCommand)

@@ -4,9 +4,9 @@ import {
   VoteDomainRepository
 } from '@sdj/backend/radio/core/domain-service';
 import { appConfig } from '@sdj/backend/shared/domain';
+import { SkipQueuedTrackCommand } from '../../commands/skip-queued-track/skip-queued-track.command';
 import { RadioFacade } from '../../radio.facade';
 import { SongVotedNegativelyEvent } from './song-voted-negatively.event';
-import { SkipQueuedTrackCommand } from '../../commands/skip-queued-track/skip-queued-track.command';
 
 @EventsHandler(SongVotedNegativelyEvent)
 export class SongVotedNegativelyHandler

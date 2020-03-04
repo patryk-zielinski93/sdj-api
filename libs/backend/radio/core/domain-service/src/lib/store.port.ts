@@ -1,8 +1,5 @@
-import { Injectable } from '@nestjs/common';
 import { QueuedTrack } from '@sdj/backend/radio/core/domain';
-import { QueuedTrackDomainRepository } from '@sdj/backend/radio/core/domain-service';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { distinctUntilChanged, filter, first, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 interface ChannelState {
   silenceCount: number;

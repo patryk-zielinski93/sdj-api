@@ -3,6 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ChannelFacade } from '@sdj/ng/core/radio/application-services';
+import { createSpyObj } from 'jest-createspyobj';
+import { hot } from 'jest-marbles';
 import { MockComponent } from 'ng-mocks';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { SidenavComponent } from '../../components/navbar/sidenav/sidenav.component';
@@ -25,8 +28,14 @@ describe('MainComponent', () => {
         MainComponent,
         MockComponent(NavbarComponent),
         MockComponent(SidenavComponent)
+      ],
+      providers: [
+        { provide: ChannelFacade, useValue: createSpyObj(ChannelFacade) }
       ]
     }).compileComponents();
+
+    const channelFacade = TestBed.inject(ChannelFacade);
+    (channelFacade.selectedChannel$ as any) = hot('');
   }));
 
   beforeEach(() => {

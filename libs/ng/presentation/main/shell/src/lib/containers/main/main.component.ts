@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   OnInit,
@@ -7,13 +6,8 @@ import {
 } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  ChannelService,
-  SpeechService,
-  WebSocketService
-} from '@sdj/ng/core/shared/kernel';
+import { ChannelFacade } from '@sdj/ng/core/radio/application-services';
 import { Channel } from '@sdj/ng/core/radio/domain';
-import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'sdj-main',
@@ -21,48 +15,27 @@ import { Observable, Subject } from 'rxjs';
   styleUrls: ['./main.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MainComponent implements OnInit, AfterViewInit {
+export class MainComponent implements OnInit {
   @ViewChild('sidenav', { static: true })
   sidenav: MatSidenav;
 
-  channels$: Observable<Channel[]>;
+  channels$ = this.channelFacade.channels$;
   selectedChannel: Channel;
 
-  private selectedChannelUnsubscribe: Subject<void> = new Subject<void>();
-
   constructor(
-    private channelService: ChannelService,
-    private ws: WebSocketService,
+    private channelFacade: ChannelFacade,
     private route: ActivatedRoute,
-    private router: Router,
-    private speechService: SpeechService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.channels$ = this.channelService.getChannels();
-    this.handleChannelChanges();
-  }
-
-  ngAfterViewInit(): void {
-    this.handleSpeeching();
     this.handleSelectedChannelChange();
   }
 
-  handleChannelChanges(): void {
-    this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
-      this.selectedChannel = channel;
-    });
-  }
-
-  handleSpeeching(): void {
-    this.speechService.startListening();
-  }
-
   handleSelectedChannelChange(): void {
-    this.channelService.getSelectedChannel().subscribe((channel: Channel) => {
-      this.selectedChannelUnsubscribe.next();
-      this.selectedChannelUnsubscribe.complete();
-      this.selectedChannelUnsubscribe = new Subject();
+    this.channelFacade.selectedChannel$.subscribe((channel: Channel) => {
+      this.selectedChannel = channel;
+      this.navigateToChannel(channel);
     });
   }
 
@@ -75,10 +48,23 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   onSelectChannel(channel: Channel): void {
-    this.channelService.selectChannel(channel);
+    this.channelFacade.selectChannel(channel);
   }
 
   onNavigateToMostPlayed(): void {
     this.router.navigate([this.selectedChannel.id, 'most-played']);
+  }
+
+  private navigateToChannel(channel: Channel): void {
+    const oldChannel = this.selectedChannel;
+    if (oldChannel && this.router.url.includes(oldChannel.id)) {
+      this.router.navigateByUrl(
+        this.router.url.replace(oldChannel.id, channel.id)
+      );
+    } else if (this.router.url.includes(channel.id)) {
+      return;
+    } else {
+      this.router.navigate([channel.id]);
+    }
   }
 }

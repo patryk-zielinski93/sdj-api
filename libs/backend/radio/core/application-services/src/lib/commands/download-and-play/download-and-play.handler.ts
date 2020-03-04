@@ -6,10 +6,10 @@ import {
 } from '@nestjs/cqrs';
 
 import { PlayQueuedTrackEvent } from '../../events/play-queued-track/play-queued-track.event';
-import { DownloadAndPlayCommand } from './download-and-play.command';
 import { RadioFacade } from '../../radio.facade';
-import { DownloadTrackCommand } from '../download-track/download-track.command';
 import { DeleteQueuedTrackCommand } from '../delete-queued-track/delete-queued-track.command';
+import { DownloadTrackCommand } from '../download-track/download-track.command';
+import { DownloadAndPlayCommand } from './download-and-play.command';
 
 @CommandHandler(DownloadAndPlayCommand)
 export class DownloadAndPlayHandler

@@ -1,9 +1,9 @@
+import { pathConfig } from '@sdj/backend/shared/domain';
 import { exec } from 'child_process';
 import * as path from 'path';
 import { Observable, Subject } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
 import * as ytdl from 'youtube-dl';
-import { pathConfig } from '@sdj/backend/shared/domain';
 
 const inProgress: { [key: string]: Observable<string> } = {};
 

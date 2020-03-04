@@ -1,1 +1,1 @@
-export * from './lib/ng-shell.module';
+export * from './lib/ng-presentation-main-shell.module';
