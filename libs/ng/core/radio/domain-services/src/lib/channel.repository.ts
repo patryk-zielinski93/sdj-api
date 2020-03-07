@@ -1,4 +1,4 @@
-import { Channel } from '@sdj/ng/core/radio/domain';
+import { Channel } from '@sdj/ng/core/channel/domain';
 import { Observable } from 'rxjs';
 
 export abstract class ChannelRepository {

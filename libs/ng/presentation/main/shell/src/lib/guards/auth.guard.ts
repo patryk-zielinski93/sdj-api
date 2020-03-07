@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { AuthFacade } from '@sdj/ng/core/auth/application-services';
-import { dynamicEnv } from '@sdj/ng/core/radio/domain';
+import { environment } from '@sdj/ng/core/shared/kernel';
 import { Observable, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 
@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate {
         switchMap(() => of(true))
       );
     } else if (!this.authFacade.isUserLogged()) {
-      window.location.href = `https://slack.com/oauth/authorize?scope=identity.basic&scope=groups:read,channels:read,mpim:read,im:read&client_id=${dynamicEnv.slack.clientId}&redirect_uri=&state=&user_scope=&granular_bot_scope=0&team=&install_redirect=&single_channel=0&tracked=1&redirect_uri=${window.location.origin}`;
+      window.location.href = `https://slack.com/oauth/authorize?scope=identity.basic&scope=groups:read,channels:read,mpim:read,im:read&client_id=${environment.slack.clientId}&redirect_uri=&state=&user_scope=&granular_bot_scope=0&team=&install_redirect=&single_channel=0&tracked=1&redirect_uri=${window.location.origin}`;
     } else {
       return true;
     }

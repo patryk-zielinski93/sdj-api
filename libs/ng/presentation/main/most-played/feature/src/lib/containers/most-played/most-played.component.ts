@@ -5,8 +5,10 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { ChannelFacade } from '@sdj/ng/core/radio/application-services';
-import { Channel, dynamicEnv, Track } from '@sdj/ng/core/radio/domain';
+import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
+import { Channel } from '@sdj/ng/core/channel/domain';
+import { Track } from '@sdj/ng/core/radio/domain';
+import { environment } from '@sdj/ng/core/shared/kernel';
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
@@ -64,7 +66,7 @@ export class MostPlayedComponent implements OnInit, OnDestroy {
           this.tracks = data.mostPlayedTracks.map((track: Track) => {
             return {
               title: `${track.title}. Played ${track.playedCount} times`,
-              link: dynamicEnv.backendUrl + 'tracks/' + track.id + '.mp3'
+              link: environment.backendUrl + 'tracks/' + track.id + '.mp3'
             };
           });
           this.loading = loading;

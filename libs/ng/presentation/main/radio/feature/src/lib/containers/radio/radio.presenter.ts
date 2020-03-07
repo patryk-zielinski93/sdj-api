@@ -1,32 +1,32 @@
 import { Injectable } from '@angular/core';
-import { ChannelFacade } from '@sdj/ng/core/radio/application-services';
-import { dynamicEnv } from '@sdj/ng/core/radio/domain';
+import { RadioFacade } from '@sdj/ng/core/radio/application-services';
+import { environment } from '@sdj/ng/core/shared/kernel';
 import { merge, Observable, Subject } from 'rxjs';
 import { first, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 
 @Injectable()
 export class RadioPresenter {
-  constructor(private channelFacade: ChannelFacade) {}
+  constructor(private radioFacade: RadioFacade) {}
 
   getAudioSrc(
     selectedChannelId: string,
     selectedChannelUnsubscribe: Observable<void>
   ): Observable<string> {
-    return this.channelFacade.roomIsRunning$.pipe(
+    return this.radioFacade.roomIsRunning$.pipe(
       first(),
       switchMap(() =>
         merge(
-          this.channelFacade.playDj$.pipe(
+          this.radioFacade.playDj$.pipe(
             takeUntil(selectedChannelUnsubscribe),
-            map(() => dynamicEnv.radioStreamUrl + selectedChannelId)
+            map(() => environment.radioStreamUrl + selectedChannelId)
           ),
-          this.channelFacade.playRadio$.pipe(
+          this.radioFacade.playRadio$.pipe(
             takeUntil(selectedChannelUnsubscribe),
-            map(() => dynamicEnv.externalStream)
+            map(() => environment.externalStream)
           )
         )
       ),
-      startWith(dynamicEnv.radioStreamUrl + selectedChannelId)
+      startWith(environment.radioStreamUrl + selectedChannelId)
     );
   }
 

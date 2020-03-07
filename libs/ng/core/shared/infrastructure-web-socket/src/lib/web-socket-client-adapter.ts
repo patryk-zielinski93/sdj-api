@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { dynamicEnv } from '@sdj/ng/core/radio/domain';
+import { environment } from '@sdj/ng/core/shared/kernel';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
 import { fromEvent, Observable, Observer, Subject } from 'rxjs';
@@ -15,7 +15,7 @@ export class WebSocketClientAdapter extends WebSocketClient {
 
   constructor() {
     super();
-    this.socket = io(dynamicEnv.backendUrl);
+    this.socket = io(environment.backendUrl);
     this.socket.connect();
   }
 

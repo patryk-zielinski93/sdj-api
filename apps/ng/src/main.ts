@@ -1,8 +1,8 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { environment } from '@sdj/ng/core/shared/kernel';
 
 import { AppModule } from './app/app.module';
-import { environment } from '@sdj/ng/core/shared/kernel';
 
 if (environment.production) {
   enableProdMode();

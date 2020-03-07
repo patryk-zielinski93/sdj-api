@@ -134,6 +134,21 @@
     },
     "ng-core-shared-infrastructure-apollo": {
       "tags": ["platform:ng", "scope:shared", "type:infrastructure"]
+    },
+    "ng-core-channel-domain": {
+      "tags": ["platform:ng", "scope:channel", "type:domain"]
+    },
+    "ng-core-channel-application-services": {
+      "tags": ["platform:ng", "scope:channel", "type:application-services"]
+    },
+    "ng-core-channel-domain-services": {
+      "tags": ["platform:ng", "scope:channel", "type:application-services"]
+    },
+    "ng-core-channel-shell": {
+      "tags": ["platform:ng", "scope:channel", "type:shell"]
+    },
+    "ng-core-channel-infrastructure": {
+      "tags": ["platform:ng", "scope:channel", "type:infrastrucutre"]
     }
   }
 }

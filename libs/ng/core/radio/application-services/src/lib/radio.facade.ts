@@ -6,6 +6,9 @@ import { delay, filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class RadioFacade {
+  roomIsRunning$ = this.ws.observe<void>(WebSocketEvents.roomIsRunning);
+  playDj$ = this.ws.observe(WebSocketEvents.playDj);
+  playRadio$ = this.ws.observe(WebSocketEvents.playRadio);
   speeching$: Observable<boolean> = this.speechService.speeching$;
 
   private pozdro$: Subject<{ message: string }>;
@@ -14,6 +17,10 @@ export class RadioFacade {
     private speechService: SpeechService,
     private ws: WebSocketClient
   ) {}
+
+  join(channelId: string): void {
+    this.ws.emit(WebSocketEvents.join, { room: channelId });
+  }
 
   startListeningForPozdro(): void {
     this.pozdro$ = this.ws.createSubject(WebSocketEvents.pozdro);

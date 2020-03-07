@@ -4,8 +4,8 @@ import {
   Resolve,
   RouterStateSnapshot
 } from '@angular/router';
-import { ChannelFacade } from '@sdj/ng/core/radio/application-services';
-import { Channel } from '@sdj/ng/core/radio/domain';
+import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
+import { Channel } from '@sdj/ng/core/channel/domain';
 import { SlackChannel } from '@sdj/shared/domain';
 import { Observable } from 'rxjs';
 import { filter, first, switchMap, tap } from 'rxjs/operators';

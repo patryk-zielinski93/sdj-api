@@ -5,7 +5,7 @@ import {
   Input,
   Output
 } from '@angular/core';
-import { Channel } from '@sdj/ng/core/radio/domain';
+import { Channel } from '@sdj/ng/core/channel/domain';
 import { Observable } from 'rxjs';
 
 @Component({

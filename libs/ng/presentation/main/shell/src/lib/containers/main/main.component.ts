@@ -6,8 +6,8 @@ import {
 } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChannelFacade } from '@sdj/ng/core/radio/application-services';
-import { Channel } from '@sdj/ng/core/radio/domain';
+import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
+import { Channel } from '@sdj/ng/core/channel/domain';
 
 @Component({
   selector: 'sdj-main',

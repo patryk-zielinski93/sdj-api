@@ -8,17 +8,14 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
+import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
+import { Channel } from '@sdj/ng/core/channel/domain';
 import {
-  ChannelFacade,
   QueuedTrackFacade,
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
-import {
-  Channel,
-  dynamicEnv,
-  QueuedTrack,
-  Track
-} from '@sdj/ng/core/radio/domain';
+import { QueuedTrack, Track } from '@sdj/ng/core/radio/domain';
+import { environment } from '@sdj/ng/core/shared/kernel';
 import { AwesomePlayerComponent } from '@sdj/ng/presentation/shared/presentation-players';
 import { User } from '@sdj/shared/domain';
 import { TrackUtil, UserUtils } from '@sdj/shared/utils';
@@ -40,7 +37,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('toPlay')
   toPlayContainer: ElementRef<HTMLElement>;
 
-  audioSrc$: Observable<string> = of(dynamicEnv.externalStream);
+  audioSrc$: Observable<string> = of(environment.externalStream);
   currentTrack$ = this.queuedTrackFacade.currentTrack$;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   getUserName: (user: User) => string = UserUtils.getUserName;
@@ -134,7 +131,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
         this.selectedChannelUnsubscribe = this.radioPresenter.recreateSubject(
           this.selectedChannelUnsubscribe
         );
-        this.channelFacade.join(channel.id);
+        this.radioFacade.join(channel.id);
         this.handleQueuedTrackList();
         this.audioSrc$ = this.radioPresenter.getAudioSrc(
           this.selectedChannel.id,

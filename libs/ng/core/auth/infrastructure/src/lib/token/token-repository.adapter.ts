@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TokenRepository } from '@sdj/ng/core/auth/domain-services';
-import { dynamicEnv } from '@sdj/ng/core/radio/domain';
+import { environment } from '@sdj/ng/core/shared/kernel';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -15,8 +15,8 @@ export class TokenRepositoryAdapter extends TokenRepository {
     return this.http
       .get<{ access_token: string }>('https://slack.com/api/oauth.access', {
         params: {
-          client_id: dynamicEnv.slack.clientId,
-          client_secret: dynamicEnv.slack.clientSecret,
+          client_id: environment.slack.clientId,
+          client_secret: environment.slack.clientSecret,
           code,
           redirect_uri: window.location.origin
         }

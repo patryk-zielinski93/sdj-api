@@ -107,6 +107,19 @@
       ],
       "@sdj/ng/core/shared/infrastructure-apollo": [
         "libs/ng/core/shared/infrastructure-apollo/src/index.ts"
+      ],
+      "@sdj/ng/core/channel/domain": [
+        "libs/ng/core/channel/domain/src/index.ts"
+      ],
+      "@sdj/ng/core/channel/application-services": [
+        "libs/ng/core/channel/application-services/src/index.ts"
+      ],
+      "@sdj/ng/core/channel/domain-services": [
+        "libs/ng/core/channel/domain-services/src/index.ts"
+      ],
+      "@sdj/ng/core/channel/shell": ["libs/ng/core/channel/shell/src/index.ts"],
+      "@sdj/ng/core/channel/infrastructure": [
+        "libs/ng/core/channel/infrastructure/src/index.ts"
       ]
     }
   },

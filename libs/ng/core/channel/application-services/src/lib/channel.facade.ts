@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Channel } from '@sdj/ng/core/radio/domain';
+import { Channel } from '@sdj/ng/core/channel/domain';
 import { ChannelRepository } from '@sdj/ng/core/radio/domain-services';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
@@ -8,11 +8,6 @@ import { map, startWith, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class ChannelFacade {
-  roomIsRunning$ = this.webSocketService.observe<void>(
-    WebSocketEvents.roomIsRunning
-  );
-  playDj$ = this.webSocketService.observe(WebSocketEvents.playDj);
-  playRadio$ = this.webSocketService.observe(WebSocketEvents.playRadio);
   channels$: Observable<Channel[]>;
   selectedChannel$: BehaviorSubject<Channel> = new BehaviorSubject(null);
   private channelsSrc = new BehaviorSubject([]);
@@ -78,9 +73,5 @@ export class ChannelFacade {
 
   selectChannel(channel: Channel): void {
     this.selectedChannel$.next(channel);
-  }
-
-  join(channelId: string): void {
-    this.webSocketService.emit(WebSocketEvents.join, { room: channelId });
   }
 }

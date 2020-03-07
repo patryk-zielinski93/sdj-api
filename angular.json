@@ -1440,6 +1440,175 @@
           "styleext": "scss"
         }
       }
+    },
+    "ng-core-channel-domain": {
+      "projectType": "library",
+      "root": "libs/ng/core/channel/domain",
+      "sourceRoot": "libs/ng/core/channel/domain/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/channel/domain/tsconfig.lib.json",
+              "libs/ng/core/channel/domain/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/core/channel/domain/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/channel/domain/jest.config.js",
+            "tsConfig": "libs/ng/core/channel/domain/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/channel/domain/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-core-channel-application-services": {
+      "projectType": "library",
+      "root": "libs/ng/core/channel/application-services",
+      "sourceRoot": "libs/ng/core/channel/application-services/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/channel/application-services/tsconfig.lib.json",
+              "libs/ng/core/channel/application-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/core/channel/application-services/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/channel/application-services/jest.config.js",
+            "tsConfig": "libs/ng/core/channel/application-services/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/channel/application-services/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-core-channel-domain-services": {
+      "projectType": "library",
+      "root": "libs/ng/core/channel/domain-services",
+      "sourceRoot": "libs/ng/core/channel/domain-services/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/channel/domain-services/tsconfig.lib.json",
+              "libs/ng/core/channel/domain-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/core/channel/domain-services/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/channel/domain-services/jest.config.js",
+            "tsConfig": "libs/ng/core/channel/domain-services/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/channel/domain-services/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-core-channel-shell": {
+      "projectType": "library",
+      "root": "libs/ng/core/channel/shell",
+      "sourceRoot": "libs/ng/core/channel/shell/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/channel/shell/tsconfig.lib.json",
+              "libs/ng/core/channel/shell/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/core/channel/shell/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/channel/shell/jest.config.js",
+            "tsConfig": "libs/ng/core/channel/shell/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/channel/shell/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-core-channel-infrastructure": {
+      "projectType": "library",
+      "root": "libs/ng/core/channel/infrastructure",
+      "sourceRoot": "libs/ng/core/channel/infrastructure/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/channel/infrastructure/tsconfig.lib.json",
+              "libs/ng/core/channel/infrastructure/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/core/channel/infrastructure/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/channel/infrastructure/jest.config.js",
+            "tsConfig": "libs/ng/core/channel/infrastructure/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/channel/infrastructure/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {

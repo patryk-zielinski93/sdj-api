@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { dynamicEnv } from '@sdj/ng/core/radio/domain';
+import { environment } from '@sdj/ng/core/shared/kernel';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -13,7 +13,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({
-            uri: dynamicEnv.backendUrl + 'graphql'
+            uri: environment.backendUrl + 'graphql'
           })
         };
       },

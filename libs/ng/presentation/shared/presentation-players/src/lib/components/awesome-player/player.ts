@@ -1,4 +1,4 @@
-import { dynamicEnv } from '@sdj/ng/core/radio/domain';
+import { environment } from '@sdj/ng/core/shared/kernel';
 import { QueuedTrack } from '@sdj/shared/domain';
 import { UserUtils } from '@sdj/shared/utils';
 import { Subject } from 'rxjs';
@@ -69,7 +69,7 @@ export class Player {
       this.analyser.smoothingTimeConstant = 0.6;
       this.analyser.fftSize = 2048;
       this.audio = <HTMLAudioElement>document.getElementById('playerHtmlAudio');
-      this.audio.src = dynamicEnv.radioStreamUrl;
+      this.audio.src = environment.radioStreamUrl;
       this.audio.crossOrigin = 'anonymous';
       this.audio.load();
       this.audio.addEventListener('ended', this.replayStream.bind(this));
