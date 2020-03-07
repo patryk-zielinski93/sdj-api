@@ -37,8 +37,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/ng/src/environments/environment.ts",
-                  "with": "apps/ng/src/environments/environment.prod.ts"
+                  "replace": "libs/ng/core/shared/kernel/src/lib/environments/environment.ts",
+                  "with": "libs/ng/core/shared/kernel/src/lib/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,

@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { NgCoreSharedInfrastructureApolloModule } from '@sdj/ng/core/shared/infrastructure-apollo';
+import { StoreRootModule } from './ngrx/state-root.module';
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { NgCoreSharedInfrastructureApolloModule } from '@sdj/ng/core/shared/infr
     NgCoreSharedInfrastructureApolloModule,
     BrowserAnimationsModule,
     BrowserModule,
-    RouterModule.forRoot([])
+    RouterModule.forRoot([]),
+    StoreRootModule
   ],
   providers: [],
   exports: [RouterModule]

@@ -9,10 +9,6 @@ export const dynamicEnv: {
     clientId: string;
     clientSecret: string;
   };
-  production: boolean;
 } = {
   ...browserWindowEnv,
-  ...{
-    production: false
-  }
 };
