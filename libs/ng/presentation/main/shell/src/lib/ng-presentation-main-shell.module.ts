@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,8 +14,6 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { MainComponent } from './containers/main/main.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ChannelResolver } from './resolvers/channel.resolver';
-import { ErrorInterceptor } from './slack/error.interceptor';
-import { TokenInterceptor } from './slack/token.interceptor';
 
 export const ngShellRoutes: Route[] = [
   {
@@ -74,19 +71,6 @@ export const ngShellRoutes: Route[] = [
     NgCoreChannelShellModule,
     NgCoreAuthShellModule
   ],
-  declarations: [NavbarComponent, MainComponent, SidenavComponent],
-  providers: [
-    ChannelResolver,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptor,
-      multi: true
-    }
-  ]
+  declarations: [NavbarComponent, MainComponent, SidenavComponent]
 })
 export class NgPresentationMainShellModule {}

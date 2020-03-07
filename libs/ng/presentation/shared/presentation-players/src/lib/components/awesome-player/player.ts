@@ -1,4 +1,4 @@
-import { environment } from '@sdj/ng/core/shared/kernel';
+import { environment } from '@sdj/ng/core/shared/domain';
 import { QueuedTrack } from '@sdj/shared/domain';
 import { UserUtils } from '@sdj/shared/utils';
 import { Subject } from 'rxjs';

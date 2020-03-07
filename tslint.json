@@ -72,6 +72,10 @@
             "onlyDependOnLibsWithTags": ["scope:auth", "scope:shared"]
           },
           {
+            "sourceTag": "scope:channel",
+            "onlyDependOnLibsWithTags": ["scope:channel", "scope:shared"]
+          },
+          {
             "sourceTag": "scope:host-api",
             "onlyDependOnLibsWithTags": ["scope:host-api", "scope:shared"]
           },
@@ -81,7 +85,19 @@
           },
           {
             "sourceTag": "scope:shared",
-            "onlyDependOnLibsWithTags": ["scope:shared"]
+            "onlyDependOnLibsWithTags": [
+              "name:ng-core-auth-api",
+              "scope:shared"
+            ]
+          },
+          {
+            "sourceTag": "type:api",
+            "onlyDependOnLibsWithTags": [
+              "type:application-services",
+              "type:domain-services",
+              "type:domain",
+              "type:shell"
+            ]
           },
           {
             "sourceTag": "type:application",
@@ -115,17 +131,12 @@
           },
           {
             "sourceTag": "type:feature",
-            "onlyDependOnLibsWithTags": [
-              "type:application-services",
-              "type:domain",
-              "type:domain-services",
-              "type:presentation",
-              "type:util"
-            ]
+            "onlyDependOnLibsWithTags": ["*"]
           },
           {
             "sourceTag": "type:infrastructure",
             "onlyDependOnLibsWithTags": [
+              "type:api",
               "type:application-services",
               "type:domain",
               "type:domain-services",
@@ -144,7 +155,7 @@
           },
           {
             "sourceTag": "type:port",
-            "onlyDependOnLibsWithTags": ["type:port"]
+            "onlyDependOnLibsWithTags": ["type:domain", "type:port"]
           },
           {
             "sourceTag": "type:shell",

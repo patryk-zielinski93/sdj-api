@@ -8,7 +8,7 @@ import {
 import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
 import { Channel } from '@sdj/ng/core/channel/domain';
 import { Track } from '@sdj/ng/core/radio/domain';
-import { environment } from '@sdj/ng/core/shared/kernel';
+import { environment } from '@sdj/ng/core/shared/domain';
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';

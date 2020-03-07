@@ -5,14 +5,14 @@ import {
   HttpRequest
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthFacade } from '@sdj/ng/core/auth/application-services';
+import { AuthApiFacade } from '@sdj/ng/core/auth/api';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'any'
 })
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(public auth: AuthFacade) {}
+  constructor(public auth: AuthApiFacade) {}
 
   intercept(
     request: HttpRequest<any>,

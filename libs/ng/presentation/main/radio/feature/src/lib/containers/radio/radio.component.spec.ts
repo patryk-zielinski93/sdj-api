@@ -1,8 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
 import {
-  ChannelFacade,
   QueuedTrackFacade,
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
@@ -39,7 +39,7 @@ describe('RadioComponent', () => {
     const radioFacade = TestBed.inject(RadioFacade);
     radioFacade.speeching$ = hot('');
 
-    const channelFacade = TestBed.inject(ChannelFacade);
+    const channelFacade = TestBed.inject<ChannelFacade>(ChannelFacade);
     (channelFacade.selectedChannel$ as any) = hot('');
   }));
 

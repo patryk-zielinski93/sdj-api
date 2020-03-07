@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Channel } from '@sdj/ng/core/channel/domain';
-import { ChannelRepository } from '@sdj/ng/core/radio/domain-services';
+import { ChannelRepository } from '@sdj/ng/core/channel/domain-services';
+import { SlackService } from '@sdj/ng/core/shared/port';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SlackService } from '../slack/slack.service';
 
 @Injectable()
 export class ChannelRepositoryAdapter extends ChannelRepository {

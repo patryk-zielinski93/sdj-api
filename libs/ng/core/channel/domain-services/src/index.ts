@@ -1,1 +1,1 @@
-export * from './lib/ng-core-channel-domain-services.module';
+export * from './lib/channel.repository';

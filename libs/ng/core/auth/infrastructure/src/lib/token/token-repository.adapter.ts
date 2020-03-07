@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TokenRepository } from '@sdj/ng/core/auth/domain-services';
-import { environment } from '@sdj/ng/core/shared/kernel';
+import { environment } from '@sdj/ng/core/shared/domain';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 

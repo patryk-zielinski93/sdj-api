@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '@sdj/ng/core/shared/kernel';
+import { environment } from '@sdj/ng/core/shared/domain';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
 import { fromEvent, Observable, Observer, Subject } from 'rxjs';

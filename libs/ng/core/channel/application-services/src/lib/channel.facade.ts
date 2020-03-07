@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Channel } from '@sdj/ng/core/channel/domain';
-import { ChannelRepository } from '@sdj/ng/core/radio/domain-services';
+import { ChannelRepository } from '@sdj/ng/core/channel/domain-services';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
 import { BehaviorSubject, Observable } from 'rxjs';

@@ -10,7 +10,7 @@ import { SlackChannel } from '@sdj/shared/domain';
 import { Observable } from 'rxjs';
 import { filter, first, switchMap, tap } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({ providedIn: 'any' })
 export class ChannelResolver implements Resolve<SlackChannel[]> {
   constructor(private channelFacade: ChannelFacade) {}
 

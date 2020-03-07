@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { AuthFacade } from '@sdj/ng/core/auth/application-services';
-import { environment } from '@sdj/ng/core/shared/kernel';
+import { environment } from '@sdj/ng/core/shared/domain';
 import { Observable, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 

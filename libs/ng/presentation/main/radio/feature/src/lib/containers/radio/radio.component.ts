@@ -15,7 +15,7 @@ import {
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
 import { QueuedTrack, Track } from '@sdj/ng/core/radio/domain';
-import { environment } from '@sdj/ng/core/shared/kernel';
+import { environment } from '@sdj/ng/core/shared/domain';
 import { AwesomePlayerComponent } from '@sdj/ng/presentation/shared/presentation-players';
 import { User } from '@sdj/shared/domain';
 import { TrackUtil, UserUtils } from '@sdj/shared/utils';

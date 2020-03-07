@@ -37,8 +37,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "libs/ng/core/shared/kernel/src/lib/environments/environment.ts",
-                  "with": "libs/ng/core/shared/kernel/src/lib/environments/environment.prod.ts"
+                  "replace": "libs/ng/core/shared/domain/src/lib/environments/environment.ts",
+                  "with": "libs/ng/core/shared/domain/src/lib/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -1609,6 +1609,99 @@
           "styleext": "scss"
         }
       }
+    },
+    "ng-core-shared-infrastructure-slack": {
+      "projectType": "library",
+      "root": "libs/ng/core/shared/infrastructure-slack",
+      "sourceRoot": "libs/ng/core/shared/infrastructure-slack/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/shared/infrastructure-slack/tsconfig.lib.json",
+              "libs/ng/core/shared/infrastructure-slack/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/core/shared/infrastructure-slack/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/shared/infrastructure-slack/jest.config.js",
+            "tsConfig": "libs/ng/core/shared/infrastructure-slack/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/shared/infrastructure-slack/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-core-shared-domain": {
+      "root": "libs/ng/core/shared/domain",
+      "sourceRoot": "libs/ng/core/shared/domain/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/shared/domain/tsconfig.lib.json",
+              "libs/ng/core/shared/domain/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/core/shared/domain/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/shared/domain/jest.config.js",
+            "tsConfig": "libs/ng/core/shared/domain/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ng-core-auth-api": {
+      "projectType": "library",
+      "root": "libs/ng/core/auth/api",
+      "sourceRoot": "libs/ng/core/auth/api/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/auth/api/tsconfig.lib.json",
+              "libs/ng/core/auth/api/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/core/auth/api/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/auth/api/jest.config.js",
+            "tsConfig": "libs/ng/core/auth/api/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/auth/api/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {
@@ -1616,7 +1709,8 @@
       "typescriptMismatch": false,
       "versionMismatch": false
     },
-    "defaultCollection": "@nrwl/angular"
+    "defaultCollection": "@nrwl/angular",
+    "analytics": false
   },
   "schematics": {
     "@nrwl/angular:application": {

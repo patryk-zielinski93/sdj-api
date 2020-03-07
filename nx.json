@@ -142,13 +142,22 @@
       "tags": ["platform:ng", "scope:channel", "type:application-services"]
     },
     "ng-core-channel-domain-services": {
-      "tags": ["platform:ng", "scope:channel", "type:application-services"]
+      "tags": ["platform:ng", "scope:channel", "type:domain-services"]
     },
     "ng-core-channel-shell": {
       "tags": ["platform:ng", "scope:channel", "type:shell"]
     },
     "ng-core-channel-infrastructure": {
-      "tags": ["platform:ng", "scope:channel", "type:infrastrucutre"]
+      "tags": ["platform:ng", "scope:channel", "type:infrastructure"]
+    },
+    "ng-core-shared-infrastructure-slack": {
+      "tags": ["platform:ng", "scope:shared", "type:infrastructure"]
+    },
+    "ng-core-shared-domain": {
+      "tags": ["platform:ng", "scope:shared", "type:domain"]
+    },
+    "ng-core-auth-api": {
+      "tags": ["name:ng-core-auth-api", "platform:ng", "scope:auth", "type:api"]
     }
   }
 }

@@ -120,7 +120,12 @@
       "@sdj/ng/core/channel/shell": ["libs/ng/core/channel/shell/src/index.ts"],
       "@sdj/ng/core/channel/infrastructure": [
         "libs/ng/core/channel/infrastructure/src/index.ts"
-      ]
+      ],
+      "@sdj/ng/core/shared/infrastructure-slack": [
+        "libs/ng/core/shared/infrastructure-slack/src/index.ts"
+      ],
+      "@sdj/ng/core/shared/domain": ["libs/ng/core/shared/domain/src/index.ts"],
+      "@sdj/ng/core/auth/api": ["libs/ng/core/auth/api/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

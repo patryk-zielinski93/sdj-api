@@ -3,7 +3,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NxModule } from '@nrwl/angular';
-import { environment } from '../environments/environment';
+import { environment } from '@sdj/ng/core/shared/domain';
 
 @NgModule({
   imports: [
