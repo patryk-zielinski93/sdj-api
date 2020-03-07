@@ -11,7 +11,7 @@ import { Route, RouterModule } from '@angular/router';
 import { NgCoreAuthShellModule } from '@sdj/ng/core/auth/shell';
 import { NgCoreRadioShellModule } from '@sdj/ng/core/radio/shell';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { SidenavComponent } from './components/navbar/sidenav/sidenav.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { MainComponent } from './containers/main/main.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ChannelResolver } from './resolvers/channel.resolver';

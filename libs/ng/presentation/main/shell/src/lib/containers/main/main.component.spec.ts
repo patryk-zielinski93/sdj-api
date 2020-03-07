@@ -8,7 +8,7 @@ import { createSpyObj } from 'jest-createspyobj';
 import { hot } from 'jest-marbles';
 import { MockComponent } from 'ng-mocks';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { SidenavComponent } from '../../components/navbar/sidenav/sidenav.component';
+import { SidenavComponent } from '../../components/sidenav/sidenav.component';
 
 import { MainComponent } from './main.component';
 

@@ -14,7 +14,6 @@
           class="queued-track__title"
           [innerHTML]="queuedTrack.track.title"
         ></div>
-        <!--              TODO why user is sometimes a string-->
         <div
           *ngIf="queuedTrack.addedBy && getUserName(queuedTrack.addedBy)"
           [innerHTML]="'~' + getUserName(queuedTrack.addedBy)"
@@ -24,7 +23,7 @@
   </ul>
   <sdj-awesome-player
     #playerComponent
-    [src]="audioSrc"
+    [src]="audioSrc$ | async"
     [track]="currentTrack$ | async"
   >
   </sdj-awesome-player>
