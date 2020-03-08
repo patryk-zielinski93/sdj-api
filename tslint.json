@@ -178,7 +178,7 @@
           },
           {
             "sourceTag": "type:e2e",
-            "onlyDependOnLibsWithTags": []
+            "onlyDependOnLibsWithTags": ["type:domain"]
           }
         ],
         "enforceBuildableLibDependency": true

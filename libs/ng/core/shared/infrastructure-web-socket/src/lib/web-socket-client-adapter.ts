@@ -4,7 +4,7 @@ import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
 import { fromEvent, Observable, Observer, Subject } from 'rxjs';
 import { AnonymousSubject } from 'rxjs/internal-compatibility';
-import * as io from 'socket.io-client';
+import * as socketIo from 'socket.io-client';
 import Socket = SocketIOClient.Socket;
 
 @Injectable({
@@ -15,8 +15,8 @@ export class WebSocketClientAdapter extends WebSocketClient {
 
   constructor() {
     super();
+    const io = window.io || socketIo;
     this.socket = io(environment.backendUrl);
-    this.socket.connect();
   }
 
   createSubject<T>(event: string): Subject<T> {

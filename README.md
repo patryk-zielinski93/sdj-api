@@ -1,5 +1,5 @@
 # SLACK DJ
-
+![SDJ BASE CI](https://github.com/Sikora00/sdj-api/workflows/SDJ%20BASE%20CI/badge.svg)
 ## Setting up
 
 - Create your own [youtube api key](https://developers.google.com/youtube/v3/getting-started)

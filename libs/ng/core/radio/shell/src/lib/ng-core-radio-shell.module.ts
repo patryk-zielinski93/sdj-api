@@ -15,7 +15,7 @@ import { SpeechService, WebSocketClient } from '@sdj/ng/core/shared/port';
       provide: QueuedTrackRepository,
       useClass: QueuedTrackRepositoryAdapter
     },
-    { provide: WebSocketClient, useClass: WebSocketClientAdapter }
+    { provide: WebSocketClient, useExisting: WebSocketClientAdapter }
   ]
 })
 export class NgCoreRadioShellModule {}

@@ -1,11 +1,11 @@
 <div class="app-content">
-  <ul class="queued-tracks-list" #toPlay>
+  <ul data-test="queued-tracks" class="queued-tracks-list" #toPlay>
     <li class="queued-tracks-list__last-element queued-tracks-list__track"></li>
     <li
       class="queued-tracks-list__track"
       *ngFor="let queuedTrack of queuedTracks.slice().reverse()"
     >
-      <div class="queued-track">
+      <div class="queued-track" data-test="queued-track">
         <img
           class="queued-track__thumbnail"
           [src]="getThumbnail(queuedTrack.track)"

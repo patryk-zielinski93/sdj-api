@@ -18,6 +18,7 @@ export class RadioPresenter {
         first(),
         switchMap(() =>
           merge(
+            of(environment.radioStreamUrl + selectedChannelId),
             this.radioFacade.playDj$.pipe(
               takeUntil(selectedChannelUnsubscribe),
               map(() => environment.radioStreamUrl + selectedChannelId)

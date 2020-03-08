@@ -16,8 +16,8 @@ import { SlackService, WebSocketClient } from '@sdj/ng/core/shared/port';
   ],
   providers: [
     { provide: ChannelRepository, useClass: ChannelRepositoryAdapter },
-    { provide: SlackService, useClass: SlackServiceAdapter },
-    { provide: WebSocketClient, useClass: WebSocketClientAdapter }
+    { provide: SlackService, useExisting: SlackServiceAdapter },
+    { provide: WebSocketClient, useExisting: WebSocketClientAdapter }
   ]
 })
 export class NgCoreChannelShellModule {}

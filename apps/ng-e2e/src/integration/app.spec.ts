@@ -1,18 +1,11 @@
+import { resolveApp } from '../support/helpers/helpers';
 import {
   getChannelListItem,
-  getNavbarList,
-  getPlayButton
-} from '../support/app.po';
-import { resolveApp } from '../support/commands';
-import { closeWSServer, setupMockWSServer } from '../support/websocket';
+  getNavbarList
+} from '../support/selectors/main.selectors';
+import { getPlayButton } from '../support/selectors/radio.selectors';
 
 describe('SDJ', () => {
-  before(() => {
-    setupMockWSServer();
-  });
-  after(() => {
-    closeWSServer();
-  });
   beforeEach(() => {
     resolveApp();
   });
@@ -21,7 +14,7 @@ describe('SDJ', () => {
     getPlayButton().should('be.visible');
   });
 
-  it('should countain channels list', () => {
+  it('should contain channels list', () => {
     getNavbarList().within(() => {
       getChannelListItem().should('have.length.greaterThan', 1);
     });
