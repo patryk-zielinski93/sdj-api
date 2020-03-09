@@ -4,7 +4,6 @@
 ![GitHub issues](https://img.shields.io/github/issues/Sikora00/sdj-api)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/Naereen/badges.svg)](http://isitmaintained.com/project/Sikora00/sdj-api)
 
-
 ## Setting up
 
 - Create your own [youtube api key](https://developers.google.com/youtube/v3/getting-started)
