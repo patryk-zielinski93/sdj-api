@@ -33,9 +33,44 @@ jobs:
         run: npm run affected:build -- --all
       - name: test
         run: npm run affected:test -- --all --passWithNoTests
-      - name: e2e
-        run: npm run affected:e2e -- --all
       - name: lint
         run: npm run affected:lint -- --all
         env:
           CI: true
+
+  e2e:
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
+      - name: affected:e2e
+        run: npm run affected:e2e -- --base origin/develop
+    env:
+      CI: true
+
+  code-coverage:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.5.4
+        env:
+          CC_TEST_REPORTER_ID: fa59bfb70c77c6c809a38c060cf750b37778621cc6ceb57ca15aadba8d04a39a
+        with:
+          coverageCommand: npm run ng -- test --code-coverage --coverage=true
