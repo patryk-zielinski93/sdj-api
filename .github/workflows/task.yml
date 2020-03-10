@@ -101,9 +101,9 @@ jobs:
     - name: validate branch
       run: node ./node_modules/@valueadd/dev validate-branch `echo ${GITHUB_REF#refs/heads/}`
     - name: validate commits
-      run: node ./node_modules/@valueadd/dev validate-commit origin/develop
+      run: npm run validate-commit
     - name: validate nx tags
-      run: node ./node_modules/@valueadd/dev validate-nx-tags
+      run: npm run validate-nx-tags
     - name: prettier check
       run: node ./node_modules/@valueadd/dev prettier-check `git diff origin/develop  --cached --name-only --diff-filter=AM | tr '\r\n' ','`
     env:

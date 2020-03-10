@@ -7,7 +7,7 @@ on:
       - develop
 
 jobs:
-  setup:
+  build:
     runs-on: ubuntu-latest
 
     strategy:
@@ -23,20 +23,33 @@ jobs:
       - name: use master
         run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
       - name: npm install
-        run: |
-          npm ci
-      - name: validate nx tags
-        run: node ./node_modules/@valueadd/dev validate-nx-tags
-      - name: prettier check
-        run: npm run format:check
+        run: npm ci
       - name: build
         run: npm run affected:build -- --all
-      - name: test
-        run: npm run affected:test -- --all --passWithNoTests
-      - name: lint
-        run: npm run affected:lint -- --all
         env:
           CI: true
+
+  code-climate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.5.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: npm run coverage
 
   coveralls:
     name: Coveralls
@@ -82,7 +95,7 @@ jobs:
     env:
       CI: true
 
-  CodeClimate:
+  lint:
     runs-on: ubuntu-latest
 
     strategy:
@@ -95,11 +108,74 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: use master
+        run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
       - name: npm install
         run: npm ci
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.5.4
+      - name: lint
+        run: npm run affected:lint -- --all
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          CI: true
+
+  prettier:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          coverageCommand: npm run coverage
+          node-version: ${{ matrix.node-version }}
+      - name: use master
+        run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
+      - name: npm install
+        run: npm ci
+      - name: prettier check
+        run: npm run format:check
+
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: use master
+        run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
+      - name: npm install
+        run: npm ci
+      - name: test
+        run: npm run affected:test -- --all --passWithNoTests
+        env:
+          CI: true
+
+  validate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: use master
+        run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
+      - name: npm install
+        run: |
+          npm ci
+      - name: validate nx tags
+        run: node ./node_modules/@valueadd/dev validate-nx-tags

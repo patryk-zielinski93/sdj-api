@@ -1,8 +1,9 @@
 # SLACK DJ
 
-![SDJ BASE CI](https://github.com/Sikora00/sdj-api/workflows/SDJ%20BASE%20CI/badge.svg)
-![GitHub issues](https://img.shields.io/github/issues/Sikora00/sdj-api)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/Naereen/badges.svg)](http://isitmaintained.com/project/Sikora00/sdj-api)
+[![SDJ BASE CI](https://github.com/Sikora00/sdj-api/workflows/SDJ%20BASE%20CI/badge.svg)](https://github.com/Sikora00/sdj-api/workflows/SDJ%20BASE%20CI/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/Sikora00/sdj-api/badge.svg)](https://coveralls.io/github/Sikora00/sdj-api)
+[![GitHub issues](https://img.shields.io/github/issues/Sikora00/sdj-api)](https://img.shields.io/github/issues/Sikora00/sdj-api)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/Sikora00/sdj-api.svg)](http://isitmaintained.com/project/Sikora00/sdj-api)
 
 ## Setting up
 
