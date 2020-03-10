@@ -7,7 +7,7 @@ import { getPlayButton } from '../support/selectors/radio.selectors';
 
 describe('SDJ', () => {
   beforeEach(() => {
-    resolveApp();
+    resolveApp('/');
   });
 
   it('should display player', () => {

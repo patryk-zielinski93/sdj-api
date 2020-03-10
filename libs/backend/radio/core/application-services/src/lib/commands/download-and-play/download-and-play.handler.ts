@@ -1,9 +1,4 @@
-import {
-  CommandBus,
-  CommandHandler,
-  EventBus,
-  ICommandHandler
-} from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { PlayQueuedTrackEvent } from '../../events/play-queued-track/play-queued-track.event';
 import { RadioFacade } from '../../radio.facade';
@@ -15,7 +10,6 @@ import { DownloadAndPlayCommand } from './download-and-play.command';
 export class DownloadAndPlayHandler
   implements ICommandHandler<DownloadAndPlayCommand> {
   constructor(
-    private readonly commandBus: CommandBus,
     private readonly eventBus: EventBus,
     private readonly radioFacade: RadioFacade
   ) {}

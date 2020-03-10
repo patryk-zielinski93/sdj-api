@@ -1,5 +1,7 @@
 import { WebSocketEvents } from '@sdj/shared/domain';
 import { isPlaying, resolveApp } from '../support/helpers/helpers';
+import { mockConfig } from '../support/mocks/configs';
+import { emmitInWs } from '../support/mocks/websocket';
 import {
   getArtistNameElement,
   getPlayButton,
@@ -7,12 +9,11 @@ import {
   getQueuedTracks,
   getTrackNameElement
 } from '../support/selectors/radio.selectors';
-import { mockConfig } from '../support/mocks/configs';
-import { emmitInWs } from '../support/mocks/websocket';
 
 describe('Radio', () => {
+  const channelId = 'C9RQHAD53';
   beforeEach(() => {
-    resolveApp();
+    resolveApp(channelId);
   });
 
   describe('Player', () => {
@@ -33,7 +34,7 @@ describe('Radio', () => {
       cy.wait(3000);
       getPlayerHtmlAudioElement().then((els: JQuery<HTMLAudioElement>) => {
         const el: HTMLAudioElement = els.get(0);
-        expect(el.src).to.eq('http:' + mockConfig.radioStreamUrl + 'C9RQHAD53');
+        expect(el.src).to.eq('http:' + mockConfig.radioStreamUrl + channelId);
       });
     });
   });

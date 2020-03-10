@@ -10,7 +10,7 @@ export const isPlaying = (el: HTMLAudioElement) => {
   return el.duration > 0 && !el.paused && !el.muted;
 };
 
-export const resolveApp = () => {
+export const resolveApp = route => {
   login();
   cy.server();
   cy.route(
@@ -19,7 +19,7 @@ export const resolveApp = () => {
     'fixture:slack-channels.response.json'
   ).as('channels');
 
-  cy.visit('/', {
+  cy.visit(route, {
     onBeforeLoad(win: Window): void {
       // @ts-ignore
       win.io = url => {

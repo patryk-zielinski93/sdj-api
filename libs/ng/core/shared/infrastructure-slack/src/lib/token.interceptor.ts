@@ -18,7 +18,10 @@ export class TokenInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (this.auth.isUserLogged()) {
+    if (
+      request.url.includes('https://slack.com/api') &&
+      this.auth.isUserLogged()
+    ) {
       request = request.clone({
         setParams: {
           token: this.auth.getToken()
