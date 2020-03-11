@@ -34,8 +34,8 @@ export class MainComponent implements OnInit {
 
   handleSelectedChannelChange(): void {
     this.channelFacade.selectedChannel$.subscribe((channel: Channel) => {
-      this.selectedChannel = channel;
       this.navigateToChannel(channel);
+      this.selectedChannel = channel;
     });
   }
 

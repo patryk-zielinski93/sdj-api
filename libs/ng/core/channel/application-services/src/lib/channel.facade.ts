@@ -72,6 +72,13 @@ export class ChannelFacade {
   }
 
   selectChannel(channel: Channel): void {
-    this.selectedChannel$.next(channel);
+    if (
+      !channel ||
+      !this.selectedChannel$.value ||
+      (this.selectedChannel$.value &&
+        channel.id !== this.selectedChannel$.value.id)
+    ) {
+      this.selectedChannel$.next(channel);
+    }
   }
 }
