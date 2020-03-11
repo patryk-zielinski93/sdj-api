@@ -15,3 +15,13 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands';
+import './mocks/websocket';
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    interface Chainable<Subject> {
+      emmitInWs(event, data?): void;
+    }
+  }
+}

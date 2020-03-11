@@ -3,7 +3,7 @@
     <li class="queued-tracks-list__last-element queued-tracks-list__track"></li>
     <li
       class="queued-tracks-list__track"
-      *ngFor="let queuedTrack of queuedTracks.slice().reverse()"
+      *ngFor="let queuedTrack of (queuedTracks$ | async).slice().reverse()"
     >
       <div class="queued-track" data-test="queued-track">
         <img

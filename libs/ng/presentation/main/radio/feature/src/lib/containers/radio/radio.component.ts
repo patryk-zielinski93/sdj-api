@@ -42,8 +42,8 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   getUserName: (user: User) => string = UserUtils.getUserName;
   listScrollSubject: Subject<QueuedTrack[]> = new Subject();
-  queuedTracks: QueuedTrack[] = [];
-  queuedTracks$: Observable<QueuedTrack[]>;
+  queuedTracks: QueuedTrack[];
+  queuedTracks$: Observable<QueuedTrack[]> = of([]);
   readonly queuedTracksWidth: number = 210;
   selectedChannel: Channel;
 

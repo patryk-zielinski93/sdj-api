@@ -1,6 +1,6 @@
 <div class="most-played-view-container">
   <h1>The most played tracks on {{ channel?.name }}</h1>
-  <ng-container *ngIf="!(loading$ | async); else loader">
+  <ng-container *ngIf="(loading$ | async) === false; else loader">
     <mat-advanced-audio-player
       *ngIf="(tracks$ | async).length > 2; else nothingToShow"
       [playlist]="tracks$ | async"

@@ -5,7 +5,9 @@ import Axios from 'axios';
 @Injectable()
 export class HostServiceAdapter extends HostService {
   removeRadioStream(id: string): Promise<unknown> {
-    return Axios.delete(`http://${process.env.HOST_IP}:8887/remove/${id}`);
+    return Axios.delete(
+      `http://${process.env.HOST_IP}:8887/remove/${id}`
+    ).catch(err => {});
   }
 
   startRadioStream(id: string): Promise<unknown> {
