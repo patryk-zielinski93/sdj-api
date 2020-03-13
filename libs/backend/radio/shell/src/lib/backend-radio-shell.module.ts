@@ -28,7 +28,7 @@ const providers = [
   { provide: TrackDomainRepository, useClass: TrackRepositoryAdapter },
   { provide: UserDomainRepository, useClass: UserRepositoryAdapter },
   { provide: VoteDomainRepository, useClass: VoteRepositoryAdapter },
-  { provide: Store, useClass: StoreAdapter }
+  { provide: Store, useExisting: StoreAdapter }
 ];
 
 @Global()
