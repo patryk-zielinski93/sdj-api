@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 const typeOrmModule = TypeOrmModule.forRoot({
   type: 'mysql',
+  synchronize: true,
   host: 'database',
   port: 3306,
   username: 'sdj',

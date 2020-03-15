@@ -21,6 +21,6 @@ export class UserRepositoryAdapter extends UserDomainRepository {
   }
 
   async save(user: User): Promise<User> {
-    return this.save(user);
+    return this.typeOrmRepository.save(user);
   }
 }
