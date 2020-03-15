@@ -4,7 +4,7 @@
   (toggleMenu)="onToggleMenu()"
 ></sdj-navbar>
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side">
+  <mat-sidenav #sidenav>
     <sdj-sidenav
       [channels$]="channels$"
       [selectedChannel]="selectedChannel"
@@ -12,6 +12,8 @@
     ></sdj-sidenav>
   </mat-sidenav>
   <mat-sidenav-content>
-    <router-outlet></router-outlet>
+    <div class="app-content">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

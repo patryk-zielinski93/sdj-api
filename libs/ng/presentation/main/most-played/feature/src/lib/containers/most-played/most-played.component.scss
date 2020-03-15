@@ -1,5 +1,8 @@
 @import 'apps/ng/src/assets/styles/variables';
 
+:host {
+  flex: 1;
+}
 .most-played-view-container {
   align-items: center;
   display: flex;

@@ -27,7 +27,7 @@ import { RadioPresenter } from './radio.presenter';
 @Component({
   selector: 'sdj-radio',
   templateUrl: './radio.component.html',
-  styleUrls: ['./radio.component.scss'],
+  styleUrls: ['./radio.component.scss', './radio.component.mobile.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [RadioPresenter]
 })
@@ -131,12 +131,12 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
         this.selectedChannelUnsubscribe = this.radioPresenter.recreateSubject(
           this.selectedChannelUnsubscribe
         );
-        this.radioFacade.join(channel.id);
         this.handleQueuedTrackList();
         this.audioSrc$ = this.radioPresenter.getAudioSrc(
           this.selectedChannel.id,
           this.selectedChannelUnsubscribe
         );
+        this.radioFacade.join(channel.id);
       });
   }
 

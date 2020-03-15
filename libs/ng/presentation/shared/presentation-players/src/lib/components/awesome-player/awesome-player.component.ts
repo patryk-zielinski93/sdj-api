@@ -1,8 +1,9 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  ElementRef,
+  HostListener,
   Input,
   OnDestroy,
   OnInit
@@ -19,7 +20,10 @@ import { Tracker } from './tracker';
 @Component({
   selector: 'sdj-awesome-player',
   templateUrl: './awesome-player.component.html',
-  styleUrls: ['./awesome-player.component.scss'],
+  styleUrls: [
+    './awesome-player.component.scss',
+    './awesome-player.component.mobile.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AwesomePlayerComponent
@@ -48,7 +52,8 @@ export class AwesomePlayerComponent
     }
   }
 
-  isPlayerLoading: boolean = false;
+  elementSize: number;
+  isPlayerLoading$ = of(false);
 
   public player: Player;
   private framer: Framer;
@@ -57,13 +62,21 @@ export class AwesomePlayerComponent
   private _src: string;
   private _track: QueuedTrack;
 
-  constructor(private chD: ChangeDetectorRef) {}
+  @HostListener('window:resize')
+  onResize(): void {
+    this.setElementSize();
+  }
+
+  constructor(private elementRef: ElementRef<HTMLElement>) {}
 
   ngOnDestroy(): void {
     this.player.destroy();
+    this.scene.stopRender();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.setElementSize();
+  }
 
   ngAfterViewInit(): void {
     this.framer = new Framer();
@@ -72,6 +85,7 @@ export class AwesomePlayerComponent
     const controls = new Controls();
 
     this.scene = new Scene(this.framer, tracker, controls);
+    this.setElementSize();
     this.player = new Player(this.scene, this.framer);
     if (this.track) {
       this.player.track = this.track;
@@ -85,14 +99,20 @@ export class AwesomePlayerComponent
 
     this.player.init();
     this.player.src = this.src;
-    this.player.isLoadingChange$
-      .pipe(
-        distinctUntilChanged(),
-        switchMap(value => of(value).pipe(delay(500)))
-      )
-      .subscribe((isLoading: boolean) => {
-        this.isPlayerLoading = isLoading;
-        this.chD.markForCheck();
-      });
+    this.isPlayerLoading$ = this.player.isLoadingChange$.pipe(
+      distinctUntilChanged(),
+      switchMap(value => of(value).pipe(delay(500)))
+    );
+  }
+
+  setElementSize(): void {
+    this.elementSize =
+      this.elementRef.nativeElement.offsetHeight <
+      this.elementRef.nativeElement.offsetWidth
+        ? this.elementRef.nativeElement.offsetHeight
+        : this.elementRef.nativeElement.offsetWidth;
+    if (this.scene) {
+      this.scene.minSize = this.elementSize;
+    }
   }
 }

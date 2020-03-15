@@ -10,7 +10,7 @@ export class Scene {
   scaleCoef: number;
   canvas: HTMLCanvasElement;
 
-  padding: number = 120;
+  padding: number;
   minSize: number = 740;
   optimiseHeight: number = 982;
   _inProcess: boolean = false;
@@ -43,7 +43,7 @@ export class Scene {
   }
 
   calculateSize(): void {
-    this.scaleCoef = Math.max(0.5, 740 / this.optimiseHeight);
+    this.scaleCoef = this.minSize / this.optimiseHeight;
 
     const size = Math.max(this.minSize, 1 /*document.body.clientHeight */);
     this.canvas.setAttribute('width', size.toString());
@@ -52,6 +52,7 @@ export class Scene {
     this.width = size;
     this.height = size;
 
+    this.padding = 120 * this.scaleCoef;
     this.radius = (size - this.padding * 2) / 2;
     this.cx = this.radius + this.padding;
     this.cy = this.radius + this.padding;

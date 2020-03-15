@@ -1,0 +1,13 @@
+@import 'apps/ng/src/assets/styles/media-mixins';
+
+@include mobile {
+  :host {
+    width: 100%;
+    height: 100%;
+  }
+
+  .player .playarea .pause,
+  .player .playarea .play {
+    border: 2px solid #fe4365;
+  }
+}

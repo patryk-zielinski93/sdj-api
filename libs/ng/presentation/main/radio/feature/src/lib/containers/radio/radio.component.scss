@@ -1,9 +1,9 @@
-@import 'apps/ng/src/assets/styles/variables';
-.app-content {
-  align-items: center;
-  display: flex;
-  height: calc(100vh - #{$navbar-height});
+:host {
   width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .queued-tracks-list {
@@ -19,10 +19,6 @@
 
   &__track {
     display: inline-block;
-  }
-
-  sdj-awesome-player {
-    height: 800px;
   }
 }
 

@@ -1,30 +1,29 @@
-<div class="app-content">
-  <ul data-test="queued-tracks" class="queued-tracks-list" #toPlay>
-    <li class="queued-tracks-list__last-element queued-tracks-list__track"></li>
-    <li
-      class="queued-tracks-list__track"
-      *ngFor="let queuedTrack of (queuedTracks$ | async).slice().reverse()"
-    >
-      <div class="queued-track" data-test="queued-track">
-        <img
-          class="queued-track__thumbnail"
-          [src]="getThumbnail(queuedTrack.track)"
-        />
-        <div
-          class="queued-track__title"
-          [innerHTML]="queuedTrack.track.title"
-        ></div>
-        <div
-          *ngIf="queuedTrack.addedBy && getUserName(queuedTrack.addedBy)"
-          [innerHTML]="'~' + getUserName(queuedTrack.addedBy)"
-        ></div>
-      </div>
-    </li>
-  </ul>
-  <sdj-awesome-player
-    #playerComponent
-    [src]="audioSrc$ | async"
-    [track]="currentTrack$ | async"
+<ul data-test="queued-tracks" class="queued-tracks-list" #toPlay>
+  <li class="queued-tracks-list__last-element queued-tracks-list__track"></li>
+  <li
+    class="queued-tracks-list__track"
+    *ngFor="let queuedTrack of (queuedTracks$ | async).slice().reverse()"
   >
-  </sdj-awesome-player>
-</div>
+    <div class="queued-track" data-test="queued-track">
+      <img
+        class="queued-track__thumbnail"
+        [src]="getThumbnail(queuedTrack.track)"
+      />
+      <div
+        class="queued-track__title"
+        [innerHTML]="queuedTrack.track.title"
+      ></div>
+      <div
+        *ngIf="queuedTrack.addedBy && getUserName(queuedTrack.addedBy)"
+        [innerHTML]="'~' + getUserName(queuedTrack.addedBy)"
+      ></div>
+    </div>
+  </li>
+</ul>
+<sdj-awesome-player
+  #playerComponent
+  [src]="audioSrc$ | async"
+  [track]="currentTrack$ | async"
+>
+</sdj-awesome-player>
+<div class="queued-tracks-list"></div>

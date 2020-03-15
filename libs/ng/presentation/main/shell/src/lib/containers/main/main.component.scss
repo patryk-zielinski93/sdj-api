@@ -5,10 +5,23 @@
   }
 
   .sidenav-container {
-    height: calc(100vh - #{$navbar-height});
+    height: 100%;
   }
 
   .spacer {
     flex: 1 1 auto;
   }
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-content {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  width: 100%;
 }

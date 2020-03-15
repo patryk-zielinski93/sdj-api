@@ -1,3 +1,4 @@
+@import 'media-mixins';
 body,
 html {
   margin: 0;
@@ -5,6 +6,7 @@ html {
 
 html {
   height: 100%;
+  font-size: 20px;
 }
 
 body {
@@ -61,4 +63,10 @@ label {
 #pitch {
   float: right;
   width: 81%;
+}
+
+@include mobile {
+  html {
+    font-size: 14px;
+  }
 }
