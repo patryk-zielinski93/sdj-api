@@ -1,4 +1,11 @@
 export const connectionConfig = {
+  db: {
+    host: 'database',
+    port: 3306,
+    username: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
+  },
   ices: {
     host: 'ices',
     port: 8888

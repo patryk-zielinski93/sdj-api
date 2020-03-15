@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { connectionConfig } from '@sdj/backend/shared/domain';
 
 const typeOrmModule = TypeOrmModule.forRoot({
   type: 'mysql',
   synchronize: true,
-  host: 'database',
-  port: 3306,
-  username: 'sdj',
-  password: 'sdj123123',
-  database: 'slack_dj',
+  host: connectionConfig.db.host,
+  port: connectionConfig.db.port,
+  username: connectionConfig.db.username,
+  password: connectionConfig.db.password,
+  database: connectionConfig.db.database,
   autoLoadEntities: true
 });
 
