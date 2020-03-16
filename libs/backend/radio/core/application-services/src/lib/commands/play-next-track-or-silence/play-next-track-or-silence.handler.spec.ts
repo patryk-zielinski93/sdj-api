@@ -59,6 +59,8 @@ describe('PlayNextTrackOrSilenceHandler', () => {
     channelRepository.findOrCreate = jest.fn();
     channelRepository.findOrCreate.mockResolvedValue({ id: '1234' } as any);
 
+    radioFacade.downloadAndPlay.mockResolvedValue({});
+
     queuedTrackRepository.getNextSongInQueue = jest.fn();
     queuedTrackRepository.getNextSongInQueue.mockResolvedValue({} as any);
 
@@ -69,6 +71,7 @@ describe('PlayNextTrackOrSilenceHandler', () => {
   test('#execute queues new track if no one is in queue but there is enough tracks to play own radio', async () => {
     channelRepository.findOrCreate = jest.fn();
     channelRepository.findOrCreate.mockResolvedValue({ id: '1234' } as any);
+    radioFacade.downloadAndPlay.mockResolvedValue({});
 
     queuedTrackRepository.getNextSongInQueue = jest.fn();
     queuedTrackRepository.getNextSongInQueue.mockResolvedValue(null);

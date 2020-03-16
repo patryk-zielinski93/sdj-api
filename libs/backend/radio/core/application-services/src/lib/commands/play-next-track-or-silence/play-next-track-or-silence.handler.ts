@@ -29,9 +29,9 @@ export class PlayNextTrackOrSilenceHandler
     );
     const queuedTrack = await this.getNextTrack(channel.id);
     if (queuedTrack) {
-      return this.radioFacade.downloadAndPlay(
-        new DownloadAndPlayCommand(queuedTrack)
-      );
+      return this.radioFacade
+        .downloadAndPlay(new DownloadAndPlayCommand(queuedTrack))
+        .catch(error => this.execute(command));
     } else {
       this.eventBus.publish(new PlaySilenceEvent(channel.id));
     }

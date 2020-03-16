@@ -20,14 +20,15 @@ export class DownloadAndPlayHandler
       .downloadTrack(new DownloadTrackCommand(track.id))
       .then(
         async () => {
-          await this.eventBus.publish(
+          return this.eventBus.publish(
             new PlayQueuedTrackEvent(command.queuedTrack.id)
           );
         },
-        () => {
+        error => {
           this.radioFacade.deleteQueuedTrack(
             new DeleteQueuedTrackCommand(command.queuedTrack.id)
           );
+          throw error;
         }
       );
   }
