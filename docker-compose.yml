@@ -11,7 +11,7 @@ services:
       args:
         - LOCAL_USER_ID=${LOCAL_USER_ID}
     volumes:
-      - ./apps/backend/src/assets/tracks:/app/apps/backend/src/assets/tracks
+      - ./dist/apps/backend/assets/tracks:/app/dist/apps/backend/assets/tracks
     environment:
       - PORT=${BACKEND_PORT}
       - VIRTUAL_HOST=${BACKEND_URL}
