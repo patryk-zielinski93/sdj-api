@@ -1,5 +1,6 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Track, TrackStatus, User } from '@sdj/backend/radio/core/domain';
+import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { DownloadTrackCommand } from '../download-track/download-track.command';
+import { Track } from '@sdj/backend/radio/core/domain';
 import { TrackDomainRepository } from '@sdj/backend/radio/core/domain-service';
 import {
   connectionConfig,
@@ -7,7 +8,7 @@ import {
   YoutubeIdError
 } from '@sdj/backend/shared/domain';
 import { LoggerService } from '@sdj/backend/shared/infrastructure-logger';
-import { downloadAndNormalize } from '@sdj/backend/shared/util-mp3';
+import { getDuration } from '@sdj/backend/shared/util-mp3';
 import parseIsoDuration from 'parse-iso-duration';
 import * as requestPromise from 'request-promise-native';
 import { CreateTrackCommand } from './create-track.command';
@@ -15,6 +16,7 @@ import { CreateTrackCommand } from './create-track.command';
 @CommandHandler(CreateTrackCommand)
 export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {
   constructor(
+    private commandBus: CommandBus,
     private readonly logger: LoggerService,
     private trackRepository: TrackDomainRepository
   ) {}
@@ -45,30 +47,17 @@ export class CreateTrackHandler implements ICommandHandler<CreateTrackCommand> {
       throw new Error('video too long');
     }
 
-    const track = this.prepareTrack(metadata, command.addedBy);
+    const track = new Track(
+      metadata.id,
+      metadata.snippet.title,
+      command.addedBy
+    );
     await this.trackRepository.save(track);
 
-    downloadAndNormalize(id).subscribe(
-      async duration => {
-        track.duration = parseInt(duration, 10);
-        track.createdAt = new Date();
-        this.trackRepository.save(track);
-      },
-      () => {
-        this.logger.error("Can't download track " + track.id);
-      }
-    );
-  }
-
-  private prepareTrack(metadata: VideoMetadata, addedBy: User): Track {
-    const track = new Track();
-    track.id = metadata.id;
-    track.status = TrackStatus.Downloading;
-    track.title = metadata.snippet.title;
-    track.duration = 0;
+    await this.commandBus.execute(new DownloadTrackCommand(id));
+    const duration = await getDuration(track.id).toPromise();
+    track.duration = parseInt(duration, 10);
     track.createdAt = new Date();
-    track.addedBy = addedBy;
-
-    return track;
+    await this.trackRepository.save(track);
   }
 }

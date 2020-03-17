@@ -3,9 +3,7 @@ import { CommandBus, EventBus } from '@nestjs/cqrs';
 
 import { QueuedTrack } from '@sdj/backend/radio/core/domain';
 import { AddTrackToQueueCommand } from './commands/add-track-to-queue/add-track-to-queue.command';
-import { CreateTrackCommand } from './commands/create-track/create-track.command';
 import { DeleteQueuedTrackCommand } from './commands/delete-queued-track/delete-queued-track.command';
-import { DeleteTrackCommand } from './commands/delete-track/delete-track.command';
 import { DownloadAndPlayCommand } from './commands/download-and-play/download-and-play.command';
 import { DownloadTrackCommand } from './commands/download-track/download-track.command';
 import { FuckYouCommand } from './commands/fuck-you/fuck-you.command';
@@ -23,14 +21,6 @@ export class RadioFacade {
     private readonly commandBus: CommandBus,
     private eventBus: EventBus
   ) {}
-
-  createTrack(command: CreateTrackCommand): Promise<unknown> {
-    return this.commandBus.execute(command);
-  }
-
-  deleteTrack(command: DeleteTrackCommand): Promise<unknown> {
-    return this.commandBus.execute(new DownloadTrackCommand(command.trackId));
-  }
 
   deleteQueuedTrack(command: DeleteQueuedTrackCommand): Promise<unknown> {
     return this.commandBus.execute(command);

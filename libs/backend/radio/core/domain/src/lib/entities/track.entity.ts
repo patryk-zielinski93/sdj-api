@@ -21,7 +21,7 @@ export class Track implements ITrack {
   @Column('datetime')
   createdAt: Date;
 
-  @Column('int')
+  @Column('int', { default: 0 })
   duration: number;
 
   @Field()
@@ -32,11 +32,6 @@ export class Track implements ITrack {
     default: 0
   })
   skips: number;
-
-  @Column('int', {
-    default: 0
-  })
-  status: number;
 
   @Field()
   @Column('varchar', {
@@ -55,5 +50,12 @@ export class Track implements ITrack {
     return (await this.queuedTracks).filter(
       queuedTrack => !queuedTrack.randomized
     ).length;
+  }
+
+  constructor(id: string, title: string, addedBy: User | null) {
+    this.id = id;
+    this.title = title;
+    this.createdAt = new Date();
+    this.addedBy = addedBy;
   }
 }

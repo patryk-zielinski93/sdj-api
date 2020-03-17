@@ -1,4 +1,5 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { DeleteQueuedTrackCommand } from '../delete-queued-track/delete-queued-track.command';
 import { QueuedTrack } from '@sdj/backend/radio/core/domain';
 import {
   ChannelDomainRepository,
@@ -29,9 +30,16 @@ export class PlayNextTrackOrSilenceHandler
     );
     const queuedTrack = await this.getNextTrack(channel.id);
     if (queuedTrack) {
-      return this.radioFacade
-        .downloadAndPlay(new DownloadAndPlayCommand(queuedTrack))
-        .catch(error => this.execute(command));
+      try {
+        await this.radioFacade.downloadAndPlay(
+          new DownloadAndPlayCommand(queuedTrack)
+        );
+      } catch (e) {
+        await this.radioFacade.deleteQueuedTrack(
+          new DeleteQueuedTrackCommand(queuedTrack.id)
+        );
+        await this.execute(command);
+      }
     } else {
       this.eventBus.publish(new PlaySilenceEvent(channel.id));
     }

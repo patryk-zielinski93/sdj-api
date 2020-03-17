@@ -28,7 +28,8 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "release": "standard-version",
+    "release:prepare": "standard-version",
+    "release:publish": "git push origin master --follow-tags --no-verify",
     "setup-ng": "ts-node -r tsconfig-paths/register apps/ng/src/setup.ts",
     "nx": "nx",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"

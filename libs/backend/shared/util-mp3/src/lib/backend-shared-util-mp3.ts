@@ -5,22 +5,20 @@ import { Observable, Subject } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
 import * as ytdl from 'youtube-dl';
 
-const inProgress: { [key: string]: Observable<string> } = {};
+const inProgress: { [key: string]: Observable<void> } = {};
 
 /**
  * Download youtube video, convert and normalize mp3.
  * @param {string} id - youtube video id
  * @returns {Observable<string>} - mp3 duration after normalization
  */
-export function downloadAndNormalize(id: string): Observable<string> {
+export function downloadAndNormalize(id: string): Observable<void> {
   if (inProgress[id]) {
     return inProgress[id];
   }
 
   const obs = download(id).pipe(
-    switchMap(filePath =>
-      normalize(filePath).pipe(switchMap(() => getDuration(filePath)))
-    ),
+    switchMap(filePath => normalize(filePath)),
     finalize(() => {
       delete inProgress[id];
     })
@@ -57,7 +55,7 @@ function download(id: string): Observable<string> {
     {},
     (err, output) => {
       if (err) {
-        sub.error(err);
+        sub.error(new Error("Can't Download Track"));
         sub.complete();
         return;
       }
@@ -72,11 +70,12 @@ function download(id: string): Observable<string> {
 
 /**
  * Get mp3 duration.
- * @param {string} filePath - system path to mp3 file
+ * @param {string} trackId
  * @returns {Observable<string>}
  */
-function getDuration(filePath: string): Observable<string> {
+export function getDuration(trackId: string): Observable<string> {
   const sub = new Subject<string>();
+  const filePath = path.join(pathConfig.tracks, trackId);
 
   try {
     exec(`mp3info -p "%S" ${filePath}`, (err, stdout, stderr) => {

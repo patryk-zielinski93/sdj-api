@@ -13,12 +13,11 @@ export class DeleteQueuedTrackHandler
     private readonly storageService: Store
   ) {}
 
-  async execute(command: DeleteQueuedTrackCommand): Promise<unknown> {
-    // TODO CASCADE DELETE
+  async execute(command: DeleteQueuedTrackCommand): Promise<void> {
     const queuedTrack = await this.queuedTrackRepository.findOneOrFail(
       command.queuedTrackId
     );
+    await this.storageService.removeFromQueue(queuedTrack);
     await this.queuedTrackRepository.remove(queuedTrack);
-    return this.storageService.removeFromQueue(queuedTrack);
   }
 }

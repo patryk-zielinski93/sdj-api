@@ -26,17 +26,17 @@ export class PlayTrackSlackCommand implements SlackCommand {
   async handler(command: string[], message: SlackMessage): Promise<void> {
     const link = command[1].slice(1, -1);
     const trackId = extractVideoIdFromYoutubeUrl(link);
-    this.radioFacade
-      .playTrack(
+    try {
+      await this.radioFacade.playTrack(
         new AddTrackToQueueCommand(link, message.channel, message.user)
-      )
-      .then(async () => {
-        const track = await this.trackRepository.findOneOrFail(trackId);
-        this.slack.rtm.sendMessage(
-          `Dodałem ${track.title} do playlisty :)`,
-          message.channel
-        );
-      })
-      .catch(err => this.slack.rtm.sendMessage(err.message, message.channel));
+      );
+      const track = await this.trackRepository.findOneOrFail(trackId);
+      await this.slack.rtm.sendMessage(
+        `Dodałem ${track.title} do playlisty :)`,
+        message.channel
+      );
+    } catch (err) {
+      await this.slack.rtm.sendMessage(err.message, message.channel);
+    }
   }
 }

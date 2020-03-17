@@ -30,24 +30,13 @@ export class PlayTrackHandler
 
     const track = await this.trackRepository.findOne(id);
     const user = await this.userRepository.findOneOrFail(addedById);
-    return new Promise((resolve, reject) => {
-      if (track) {
-        this.commandBus.execute(new DownloadTrackCommand(track.id)).then(() => {
-          this.queueTrack(channelId, track, user)
-            .then(resolve)
-            .catch(reject);
-        });
-      } else {
-        this.commandBus
-          .execute(new CreateTrackCommand(id, user))
-          .then(async () => {
-            const newTrack = await this.trackRepository.findOneOrFail(id);
-            this.queueTrack(channelId, newTrack, user)
-              .then(resolve)
-              .catch(reject);
-          });
-      }
-    });
+    if (track) {
+      await this.queueTrack(channelId, track, user);
+    } else {
+      await this.commandBus.execute(new CreateTrackCommand(id, user));
+      const newTrack = await this.trackRepository.findOneOrFail(id);
+      await this.queueTrack(channelId, newTrack, user);
+    }
   }
 
   private queueTrack(
