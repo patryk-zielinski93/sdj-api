@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/Sikora00/sdj-api/compare/v1.0.0...v1.0.1) (2020-03-17)
+
+
+### Bug Fixes
+
+* **backend:** bugs when can't download track ([62ee2f4](https://github.com/Sikora00/sdj-api/commit/62ee2f4744d17face198a4fa213ddd184b666071))
+
 ## [1.0.0](https://github.com/Sikora00/sdj-api/compare/v0.1.2...v1.0.0) (2020-03-16)
 
 
