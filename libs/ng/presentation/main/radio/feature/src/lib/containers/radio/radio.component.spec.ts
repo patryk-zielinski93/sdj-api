@@ -6,6 +6,7 @@ import {
   QueuedTrackFacade,
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
+import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { AwesomePlayerComponent } from '@sdj/ng/presentation/shared/presentation-players';
 import { LoaderComponent } from '@sdj/ng/presentation/shared/presentation-sdj-loader';
 import { createSpyObj } from 'jest-createspyobj';
@@ -13,6 +14,7 @@ import { hot } from 'jest-marbles';
 import { MockComponent } from 'ng-mocks';
 
 import { RadioComponent } from './radio.component';
+import Mocked = jest.Mocked;
 
 describe('RadioComponent', () => {
   let component: RadioComponent;
@@ -32,7 +34,8 @@ describe('RadioComponent', () => {
           provide: QueuedTrackFacade,
           useValue: createSpyObj(QueuedTrackFacade)
         },
-        { provide: RadioFacade, useValue: createSpyObj(RadioFacade) }
+        { provide: RadioFacade, useValue: createSpyObj(RadioFacade) },
+        { provide: WebSocketClient, useValue: createSpyObj(WebSocketClient) }
       ]
     }).compileComponents();
 
@@ -41,6 +44,12 @@ describe('RadioComponent', () => {
 
     const channelFacade = TestBed.inject<ChannelFacade>(ChannelFacade);
     (channelFacade.selectedChannel$ as any) = hot('');
+
+    const webSocketClient: Mocked<WebSocketClient> = TestBed.inject<any>(
+      WebSocketClient
+    );
+    webSocketClient.observe = jest.fn();
+    webSocketClient.observe.mockReturnValue(hot(''));
   }));
 
   beforeEach(() => {

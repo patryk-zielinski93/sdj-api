@@ -24,7 +24,7 @@ export class AppController {
 
   @Get('next/:id')
   async removeNextSong(@Param() params: { id: string }): Promise<any> {
-    const channel = await this.channelRepository.findOrCreate(params.id);
+    const channel = await this.channelRepository.findOrFail(params.id);
     const queuedTrack = await this.queuedTrackRepository.getNextSongInQueue(
       channel.id
     );

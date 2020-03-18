@@ -3,7 +3,7 @@ import { PlaySilenceEvent } from '@sdj/backend/radio/core/application-services';
 import { Store } from '@sdj/backend/radio/core/domain-service';
 import { LoggerService } from '@sdj/backend/shared/infrastructure-logger';
 import { WebSocketEvents } from '@sdj/shared/domain';
-import { Gateway } from '../../gateway';
+import { Gateway } from '../../gateway/gateway';
 
 @EventsHandler(PlaySilenceEvent)
 export class WsPlaySilenceHandler implements IEventHandler<PlaySilenceEvent> {

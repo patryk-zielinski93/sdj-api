@@ -1,5 +1,6 @@
 export interface Channel {
   id: string;
+  defaultStreamUrl: string;
   name: string;
-  users: number;
+  usersOnline: number;
 }

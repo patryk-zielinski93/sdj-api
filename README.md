@@ -11,7 +11,6 @@
 - Create [slack bot](https://api.slack.com/apps)
 - Copy without sample and check the configuration:
   - ./env-sample
-  - ./ormconfig-sample.json
   - ./containers/icecast/icecast-sample.xml
   - ./containers/ices/ices-sample.conf
 - run npm install

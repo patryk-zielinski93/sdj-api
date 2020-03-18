@@ -1,4 +1,4 @@
-import { CommandBus, EventBus } from '@nestjs/cqrs';
+import { CommandBus, EventBus, QueryBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createSpyObj } from 'jest-createspyobj';
 import { RadioFacade } from './radio.facade';
@@ -11,7 +11,8 @@ describe('RadioFacade', () => {
       providers: [
         RadioFacade,
         { provide: CommandBus, useValue: createSpyObj(CommandBus) },
-        { provide: EventBus, useValue: createSpyObj(EventBus) }
+        { provide: EventBus, useValue: createSpyObj(EventBus) },
+        { provide: QueryBus, useValue: createSpyObj(QueryBus) }
       ]
     }).compile();
 

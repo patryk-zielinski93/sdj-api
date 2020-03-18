@@ -1,4 +1,5 @@
 export enum WebSocketEvents {
+  leaveChannel = 'leaveChannel',
   channels = 'channels',
   connect = 'connect',
   join = 'join',
@@ -6,5 +7,6 @@ export enum WebSocketEvents {
   playRadio = 'play_radio',
   pozdro = 'pozdro',
   queuedTrackList = 'queuedTrackList',
+  reconnect = 'reconnect',
   roomIsRunning = 'roomIsRunning'
 }

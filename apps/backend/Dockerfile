@@ -10,7 +10,7 @@ RUN dpkg -i mp3gain.deb
 COPY ./apps/backend/docker/prod /var/docker
 
 RUN mkdir -p /app
-COPY angular.json nx.json ormconfig.json package.json pm2.json tsconfig.json /app/
+COPY angular.json nx.json package.json pm2.json tsconfig.json /app/
 COPY ./apps/backend /app/apps/backend
 COPY ./libs/backend /app/libs/backend
 COPY ./builders /app/builders
@@ -22,8 +22,6 @@ RUN npm install -g pm2 typescript @angular/cli
 RUN pm2 install pm2-server-monit
 RUN pm2 install pm2-redis
 RUN pm2 set pm2-redis:ip redis
-RUN pm2 install pm2-rabbitmq
-RUN pm2 set pm2-rabbitmq:hostname  rabbit:15672
 
 EXPOSE 8888
 

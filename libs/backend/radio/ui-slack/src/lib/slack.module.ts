@@ -8,6 +8,7 @@ import { PlayTrackSlackCommand } from './bot/lib/commands/play-track.slack-comma
 import { PozdroSlackCommand } from './bot/lib/commands/pozdro.slack-command';
 import { RandSlackCommand } from './bot/lib/commands/rand.slack-command';
 import { RefreshSlackCommand } from './bot/lib/commands/refresh.slack-command';
+import { SetChannelDefaultStreamSlackCommand } from './bot/lib/commands/set-channel-default-stream.slack-command';
 import { ThumbDownSlackCommand } from './bot/lib/commands/thumb-down.slack-command';
 import { ThumbUpSlackCommand } from './bot/lib/commands/thumb-up.slack-command';
 import { SlackQueuedTrackSkippedHandler } from './bot/lib/events/queued-track-skipped/slack-queued-track-skipped.handler';
@@ -26,6 +27,7 @@ const EventsHandlers = [SlackQueuedTrackSkippedHandler];
     PozdroSlackCommand,
     RandSlackCommand,
     RefreshSlackCommand,
+    SetChannelDefaultStreamSlackCommand,
     ThumbUpSlackCommand,
     ThumbDownSlackCommand,
     SlackService,

@@ -2,7 +2,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { PozdroEvent } from '@sdj/backend/radio/core/application-services';
 import { LoggerService } from '@sdj/backend/shared/infrastructure-logger';
 import { WebSocketEvents } from '@sdj/shared/domain';
-import { Gateway } from '../../gateway';
+import { Gateway } from '../../gateway/gateway';
 
 @EventsHandler(PozdroEvent)
 export class WsPozdroHandler implements IEventHandler<PozdroEvent> {

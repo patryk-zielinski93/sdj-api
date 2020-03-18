@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   OnDestroy,
   OnInit,
   ViewChild
@@ -16,8 +17,9 @@ import {
 } from '@sdj/ng/core/radio/application-services';
 import { QueuedTrack, Track } from '@sdj/ng/core/radio/domain';
 import { environment } from '@sdj/ng/core/shared/domain';
+import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { AwesomePlayerComponent } from '@sdj/ng/presentation/shared/presentation-players';
-import { User } from '@sdj/shared/domain';
+import { User, WebSocketEvents } from '@sdj/shared/domain';
 import { TrackUtil, UserUtils } from '@sdj/shared/utils';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { merge, Observable, of, Subject } from 'rxjs';
@@ -54,8 +56,14 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
     private chD: ChangeDetectorRef,
     private queuedTrackFacade: QueuedTrackFacade,
     private radioFacade: RadioFacade,
-    private radioPresenter: RadioPresenter
+    private radioPresenter: RadioPresenter,
+    private webSocket: WebSocketClient
   ) {}
+
+  @HostListener('window:unload')
+  unloadHandler(): void {
+    this.leaveChannel();
+  }
 
   ngOnDestroy(): void {
     this.radioFacade.stopListeningForPozdro();
@@ -63,6 +71,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.radioFacade.startListeningForPozdro();
+    this.handleReconnection();
   }
 
   ngAfterViewInit(): void {
@@ -125,7 +134,13 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
 
   handleSelectedChannelChange(): void {
     this.channelFacade.selectedChannel$
-      .pipe(untilDestroyed(this))
+      .pipe(
+        filter(
+          channel =>
+            !this.selectedChannel || channel.id !== this.selectedChannel.id
+        ),
+        untilDestroyed(this)
+      )
       .subscribe((channel: Channel) => {
         this.selectedChannel = channel;
         this.selectedChannelUnsubscribe = this.radioPresenter.recreateSubject(
@@ -133,10 +148,11 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
         );
         this.handleQueuedTrackList();
         this.audioSrc$ = this.radioPresenter.getAudioSrc(
-          this.selectedChannel.id,
+          this.selectedChannel,
           this.selectedChannelUnsubscribe
         );
         this.radioFacade.join(channel.id);
+        this.chD.markForCheck();
       });
   }
 
@@ -148,5 +164,19 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
         this.playerComponent.player.audio.volume = 1;
       }
     });
+  }
+
+  leaveChannel(): void {
+    this.channelFacade.leaveChannel(this.selectedChannel);
+  }
+
+  private handleReconnection(): void {
+    this.webSocket
+      .observe(WebSocketEvents.reconnect)
+      .pipe(
+        filter(() => Boolean(this.selectedChannel)),
+        untilDestroyed(this)
+      )
+      .subscribe(() => this.radioFacade.join(this.selectedChannel.id));
   }
 }

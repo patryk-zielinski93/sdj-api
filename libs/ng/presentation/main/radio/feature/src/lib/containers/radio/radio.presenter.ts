@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Channel } from '@sdj/ng/core/channel/domain';
 import { RadioFacade } from '@sdj/ng/core/radio/application-services';
 import { environment } from '@sdj/ng/core/shared/domain';
 import { merge, Observable, of, Subject } from 'rxjs';
@@ -9,11 +10,12 @@ export class RadioPresenter {
   constructor(private radioFacade: RadioFacade) {}
 
   getAudioSrc(
-    selectedChannelId: string,
+    selectedChannel: Channel,
     selectedChannelUnsubscribe: Observable<void>
   ): Observable<string> {
+    const selectedChannelId = selectedChannel.id;
     return merge(
-      of(environment.externalStream),
+      of(selectedChannel.defaultStreamUrl),
       this.radioFacade.roomIsRunning$.pipe(
         first(),
         switchMap(() =>
@@ -25,12 +27,12 @@ export class RadioPresenter {
             ),
             this.radioFacade.playRadio$.pipe(
               takeUntil(selectedChannelUnsubscribe),
-              map(() => environment.externalStream)
+              map(() => selectedChannel.defaultStreamUrl)
             )
           )
         )
       )
-    );
+    ).pipe(map(streamUrl => streamUrl || environment.externalStream));
   }
 
   recreateSubject(subject: Subject<void>): Subject<void> {

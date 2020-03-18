@@ -36,47 +36,6 @@ export class StoreAdapter extends Store {
     super();
   }
 
-  channelAppears(channelId: string): Promise<unknown> {
-    return (!!this.state && !!this.state[channelId]
-      ? of()
-      : this._state.pipe(
-          filter(state => !!state[channelId]),
-          first()
-        )
-    ).toPromise();
-  }
-
-  channelDisappears(channelId: string): void {
-    const state = this.state;
-    delete state[channelId];
-    this._state.next(state);
-  }
-
-  async getChannelState(channelId: string): Promise<ChannelState> {
-    if (!this.state[channelId]) {
-      this.state[channelId] = {
-        ...initialChannelState,
-        queue: await this.queuedTrackRepository.findQueuedTracks(channelId)
-      };
-    }
-    return this.state[channelId];
-  }
-
-  async getCurrentTrack(channelId: string): Promise<QueuedTrack | null> {
-    return (await this.getChannelState(channelId)).currentTrack;
-  }
-
-  async setCurrentTrack(
-    channelId: string,
-    queuedTrack: QueuedTrack | null
-  ): Promise<void> {
-    const channelState = await this.getChannelState(channelId);
-    this._state.next({
-      ...this.state,
-      [channelId]: { ...channelState, currentTrack: queuedTrack }
-    });
-  }
-
   async addToQueue(queuedTrack: QueuedTrack): Promise<void> {
     const channelState = await this.getChannelState(queuedTrack.playedIn.id);
     const isTrackAlreadyInQueue =
@@ -94,17 +53,24 @@ export class StoreAdapter extends Store {
     }
   }
 
-  async setSilenceCount(channelId: string, value: number): Promise<void> {
-    const channelState = await this.getChannelState(channelId);
-    this._state.next({
-      ...this.state,
-      [channelId]: { ...channelState, silenceCount: value }
-    });
+  channelAppears(channelId: string): Promise<unknown> {
+    return (!!this.state && !!this.state[channelId]
+      ? of()
+      : this._state.pipe(
+          filter(state => !!state[channelId]),
+          first()
+        )
+    ).toPromise();
   }
 
-  async getSilenceCount(channelId: string): Promise<number> {
-    await this.getChannelState(channelId);
-    return this.state[channelId].silenceCount;
+  channelDisappears(channelId: string): void {
+    const state = this.state;
+    delete state[channelId];
+    this._state.next(state);
+  }
+
+  async getCurrentTrack(channelId: string): Promise<QueuedTrack | null> {
+    return (await this.getChannelState(channelId)).currentTrack;
   }
 
   getQueue(channelId: string): Observable<QueuedTrack[]> {
@@ -116,6 +82,34 @@ export class StoreAdapter extends Store {
     );
   }
 
+  async getSilenceCount(channelId: string): Promise<number> {
+    await this.getChannelState(channelId);
+    return this.state[channelId].silenceCount;
+  }
+
+  isChannelActive(channelId: string): boolean {
+    return !!this.state[channelId];
+  }
+
+  async setCurrentTrack(
+    channelId: string,
+    queuedTrack: QueuedTrack | null
+  ): Promise<void> {
+    const channelState = await this.getChannelState(channelId);
+    this._state.next({
+      ...this.state,
+      [channelId]: { ...channelState, currentTrack: queuedTrack }
+    });
+  }
+
+  async setSilenceCount(channelId: string, value: number): Promise<void> {
+    const channelState = await this.getChannelState(channelId);
+    this._state.next({
+      ...this.state,
+      [channelId]: { ...channelState, silenceCount: value }
+    });
+  }
+
   async removeFromQueue(queuedTrack: QueuedTrack): Promise<void> {
     const channelState = await this.getChannelState(queuedTrack.playedIn.id);
     this._state.next({
@@ -125,5 +119,15 @@ export class StoreAdapter extends Store {
         queue: channelState.queue.filter(qTrack => qTrack.id !== queuedTrack.id)
       }
     });
+  }
+
+  private async getChannelState(channelId: string): Promise<ChannelState> {
+    if (!this.state[channelId]) {
+      this.state[channelId] = {
+        ...initialChannelState,
+        queue: await this.queuedTrackRepository.findQueuedTracks(channelId)
+      };
+    }
+    return this.state[channelId];
   }
 }

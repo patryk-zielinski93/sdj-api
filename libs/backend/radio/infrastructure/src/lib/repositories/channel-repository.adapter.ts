@@ -13,17 +13,36 @@ export class ChannelRepositoryAdapter extends ChannelDomainRepository {
     super();
   }
 
+  findById(channelId: string): Promise<Channel | undefined> {
+    return this.typeOrmRepository.findOne(channelId);
+  }
+
+  findAll(): Promise<Channel[]> {
+    return this.typeOrmRepository.find();
+  }
+
+  findByIds(channelIds: string[]): Promise<Channel[]> {
+    return this.typeOrmRepository.findByIds(channelIds);
+  }
+
+  async findOne(channelId: string): Promise<Channel | undefined> {
+    return this.typeOrmRepository.findOne(channelId);
+  }
+
   async findOrCreate(channelId: string): Promise<Channel> {
     let channel = await this.typeOrmRepository.findOne(channelId);
     if (!channel) {
-      channel = new Channel();
-      channel.id = channelId;
-      this.save(channel);
+      channel = new Channel(channelId);
+      channel = await this.save(channel);
     }
     return channel;
   }
 
-  private save(channel: Channel): Promise<Channel> {
+  findOrFail(channelId: string): Promise<Channel> {
+    return this.typeOrmRepository.findOneOrFail(channelId);
+  }
+
+  save(channel: Channel): Promise<Channel> {
     return this.typeOrmRepository.save(channel);
   }
 }

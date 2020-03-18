@@ -1,5 +1,6 @@
 (function(window) {
   window.__env = {
+    apiUrl: '//{{backendUrl}}/api',
     backendUrl: '//{{backendUrl}}/',
     externalStream: '//{{externalStream}}',
     radioStreamUrl: '//{{radioStreamUrl}}/',

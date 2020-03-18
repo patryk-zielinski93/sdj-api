@@ -2,6 +2,7 @@ const browserWindow = window || {};
 const browserWindowEnv = browserWindow['__env'] || {};
 
 export const environment: {
+  apiUrl: string;
   backendUrl: string;
   externalStream: string;
   radioStreamUrl: string;
