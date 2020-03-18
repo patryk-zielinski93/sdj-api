@@ -75,7 +75,7 @@ function download(id: string): Observable<string> {
  */
 export function getDuration(trackId: string): Observable<string> {
   const sub = new Subject<string>();
-  const filePath = path.join(pathConfig.tracks, trackId);
+  const filePath = path.join(pathConfig.tracks, `${trackId}.mp3`);
 
   try {
     exec(`mp3info -p "%S" ${filePath}`, (err, stdout, stderr) => {
