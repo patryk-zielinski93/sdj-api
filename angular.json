@@ -1702,6 +1702,73 @@
           "styleext": "scss"
         }
       }
+    },
+    "ng-presentation-main-radio-presentation": {
+      "projectType": "library",
+      "root": "libs/ng/presentation/main/radio/presentation",
+      "sourceRoot": "libs/ng/presentation/main/radio/presentation/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/presentation/main/radio/presentation/tsconfig.lib.json",
+              "libs/ng/presentation/main/radio/presentation/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/presentation/main/radio/presentation/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/presentation/main/radio/presentation/jest.config.js",
+            "tsConfig": "libs/ng/presentation/main/radio/presentation/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/presentation/main/radio/presentation/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-core-channel-api": {
+      "projectType": "library",
+      "root": "libs/ng/core/channel/api",
+      "sourceRoot": "libs/ng/core/channel/api/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/channel/api/tsconfig.lib.json",
+              "libs/ng/core/channel/api/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/core/channel/api/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/channel/api/jest.config.js",
+            "tsConfig": "libs/ng/core/channel/api/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/channel/api/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {

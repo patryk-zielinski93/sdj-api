@@ -7,7 +7,6 @@ import {
 } from '@sdj/backend/radio/core/domain-service';
 import { extractVideoIdFromYoutubeUrl } from '@sdj/backend/shared/util-you-tube';
 import { CreateTrackCommand } from '../create-track/create-track.command';
-import { DownloadTrackCommand } from '../download-track/download-track.command';
 import { QueueTrackCommand } from '../queue-track/queue-track.command';
 import { AddTrackToQueueCommand } from './add-track-to-queue.command';
 

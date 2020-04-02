@@ -73,10 +73,10 @@
       "tags": ["platform:backend", "scope:shared", "type:infrastructure"]
     },
     "ng-presentation-main-radio-feature": {
-      "tags": ["platform:ng", "type:feature"]
+      "tags": ["platform:ng", "scope:radio", "type:feature"]
     },
     "ng-presentation-main-most-played-feature": {
-      "tags": ["platform:ng", "type:feature"]
+      "tags": ["platform:ng", "scope:most-played", "type:feature"]
     },
     "ng-presentation-shared-presentation-sdj-loader": {
       "tags": ["platform:ng", "scope:shared", "type:presentation"]
@@ -158,6 +158,17 @@
     },
     "ng-core-auth-api": {
       "tags": ["name:ng-core-auth-api", "platform:ng", "scope:auth", "type:api"]
+    },
+    "ng-presentation-main-radio-presentation": {
+      "tags": ["platform:ng", "scope:radio", "type:presentation"]
+    },
+    "ng-core-channel-api": {
+      "tags": [
+        "name:ng-core-channel-api",
+        "platform:ng",
+        "scope:channel",
+        "type:api"
+      ]
     }
   }
 }

@@ -9,21 +9,22 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
-import { Channel } from '@sdj/ng/core/channel/domain';
+import { MatDialog } from '@angular/material/dialog';
+import { Channel, ChannelApiFacade } from '@sdj/ng/core/channel/api';
 import {
+  ExternalRadioFacade,
   QueuedTrackFacade,
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
 import { QueuedTrack, Track } from '@sdj/ng/core/radio/domain';
-import { environment } from '@sdj/ng/core/shared/domain';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
+import { RadioStationsComponent } from '@sdj/ng/presentation/main/radio/presentation';
 import { AwesomePlayerComponent } from '@sdj/ng/presentation/shared/presentation-players';
 import { User, WebSocketEvents } from '@sdj/shared/domain';
 import { TrackUtil, UserUtils } from '@sdj/shared/utils';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { merge, Observable, of, Subject } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 import { RadioPresenter } from './radio.presenter';
 
 @Component({
@@ -39,7 +40,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('toPlay')
   toPlayContainer: ElementRef<HTMLElement>;
 
-  audioSrc$: Observable<string> = of(environment.externalStream);
+  audioSrc$: Observable<string> = this.radioFacade.audioSource$;
   currentTrack$ = this.queuedTrackFacade.currentTrack$;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   getUserName: (user: User) => string = UserUtils.getUserName;
@@ -52,8 +53,10 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   private selectedChannelUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
-    private channelFacade: ChannelFacade,
+    private channelFacade: ChannelApiFacade,
     private chD: ChangeDetectorRef,
+    private dialog: MatDialog,
+    private externalRadioFacade: ExternalRadioFacade,
     private queuedTrackFacade: QueuedTrackFacade,
     private radioFacade: RadioFacade,
     private radioPresenter: RadioPresenter,
@@ -77,6 +80,22 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     this.handleSpeeching();
     this.handleSelectedChannelChange();
+  }
+
+  onChangeRadioStation(): void {
+    this.externalRadioFacade.externalRadioGroups$
+      .pipe(first())
+      .subscribe(externalRadioGroups => {
+        this.dialog
+          .open(RadioStationsComponent, {
+            data: { externalRadioGroups },
+            panelClass: 'radio-stations-dialog'
+          })
+          .afterClosed()
+          .subscribe(result => {
+            this.externalRadioFacade.select(result);
+          });
+      });
   }
 
   handleQueuedTrackList(): void {
@@ -147,11 +166,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
           this.selectedChannelUnsubscribe
         );
         this.handleQueuedTrackList();
-        this.audioSrc$ = this.radioPresenter.getAudioSrc(
-          this.selectedChannel,
-          this.selectedChannelUnsubscribe
-        );
-        this.radioFacade.join(channel.id);
+        this.radioFacade.join(channel);
         this.chD.markForCheck();
       });
   }
@@ -167,7 +182,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   leaveChannel(): void {
-    this.channelFacade.leaveChannel(this.selectedChannel);
+    this.radioFacade.leaveChannel(this.selectedChannel);
   }
 
   private handleReconnection(): void {
@@ -177,6 +192,6 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
         filter(() => Boolean(this.selectedChannel)),
         untilDestroyed(this)
       )
-      .subscribe(() => this.radioFacade.join(this.selectedChannel.id));
+      .subscribe(() => this.radioFacade.join(this.selectedChannel));
   }
 }

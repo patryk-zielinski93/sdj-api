@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { QueuedTrack, Track } from '@sdj/ng/core/radio/domain';
+import { Track } from '@sdj/ng/core/radio/domain';
 import { TrackRepository } from '@sdj/ng/core/radio/domain-services';
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';

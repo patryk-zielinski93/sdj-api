@@ -18,10 +18,6 @@ export class ChannelFacade {
     this.handleSelectedChannel();
   }
 
-  leaveChannel(channel: Channel): void {
-    this.webSocketService.emit(WebSocketEvents.leaveChannel, channel.id);
-  }
-
   loadChannels(): Observable<Channel[]> {
     const source = this.channelRepository.getChannels();
     source.subscribe((channels: Channel[]) => {

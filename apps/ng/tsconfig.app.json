@@ -9,7 +9,5 @@
   "lib": ["es2018", "dom"],
   "include": ["**/*.ts"],
   "exclude": ["src/test-setup.ts", "**/*.spec.ts", "src/setup.ts"],
-  "angularCompilerOptions": {
-    "enableIvy": false
-  }
+  "angularCompilerOptions": {}
 }

@@ -1,8 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
+import { ChannelApiFacade } from '@sdj/ng/core/channel/api';
 import {
+  ExternalRadioFacade,
   QueuedTrackFacade,
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
@@ -11,7 +13,8 @@ import { AwesomePlayerComponent } from '@sdj/ng/presentation/shared/presentation
 import { LoaderComponent } from '@sdj/ng/presentation/shared/presentation-sdj-loader';
 import { createSpyObj } from 'jest-createspyobj';
 import { hot } from 'jest-marbles';
-import { MockComponent } from 'ng-mocks';
+import { MockComponents } from 'ng-mocks';
+import { RadioActionMenuComponent } from '../../../../../presentation/src/lib/radio-action-menu/radio-action-menu.component';
 
 import { RadioComponent } from './radio.component';
 import Mocked = jest.Mocked;
@@ -25,24 +28,32 @@ describe('RadioComponent', () => {
       imports: [RouterTestingModule, HttpClientTestingModule],
       declarations: [
         RadioComponent,
-        MockComponent(AwesomePlayerComponent),
-        MockComponent(LoaderComponent)
+        MockComponents(
+          AwesomePlayerComponent,
+          LoaderComponent,
+          RadioActionMenuComponent
+        )
       ],
       providers: [
-        { provide: ChannelFacade, useValue: createSpyObj(ChannelFacade) },
+        { provide: ChannelApiFacade, useValue: createSpyObj(ChannelApiFacade) },
         {
           provide: QueuedTrackFacade,
           useValue: createSpyObj(QueuedTrackFacade)
         },
         { provide: RadioFacade, useValue: createSpyObj(RadioFacade) },
-        { provide: WebSocketClient, useValue: createSpyObj(WebSocketClient) }
+        { provide: WebSocketClient, useValue: createSpyObj(WebSocketClient) },
+        { provide: MatDialog, useValue: createSpyObj(MatDialog) },
+        {
+          provide: ExternalRadioFacade,
+          useValue: createSpyObj(ExternalRadioFacade)
+        }
       ]
     }).compileComponents();
 
     const radioFacade = TestBed.inject(RadioFacade);
     radioFacade.speeching$ = hot('');
 
-    const channelFacade = TestBed.inject<ChannelFacade>(ChannelFacade);
+    const channelFacade = TestBed.inject<ChannelApiFacade>(ChannelApiFacade);
     (channelFacade.selectedChannel$ as any) = hot('');
 
     const webSocketClient: Mocked<WebSocketClient> = TestBed.inject<any>(

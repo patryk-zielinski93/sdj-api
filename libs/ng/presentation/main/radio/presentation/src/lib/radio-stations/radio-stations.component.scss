@@ -1,0 +1,11 @@
+.radio-stations {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-stations-radio {
+  margin: 0.5rem;
+}
+.radio-stations-radio__icon {
+  height: 4rem;
+}

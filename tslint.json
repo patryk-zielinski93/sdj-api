@@ -81,7 +81,11 @@
           },
           {
             "sourceTag": "scope:radio",
-            "onlyDependOnLibsWithTags": ["scope:radio", "scope:shared"]
+            "onlyDependOnLibsWithTags": [
+              "name:ng-core-channel-api",
+              "scope:radio",
+              "scope:shared"
+            ]
           },
           {
             "sourceTag": "scope:shared",
@@ -106,6 +110,7 @@
           {
             "sourceTag": "type:application-services",
             "onlyDependOnLibsWithTags": [
+              "type:api",
               "type:domain",
               "type:domain-services",
               "type:port",
