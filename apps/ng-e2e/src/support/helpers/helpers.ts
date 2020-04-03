@@ -1,6 +1,7 @@
 import { mockConfig } from '../mocks/configs';
 import { MockEventEmitter } from '../mocks/mock-event-emitter';
 import { assignSocket } from '../mocks/websocket';
+import { registerCommonFixtures } from './register-common-fixtures';
 
 export function login(): void {
   window.localStorage.setItem('token', 'xoxo');
@@ -13,11 +14,7 @@ export const isPlaying = (el: HTMLAudioElement) => {
 export const resolveApp = route => {
   login();
   cy.server();
-  cy.route(
-    'GET',
-    'https://slack.com/api/conversations.list*',
-    'fixture:slack-channels.response.json'
-  ).as('channels');
+  registerCommonFixtures();
 
   cy.visit(route, {
     onBeforeLoad(win: Window): void {
@@ -29,9 +26,7 @@ export const resolveApp = route => {
       };
       // @ts-ignore
       win.__env = {
-        backendUrl: mockConfig.backendUrl,
-        externalStream: mockConfig.externalStream,
-        radioStreamUrl: mockConfig.radioStreamUrl
+        ...mockConfig
       };
     }
   });

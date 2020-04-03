@@ -2,19 +2,19 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ChannelApiFacade } from '@sdj/ng/core/channel/api';
+import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
 import {
   ExternalRadioFacade,
   QueuedTrackFacade,
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
+import { RadioActionMenuComponent } from '@sdj/ng/presentation/main/radio/presentation';
 import { AwesomePlayerComponent } from '@sdj/ng/presentation/shared/presentation-players';
 import { LoaderComponent } from '@sdj/ng/presentation/shared/presentation-sdj-loader';
 import { createSpyObj } from 'jest-createspyobj';
 import { hot } from 'jest-marbles';
 import { MockComponents } from 'ng-mocks';
-import { RadioActionMenuComponent } from '../../../../../presentation/src/lib/radio-action-menu/radio-action-menu.component';
 
 import { RadioComponent } from './radio.component';
 import Mocked = jest.Mocked;
@@ -35,7 +35,7 @@ describe('RadioComponent', () => {
         )
       ],
       providers: [
-        { provide: ChannelApiFacade, useValue: createSpyObj(ChannelApiFacade) },
+        { provide: ChannelFacade, useValue: createSpyObj(ChannelFacade) },
         {
           provide: QueuedTrackFacade,
           useValue: createSpyObj(QueuedTrackFacade)
@@ -53,7 +53,7 @@ describe('RadioComponent', () => {
     const radioFacade = TestBed.inject(RadioFacade);
     radioFacade.speeching$ = hot('');
 
-    const channelFacade = TestBed.inject<ChannelApiFacade>(ChannelApiFacade);
+    const channelFacade = TestBed.inject<ChannelFacade>(ChannelFacade);
     (channelFacade.selectedChannel$ as any) = hot('');
 
     const webSocketClient: Mocked<WebSocketClient> = TestBed.inject<any>(

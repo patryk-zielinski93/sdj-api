@@ -80,10 +80,28 @@
             "onlyDependOnLibsWithTags": ["scope:host-api", "scope:shared"]
           },
           {
+            "sourceTag": "scope:most-played-feature",
+            "onlyDependOnLibsWithTags": [
+              "scope:channel",
+              "scope:most-played-feature",
+              "scope:radio",
+              "scope:shared"
+            ]
+          },
+          {
             "sourceTag": "scope:radio",
             "onlyDependOnLibsWithTags": [
               "name:ng-core-channel-api",
               "scope:radio",
+              "scope:shared"
+            ]
+          },
+          {
+            "sourceTag": "scope:radio-feature",
+            "onlyDependOnLibsWithTags": [
+              "scope:radio-feature",
+              "scope:radio",
+              "scope:channel",
               "scope:shared"
             ]
           },

@@ -48,7 +48,7 @@ export class MainComponent implements OnInit {
   }
 
   onSelectChannel(channel: Channel): void {
-    this.channelFacade.selectChannel(channel);
+    this.channelFacade.selectChannel(channel.id);
   }
 
   onNavigateToMostPlayed(): void {

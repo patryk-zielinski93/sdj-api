@@ -1,12 +1,28 @@
 import { Injectable } from '@angular/core';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
+import { of } from 'rxjs';
+import { first, switchMap, tap } from 'rxjs/operators';
+import { RoomIsRunningEvent } from '../../events/room-is-running.event';
+import { JoinCommand } from './join.command';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class JoinHandler {
-  constructor(private ws: WebSocketClient) {}
+  @Effect() handle$ = this.actions$.pipe(
+    ofType(JoinCommand.type),
+    tap((command: JoinCommand) => this.handle(command)),
+    switchMap(() =>
+      this.ws.observe<void>(WebSocketEvents.roomIsRunning).pipe(
+        first(),
+        switchMap(() => of(new RoomIsRunningEvent()))
+      )
+    )
+  );
 
-  execute({ channelId }): void {
-    this.ws.emit(WebSocketEvents.join, { room: channelId });
+  handle(command: JoinCommand): void {
+    this.ws.emit(WebSocketEvents.join, { room: command.channelId });
   }
+
+  constructor(private actions$: Actions, private ws: WebSocketClient) {}
 }

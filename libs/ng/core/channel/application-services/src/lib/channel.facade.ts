@@ -1,85 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Channel } from '@sdj/ng/core/channel/domain';
-import { ChannelRepository } from '@sdj/ng/core/channel/domain-services';
-import { WebSocketClient } from '@sdj/ng/core/shared/port';
-import { WebSocketEvents } from '@sdj/shared/domain';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { ChannelPartialState } from './+state/channel.reducer';
+import { channelQuery } from './+state/channel.selectors';
+import { LoadChannelsQuery } from './queries/load-channels.query';
+import { SelectChannelService } from './services/select-channel.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ChannelFacade {
-  channels$ = new BehaviorSubject([]);
-  selectedChannel$: BehaviorSubject<Channel> = new BehaviorSubject(null);
+  channels$ = this.store.pipe(select(channelQuery.channels));
+  selectedChannel$ = this.store.pipe(select(channelQuery.selectedChannel));
 
   constructor(
-    private channelRepository: ChannelRepository,
-    private webSocketService: WebSocketClient
-  ) {
-    this.handleSelectedChannel();
-  }
+    private selectChannelService: SelectChannelService,
+    private store: Store<ChannelPartialState>
+  ) {}
 
-  loadChannels(): Observable<Channel[]> {
-    const source = this.channelRepository.getChannels();
-    source.subscribe((channels: Channel[]) => {
-      this.channels$.next(channels);
-    });
-    this.webSocketService
-      .createSubject(WebSocketEvents.channels)
-      .pipe(
-        map(channels =>
-          this.channels$.value.map((channel: Channel) => ({
-            ...channel,
-            ...channels[channel.id],
-            name: channel.name
-          }))
-        )
-      )
-      .subscribe((channels: Channel[]) => {
-        this.channels$.next(channels);
-      });
-    return source;
+  loadChannels(): void {
+    this.store.dispatch(new LoadChannelsQuery());
   }
 
   selectFirstChannel(channelId: string | null): void {
-    if (channelId) {
-      const channel = this.channels$.value.find(
-        (ch: Channel) => ch.id === channelId
-      );
-      this.selectChannel(channel);
-    } else {
-      this.selectGeneral();
-    }
+    this.selectChannelService.selectFirstChannel(channelId);
   }
 
-  selectGeneral(): void {
-    const channel = this.channels$.value.find(
-      (ch: Channel) => ch.name === 'general'
-    );
-    this.selectChannel(channel);
-  }
-
-  selectChannel(channel: Channel): void {
-    if (
-      !channel ||
-      !this.selectedChannel$.value ||
-      (this.selectedChannel$.value &&
-        channel.id !== this.selectedChannel$.value.id)
-    ) {
-      this.selectedChannel$.next(channel);
-    }
-  }
-
-  private handleSelectedChannel(): void {
-    this.channels$
-      .pipe(filter<Channel[]>(() => !!this.selectedChannel$.value))
-      .subscribe(channels => {
-        const selectedChannel = this.selectedChannel$.value;
-        const newSelectedChannel = channels.find(
-          channel => channel.id === selectedChannel.id
-        );
-        if (newSelectedChannel) {
-          this.selectedChannel$.next(newSelectedChannel);
-        }
-      });
+  selectChannel(channelId: string): void {
+    this.selectChannelService.selectChannel(channelId);
   }
 }

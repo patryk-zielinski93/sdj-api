@@ -73,10 +73,10 @@
       "tags": ["platform:backend", "scope:shared", "type:infrastructure"]
     },
     "ng-presentation-main-radio-feature": {
-      "tags": ["platform:ng", "scope:radio", "type:feature"]
+      "tags": ["platform:ng", "scope:radio-feature", "type:feature"]
     },
     "ng-presentation-main-most-played-feature": {
-      "tags": ["platform:ng", "scope:most-played", "type:feature"]
+      "tags": ["platform:ng", "scope:most-played-feature", "type:feature"]
     },
     "ng-presentation-shared-presentation-sdj-loader": {
       "tags": ["platform:ng", "scope:shared", "type:presentation"]

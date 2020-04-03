@@ -1,68 +1,104 @@
 import { TestBed } from '@angular/core/testing';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { Action } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
+import { ChannelApiFacade } from '@sdj/ng/core/channel/api';
+import { ExternalRadioFacade } from '@sdj/ng/core/radio/application-services';
 import { environment } from '@sdj/ng/core/shared/domain';
+import { WebSocketClient } from '@sdj/ng/core/shared/port';
+import { createSpyObj } from 'jest-createspyobj';
 import { cold, hot } from 'jest-marbles';
-import { of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { AudioSourceChangedEvent } from '../events/audio-source-changed.event';
 import { GetAudioSourceHandler } from './get-audio-source.handler';
 import { GetAudioSourceQuery } from './get-audio-source.query';
+import Mocked = jest.Mocked;
 
 describe('TrackFacade', () => {
-  let service: GetAudioSourceHandler;
+  let actions: Observable<Action>;
+  let handler: GetAudioSourceHandler;
+  let channelApiFacade: Mocked<ChannelApiFacade>;
+  let externalRadioFacade: Mocked<ExternalRadioFacade>;
+
   const channel = { id: '1234', defaultStreamUrl: 'url' } as any;
   const channelRadioStream = environment.radioStreamUrl + channel.id;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GetAudioSourceHandler]
+      providers: [
+        GetAudioSourceHandler,
+        { provide: WebSocketClient, useValue: createSpyObj(WebSocketClient) },
+        { provide: ChannelApiFacade, useValue: createSpyObj(ChannelApiFacade) },
+        {
+          provide: ExternalRadioFacade,
+          useValue: createSpyObj(ExternalRadioFacade)
+        },
+        provideMockActions(() => actions),
+        provideMockStore({ initialState: {} })
+      ]
     });
-    service = TestBed.inject(GetAudioSourceHandler);
+
+    const ws: Mocked<WebSocketClient> = TestBed.inject(WebSocketClient) as any;
+    ws.observe = jest.fn();
+    ws.observe.mockReturnValue(hot('--a-|'));
+
+    channelApiFacade = TestBed.inject(ChannelApiFacade);
+    externalRadioFacade = TestBed.inject(ExternalRadioFacade) as any;
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
-  describe('#getAudioSrc', () => {
+  describe('handle$', () => {
     test('emits channel default stream on the beginning', () => {
-      const roomIsRunning$ = cold('-');
-      const query = new GetAudioSourceQuery(
-        channel,
-        roomIsRunning$,
-        of(),
-        of()
+      channelApiFacade.selectedChannel$ = cold('a', { a: channel });
+      externalRadioFacade.selectedExternalRadio$ = cold('a', {
+        a: null
+      }) as any;
+      handler = TestBed.inject(GetAudioSourceHandler);
+      handler.roomIsRunning$ = cold('-');
+
+      const query = new GetAudioSourceQuery();
+      actions = hot('-a-|', { a: query });
+      expect(handler.handle$).toBeObservable(
+        cold('-a', { a: new AudioSourceChangedEvent(channel.defaultStreamUrl) })
       );
-      const result = service.exec(query);
-      expect(result).toBeObservable(hot('a', { a: channel.defaultStreamUrl }));
     });
 
     test('emits channel stream when room is running', () => {
-      const roomIsRunning$ = cold('-a');
-      const playDj$ = cold('');
-      const playRadio$ = cold('');
-      const query = new GetAudioSourceQuery(
-        channel,
-        roomIsRunning$,
-        playDj$,
-        playRadio$
-      );
-      const result = service.exec(query);
-      expect(result).toBeObservable(
-        hot('ab', { a: channel.defaultStreamUrl, b: channelRadioStream })
+      channelApiFacade.selectedChannel$ = cold('a', { a: channel });
+      externalRadioFacade.selectedExternalRadio$ = cold('a', {
+        a: null
+      }) as any;
+      handler = TestBed.inject(GetAudioSourceHandler);
+      handler.roomIsRunning$ = cold('-a');
+      handler.playDj$ = cold('');
+      handler.playRadio$ = cold('');
+
+      const query = new GetAudioSourceQuery();
+      actions = hot('-a-|', { a: query });
+      expect(handler.handle$).toBeObservable(
+        hot('-ab', {
+          a: new AudioSourceChangedEvent(channel.defaultStreamUrl),
+          b: new AudioSourceChangedEvent(channelRadioStream)
+        })
       );
     });
 
     test('switch between channel stream and radio when room is running', () => {
-      const roomIsRunning$ = cold('-a');
-      const playDj$ = cold('-a-a-a');
-      const playRadio$ = cold('--a-a');
-      const query = new GetAudioSourceQuery(
-        channel,
-        roomIsRunning$,
-        playDj$,
-        playRadio$
-      );
-      const result = service.exec(query);
-      expect(result).toBeObservable(
-        hot('abbabab', { a: channel.defaultStreamUrl, b: channelRadioStream })
+      channelApiFacade.selectedChannel$ = cold('a', { a: channel });
+      externalRadioFacade.selectedExternalRadio$ = cold('a', {
+        a: null
+      }) as any;
+      handler = TestBed.inject(GetAudioSourceHandler);
+      handler.roomIsRunning$ = cold('-a');
+      handler.playDj$ = cold('-a-a-a');
+      handler.playRadio$ = cold('--a-a');
+
+      const query = new GetAudioSourceQuery();
+      actions = hot('-a-|', { a: query });
+      expect(handler.handle$).toBeObservable(
+        hot('-abbabab', {
+          a: new AudioSourceChangedEvent(channel.defaultStreamUrl),
+          b: new AudioSourceChangedEvent(channelRadioStream)
+        })
       );
     });
   });

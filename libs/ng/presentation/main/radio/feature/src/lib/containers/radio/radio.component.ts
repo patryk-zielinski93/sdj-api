@@ -10,7 +10,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Channel, ChannelApiFacade } from '@sdj/ng/core/channel/api';
+import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
+import { Channel } from '@sdj/ng/core/channel/domain';
 import {
   ExternalRadioFacade,
   QueuedTrackFacade,
@@ -53,7 +54,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   private selectedChannelUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
-    private channelFacade: ChannelApiFacade,
+    private channelFacade: ChannelFacade,
     private chD: ChangeDetectorRef,
     private dialog: MatDialog,
     private externalRadioFacade: ExternalRadioFacade,
@@ -154,6 +155,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   handleSelectedChannelChange(): void {
     this.channelFacade.selectedChannel$
       .pipe(
+        filter<Channel>(Boolean),
         filter(
           channel =>
             !this.selectedChannel || channel.id !== this.selectedChannel.id
