@@ -8,12 +8,11 @@ import { ExternalRadioFacade } from './external-radio.facade';
 import { GetAudioSourceHandler } from './queries/get-audio-source.handler';
 import { QueuedTrackFacade } from './queued-track.facade';
 import { RadioFacade } from './radio.facade';
-import { TrackFacade } from './track.facade';
 
 const HANDLERS = [JoinHandler, GetAudioSourceHandler];
 
 @NgModule({
-  providers: [ExternalRadioFacade, QueuedTrackFacade, RadioFacade, TrackFacade],
+  providers: [ExternalRadioFacade, QueuedTrackFacade, RadioFacade],
   imports: [
     EffectsModule.forFeature(HANDLERS),
     NgCoreChannelApiModule,

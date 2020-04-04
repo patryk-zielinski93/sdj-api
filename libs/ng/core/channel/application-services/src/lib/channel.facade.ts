@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ChannelPartialState } from './+state/channel.reducer';
 import { channelQuery } from './+state/channel.selectors';
-import { LoadChannelsQuery } from './queries/load-channels.query';
+import { LoadChannelsQuery } from './queries/load-channels/load-channels.query';
 import { SelectChannelService } from './services/select-channel.service';
 
 @Injectable({ providedIn: 'root' })

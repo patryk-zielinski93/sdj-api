@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { TrackRepository } from '@sdj/ng/core/radio/domain-services';
 import { createSpyObj } from 'jest-createspyobj';
 
 import { TrackFacade } from './track.facade';
+import { TrackRepository } from '@sdj/ng/core/track/domain-services';
 
 describe('TrackFacade', () => {
   let service: TrackFacade;

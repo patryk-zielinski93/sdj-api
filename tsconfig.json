@@ -129,7 +129,19 @@
       "@sdj/ng/presentation/main/radio/presentation": [
         "libs/ng/presentation/main/radio/presentation/src/index.ts"
       ],
-      "@sdj/ng/core/channel/api": ["libs/ng/core/channel/api/src/index.ts"]
+      "@sdj/ng/core/channel/api": ["libs/ng/core/channel/api/src/index.ts"],
+      "@sdj/ng/core/track/application-services": [
+        "libs/ng/core/track/application-services/src/index.ts"
+      ],
+      "@sdj/ng/core/track/api": ["libs/ng/core/track/api/src/index.ts"],
+      "@sdj/ng/core/track/domain": ["libs/ng/core/track/domain/src/index.ts"],
+      "@sdj/ng/core/track/domain-services": [
+        "libs/ng/core/track/domain-services/src/index.ts"
+      ],
+      "@sdj/ng/core/track/infrastrucutre": [
+        "libs/ng/core/track/infrastrucutre/src/index.ts"
+      ],
+      "@sdj/ng/core/track/shell": ["libs/ng/core/track/shell/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

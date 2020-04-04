@@ -10,6 +10,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
 import { Channel } from '@sdj/ng/core/channel/domain';
 import {
@@ -17,17 +18,18 @@ import {
   QueuedTrackFacade,
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
-import { QueuedTrack, Track } from '@sdj/ng/core/radio/domain';
+import { QueuedTrack } from '@sdj/ng/core/radio/domain';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
+import { Track } from '@sdj/ng/core/track/domain';
 import { RadioStationsComponent } from '@sdj/ng/presentation/main/radio/presentation';
 import { AwesomePlayerComponent } from '@sdj/ng/presentation/shared/presentation-players';
 import { User, WebSocketEvents } from '@sdj/shared/domain';
 import { TrackUtil, UserUtils } from '@sdj/shared/utils';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { merge, Observable, of, Subject } from 'rxjs';
 import { filter, first, map, takeUntil, tap } from 'rxjs/operators';
 import { RadioPresenter } from './radio.presenter';
 
+@UntilDestroy()
 @Component({
   selector: 'sdj-radio',
   templateUrl: './radio.component.html',
@@ -70,6 +72,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.leaveChannel();
     this.radioFacade.stopListeningForPozdro();
   }
 

@@ -169,6 +169,24 @@
         "scope:channel",
         "type:api"
       ]
+    },
+    "ng-core-track-application-services": {
+      "tags": ["platform:ng", "scope:track", "type:application-services"]
+    },
+    "ng-core-track-api": {
+      "tags": ["platform:ng", "scope:track", "type:api"]
+    },
+    "ng-core-track-domain": {
+      "tags": ["platform:ng", "scope:track", "type:domain"]
+    },
+    "ng-core-track-domain-services": {
+      "tags": ["platform:ng", "scope:track", "type:domain-services"]
+    },
+    "ng-core-track-infrastrucutre": {
+      "tags": ["platform:ng", "scope:track", "type:infrastructure"]
+    },
+    "ng-core-track-shell": {
+      "tags": ["platform:ng", "scope:track", "type:shell"]
     }
   }
 }

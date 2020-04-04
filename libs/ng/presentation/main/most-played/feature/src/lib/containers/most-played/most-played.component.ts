@@ -5,15 +5,16 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
 import { Channel } from '@sdj/ng/core/channel/domain';
-import { TrackFacade } from '@sdj/ng/core/radio/application-services';
-import { Track } from '@sdj/ng/core/radio/domain';
 import { environment } from '@sdj/ng/core/shared/domain';
+import { TrackFacade } from '@sdj/ng/core/track/application-services';
+import { Track } from '@sdj/ng/core/track/domain';
 import { Track as MatTrack } from 'ngx-audio-player';
-import { untilDestroyed } from 'ngx-take-until-destroy';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
+@UntilDestroy()
 @Component({
   selector: 'sdj-most-played',
   templateUrl: './most-played.component.html',
@@ -24,6 +25,7 @@ export class MostPlayedComponent implements OnInit, OnDestroy {
   channel: Channel;
   loading$ = this.trackFacade.mostPlayedTracksLoading$;
   tracks$ = this.trackFacade.mostPlayedTracks$.pipe(
+    filter(Boolean),
     map<Track[], MatTrack[]>(tracks =>
       tracks.map(track => ({
         title: `${track.title}. Played ${track.playedCount} times`,

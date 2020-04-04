@@ -11,7 +11,12 @@ async function bootstrap(): Promise<void> {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const port = parseInt(process.env.PORT, 10) || 8888;
-  app.useStaticAssets(join(__dirname, 'assets'));
+  app.useStaticAssets(join(__dirname, 'assets'), {
+    setHeaders: (res, path, stat) => {
+      res.set('Access-Control-Allow-Origin', '*');
+    }
+  });
+  app.enableCors();
 
   return app.listen(port, () => {
     Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);

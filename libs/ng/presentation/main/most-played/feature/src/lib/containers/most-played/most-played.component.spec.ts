@@ -2,7 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
-import { TrackFacade } from '@sdj/ng/core/radio/application-services';
+import { TrackFacade } from '@sdj/ng/core/track/application-services';
 import { LoaderComponent } from '@sdj/ng/presentation/shared/presentation-sdj-loader';
 import { ApolloTestingModule } from 'apollo-angular/testing';
 import { createSpyObj } from 'jest-createspyobj';

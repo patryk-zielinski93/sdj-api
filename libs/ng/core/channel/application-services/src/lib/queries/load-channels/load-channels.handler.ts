@@ -7,9 +7,9 @@ import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
 import { merge, Observable } from 'rxjs';
 import { map, switchMap, withLatestFrom } from 'rxjs/operators';
-import { ChannelPartialState } from '../+state/channel.reducer';
-import { channelQuery } from '../+state/channel.selectors';
-import { ChannelsReceivedEvent } from '../events/channels-received.event';
+import { ChannelPartialState } from '../../+state/channel.reducer';
+import { channelQuery } from '../../+state/channel.selectors';
+import { ChannelsReceivedEvent } from '../../events/channels-received.event';
 import { LoadChannelsQuery } from './load-channels.query';
 
 @Injectable({ providedIn: 'root' })

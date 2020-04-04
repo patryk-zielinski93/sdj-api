@@ -85,7 +85,8 @@
               "scope:channel",
               "scope:most-played-feature",
               "scope:radio",
-              "scope:shared"
+              "scope:shared",
+              "scope:track"
             ]
           },
           {
@@ -99,9 +100,10 @@
           {
             "sourceTag": "scope:radio-feature",
             "onlyDependOnLibsWithTags": [
-              "scope:radio-feature",
-              "scope:radio",
               "scope:channel",
+              "scope:radio",
+              "scope:track",
+              "scope:radio-feature",
               "scope:shared"
             ]
           },
@@ -111,6 +113,10 @@
               "name:ng-core-auth-api",
               "scope:shared"
             ]
+          },
+          {
+            "sourceTag": "scope:track",
+            "onlyDependOnLibsWithTags": ["scope:track", "scope:shared"]
           },
           {
             "sourceTag": "type:api",

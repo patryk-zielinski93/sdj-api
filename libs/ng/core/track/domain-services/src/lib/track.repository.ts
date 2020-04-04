@@ -1,4 +1,4 @@
-import { Track } from '@sdj/ng/core/radio/domain';
+import { Track } from '@sdj/ng/core/track/domain';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs';
 

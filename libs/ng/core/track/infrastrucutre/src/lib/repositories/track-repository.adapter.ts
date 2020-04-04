@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Track } from '@sdj/ng/core/radio/domain';
-import { TrackRepository } from '@sdj/ng/core/radio/domain-services';
+import { Track } from '@sdj/ng/core/track/domain';
+import { TrackRepository } from '@sdj/ng/core/track/domain-services';
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
