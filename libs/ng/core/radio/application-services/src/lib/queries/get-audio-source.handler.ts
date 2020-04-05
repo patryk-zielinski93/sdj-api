@@ -2,22 +2,21 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, select, Store } from '@ngrx/store';
 import { Channel, ChannelApiFacade } from '@sdj/ng/core/channel/api';
-import { ExternalRadioEntity } from '@sdj/ng/core/radio/domain';
+import { ExternalRadio } from '@sdj/ng/core/radio/domain';
 import { environment } from '@sdj/ng/core/shared/domain';
-import { WebSocketClient } from '@sdj/ng/core/shared/port';
-import { WebSocketEvents } from '@sdj/shared/domain';
 import { merge, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { RadioPartialState } from '../+state/radio.reducer';
 import { radioQuery } from '../+state/radio.selectors';
+import { RadioDataService } from '@sdj/ng/core/radio/infrastructure';
 import { AudioSourceChangedEvent } from '../events/audio-source-changed.event';
 import { ExternalRadioFacade } from '../external-radio.facade';
 import { GetAudioSourceQuery } from './get-audio-source.query';
 
 @Injectable({ providedIn: 'root' })
 export class GetAudioSourceHandler {
-  playDj$ = this.ws.observe(WebSocketEvents.playDj);
-  playRadio$ = this.ws.observe(WebSocketEvents.playRadio);
+  playDj$ = this.radioDataService.getPlayDj();
+  playRadio$ = this.radioDataService.getPlayRadio();
   roomIsRunning$ = this.store.pipe(select(radioQuery.roomIsRunning));
 
   @Effect() handle$ = this.actions$.pipe(
@@ -30,7 +29,7 @@ export class GetAudioSourceHandler {
       ([query, selectedChannel, selectedExternalRadio]: [
         GetAudioSourceQuery,
         Channel,
-        ExternalRadioEntity
+        ExternalRadio
       ]) => this.handle(selectedChannel, selectedExternalRadio)
     )
   );
@@ -39,21 +38,18 @@ export class GetAudioSourceHandler {
     private actions$: Actions,
     private channelApiFacade: ChannelApiFacade,
     private externalRadioFacade: ExternalRadioFacade,
-    private store: Store<RadioPartialState>,
-    private ws: WebSocketClient
+    private radioDataService: RadioDataService,
+    private store: Store<RadioPartialState>
   ) {}
 
   private static getStreamFromExternalRadioOrChannel(
     channel: Channel,
-    externalRadio?: ExternalRadioEntity
+    externalRadio?: ExternalRadio
   ): string {
     return externalRadio ? externalRadio.url : channel.defaultStreamUrl;
   }
 
-  handle(
-    channel: Channel,
-    externalRadio: ExternalRadioEntity
-  ): Observable<Action> {
+  handle(channel: Channel, externalRadio: ExternalRadio): Observable<Action> {
     const selectedChannelId = channel.id;
     return merge(
       of(

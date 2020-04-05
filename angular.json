@@ -1970,6 +1970,111 @@
           "styleext": "scss"
         }
       }
+    },
+    "ng-core-queued-track-application-services": {
+      "projectType": "library",
+      "root": "libs/ng/core/queued-track/application-services",
+      "sourceRoot": "libs/ng/core/queued-track/application-services/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/queued-track/application-services/tsconfig.lib.json",
+              "libs/ng/core/queued-track/application-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/core/queued-track/application-services/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/queued-track/application-services/jest.config.js",
+            "tsConfig": "libs/ng/core/queued-track/application-services/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/queued-track/application-services/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-core-queued-track-domain": {
+      "projectType": "library",
+      "root": "libs/ng/core/queued-track/domain",
+      "sourceRoot": "libs/ng/core/queued-track/domain/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/queued-track/domain/tsconfig.lib.json",
+              "libs/ng/core/queued-track/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/core/queued-track/domain/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/queued-track/domain/jest.config.js",
+            "tsConfig": "libs/ng/core/queued-track/domain/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/queued-track/domain/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-core-queued-track-infrastructure": {
+      "projectType": "library",
+      "root": "libs/ng/core/queued-track/infrastructure",
+      "sourceRoot": "libs/ng/core/queued-track/infrastructure/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/core/queued-track/infrastructure/tsconfig.lib.json",
+              "libs/ng/core/queued-track/infrastructure/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/core/queued-track/infrastructure/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/core/queued-track/infrastructure/jest.config.js",
+            "tsConfig": "libs/ng/core/queued-track/infrastructure/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ng/core/queued-track/infrastructure/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {

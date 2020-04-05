@@ -90,6 +90,10 @@
             ]
           },
           {
+            "sourceTag": "scope:queued-track",
+            "onlyDependOnLibsWithTags": ["scope:queued-track", "scope:shared"]
+          },
+          {
             "sourceTag": "scope:radio",
             "onlyDependOnLibsWithTags": [
               "name:ng-core-channel-api",
@@ -101,6 +105,7 @@
             "sourceTag": "scope:radio-feature",
             "onlyDependOnLibsWithTags": [
               "scope:channel",
+              "scope:queued-track",
               "scope:radio",
               "scope:track",
               "scope:radio-feature",

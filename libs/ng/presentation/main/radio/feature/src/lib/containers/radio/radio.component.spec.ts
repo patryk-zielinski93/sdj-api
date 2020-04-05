@@ -3,9 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
+import { QueuedTrackFacade } from '@sdj/ng/core/queued-track/application-services';
 import {
   ExternalRadioFacade,
-  QueuedTrackFacade,
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';

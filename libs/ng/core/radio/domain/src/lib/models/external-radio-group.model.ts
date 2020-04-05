@@ -1,6 +1,6 @@
-import { ExternalRadioEntity } from '@sdj/ng/core/radio/domain';
+import { ExternalRadio } from '@sdj/ng/core/radio/domain';
 
 export interface ExternalRadioGroup {
   title: string;
-  radios: ExternalRadioEntity[];
+  radios: ExternalRadio[];
 }

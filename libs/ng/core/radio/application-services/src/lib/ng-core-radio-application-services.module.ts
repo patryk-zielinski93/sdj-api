@@ -6,13 +6,12 @@ import * as fromRadio from './+state/radio.reducer';
 import { JoinHandler } from './commands/join/join.handler';
 import { ExternalRadioFacade } from './external-radio.facade';
 import { GetAudioSourceHandler } from './queries/get-audio-source.handler';
-import { QueuedTrackFacade } from './queued-track.facade';
 import { RadioFacade } from './radio.facade';
 
 const HANDLERS = [JoinHandler, GetAudioSourceHandler];
 
 @NgModule({
-  providers: [ExternalRadioFacade, QueuedTrackFacade, RadioFacade],
+  providers: [ExternalRadioFacade, RadioFacade],
   imports: [
     EffectsModule.forFeature(HANDLERS),
     NgCoreChannelApiModule,

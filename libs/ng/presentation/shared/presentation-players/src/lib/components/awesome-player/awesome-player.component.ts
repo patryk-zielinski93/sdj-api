@@ -8,7 +8,8 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { QueuedTrack } from '@sdj/ng/core/radio/domain';
+import { QueuedTrack } from '@sdj/ng/core/queued-track/domain';
+import { ExternalRadio } from '@sdj/ng/core/radio/domain';
 import { of } from 'rxjs';
 import { delay, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Controls } from './controls';
@@ -30,6 +31,13 @@ export class AwesomePlayerComponent
   implements OnInit, OnDestroy, AfterViewInit {
   get src(): string {
     return this._src;
+  }
+
+  @Input()
+  set externalRadio(value: ExternalRadio | null) {
+    if (this.player) {
+      this.player.radio = value;
+    }
   }
 
   @Input()

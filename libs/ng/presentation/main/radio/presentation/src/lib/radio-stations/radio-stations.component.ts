@@ -1,9 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  ExternalRadioEntity,
-  ExternalRadioGroup
-} from '@sdj/ng/core/radio/domain';
+import { ExternalRadio, ExternalRadioGroup } from '@sdj/ng/core/radio/domain';
 
 @Component({
   selector: 'sdj-radio-stations',
@@ -21,7 +18,7 @@ export class RadioStationsComponent {
     this.externalRadioGroups = data.externalRadioGroups;
   }
 
-  select(externalRadio: ExternalRadioEntity): void {
+  select(externalRadio: ExternalRadio): void {
     this.dialogRef.close(externalRadio);
   }
 }

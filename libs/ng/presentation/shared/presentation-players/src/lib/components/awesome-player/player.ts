@@ -1,3 +1,4 @@
+import { ExternalRadio } from '@sdj/ng/core/radio/domain';
 import { environment } from '@sdj/ng/core/shared/domain';
 import { QueuedTrack } from '@sdj/shared/domain';
 import { UserUtils } from '@sdj/shared/utils';
@@ -7,6 +8,15 @@ import { Framer } from './framer';
 import { Scene } from './scene';
 
 export class Player {
+  get radio(): ExternalRadio | undefined {
+    return this._radio;
+  }
+
+  set radio(value: ExternalRadio) {
+    this._radio = value;
+    this.handleTrackChange();
+  }
+
   get src(): string {
     return this._src;
   }
@@ -41,6 +51,7 @@ export class Player {
   private gainNode: GainNode;
   private javascriptNode: ScriptProcessorNode;
   private source: MediaElementAudioSourceNode;
+  private _radio?: ExternalRadio;
   private _src: string;
   private _track: QueuedTrack;
 
@@ -89,13 +100,24 @@ export class Player {
     this.scene.init();
   }
 
-  handleTrackChange(track: QueuedTrack): void {
+  handleTrackChange(track?: QueuedTrack): void {
+    let artist = 'DJ PAWEŁ';
+    let song = 'OPEN FM';
+
+    if (this.radio) {
+      song = this.radio.title;
+    }
+
+    if (track) {
+      song = track.track.title;
+      if (track && track.addedBy) {
+        artist = UserUtils.getUserName(track.addedBy);
+      }
+    }
+
     const convertedTrack = {
-      artist:
-        track && track.addedBy
-          ? UserUtils.getUserName(track.addedBy)
-          : 'DJ PAWEŁ',
-      song: track ? track.track.title : 'OPEN FM'
+      artist,
+      song
     };
     document.querySelector('.song .artist').textContent = convertedTrack.artist;
     document.querySelector('.song .name').textContent = convertedTrack.song;

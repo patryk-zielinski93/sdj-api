@@ -187,6 +187,15 @@
     },
     "ng-core-track-shell": {
       "tags": ["platform:ng", "scope:track", "type:shell"]
+    },
+    "ng-core-queued-track-application-services": {
+      "tags": ["platform:ng", "scope:queued-track", "type:application-services"]
+    },
+    "ng-core-queued-track-domain": {
+      "tags": ["platform:ng", "scope:queued-track", "type:domain"]
+    },
+    "ng-core-queued-track-infrastructure": {
+      "tags": ["platform:ng", "scope:queued-track", "type:infrastructure"]
     }
   }
 }

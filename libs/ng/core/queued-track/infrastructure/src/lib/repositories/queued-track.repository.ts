@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { QueuedTrack } from '@sdj/ng/core/radio/domain';
-import { QueuedTrackRepository } from '@sdj/ng/core/radio/domain-services';
+import { QueuedTrack } from '@sdj/ng/core/queued-track/domain';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
 import { defer, Observable } from 'rxjs';
 
-@Injectable()
-export class QueuedTrackRepositoryAdapter extends QueuedTrackRepository {
-  constructor(private ws: WebSocketClient) {
-    super();
-  }
+@Injectable({ providedIn: 'root' })
+export class QueuedTrackRepository {
+  constructor(private ws: WebSocketClient) {}
 
   getQueuedTracks(channelId: string): Observable<QueuedTrack[]> {
     return defer(() => {

@@ -22,6 +22,7 @@
 </ul>
 <sdj-awesome-player
   #playerComponent
+  [externalRadio]="selectedExternalRadio$ | async"
   [src]="audioSrc$ | async"
   [track]="currentTrack$ | async"
 >

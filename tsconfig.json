@@ -141,7 +141,16 @@
       "@sdj/ng/core/track/infrastrucutre": [
         "libs/ng/core/track/infrastrucutre/src/index.ts"
       ],
-      "@sdj/ng/core/track/shell": ["libs/ng/core/track/shell/src/index.ts"]
+      "@sdj/ng/core/track/shell": ["libs/ng/core/track/shell/src/index.ts"],
+      "@sdj/ng/core/queued-track/application-services": [
+        "libs/ng/core/queued-track/application-services/src/index.ts"
+      ],
+      "@sdj/ng/core/queued-track/domain": [
+        "libs/ng/core/queued-track/domain/src/index.ts"
+      ],
+      "@sdj/ng/core/queued-track/infrastructure": [
+        "libs/ng/core/queued-track/infrastructure/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

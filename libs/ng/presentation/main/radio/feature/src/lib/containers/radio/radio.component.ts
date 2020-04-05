@@ -13,12 +13,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ChannelFacade } from '@sdj/ng/core/channel/application-services';
 import { Channel } from '@sdj/ng/core/channel/domain';
+import { QueuedTrackFacade } from '@sdj/ng/core/queued-track/application-services';
+import { QueuedTrack } from '@sdj/ng/core/queued-track/domain';
 import {
   ExternalRadioFacade,
-  QueuedTrackFacade,
   RadioFacade
 } from '@sdj/ng/core/radio/application-services';
-import { QueuedTrack } from '@sdj/ng/core/radio/domain';
+import { ExternalRadio } from '@sdj/ng/core/radio/domain';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { Track } from '@sdj/ng/core/track/domain';
 import { RadioStationsComponent } from '@sdj/ng/presentation/main/radio/presentation';
@@ -45,6 +46,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
 
   audioSrc$: Observable<string> = this.radioFacade.audioSource$;
   currentTrack$ = this.queuedTrackFacade.currentTrack$;
+  selectedExternalRadio$ = this.externalRadioFacade.selectedExternalRadio$;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   getUserName: (user: User) => string = UserUtils.getUserName;
   listScrollSubject: Subject<QueuedTrack[]> = new Subject();
@@ -96,6 +98,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
             panelClass: 'radio-stations-dialog'
           })
           .afterClosed()
+          .pipe(filter<ExternalRadio>(Boolean))
           .subscribe(result => {
             this.externalRadioFacade.select(result);
           });
