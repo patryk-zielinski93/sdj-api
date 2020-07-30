@@ -55,6 +55,7 @@ function download(id: string): Observable<string> {
     {},
     (err, output) => {
       if (err) {
+        console.error(err)
         sub.error(new Error("Can't Download Track"));
         sub.complete();
         return;

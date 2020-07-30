@@ -11,14 +11,13 @@ services:
       args:
         - LOCAL_USER_ID=${LOCAL_USER_ID}
     volumes:
-      - ./dist/apps/backend/assets/tracks:/app/dist/apps/backend/assets/tracks
+      - ./tracks:/app/dist/apps/backend/assets/tracks
     environment:
       - PORT=${BACKEND_PORT}
       - VIRTUAL_HOST=${BACKEND_URL}
       - VIRTUAL_PORT=${BACKEND_PORT}
       - LOCAL_USER_ID=${LOCAL_USER_ID}
       - HOST_IP=${HOST_IP}
-    user: ${CURRENT_UID}
     networks:
       backend:
         aliases:
@@ -35,7 +34,6 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    user: ${CURRENT_UID}
     networks:
       backend:
         aliases:
@@ -49,7 +47,6 @@ services:
     environment:
       - VIRTUAL_HOST=${ICECAST_URL}
       - VIRUTAL_PORT=8000
-    user: ${CURRENT_UID}
     networks:
       streaming:
         aliases:
@@ -61,10 +58,9 @@ services:
       dockerfile: Dockerfile
       context: ./containers/ices
     volumes:
-      - ./dist/apps/backend/assets/tracks:/tracks
+      - ./tracks:/tracks
     environment:
       - ROOM_ID=${ROOM_ID}
-    user: ${CURRENT_UID}
     depends_on:
       - slack_dj_redis
       - slack_dj_icecast
@@ -92,7 +88,6 @@ services:
     - RADIO_STREAM_URL=${ICECAST_URL}
     - SLACK_CLIENT_ID=${SLACK_CLIENT_ID}
     - SLACK_CLIENT_SECRET=${SLACK_CLIENT_SECRET}
-    user: ${CURRENT_UID}
     networks:
       frontend:
         aliases:
@@ -107,7 +102,6 @@ services:
       - '80:80'
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-    user: ${CURRENT_UID}
     networks:
       - streaming
       - frontend
@@ -118,7 +112,6 @@ services:
     volumes:
       - redis:/data
     image: redis:alpine
-    user: ${CURRENT_UID}
     networks:
       backend:
         aliases:

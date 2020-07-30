@@ -1,14 +1,13 @@
 FROM node:lts-jessie as build-stage
 WORKDIR /app
 
-COPY angular.json nx.json package.json tsconfig.json /app/
+COPY angular.json nx.json package.json package-lock.json tsconfig.json /app/
 COPY ./apps/ng/src/env.sample.js ./apps/ng/src/env.js
 COPY ./apps/ng /app/apps/ng
 COPY ./libs/shared /app/libs/shared
 COPY ./libs/ng /app/libs/ng
-RUN npm install -g @angular/cli
-RUN npm set progress=false && npm install
-RUN ng build ng --prod
+RUN npm set progress=false && npm ci --unsafe-perm
+RUN npm run ng build ng -- --prod
 
 FROM nginx:1.15
 

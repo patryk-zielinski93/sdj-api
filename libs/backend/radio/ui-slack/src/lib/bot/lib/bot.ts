@@ -111,7 +111,7 @@ export class Bot {
         await this.userRepository.save(user);
       }
 
-      const command = message.text.split(' ');
+      const command = message.text.split(/(\s+)/).filter( e => e.trim().length > 0);
       const commands = this.commands[command[0]];
 
       if (command[0] === 'help') {

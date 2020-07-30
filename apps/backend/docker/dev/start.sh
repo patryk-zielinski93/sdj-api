@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 npm install
-ng run backend:serve-dev
+npm run ng run backend:serve-dev

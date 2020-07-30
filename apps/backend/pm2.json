@@ -3,7 +3,7 @@
     {
       "name": "app",
       "script": "node",
-      "args": " dist/apps/backend/main.js",
+      "args": " main.js",
       "instances": "1",
       "exec_mode": "fork"
     }

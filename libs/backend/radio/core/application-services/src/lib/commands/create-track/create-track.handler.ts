@@ -9,7 +9,7 @@ import {
 import { LoggerService } from '@sdj/backend/shared/infrastructure-logger';
 import { getDuration } from '@sdj/backend/shared/util-mp3';
 import parseIsoDuration from 'parse-iso-duration';
-import * as requestPromise from 'request-promise-native';
+import * as requestPromise from 'request-promise-native'; //ToDo use axios from infrastructure
 import { DownloadTrackCommand } from '../download-track/download-track.command';
 import { CreateTrackCommand } from './create-track.command';
 

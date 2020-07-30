@@ -38,9 +38,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-ormconfig.json
 .history
 .env
-data/
 docker-compose.override.yml
 schema.gql
+tracks/*
+!tracks/10-sec-of-silence.mp3
