@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { NgCoreRadioApplicationServicesModule } from '@sdj/ng/core/radio/application-services';
+import { NgCoreRadioInfrastructureModule } from '@sdj/ng/core/radio/infrastructure';
 import { NgCoreSharedInfrastructureApolloModule } from '@sdj/ng/core/shared/infrastructure-apollo';
 import { SpeechServiceAdapter } from '@sdj/ng/core/shared/infrastructure-speech';
-import { WebSocketClientAdapter } from '@sdj/ng/core/shared/infrastructure-web-socket';
-import { SpeechService, WebSocketClient } from '@sdj/ng/core/shared/port';
+import { NgCoreSharedInfrastructureWebSocketModule } from '@sdj/ng/core/shared/infrastructure-web-socket';
+import { SpeechService } from '@sdj/ng/core/shared/port';
 
 @NgModule({
   imports: [
+    NgCoreRadioInfrastructureModule,
     NgCoreRadioApplicationServicesModule,
-    NgCoreSharedInfrastructureApolloModule
+    NgCoreSharedInfrastructureApolloModule,
+    NgCoreSharedInfrastructureWebSocketModule
   ],
-  providers: [
-    { provide: SpeechService, useClass: SpeechServiceAdapter },
-    { provide: WebSocketClient, useExisting: WebSocketClientAdapter }
-  ]
+  providers: [{ provide: SpeechService, useClass: SpeechServiceAdapter }]
 })
 export class NgCoreRadioShellModule {}

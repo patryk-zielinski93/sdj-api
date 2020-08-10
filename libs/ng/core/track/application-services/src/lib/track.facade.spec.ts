@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { createSpyObj } from 'jest-createspyobj';
 
 import { TrackFacade } from './track.facade';
@@ -11,6 +12,7 @@ describe('TrackFacade', () => {
     TestBed.configureTestingModule({
       providers: [
         TrackFacade,
+        provideMockStore(),
         { provide: TrackRepository, useValue: createSpyObj(TrackRepository) }
       ]
     });

@@ -7,9 +7,7 @@ import { AnonymousSubject } from 'rxjs/internal-compatibility';
 import * as socketIo from 'socket.io-client';
 import Socket = SocketIOClient.Socket;
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class WebSocketClientAdapter extends WebSocketClient {
   private readonly socket: Socket;
 

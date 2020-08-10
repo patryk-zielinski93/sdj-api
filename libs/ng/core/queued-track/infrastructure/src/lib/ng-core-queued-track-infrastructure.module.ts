@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { QueuedTrackRepository } from '@sdj/ng/core/queued-track/application-services';
+import { QueuedTrackRepositoryAdapter } from './repositories/queued-track-repository.adapter';
 
 @NgModule({
-  imports: [CommonModule]
+  providers: [
+    { provide: QueuedTrackRepository, useClass: QueuedTrackRepositoryAdapter }
+  ]
 })
 export class NgCoreQueuedTrackInfrastructureModule {}

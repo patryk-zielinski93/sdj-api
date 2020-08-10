@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { QueuedTrackFacade } from './queued-track.facade';
 
-@NgModule({})
+@NgModule({ providers: [QueuedTrackFacade] })
 export class NgCoreQueuedTrackApplicationServicesModule {}

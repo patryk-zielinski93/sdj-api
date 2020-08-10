@@ -23,7 +23,7 @@ describe('Track Selectors', () => {
     test('mostPlayedTracksLoading() returns the boolean', () => {
       const results = trackQuery.mostPlayedTracksLoading(storeState);
 
-      expect(results).toMatchObject(false);
+      expect(results).toBe(false);
     });
   });
 });

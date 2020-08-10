@@ -3,7 +3,10 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ChannelApiFacade } from '@sdj/ng/core/channel/api';
-import { ExternalRadioFacade } from '@sdj/ng/core/radio/application-services';
+import {
+  ExternalRadioFacade,
+  RadioDataService
+} from '@sdj/ng/core/radio/application-services';
 import { environment } from '@sdj/ng/core/shared/domain';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { createSpyObj } from 'jest-createspyobj';
@@ -27,6 +30,10 @@ describe('TrackFacade', () => {
     TestBed.configureTestingModule({
       providers: [
         GetAudioSourceHandler,
+        {
+          provide: RadioDataService,
+          useValue: { getPlayDj: jest.fn(), getPlayRadio: jest.fn() }
+        },
         { provide: WebSocketClient, useValue: createSpyObj(WebSocketClient) },
         { provide: ChannelApiFacade, useValue: createSpyObj(ChannelApiFacade) },
         {

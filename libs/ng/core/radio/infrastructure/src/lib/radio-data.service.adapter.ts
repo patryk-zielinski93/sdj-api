@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { WebSocketClientAdapter } from '@sdj/ng/core/shared/infrastructure-web-socket';
+import { RadioDataService } from '@sdj/ng/core/radio/application-services';
+import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class RadioDataService {
-  constructor(private ws: WebSocketClientAdapter) {}
+@Injectable()
+export class RadioDataServiceAdapter implements RadioDataService {
+  constructor(private ws: WebSocketClient) {}
 
   getPlayDj(): Observable<void> {
     return this.ws.observe(WebSocketEvents.playDj);

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { QueuedTrack } from '@sdj/ng/core/queued-track/domain';
-import { QueuedTrackRepository } from '@sdj/ng/core/queued-track/infrastructure';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { QueuedTrackRepository } from './ports/queued-track.repository';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class QueuedTrackFacade {
   queuedTracks$ = new BehaviorSubject<QueuedTrack[]>([]);
   currentTrack$ = this.queuedTracks$.pipe(

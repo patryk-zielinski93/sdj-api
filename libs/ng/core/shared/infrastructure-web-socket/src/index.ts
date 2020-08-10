@@ -1,1 +1,1 @@
-export * from './lib/web-socket-client-adapter';
+export * from './lib/ng-core-shared-infrastructure-web-socket.module';

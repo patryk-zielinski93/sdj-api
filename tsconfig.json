@@ -78,9 +78,6 @@
       ],
       "@sdj/ng/core/shared/kernel": ["libs/ng/core/shared/kernel/src/index.ts"],
       "@sdj/backend/shared/kernel": ["libs/backend/shared/kernel/src/index.ts"],
-      "@sdj/ng/core/radio/domain-services": [
-        "libs/ng/core/radio/domain-services/src/index.ts"
-      ],
       "@sdj/ng/core/radio/infrastructure": [
         "libs/ng/core/radio/infrastructure/src/index.ts"
       ],

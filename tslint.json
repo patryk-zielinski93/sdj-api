@@ -174,6 +174,7 @@
               "type:application-services",
               "type:domain",
               "type:domain-services",
+              "type:infrastructure",
               "type:port",
               "type:shell",
               "type:util"

@@ -3,9 +3,10 @@ import { QueuedTrack } from '@sdj/ng/core/queued-track/domain';
 import { WebSocketClient } from '@sdj/ng/core/shared/port';
 import { WebSocketEvents } from '@sdj/shared/domain';
 import { defer, Observable } from 'rxjs';
+import { QueuedTrackRepository } from '@sdj/ng/core/queued-track/application-services';
 
-@Injectable({ providedIn: 'root' })
-export class QueuedTrackRepository {
+@Injectable()
+export class QueuedTrackRepositoryAdapter implements QueuedTrackRepository {
   constructor(private ws: WebSocketClient) {}
 
   getQueuedTracks(channelId: string): Observable<QueuedTrack[]> {

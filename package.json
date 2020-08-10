@@ -61,7 +61,7 @@
     "@nestjs/platform-socket.io": "^6.11.8",
     "@nestjs/typeorm": "^6.3.3",
     "@nestjs/websockets": "^6.11.8",
-    "@ngneat/until-destroy": "^7.1.5",
+    "@ngneat/until-destroy": "^8.0.1",
     "@ngrx/effects": "^8.6.0",
     "@ngrx/entity": "^8.6.0",
     "@ngrx/router-store": "^8.6.0",

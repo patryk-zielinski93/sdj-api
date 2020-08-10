@@ -6,18 +6,18 @@ import {
   NgCoreSharedInfrastructureSlackModule,
   SlackServiceAdapter
 } from '@sdj/ng/core/shared/infrastructure-slack';
-import { WebSocketClientAdapter } from '@sdj/ng/core/shared/infrastructure-web-socket';
 import { SlackService, WebSocketClient } from '@sdj/ng/core/shared/port';
+import { NgCoreSharedInfrastructureWebSocketModule } from '@sdj/ng/core/shared/infrastructure-web-socket';
 
 @NgModule({
   imports: [
     NgCoreChannelApplicationServicesModule,
-    NgCoreSharedInfrastructureSlackModule
+    NgCoreSharedInfrastructureSlackModule,
+    NgCoreSharedInfrastructureWebSocketModule
   ],
   providers: [
     { provide: ChannelRepository, useClass: ChannelRepositoryAdapter },
-    { provide: SlackService, useExisting: SlackServiceAdapter },
-    { provide: WebSocketClient, useExisting: WebSocketClientAdapter }
+    { provide: SlackService, useExisting: SlackServiceAdapter }
   ]
 })
 export class NgCoreChannelShellModule {}

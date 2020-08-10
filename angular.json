@@ -1042,35 +1042,6 @@
         }
       }
     },
-    "ng-core-radio-domain-services": {
-      "root": "libs/ng/core/radio/domain-services",
-      "sourceRoot": "libs/ng/core/radio/domain-services/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/ng/core/radio/domain-services/tsconfig.lib.json",
-              "libs/ng/core/radio/domain-services/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/ng/core/radio/domain-services/**"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/ng/core/radio/domain-services/jest.config.js",
-            "tsConfig": "libs/ng/core/radio/domain-services/tsconfig.spec.json",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "ng-core-radio-infrastructure": {
       "projectType": "library",
       "root": "libs/ng/core/radio/infrastructure",

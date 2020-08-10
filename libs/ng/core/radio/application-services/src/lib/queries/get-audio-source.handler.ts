@@ -8,10 +8,10 @@ import { merge, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { RadioPartialState } from '../+state/radio.reducer';
 import { radioQuery } from '../+state/radio.selectors';
-import { RadioDataService } from '@sdj/ng/core/radio/infrastructure';
 import { AudioSourceChangedEvent } from '../events/audio-source-changed.event';
 import { ExternalRadioFacade } from '../external-radio.facade';
 import { GetAudioSourceQuery } from './get-audio-source.query';
+import { RadioDataService } from '../ports/radio-data-service.port';
 
 @Injectable({ providedIn: 'root' })
 export class GetAudioSourceHandler {

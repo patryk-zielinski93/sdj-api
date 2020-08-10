@@ -1,1 +1,1 @@
-export * from './lib/radio-data.service';
+export * from './lib/ng-core-radio-infrastructure.module';

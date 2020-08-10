@@ -99,9 +99,6 @@
     "backend-shared-kernel": {
       "tags": ["platform:backend", "scope:shared", "type:kernel"]
     },
-    "ng-core-radio-domain-services": {
-      "tags": ["platform:ng", "scope:radio", "type:domain-services"]
-    },
     "ng-core-radio-infrastructure": {
       "tags": ["platform:ng", "scope:radio", "type:infrastructure"]
     },

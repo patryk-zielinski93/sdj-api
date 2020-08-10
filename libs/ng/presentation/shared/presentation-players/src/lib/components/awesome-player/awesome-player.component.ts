@@ -8,7 +8,9 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
+// tslint:disable-next-line:nx-enforce-module-boundaries ToDo remove after scopes refactor
 import { QueuedTrack } from '@sdj/ng/core/queued-track/domain';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { ExternalRadio } from '@sdj/ng/core/radio/domain';
 import { of } from 'rxjs';
 import { delay, distinctUntilChanged, switchMap } from 'rxjs/operators';
