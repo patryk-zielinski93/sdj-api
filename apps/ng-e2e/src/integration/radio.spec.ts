@@ -39,6 +39,7 @@ describe('Radio', () => {
   describe('Queue', () => {
     it('should display current track', () => {
       cy.wait(2000);
+      cy.emmitInWs(WebSocketEvents.roomIsRunning);
       cy.emmitInWs(WebSocketEvents.queuedTrackList, [
         { track: { title: 'Song 1' }, addedBy: { name: 'Maciej Sikorski' } }
       ]);
@@ -70,6 +71,7 @@ describe('Radio', () => {
 
     it('should handle changes on queue', () => {
       cy.wait(2000);
+      cy.emmitInWs(WebSocketEvents.roomIsRunning);
       cy.emmitInWs(WebSocketEvents.queuedTrackList, [
         { track: { title: 'Song 1' }, addedBy: { name: 'Maciej Sikorski' } }
       ]);

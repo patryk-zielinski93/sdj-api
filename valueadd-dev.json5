@@ -98,7 +98,8 @@
       [
         'sdj',
         'backend',
-        'ng'
+        'ng',
+        'ng-radio'
       ]
     ]
   },

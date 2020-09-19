@@ -1,5 +1,5 @@
 import { Scene } from './scene';
-import { Tracker } from './tracker';
+import { Circle } from './circle';
 
 interface Tick {
   x1: number;
@@ -8,7 +8,7 @@ interface Tick {
   y2: number;
 }
 
-export class Framer {
+export class Ticks {
   private static readonly DefaultCountTicks = 360;
 
   canvas: HTMLCanvasElement;
@@ -19,12 +19,11 @@ export class Framer {
 
   countTicks: number;
   frequencyData: Uint8Array | Array<any> = [];
-  tickSize: number = 10;
-  PI: number = 360;
-  index: number = 0;
-  loadingAngle: number = 0;
+  tickSize = 10;
+  PI = 360;
+  index = 0;
 
-  tracker: Tracker;
+  circle: Circle;
 
   init(scene: Scene): void {
     this.canvas = document.querySelector('canvas');
@@ -35,12 +34,11 @@ export class Framer {
 
   configure(): void {
     this.maxTickSize = this.tickSize * 9 * this.scene.scaleCoef;
-    this.countTicks = Framer.DefaultCountTicks * this.scene.scaleCoef;
+    this.countTicks = Ticks.DefaultCountTicks * this.scene.scaleCoef;
   }
 
   draw(): void {
     this.drawTicks();
-    this.drawEdging();
   }
 
   drawTicks(): void {
@@ -73,40 +71,8 @@ export class Framer {
     this.context.stroke();
   }
 
-  setLoadingPercent(percent: number): void {
-    this.loadingAngle = percent * 2 * Math.PI;
-  }
-
-  drawEdging(): void {
-    this.context.save();
-    this.context.beginPath();
-    this.context.strokeStyle = 'rgba(254, 67, 101, 0.5)';
-    this.context.lineWidth = 1;
-
-    const offset = this.tracker.lineWidth / 2;
-    this.context.moveTo(
-      this.scene.padding +
-        2 * this.scene.radius -
-        this.tracker.innerDelta -
-        offset,
-      this.scene.padding + this.scene.radius
-    );
-    this.context.arc(
-      this.scene.cx,
-      this.scene.cy,
-      this.scene.radius - this.tracker.innerDelta - offset,
-      0,
-      this.loadingAngle,
-      false
-    );
-
-    this.context.stroke();
-    this.context.restore();
-  }
-
   getTicks(count: number, size: number, animationParams: number[]): Tick[] {
     const ticks = this.getTickPoints(count),
-      // lesser = 160 + (1 - ((this.scene.minSize - 300) / 440)) * 38,
       lesser = 160,
       result: Tick[] = [],
       allScales = [];

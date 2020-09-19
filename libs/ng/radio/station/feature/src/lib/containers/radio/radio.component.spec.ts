@@ -8,13 +8,17 @@ import {
   RadioFacade
 } from '@sdj/ng/radio/core/application-services';
 import { ChannelFacade } from '@sdj/ng/radio/core/domain';
+import {
+  AwesomePlayerSecondTitlePipe,
+  AwesomePlayerTitlePipe,
+  RadioActionMenuComponent
+} from '@sdj/ng/radio/station/presentation';
 import { WebSocketClient } from '@sdj/ng/shared/core/application-services';
-import { RadioActionMenuComponent } from '@sdj/ng/radio/station/presentation';
 import { AwesomePlayerComponent } from '@sdj/ng/shared/presentation-players';
 import { LoaderComponent } from '@sdj/ng/shared/presentation-sdj-loader';
 import { createSpyObj } from 'jest-createspyobj';
 import { hot } from 'jest-marbles';
-import { MockComponents } from 'ng-mocks';
+import { MockComponents, MockPipes } from 'ng-mocks';
 import { RadioComponent } from './radio.component';
 import Mocked = jest.Mocked;
 
@@ -31,7 +35,8 @@ describe('RadioComponent', () => {
           AwesomePlayerComponent,
           LoaderComponent,
           RadioActionMenuComponent
-        )
+        ),
+        MockPipes(AwesomePlayerSecondTitlePipe, AwesomePlayerTitlePipe)
       ],
       providers: [
         { provide: ChannelFacade, useValue: createSpyObj(ChannelFacade) },

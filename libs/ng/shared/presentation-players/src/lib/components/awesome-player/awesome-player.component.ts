@@ -1,21 +1,22 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   OnDestroy,
-  OnInit
+  OnInit,
+  Output
 } from '@angular/core';
-import { ExternalRadio, QueuedTrack } from '@sdj/ng/radio/core/domain';
 import { of } from 'rxjs';
 import { delay, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Controls } from './controls';
-import { Framer } from './framer';
+import { Circle } from './circle';
 import { Player } from './player';
 import { Scene } from './scene';
-import { Tracker } from './tracker';
+import { Ticks } from './ticks';
 
 @Component({
   selector: 'sdj-awesome-player',
@@ -28,53 +29,46 @@ import { Tracker } from './tracker';
 })
 export class AwesomePlayerComponent
   implements OnInit, OnDestroy, AfterViewInit {
-  get src(): string {
-    return this._src;
-  }
-
   @Input()
-  set externalRadio(value: ExternalRadio | null) {
-    if (this.player) {
-      this.player.radio = value;
-    }
-  }
+  title?: string;
+  @Input()
+  secondTitle: string;
 
   @Input()
   set src(value: string) {
-    this._src = value;
-    if (this.player) {
-      this.player.src = value;
+    if (!value) {
+      this.onPause();
+    } else {
+      this._src = value.toString();
+      if (this.player) {
+        this.player.src = this._src;
+      }
     }
   }
 
-  get track(): QueuedTrack {
-    return this._track;
-  }
-
-  @Input()
-  set track(value: QueuedTrack) {
-    this._track = value;
-    if (this.player) {
-      this.player.track = this.track;
-    }
-  }
+  @Output()
+  noAudioSource = new EventEmitter<void>();
 
   elementSize: number;
+  isMuted = false;
   isPlayerLoading$ = of(false);
+  isPlaying = false;
 
   public player: Player;
-  private framer: Framer;
-  private scene: Scene;
+  private framer: Ticks;
 
+  private scene: Scene;
   private _src: string;
-  private _track: QueuedTrack;
 
   @HostListener('window:resize')
   onResize(): void {
     this.setElementSize();
   }
 
-  constructor(private elementRef: ElementRef<HTMLElement>) {}
+  constructor(
+    private cdR: ChangeDetectorRef,
+    private elementRef: ElementRef<HTMLElement>
+  ) {}
 
   ngOnDestroy(): void {
     this.player.destroy();
@@ -85,27 +79,17 @@ export class AwesomePlayerComponent
     this.setElementSize();
   }
 
-  ngAfterViewInit(): void {
-    this.framer = new Framer();
-    const tracker = new Tracker();
-    this.framer.tracker = tracker;
-    const controls = new Controls();
+  async ngAfterViewInit(): Promise<void> {
+    this.framer = new Ticks();
+    const circle = new Circle();
+    this.framer.circle = circle;
 
-    this.scene = new Scene(this.framer, tracker, controls);
+    this.scene = new Scene(this.framer, circle);
     this.setElementSize();
     this.player = new Player(this.scene, this.framer);
-    if (this.track) {
-      this.player.track = this.track;
-    }
-
-    controls.player = this.player;
-    controls.scene = this.scene;
-    controls.tracker = tracker;
-
-    tracker.player = this.player;
 
     this.player.init();
-    this.player.src = this.src;
+    this.player.src = this._src;
     this.isPlayerLoading$ = this.player.isLoadingChange$.pipe(
       distinctUntilChanged(),
       switchMap(value => of(value).pipe(delay(500)))
@@ -113,13 +97,38 @@ export class AwesomePlayerComponent
   }
 
   setElementSize(): void {
-    this.elementSize =
-      this.elementRef.nativeElement.offsetHeight <
-      this.elementRef.nativeElement.offsetWidth
-        ? this.elementRef.nativeElement.offsetHeight
-        : this.elementRef.nativeElement.offsetWidth;
+    const sizeBaseNode: HTMLElement = this.elementRef.nativeElement
+      .children[0] as HTMLElement;
+    this.elementSize = Math.min(
+      sizeBaseNode.offsetHeight,
+      sizeBaseNode.offsetWidth,
+      740
+    );
     if (this.scene) {
       this.scene.minSize = this.elementSize;
     }
+  }
+
+  onPlay(): void {
+    if (this._src) {
+      this.isPlaying = true;
+      this.player.play();
+    } else {
+      this.noAudioSource.emit();
+    }
+  }
+
+  onPause(): void {
+    this.player?.pause();
+    this.isPlaying = false;
+  }
+
+  toggleSound(): void {
+    if (this.isMuted) {
+      this.player.unmute();
+    } else {
+      this.player.mute();
+    }
+    this.isMuted = !this.isMuted;
   }
 }

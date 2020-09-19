@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ChannelFacade } from '@sdj/ng/radio/core/domain';
+import { Channel, ChannelFacade, SourceType } from '@sdj/ng/radio/core/domain';
 import { WebSocketClient } from '@sdj/ng/shared/core/application-services';
 import { environment } from '@sdj/ng/shared/core/domain';
 import { createSpyObj } from 'jest-createspyobj';
@@ -10,7 +10,7 @@ import { cold, hot } from 'jest-marbles';
 import { Observable } from 'rxjs';
 import { ExternalRadioFacade } from '../../external-radio.facade';
 import { RadioDataService } from '../../ports/radio-data-service.port';
-import { AudioSourceChangedEvent } from '../events/audio-source-changed.event';
+import { AudioSourceChangedEvent } from '../events/audio-source-changed/audio-source-changed.event';
 import { GetAudioSourceHandler } from './get-audio-source.handler';
 import { GetAudioSourceQuery } from './get-audio-source.query';
 import Mocked = jest.Mocked;
@@ -21,7 +21,7 @@ describe('TrackFacade', () => {
   let channelFacade: Mocked<ChannelFacade>;
   let externalRadioFacade: Mocked<ExternalRadioFacade>;
 
-  const channel = { id: '1234', defaultStreamUrl: 'url' } as any;
+  const channel = { id: '1234', defaultStreamUrl: 'url' } as Partial<Channel>;
   const channelRadioStream = environment.radioStreamUrl + channel.id;
 
   beforeEach(() => {
@@ -63,7 +63,12 @@ describe('TrackFacade', () => {
       const query = new GetAudioSourceQuery();
       actions = hot('-a-|', { a: query });
       expect(handler.handle$).toBeObservable(
-        cold('-a', { a: new AudioSourceChangedEvent(channel.defaultStreamUrl) })
+        cold('-a', {
+          a: new AudioSourceChangedEvent({
+            src: channel.defaultStreamUrl,
+            sourceType: SourceType.ExternalRadio
+          })
+        })
       );
     });
 
@@ -81,8 +86,14 @@ describe('TrackFacade', () => {
       actions = hot('-a-|', { a: query });
       expect(handler.handle$).toBeObservable(
         hot('-ab', {
-          a: new AudioSourceChangedEvent(channel.defaultStreamUrl),
-          b: new AudioSourceChangedEvent(channelRadioStream)
+          a: new AudioSourceChangedEvent({
+            src: channel.defaultStreamUrl,
+            sourceType: SourceType.ExternalRadio
+          }),
+          b: new AudioSourceChangedEvent({
+            src: channelRadioStream,
+            sourceType: SourceType.Station
+          })
         })
       );
     });
@@ -101,8 +112,14 @@ describe('TrackFacade', () => {
       actions = hot('-a-|', { a: query });
       expect(handler.handle$).toBeObservable(
         hot('-abbabab', {
-          a: new AudioSourceChangedEvent(channel.defaultStreamUrl),
-          b: new AudioSourceChangedEvent(channelRadioStream)
+          a: new AudioSourceChangedEvent({
+            src: channel.defaultStreamUrl,
+            sourceType: SourceType.ExternalRadio
+          }),
+          b: new AudioSourceChangedEvent({
+            src: channelRadioStream,
+            sourceType: SourceType.Station
+          })
         })
       );
     });
