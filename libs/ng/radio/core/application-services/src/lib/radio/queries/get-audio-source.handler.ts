@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, select, Store } from '@ngrx/store';
-import {
-  Channel,
-  ChannelFacade,
-  ExternalRadio
-} from '@sdj/ng/radio/core/domain';
+import { Channel, ChannelFacade, ExternalRadio, SourceType } from '@sdj/ng/radio/core/domain';
 import { environment } from '@sdj/ng/shared/core/domain';
 import { merge, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, withLatestFrom } from 'rxjs/operators';
@@ -13,7 +9,8 @@ import { RadioPartialState } from '../+state/radio.reducer';
 import { radioQuery } from '../+state/radio.selectors';
 import { ExternalRadioFacade } from '../../external-radio.facade';
 import { RadioDataService } from '../../ports/radio-data-service.port';
-import { AudioSourceChangedEvent } from '../events/audio-source-changed.event';
+import { AudioSourceChangedEvent } from '../events/audio-source-changed/audio-source-changed.event';
+import { AudioSourceChangedEventPayload } from '../events/audio-source-changed/audio-source-changed.event-payload';
 import { GetAudioSourceQuery } from './get-audio-source.query';
 
 @Injectable({ providedIn: 'root' })
@@ -68,14 +65,13 @@ export class GetAudioSourceHandler {
           merge(
             of(environment.radioStreamUrl + selectedChannelId),
             this.playDj$.pipe(
-              map(() => environment.radioStreamUrl + selectedChannelId)
+              map(() => ({ src: environment.radioStreamUrl + selectedChannelId, sourceType: SourceType.Station }))
             ),
             this.playRadio$.pipe(
-              map(() =>
-                GetAudioSourceHandler.getStreamFromExternalRadioOrChannel(
+              map(() => ({ src:                 GetAudioSourceHandler.getStreamFromExternalRadioOrChannel(
                   channel,
                   externalRadio
-                )
+                ), sourceType: SourceType.ExternalRadio})
               )
             )
           )
@@ -83,8 +79,8 @@ export class GetAudioSourceHandler {
       )
     ).pipe(
       map(
-        streamUrl =>
-          new AudioSourceChangedEvent(streamUrl || environment.externalStream)
+        (data?: AudioSourceChangedEventPayload) =>
+          new AudioSourceChangedEvent({src: data?.src || environment.externalStream, sourceType: data?.sourceType || SourceType.ExternalRadio})
       )
     );
   }

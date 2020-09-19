@@ -21,10 +21,15 @@
   </li>
 </ul>
 <sdj-awesome-player
+  *ngIf="{
+    sourceType: sourceType$ | async,
+    currentTrack: currentTrack$ | async,
+    selectedExternalRadio: selectedExternalRadio$ | async
+  } as state"
   #playerComponent
-  [externalRadio]="selectedExternalRadio$ | async"
+  [title]="state.sourceType | awesomePlayerTitle: state.currentTrack:state.selectedExternalRadio"
+  [secondTitle]="state.sourceType | awesomePlayerSecondTitle: state.currentTrack:state.selectedExternalRadio"
   [src]="audioSrc$ | async"
-  [track]="currentTrack$ | async"
 >
 </sdj-awesome-player>
 <div class="queued-tracks-list"></div>

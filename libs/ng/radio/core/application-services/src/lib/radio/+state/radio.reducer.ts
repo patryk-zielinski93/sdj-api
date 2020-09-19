@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
+import { SourceType } from '@sdj/ng/radio/core/domain';
 import { JoinCommand } from '../commands/join/join.command';
-import { AudioSourceChangedEvent } from '../events/audio-source-changed.event';
+import { AudioSourceChangedEvent } from '../events/audio-source-changed/audio-source-changed.event';
 import { RoomIsRunningEvent } from '../events/room-is-running.event';
 
 export const RADIO_FEATURE_KEY = 'radio';
@@ -8,6 +9,7 @@ export const RADIO_FEATURE_KEY = 'radio';
 export interface RadioState {
   roomIsRunning: boolean;
   audioSource: string | null;
+  sourceType: SourceType | null
 }
 
 export interface RadioPartialState {
@@ -16,7 +18,8 @@ export interface RadioPartialState {
 
 export const initialState: RadioState = {
   roomIsRunning: false,
-  audioSource: null
+  audioSource: null,
+  sourceType: null
 };
 
 export function reducer(
@@ -27,7 +30,8 @@ export function reducer(
     case AudioSourceChangedEvent.type:
       state = {
         ...state,
-        audioSource: (<AudioSourceChangedEvent>action).source
+        audioSource: (<AudioSourceChangedEvent>action).payload.src,
+        sourceType: (<AudioSourceChangedEvent>action).payload.sourceType
       };
       break;
     case JoinCommand.type:

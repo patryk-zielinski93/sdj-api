@@ -10,7 +10,7 @@ import { cold, hot } from 'jest-marbles';
 import { Observable } from 'rxjs';
 import { ExternalRadioFacade } from '../../external-radio.facade';
 import { RadioDataService } from '../../ports/radio-data-service.port';
-import { AudioSourceChangedEvent } from '../events/audio-source-changed.event';
+import { AudioSourceChangedEvent } from '../events/audio-source-changed/audio-source-changed.event';
 import { GetAudioSourceHandler } from './get-audio-source.handler';
 import { GetAudioSourceQuery } from './get-audio-source.query';
 import Mocked = jest.Mocked;

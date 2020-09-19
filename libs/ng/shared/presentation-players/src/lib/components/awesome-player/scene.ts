@@ -1,6 +1,5 @@
-import { Controls } from './controls';
-import { Framer } from './framer';
-import { Tracker } from './tracker';
+import { Ticks } from './ticks';
+import { Circle } from './circle';
 
 export class Scene {
   context: CanvasRenderingContext2D;
@@ -11,26 +10,20 @@ export class Scene {
   canvas: HTMLCanvasElement;
 
   padding: number;
-  minSize: number = 740;
-  optimiseHeight: number = 982;
-  _inProcess: boolean = false;
+  minSize = 740;
+  optimiseHeight = 982;
+  private inProcess = false;
   private width: number;
   private height: number;
-  coord: ClientRect | DOMRect;
 
-  constructor(
-    private framer: Framer,
-    private tracker: Tracker,
-    private controls: Controls
-  ) {}
+  constructor(private ticks: Ticks, private circle: Circle) {}
 
   init(): void {
     this.canvasConfigure();
     this.initHandlers();
 
-    this.framer.init(this);
-    this.tracker.init(this);
-    this.controls.init(this);
+    this.ticks.init(this);
+    this.circle.init(this);
 
     this.startRender();
   }
@@ -56,13 +49,12 @@ export class Scene {
     this.radius = (size - this.padding * 2) / 2;
     this.cx = this.radius + this.padding;
     this.cy = this.radius + this.padding;
-    this.coord = this.canvas.getBoundingClientRect();
   }
 
   initHandlers(): void {
     window.onresize = () => {
       this.canvasConfigure();
-      this.framer.configure();
+      this.ticks.configure();
       this.render();
     };
   }
@@ -71,7 +63,7 @@ export class Scene {
     requestAnimationFrame(() => {
       this.clear();
       this.draw();
-      if (this._inProcess) {
+      if (this.inProcess) {
         this.render();
       }
     });
@@ -82,21 +74,16 @@ export class Scene {
   }
 
   draw(): void {
-    this.framer.draw();
-    this.tracker.draw();
-    this.controls.draw();
+    this.ticks.draw();
+    this.circle.draw();
   }
 
   startRender(): void {
-    this._inProcess = true;
+    this.inProcess = true;
     this.render();
   }
 
   stopRender(): void {
-    this._inProcess = false;
-  }
-
-  inProcess(): boolean {
-    return this._inProcess;
+    this.inProcess = false;
   }
 }

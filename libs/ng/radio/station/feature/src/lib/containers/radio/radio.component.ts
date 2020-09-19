@@ -11,20 +11,10 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import {
-  ExternalRadioFacade,
-  QueuedTrackFacade,
-  RadioFacade
-} from '@sdj/ng/radio/core/application-services';
-import {
-  Channel,
-  ChannelFacade,
-  ExternalRadio,
-  QueuedTrack,
-  Track
-} from '@sdj/ng/radio/core/domain';
-import { WebSocketClient } from '@sdj/ng/shared/core/application-services';
+import { ExternalRadioFacade, QueuedTrackFacade, RadioFacade } from '@sdj/ng/radio/core/application-services';
+import { Channel, ChannelFacade, ExternalRadio, QueuedTrack, SourceType, Track } from '@sdj/ng/radio/core/domain';
 import { RadioStationsComponent } from '@sdj/ng/radio/station/presentation';
+import { WebSocketClient } from '@sdj/ng/shared/core/application-services';
 import { AwesomePlayerComponent } from '@sdj/ng/shared/presentation-players';
 import { User, WebSocketEvents } from '@sdj/shared/domain';
 import { TrackUtil, UserUtils } from '@sdj/shared/utils';
@@ -51,6 +41,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedExternalRadio$ = this.externalRadioFacade.selectedExternalRadio$;
   getThumbnail: (track: Track) => string = TrackUtil.getTrackThumbnail;
   getUserName: (user: User) => string = UserUtils.getUserName;
+  sourceType$ = this.radioFacade.sourceType$;
   listScrollSubject: Subject<QueuedTrack[]> = new Subject();
   queuedTracks: QueuedTrack[];
   queuedTracks$: Observable<QueuedTrack[]> = of([]);
@@ -58,6 +49,7 @@ export class RadioComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedChannel: Channel;
 
   private selectedChannelUnsubscribe: Subject<void> = new Subject<void>();
+  sourceType: SourceType;
 
   constructor(
     private channelFacade: ChannelFacade,

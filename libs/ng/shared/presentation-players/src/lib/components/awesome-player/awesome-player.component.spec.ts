@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { LoaderComponent } from '@sdj/ng/shared/presentation-sdj-loader';
+import { LoaderComponent } from '@sdj/ng/presentation/shared/presentation-sdj-loader';
 import { MockComponent } from 'ng-mocks';
 
 import { AwesomePlayerComponent } from './awesome-player.component';
@@ -10,7 +10,7 @@ describe('AwesomePlayerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AwesomePlayerComponent, MockComponent(LoaderComponent)]
+      declarations: [AwesomePlayerComponent, MockComponent(LoaderComponent)],
     }).compileComponents();
   }));
 

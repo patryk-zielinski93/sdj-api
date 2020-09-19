@@ -18,6 +18,7 @@ import { GetAudioSourceQuery } from './radio/queries/get-audio-source.query';
 @Injectable()
 export class RadioFacade {
   audioSource$ = this.store.pipe(select(radioQuery.audioSource));
+  sourceType$ = this.store.pipe(select(radioQuery.sourceType))
   speeching$: Observable<boolean> = this.speechService.speeching$;
 
   private pozdro$: Subject<{ message: string }>;
