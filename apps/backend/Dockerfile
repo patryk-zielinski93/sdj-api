@@ -3,7 +3,7 @@ ARG LOCAL_USER_ID
 
 WORKDIR /app
 
-COPY angular.json nx.json package.json package-lock.json tsconfig.json ./
+COPY angular.json nx.json package.json package-lock.json tsconfig.base.json ./
 COPY ./apps/backend ./apps/backend
 COPY ./libs/backend ./libs/backend
 COPY ./libs/shared ./libs/shared

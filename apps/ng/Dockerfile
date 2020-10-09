@@ -1,7 +1,7 @@
 FROM node:lts-jessie as build-stage
 WORKDIR /app
 
-COPY angular.json nx.json package.json package-lock.json tsconfig.json /app/
+COPY angular.json nx.json package.json package-lock.json tsconfig.base.json decorate-angular-cli.js /app/
 COPY ./apps/ng/src/env.sample.js ./apps/ng/src/env.js
 COPY ./apps/ng /app/apps/ng
 COPY ./libs/shared /app/libs/shared
