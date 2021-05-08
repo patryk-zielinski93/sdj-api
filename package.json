@@ -54,7 +54,7 @@
     "request-promise-native": "^1.0.5",
     "rxjs": "^6.2.0",
     "socket.io": "^2.1.1",
-    "typeorm": "^0.2.6",
+    "typeorm": "^0.2.25",
     "youtube-dl": "^1.12.2"
   }
 }
