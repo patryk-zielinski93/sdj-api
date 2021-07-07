@@ -1,0 +1,194 @@
+{
+  "npmScope": "sdj",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*",
+    "tsconfig.base.json": "*"
+  },
+  "projects": {
+    "ng-e2e": {
+      "tags": ["type:e2e"],
+      "implicitDependencies": ["ng"]
+    },
+    "ng": {
+      "tags": ["platform:ng", "type:application"]
+    },
+    "backend": {
+      "tags": ["platform:backend", "type:application"]
+    },
+    "host-api": {
+      "tags": ["scope:host-api", "type:application"]
+    },
+    "backend-shared-domain": {
+      "tags": ["platform:backend", "scope:shared", "type:domain"]
+    },
+    "shared-domain": {
+      "tags": ["platform:any", "scope:shared", "type:domain"]
+    },
+    "shared-utils": {
+      "tags": ["platform:any", "scope:shared", "type:util"]
+    },
+    "backend-radio-core-application-services": {
+      "tags": ["platform:backend", "scope:radio", "type:application-services"]
+    },
+    "backend-radio-core-domain": {
+      "tags": ["platform:backend", "scope:radio", "type:domain"]
+    },
+    "backend-radio-ui-rest": {
+      "tags": ["platform:backend", "scope:radio", "type:ui"]
+    },
+    "backend-radio-ui-web-socket": {
+      "tags": ["platform:backend", "scope:radio", "type:ui"]
+    },
+    "backend-radio-ui-slack": {
+      "tags": ["platform:backend", "scope:radio", "type:ui"]
+    },
+    "backend-radio-infrastructure": {
+      "tags": ["platform:backend", "scope:radio", "type:infrastructure"]
+    },
+    "backend-shared-util-you-tube": {
+      "tags": ["platform:backend", "scope:shared", "type:util"]
+    },
+    "backend-radio-ui-redis": {
+      "tags": ["platform:backend", "scope:radio", "type:ui"]
+    },
+    "backend-shared-infrastructure-logger": {
+      "tags": ["platform:backend", "scope:shared", "type:util"]
+    },
+    "backend-shared-kernel": {
+      "tags": ["platform:backend", "scope:shared", "type:kernel"]
+    },
+    "backend-radio-feature": {
+      "tags": ["platform:backend", "scope:radio", "type:feature"]
+    },
+    "backend-shared-application-services": {
+      "tags": ["platform:backend", "scope:shared", "type:application-services"]
+    },
+    "backend-shared-infrastructure-http-host-service": {
+      "tags": ["platform:backend", "scope:shared", "type:infrastructure"]
+    },
+    "ng-auth-core-application-services": {
+      "tags": ["platform:ng", "scope:auth", "type:application-services"]
+    },
+    "ng-auth-http-infrastructure": {
+      "tags": ["platform:ng", "scope:auth", "type:infrastructure"]
+    },
+    "ng-radio-core-domain": {
+      "tags": ["platform:ng", "scope:shared", "type:domain"]
+    },
+    "ng-radio-core-application-services": {
+      "tags": ["platform:ng", "scope:radio", "type:application-services"]
+    },
+    "ng-radio-infrastructure-channel-http": {
+      "tags": ["platform:ng", "scope:radio", "type:infrastructure"]
+    },
+    "ng-radio-infrastructure-queued-track-web-socket": {
+      "tags": ["platform:ng", "scope:radio", "type:infrastructure"]
+    },
+    "ng-radio-infrastructure-track-apollo": {
+      "tags": ["platform:ng", "scope:radio", "type:infrastructure"]
+    },
+    "ng-radio-infrastructure-radio-ws": {
+      "tags": ["platform:ng", "scope:radio", "type:infrastructure"]
+    },
+    "ng-shared-core-domain": {
+      "tags": ["platform:ng", "scope:shared", "type:domain"]
+    },
+    "ng-shared-kernel": {
+      "tags": ["platform:ng", "scope:shared", "type:kernel"]
+    },
+    "ng-shared-core-application-services": {
+      "tags": ["platform:ng", "scope:shared", "type:application-services"]
+    },
+    "ng-shared-presentation-players": {
+      "tags": ["platform:ng", "scope:shared", "type:presentation"]
+    },
+    "ng-shared-presentation-sdj-loader": {
+      "tags": ["platform:ng", "scope:shared", "type:presentation"]
+    },
+    "ng-radio-top-rated-feature": {
+      "tags": ["platform:ng", "scope:radio-top-rated", "type:feature"]
+    },
+    "ng-radio-station-feature": {
+      "tags": ["platform:ng", "scope:radio-station", "type:feature"]
+    },
+    "ng-radio-station-presentation": {
+      "tags": ["platform:ng", "scope:radio-station", "type:presentation"]
+    },
+    "ng-radio-most-played-feature": {
+      "tags": ["platform:ng", "scope:radio-most-played", "type:feature"]
+    },
+    "ng-main-shell": {
+      "tags": ["platform:ng", "type:feature"]
+    },
+    "ng-shared-infrastructure-slack-api-http": {
+      "tags": ["platform:ng", "scope:shared", "type:infrastructure"]
+    },
+    "ng-shared-infrastructure-speech": {
+      "tags": ["platform:ng", "scope:shared", "type:infrastructure"]
+    },
+    "ng-shared-infrastructure-apollo": {
+      "tags": ["platform:ng", "scope:shared", "type:infrastructure"]
+    },
+    "ng-shared-infrastructure-ws-socket-io": {
+      "tags": ["platform:ng", "scope:shared", "type:infrastructure"]
+    },
+    "backend-e2e": {
+      "tags": ["type:e2e"],
+      "implicitDependencies": ["backend"]
+    },
+    "host-api-e2e": {
+      "tags": ["type:e2e"],
+      "implicitDependencies": ["host-api"]
+    },
+    "backend-radio-infrastructure-youtube-api": {
+      "tags": ["platform:backend", "scope:radio", "type:infrastructure"]
+    },
+    "backend-radio-infrastructure-mp3-gain": {
+      "tags": ["platform:backend", "scope:radio", "type:infrastructure"]
+    },
+    "backend-radio-infrastructure-typeorm": {
+      "tags": ["platform:backend", "scope:radio", "type:infrastructure"]
+    },
+    "backend-radio-infrastructure-slack-api": {
+      "tags": ["platform:backend", "scope:radio", "type:infrastructure"]
+    },
+    "backend-auth-core-application-services": {
+      "tags": ["platform:backend", "scope:auth", "type:application-services"]
+    },
+    "backend-auth-ui-rest": {
+      "tags": ["platform:backend", "scope:auth", "type:ui"]
+    },
+    "shared-auth-core-domain": {
+      "tags": ["platform:any", "scope:auth", "type:domain"]
+    },
+    "ng-auth-infrastructure-local-storage": {
+      "tags": ["platform:ng", "scope:auth", "type:infrastructure"]
+    },
+    "ng-auth-shell": {
+      "tags": ["platform:ng", "scope:auth", "type:shell"]
+    },
+    "backend-auth-core-domain": {
+      "tags": ["platform:backend", "scope:auth", "type:domain"]
+    },
+    "backend-auth-api": {
+      "tags": ["name:auth-api", "platform:backend", "scope:auth", "type:domain"]
+    },
+    "ng-radio-infrastructure-track-persistence-ngrx-entity": {
+      "tags": ["platform:ng", "scope:radio", "type:infrastructure"]
+    }
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "affected": {
+    "defaultBase": "master"
+  }
+}

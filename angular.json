@@ -1,0 +1,1810 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "",
+  "projects": {
+    "ng": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/workspace:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/ng",
+      "sourceRoot": "apps/ng/src",
+      "prefix": "sdj",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/ng",
+            "index": "apps/ng/src/index.html",
+            "main": "apps/ng/src/main.ts",
+            "polyfills": "apps/ng/src/polyfills.ts",
+            "tsConfig": "apps/ng/tsconfig.app.json",
+            "assets": [
+              "apps/ng/src/favicon.ico",
+              "apps/ng/src/env.js",
+              "apps/ng/src/assets"
+            ],
+            "styles": [
+              "apps/ng/src/styles.scss",
+              "apps/ng/src/styles-app-loading.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "libs/ng/shared/core/domain/src/lib/environments/environment.ts",
+                  "with": "libs/ng/shared/core/domain/src/lib/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "ng:build",
+            "proxyConfig": "apps/ng/proxy.conf.json",
+            "host": "0.0.0.0",
+            "disableHostCheck": true
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ng:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "ng:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/ng/tsconfig.app.json",
+              "apps/ng/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/ng/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/ng/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ng-e2e": {
+      "root": "apps/ng-e2e",
+      "sourceRoot": "apps/ng-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/ng-e2e/cypress.json",
+            "tsConfig": "apps/ng-e2e/tsconfig.e2e.json",
+            "devServerTarget": "ng:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ng:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/ng-e2e/tsconfig.e2e.json",
+            "exclude": ["**/node_modules/**", "!apps/ng-e2e/**/*"]
+          }
+        }
+      }
+    },
+    "backend": {
+      "root": "apps/backend",
+      "sourceRoot": "apps/backend/src",
+      "projectType": "application",
+      "prefix": "backend",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/backend",
+            "main": "apps/backend/src/main.ts",
+            "tsConfig": "apps/backend/tsconfig.app.json",
+            "assets": ["apps/backend/src/assets"],
+            "buildLibsFromSource": true
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/backend/src/environments/environment.ts",
+                  "with": "apps/backend/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "./builders:pm2",
+          "options": {
+            "buildTarget": "backend:build",
+            "logMethod": "monit"
+          }
+        },
+        "serve-dev": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "backend:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/backend/tsconfig.app.json",
+              "apps/backend/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/backend/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/backend/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "host-api": {
+      "root": "apps/host-api",
+      "sourceRoot": "apps/host-api/src",
+      "projectType": "application",
+      "prefix": "host-api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/host-api",
+            "main": "apps/host-api/src/main.ts",
+            "tsConfig": "apps/host-api/tsconfig.app.json",
+            "assets": ["apps/host-api/src/assets"],
+            "buildLibsFromSource": true
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/host-api/src/environments/environment.ts",
+                  "with": "apps/host-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "host-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/host-api/tsconfig.app.json",
+              "apps/host-api/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/host-api/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/host-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-domain": {
+      "root": "libs/shared/domain",
+      "sourceRoot": "libs/shared/domain/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/domain/tsconfig.lib.json",
+              "libs/shared/domain/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/domain/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-shared-domain": {
+      "root": "libs/backend/shared/domain",
+      "sourceRoot": "libs/backend/shared/domain/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/shared/domain/tsconfig.lib.json",
+              "libs/backend/shared/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/shared/domain/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/shared/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-utils": {
+      "root": "libs/shared/utils",
+      "sourceRoot": "libs/shared/utils/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/utils/tsconfig.lib.json",
+              "libs/shared/utils/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/utils/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-radio-core-application-services": {
+      "projectType": "library",
+      "root": "libs/backend/radio/core/application-services",
+      "sourceRoot": "libs/backend/radio/core/application-services/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/core/application-services/tsconfig.lib.json",
+              "libs/backend/radio/core/application-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/core/application-services/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/core/application-services/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {}
+    },
+    "backend-radio-core-domain": {
+      "projectType": "library",
+      "root": "libs/backend/radio/core/domain",
+      "sourceRoot": "libs/backend/radio/core/domain/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/core/domain/tsconfig.lib.json",
+              "libs/backend/radio/core/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/core/domain/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/core/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "backend-radio-ui-rest": {
+      "projectType": "library",
+      "root": "libs/backend/radio/ui-rest",
+      "sourceRoot": "libs/backend/radio/ui-rest/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/ui-rest/tsconfig.lib.json",
+              "libs/backend/radio/ui-rest/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/ui-rest/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/ui-rest/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "backend-radio-ui-web-socket": {
+      "projectType": "library",
+      "root": "libs/backend/radio/ui-web-socket",
+      "sourceRoot": "libs/backend/radio/ui-web-socket/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/ui-web-socket/tsconfig.lib.json",
+              "libs/backend/radio/ui-web-socket/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/ui-web-socket/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/ui-web-socket/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "backend-radio-ui-slack": {
+      "projectType": "library",
+      "root": "libs/backend/radio/ui-slack",
+      "sourceRoot": "libs/backend/radio/ui-slack/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/ui-slack/tsconfig.lib.json",
+              "libs/backend/radio/ui-slack/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/ui-slack/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/ui-slack/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "backend-radio-infrastructure": {
+      "root": "libs/backend/radio/infrastructure",
+      "sourceRoot": "libs/backend/radio/infrastructure/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/infrastructure/tsconfig.lib.json",
+              "libs/backend/radio/infrastructure/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/infrastructure/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/infrastructure/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-shared-util-you-tube": {
+      "root": "libs/backend/shared/util-you-tube",
+      "sourceRoot": "libs/backend/shared/util-you-tube/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/shared/util-you-tube/tsconfig.lib.json",
+              "libs/backend/shared/util-you-tube/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/shared/util-you-tube/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/shared/util-you-tube/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-radio-ui-redis": {
+      "projectType": "library",
+      "root": "libs/backend/radio/ui-redis",
+      "sourceRoot": "libs/backend/radio/ui-redis/src",
+      "prefix": "Ices",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/ui-redis/tsconfig.lib.json",
+              "libs/backend/radio/ui-redis/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/ui-redis/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/ui-redis/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {}
+    },
+    "backend-shared-infrastructure-logger": {
+      "root": "libs/backend/shared/infrastructure-logger",
+      "sourceRoot": "libs/backend/shared/infrastructure-logger/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/shared/infrastructure-logger/tsconfig.lib.json",
+              "libs/backend/shared/infrastructure-logger/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/shared/infrastructure-logger/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/shared/infrastructure-logger/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-shared-kernel": {
+      "root": "libs/backend/shared/kernel",
+      "sourceRoot": "libs/backend/shared/kernel/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/shared/kernel/tsconfig.lib.json",
+              "libs/backend/shared/kernel/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/shared/kernel/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/shared/kernel/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-radio-feature": {
+      "root": "libs/backend/radio/feature",
+      "sourceRoot": "libs/backend/radio/feature/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/feature/tsconfig.lib.json",
+              "libs/backend/radio/feature/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/feature/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-shared-application-services": {
+      "root": "libs/backend/shared/application-services",
+      "sourceRoot": "libs/backend/shared/application-services/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/shared/application-services/tsconfig.lib.json",
+              "libs/backend/shared/application-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/shared/application-services/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/shared/application-services/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-shared-infrastructure-http-host-service": {
+      "root": "libs/backend/shared/infrastructure-http-host-service",
+      "sourceRoot": "libs/backend/shared/infrastructure-http-host-service/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/shared/infrastructure-http-host-service/tsconfig.lib.json",
+              "libs/backend/shared/infrastructure-http-host-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/shared/infrastructure-http-host-service/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/shared/infrastructure-http-host-service/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ng-auth-core-application-services": {
+      "projectType": "library",
+      "root": "libs/ng/auth/core/application-services",
+      "sourceRoot": "libs/ng/auth/core/application-services/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/auth/core/application-services/tsconfig.lib.json",
+              "libs/ng/auth/core/application-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/auth/core/application-services/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/auth/core/application-services/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-auth-http-infrastructure": {
+      "projectType": "library",
+      "root": "libs/ng/auth/http-infrastructure",
+      "sourceRoot": "libs/ng/auth/http-infrastructure/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/auth/http-infrastructure/tsconfig.lib.json",
+              "libs/ng/auth/http-infrastructure/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/auth/http-infrastructure/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/auth/http-infrastructure/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-core-domain": {
+      "projectType": "library",
+      "root": "libs/ng/radio/core/domain",
+      "sourceRoot": "libs/ng/radio/core/domain/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/core/domain/tsconfig.lib.json",
+              "libs/ng/radio/core/domain/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/radio/core/domain/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/core/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-core-application-services": {
+      "projectType": "library",
+      "root": "libs/ng/radio/core/application-services",
+      "sourceRoot": "libs/ng/radio/core/application-services/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/core/application-services/tsconfig.lib.json",
+              "libs/ng/radio/core/application-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/core/application-services/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/core/application-services/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-infrastructure-channel-http": {
+      "projectType": "library",
+      "root": "libs/ng/radio/infrastructure-channel-http",
+      "sourceRoot": "libs/ng/radio/infrastructure-channel-http/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/infrastructure-channel-http/tsconfig.lib.json",
+              "libs/ng/radio/infrastructure-channel-http/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/infrastructure-channel-http/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/infrastructure-channel-http/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-infrastructure-queued-track-web-socket": {
+      "projectType": "library",
+      "root": "libs/ng/radio/infrastructure-queued-track-web-socket",
+      "sourceRoot": "libs/ng/radio/infrastructure-queued-track-web-socket/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/infrastructure-queued-track-web-socket/tsconfig.lib.json",
+              "libs/ng/radio/infrastructure-queued-track-web-socket/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/infrastructure-queued-track-web-socket/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/infrastructure-queued-track-web-socket/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-infrastructure-track-apollo": {
+      "projectType": "library",
+      "root": "libs/ng/radio/infrastructure-track-apollo",
+      "sourceRoot": "libs/ng/radio/infrastructure-track-apollo/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/infrastructure-track-apollo/tsconfig.lib.json",
+              "libs/ng/radio/infrastructure-track-apollo/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/infrastructure-track-apollo/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/infrastructure-track-apollo/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-infrastructure-radio-ws": {
+      "projectType": "library",
+      "root": "libs/ng/radio/infrastructure-radio-ws",
+      "sourceRoot": "libs/ng/radio/infrastructure-radio-ws/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/infrastructure-radio-ws/tsconfig.lib.json",
+              "libs/ng/radio/infrastructure-radio-ws/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/infrastructure-radio-ws/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/infrastructure-radio-ws/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-core-domain": {
+      "root": "libs/ng/shared/core/domain",
+      "sourceRoot": "libs/ng/shared/core/domain/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/core/domain/tsconfig.lib.json",
+              "libs/ng/shared/core/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/shared/core/domain/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/core/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ng-shared-kernel": {
+      "projectType": "library",
+      "root": "libs/ng/shared/kernel",
+      "sourceRoot": "libs/ng/shared/kernel/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/kernel/tsconfig.lib.json",
+              "libs/ng/shared/kernel/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/shared/kernel/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/kernel/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-core-application-services": {
+      "root": "libs/ng/shared/core/application-services",
+      "sourceRoot": "libs/ng/shared/core/application-services/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/core/application-services/tsconfig.lib.json",
+              "libs/ng/shared/core/application-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/shared/core/application-services/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/core/application-services/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ng-shared-presentation-players": {
+      "projectType": "library",
+      "root": "libs/ng/shared/presentation-players",
+      "sourceRoot": "libs/ng/shared/presentation-players/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/presentation-players/tsconfig.lib.json",
+              "libs/ng/shared/presentation-players/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/shared/presentation-players/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/presentation-players/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-presentation-sdj-loader": {
+      "projectType": "library",
+      "root": "libs/ng/shared/presentation-sdj-loader",
+      "sourceRoot": "libs/ng/shared/presentation-sdj-loader/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/presentation-sdj-loader/tsconfig.lib.json",
+              "libs/ng/shared/presentation-sdj-loader/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/shared/presentation-sdj-loader/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/presentation-sdj-loader/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-top-rated-feature": {
+      "projectType": "library",
+      "root": "libs/ng/radio/top-rated/feature",
+      "sourceRoot": "libs/ng/radio/top-rated/feature/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/top-rated/feature/tsconfig.lib.json",
+              "libs/ng/radio/top-rated/feature/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/top-rated/feature/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/top-rated/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-station-feature": {
+      "projectType": "library",
+      "root": "libs/ng/radio/station/feature",
+      "sourceRoot": "libs/ng/radio/station/feature/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/station/feature/tsconfig.lib.json",
+              "libs/ng/radio/station/feature/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/station/feature/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/station/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-station-presentation": {
+      "projectType": "library",
+      "root": "libs/ng/radio/station/presentation",
+      "sourceRoot": "libs/ng/radio/station/presentation/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/station/presentation/tsconfig.lib.json",
+              "libs/ng/radio/station/presentation/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/station/presentation/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/station/presentation/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-radio-most-played-feature": {
+      "projectType": "library",
+      "root": "libs/ng/radio/most-played/feature",
+      "sourceRoot": "libs/ng/radio/most-played/feature/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/most-played/feature/tsconfig.lib.json",
+              "libs/ng/radio/most-played/feature/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/most-played/feature/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/most-played/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-main-shell": {
+      "projectType": "library",
+      "root": "libs/ng/main/shell",
+      "sourceRoot": "libs/ng/main/shell/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/main/shell/tsconfig.lib.json",
+              "libs/ng/main/shell/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/main/shell/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/main/shell/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-infrastructure-slack-api-http": {
+      "projectType": "library",
+      "root": "libs/ng/shared/infrastructure-slack-api-http",
+      "sourceRoot": "libs/ng/shared/infrastructure-slack-api-http/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/infrastructure-slack-api-http/tsconfig.lib.json",
+              "libs/ng/shared/infrastructure-slack-api-http/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/shared/infrastructure-slack-api-http/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/infrastructure-slack-api-http/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-infrastructure-speech": {
+      "projectType": "library",
+      "root": "libs/ng/shared/infrastructure-speech",
+      "sourceRoot": "libs/ng/shared/infrastructure-speech/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/infrastructure-speech/tsconfig.lib.json",
+              "libs/ng/shared/infrastructure-speech/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/shared/infrastructure-speech/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/infrastructure-speech/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-infrastructure-apollo": {
+      "projectType": "library",
+      "root": "libs/ng/shared/infrastructure-apollo",
+      "sourceRoot": "libs/ng/shared/infrastructure-apollo/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/infrastructure-apollo/tsconfig.lib.json",
+              "libs/ng/shared/infrastructure-apollo/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/shared/infrastructure-apollo/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/infrastructure-apollo/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ng-shared-infrastructure-ws-socket-io": {
+      "projectType": "library",
+      "root": "libs/ng/shared/infrastructure-ws-socket-io",
+      "sourceRoot": "libs/ng/shared/infrastructure-ws-socket-io/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/shared/infrastructure-ws-socket-io/tsconfig.lib.json",
+              "libs/ng/shared/infrastructure-ws-socket-io/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/shared/infrastructure-ws-socket-io/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/shared/infrastructure-ws-socket-io/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "backend-e2e": {
+      "root": "apps/backend-e2e",
+      "sourceRoot": "apps/backend-e2e/src",
+      "projectType": "application",
+      "prefix": "backend-e2e",
+      "schematics": {},
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/backend-e2e/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "host-api-e2e": {
+      "root": "apps/host-api-e2e",
+      "sourceRoot": "apps/host-api-e2e/src",
+      "projectType": "application",
+      "prefix": "host-api-e2e",
+      "schematics": {},
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/host-api-e2e/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-radio-infrastructure-youtube-api": {
+      "root": "libs/backend/radio/infrastructure-youtube-api",
+      "sourceRoot": "libs/backend/radio/infrastructure-youtube-api/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/infrastructure-youtube-api/tsconfig.lib.json",
+              "libs/backend/radio/infrastructure-youtube-api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/infrastructure-youtube-api/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/infrastructure-youtube-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-radio-infrastructure-mp3-gain": {
+      "root": "libs/backend/radio/infrastructure-mp3-gain",
+      "sourceRoot": "libs/backend/radio/infrastructure-mp3-gain/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/infrastructure-mp3-gain/tsconfig.lib.json",
+              "libs/backend/radio/infrastructure-mp3-gain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/infrastructure-mp3-gain/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/infrastructure-mp3-gain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-radio-infrastructure-typeorm": {
+      "root": "libs/backend/radio/infrastructure-typeorm",
+      "sourceRoot": "libs/backend/radio/infrastructure-typeorm/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/infrastructure-typeorm/tsconfig.lib.json",
+              "libs/backend/radio/infrastructure-typeorm/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/infrastructure-typeorm/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/infrastructure-typeorm/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-radio-infrastructure-slack-api": {
+      "root": "libs/backend/radio/infrastructure-slack-api",
+      "sourceRoot": "libs/backend/radio/infrastructure-slack-api/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/radio/infrastructure-slack-api/tsconfig.lib.json",
+              "libs/backend/radio/infrastructure-slack-api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/radio/infrastructure-slack-api/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/radio/infrastructure-slack-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-auth-core-application-services": {
+      "root": "libs/backend/auth/core/application-services",
+      "sourceRoot": "libs/backend/auth/core/application-services/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/auth/core/application-services/tsconfig.lib.json",
+              "libs/backend/auth/core/application-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/auth/core/application-services/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/auth/core/application-services/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-auth-ui-rest": {
+      "root": "libs/backend/auth/ui-rest",
+      "sourceRoot": "libs/backend/auth/ui-rest/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/auth/ui-rest/tsconfig.lib.json",
+              "libs/backend/auth/ui-rest/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/auth/ui-rest/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/auth/ui-rest/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-auth-core-domain": {
+      "root": "libs/shared/auth/core/domain",
+      "sourceRoot": "libs/shared/auth/core/domain/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/auth/core/domain/tsconfig.lib.json",
+              "libs/shared/auth/core/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/auth/core/domain/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/auth/core/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ng-auth-infrastructure-local-storage": {
+      "projectType": "library",
+      "root": "libs/ng/auth/infrastructure-local-storage",
+      "sourceRoot": "libs/ng/auth/infrastructure-local-storage/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/auth/infrastructure-local-storage/tsconfig.lib.json",
+              "libs/ng/auth/infrastructure-local-storage/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/auth/infrastructure-local-storage/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/auth/infrastructure-local-storage/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "ng-auth-shell": {
+      "projectType": "library",
+      "root": "libs/ng/auth/shell",
+      "sourceRoot": "libs/ng/auth/shell/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/auth/shell/tsconfig.lib.json",
+              "libs/ng/auth/shell/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng/auth/shell/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/auth/shell/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "backend-auth-core-domain": {
+      "root": "libs/backend/auth/core/domain",
+      "sourceRoot": "libs/backend/auth/core/domain/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/auth/core/domain/tsconfig.lib.json",
+              "libs/backend/auth/core/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/backend/auth/core/domain/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/auth/core/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "backend-auth-api": {
+      "root": "libs/backend/auth/api",
+      "sourceRoot": "libs/backend/auth/api/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/auth/api/tsconfig.lib.json",
+              "libs/backend/auth/api/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/auth/api/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/auth/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ng-radio-infrastructure-track-persistence-ngrx-entity": {
+      "projectType": "library",
+      "root": "libs/ng/radio/infrastructure-track-persistence-ngrx-entity",
+      "sourceRoot": "libs/ng/radio/infrastructure-track-persistence-ngrx-entity/src",
+      "prefix": "sdj",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng/radio/infrastructure-track-persistence-ngrx-entity/tsconfig.lib.json",
+              "libs/ng/radio/infrastructure-track-persistence-ngrx-entity/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng/radio/infrastructure-track-persistence-ngrx-entity/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng/radio/infrastructure-track-persistence-ngrx-entity/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    }
+  },
+  "cli": {
+    "warnings": {
+      "typescriptMismatch": false,
+      "versionMismatch": false
+    },
+    "defaultCollection": "@nrwl/angular",
+    "analytics": false
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "ng"
+}

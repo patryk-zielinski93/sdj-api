@@ -1,3 +1,6 @@
 {
-  "watch": ["src/**/*.ts"]
+  "watch": ["apps/backend/src", "libs"],
+  "ext": "ts",
+  "ignore": ["apps/backend/src/**/*.spec.ts"],
+  "exec": "ts-node  --project apps/backend/tsconfig.app.json -r tsconfig-paths/register apps/backend/src/main.ts"
 }

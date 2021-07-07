@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "name": "app",
+      "script": "node",
+      "args": " main.js",
+      "instances": "1",
+      "exec_mode": "fork"
+    }
+  ]
+}

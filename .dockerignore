@@ -1,2 +1,3 @@
-node_modules
-containers
+.history
+.vscode
+.idea

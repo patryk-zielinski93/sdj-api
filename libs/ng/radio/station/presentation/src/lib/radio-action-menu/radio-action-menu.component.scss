@@ -1,0 +1,104 @@
+@import 'apps/ng/src/assets/styles/variables';
+
+.action-menu {
+  position: fixed;
+  bottom: 4rem;
+  right: 4rem;
+  > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  mat-icon {
+    color: $white;
+    box-sizing: content-box;
+  }
+  &:hover {
+    .action-menu-items {
+      height: auto;
+      li {
+        transition: transform 0.5s;
+        transition-delay: 0.15s;
+        transform: scale(1);
+      }
+    }
+  }
+}
+
+.action-menu-items {
+  height: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  > li > button {
+    font-size: 40px;
+    color: #fff;
+    display: block;
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
+    margin: 0.4em auto;
+    position: relative;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+    cursor: pointer;
+    mat-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 1em;
+      width: 1em;
+      font-size: 0.4em;
+      padding: 0;
+      line-height: 1;
+    }
+  }
+  li {
+    transform: scale(0);
+  }
+}
+
+.btn-floating--red {
+  &,
+  &.mat-raised-button.mat-accent,
+  &.mat-fab.mat-accent,
+  &.mat-mini-fab.mat-accent {
+    background: #e53935;
+  }
+}
+
+.btn-floating--orange {
+  &,
+  &.mat-raised-button.mat-accent,
+  &.mat-fab.mat-accent,
+  &.mat-mini-fab.mat-accent {
+    background: #ff9800;
+  }
+}
+
+.btn-floating--green {
+  &,
+  &.mat-raised-button.mat-accent,
+  &.mat-fab.mat-accent,
+  &.mat-mini-fab.mat-accent {
+    background: #009688;
+  }
+}
+
+.btn-floating--brown {
+  &,
+  &.mat-raised-button.mat-accent,
+  &.mat-fab.mat-accent,
+  &.mat-mini-fab.mat-accent {
+    background: #795548;
+  }
+}
+
+.btn-floating--blue {
+  &,
+  &.mat-raised-button.mat-accent,
+  &.mat-fab.mat-accent,
+  &.mat-mini-fab.mat-accent {
+    background: #2196f3;
+  }
+}

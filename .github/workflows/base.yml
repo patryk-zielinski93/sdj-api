@@ -1,0 +1,182 @@
+name: SDJ BASE CI
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: use master
+        run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
+      - name: npm install
+        run: npm ci
+      - name: build
+        run: npm run affected:build -- --all
+        env:
+          CI: true
+
+  code-climate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.5.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: npm run coverage
+
+  coveralls:
+    name: Coveralls
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: npm install, make test-coverage
+        run: |
+          npm ci
+          npm run coverage
+
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          parallel-finished: true
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build the stack
+        run: docker-compose -f docker-compose-e2e.yml up -d
+      - name: npm install
+        run: docker exec sdj-e2e-backend bash -c "npm ci"
+      - name: affected:e2e
+        run: docker exec sdj-e2e-backend bash -c "npm run affected:e2e -- --parallel --all"
+    env:
+      DB_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_USERNAME: root
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: use master
+        run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
+      - name: npm install
+        run: npm ci
+      - name: lint
+        run: npm run affected:lint -- --all
+        env:
+          CI: true
+
+  prettier:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: use master
+        run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
+      - name: npm install
+        run: npm ci
+      - name: prettier check
+        run: npm run format:check
+
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: use master
+        run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
+      - name: npm install
+        run: npm ci
+      - name: test
+        run: npm run affected:test -- --all --passWithNoTests
+        env:
+          CI: true
+
+  validate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: use master
+        run: git branch master origin/master #https://github.com/nrwl/nx/issues/1988
+      - name: npm install
+        run: |
+          npm ci
+      - name: validate nx tags
+        run: node ./node_modules/@valueadd/dev validate-nx-tags

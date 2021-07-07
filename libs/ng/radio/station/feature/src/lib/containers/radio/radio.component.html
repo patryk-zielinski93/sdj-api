@@ -1,0 +1,44 @@
+<ul data-test="queued-tracks" class="queued-tracks-list" #toPlay>
+  <li class="queued-tracks-list__last-element queued-tracks-list__track"></li>
+  <li
+    class="queued-tracks-list__track"
+    *ngFor="let queuedTrack of (queuedTracks$ | async).slice().reverse()"
+  >
+    <div class="queued-track" data-test="queued-track">
+      <img
+        class="queued-track__thumbnail"
+        [src]="getThumbnail(queuedTrack.track)"
+      />
+      <div
+        class="queued-track__title"
+        [innerHTML]="queuedTrack.track.title"
+      ></div>
+      <div
+        *ngIf="queuedTrack.addedBy && getUserName(queuedTrack.addedBy)"
+        [innerHTML]="'~' + getUserName(queuedTrack.addedBy)"
+      ></div>
+    </div>
+  </li>
+</ul>
+<sdj-awesome-player
+  *ngIf="{
+    sourceType: sourceType$ | async,
+    currentTrack: currentTrack$ | async,
+    selectedExternalRadio: selectedExternalRadio$ | async
+  } as state"
+  #playerComponent
+  [title]="
+    state.sourceType
+      | awesomePlayerTitle: state.currentTrack:state.selectedExternalRadio
+  "
+  [secondTitle]="
+    state.sourceType
+      | awesomePlayerSecondTitle: state.currentTrack:state.selectedExternalRadio
+  "
+  [src]="audioSrc$ | async"
+>
+</sdj-awesome-player>
+<div class="queued-tracks-list"></div>
+<sdj-radio-action-menu
+  (changeRadioStation)="onChangeRadioStation()"
+></sdj-radio-action-menu>

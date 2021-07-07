@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 import redis
 import time
+import os
 
 # This is just a skeleton, something for you to start with.
 r = None
-silence = '/tracks/10-sec-of-silence.mp3'
-
+channel = os.environ['ROOM_ID']
+pubsub = None
 
 # Function called to initialize your python environment.
 # Should return 1 if ok, and 0 if something went wrong.
 def ices_init():
-    global r, silence
-    r = redis.StrictRedis(host='redis', port=6379, db=0)
-    r.set('next_song', '10-sec-of-silence')
+    global r, pubsub
+    r = redis.StrictRedis(host='redis', port=6379, db=0, decode_responses=True)
+    pubsub = r.pubsub()
     return 1
 
 
@@ -26,13 +27,23 @@ def ices_shutdown():
 # Function called to get the next filename to stream.
 # Should return a string.
 def ices_get_next():
-    global silence
+    global pubsub
     print 'Executing get_next() function...'
-    r.publish('getNext', 'getNext')
-    time.sleep(1)
-    song_id = r.get('next_song')
-    next_song = '/tracks/' + song_id + '.mp3'
-    return next_song if song_id else silence
+    r.publish('getNext', channel)
+    message = None
+
+    pubsub.subscribe(channel)
+    PAUSE = True
+    while PAUSE:
+        message = pubsub.get_message()
+        if message: 
+            if message['data'] and not isinstance(message['data'], (int, long)):
+                song_id = str(message['data'])
+                next_song = '/tracks/' + song_id + '.mp3'
+                PAUSE = False
+        else: 
+            time.sleep(1)
+    return next_song
 
 # This function, if defined, returns the string you'd like used
 # as metadata (ie for title streaming) for the current song. You may

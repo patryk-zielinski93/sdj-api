@@ -1,0 +1,102 @@
+{
+  "data": {
+    "mostPlayedTracks": [
+      {
+        "title": "Budka Suflera - Takie Tango",
+        "id": "_GZB_nP4uWE",
+        "playedCount": 1,
+        "__typename": "Track"
+      },
+      {
+        "title": "SIAMÉS \"The Wolf\" [Official Animated Music Video]",
+        "id": "lX44CAz-JhU",
+        "playedCount": 6,
+        "__typename": "Track"
+      },
+      {
+        "title": "Belmondo - Dzień Dobry",
+        "id": "-0QiCWGmBcw",
+        "playedCount": 3,
+        "__typename": "Track"
+      },
+      {
+        "title": "Baby Bash ft. Frankie J - Suga Suga (Official Video)",
+        "id": "6rgStv12dwA",
+        "playedCount": 1,
+        "__typename": "Track"
+      },
+      {
+        "title": "Mr. Zoob - Mój jest ten kawałek podłogi",
+        "id": "fGrSn37vrW4",
+        "playedCount": 1,
+        "__typename": "Track"
+      },
+      {
+        "title": "Poradnik Prawdziwego Mężczyzny - Odcinek 11 - Rachunki",
+        "id": "fwbl6SJGRyQ",
+        "playedCount": 1,
+        "__typename": "Track"
+      },
+      {
+        "title": "Jubël - On The Beach (Official Video)",
+        "id": "8Ki7_lewfYI",
+        "playedCount": 3,
+        "__typename": "Track"
+      },
+      {
+        "title": "\"Fu-Gee-La\" The Fugees - Live on SquirtTV on MTV (1994)",
+        "id": "rssw8i036D8",
+        "playedCount": 1,
+        "__typename": "Track"
+      },
+      {
+        "title": "STRACHY NA LACHY - Żyję w kraju [OFFICIAL VIDEO]",
+        "id": "m00udFijVf0",
+        "playedCount": 1,
+        "__typename": "Track"
+      },
+      {
+        "title": "07.Perfect - Ale w koło jest wesoło",
+        "id": "1_XsuuQNT9E",
+        "playedCount": 1,
+        "__typename": "Track"
+      },
+      {
+        "title": "Red Hot Chili Peppers  Can't Stop HQ (lyrics)",
+        "id": "tmzxskChxDQ",
+        "playedCount": 1,
+        "__typename": "Track"
+      },
+      {
+        "title": "ŁYDKA GRUBASA - 14. Rapapara",
+        "id": "LaN8Z8Kz6kA",
+        "playedCount": 2,
+        "__typename": "Track"
+      },
+      {
+        "title": "Sabaton Primo Victoria",
+        "id": "QZm4zseMok0",
+        "playedCount": 2,
+        "__typename": "Track"
+      },
+      {
+        "title": "AC/DC - Back In Black Lyrics",
+        "id": "KjJe1rBdm9U",
+        "playedCount": 1,
+        "__typename": "Track"
+      },
+      {
+        "title": "Dudek P56 x Kaczy Proceder x Żary JLB x Steel Banging - Bez smutku na twarzy",
+        "id": "2jdor9SKyCE",
+        "playedCount": 2,
+        "__typename": "Track"
+      },
+      {
+        "title": "Zabili Mi Żółwia - Wiosna",
+        "id": "RRnFG-5_Ces",
+        "playedCount": 2,
+        "__typename": "Track"
+      }
+    ]
+  }
+}

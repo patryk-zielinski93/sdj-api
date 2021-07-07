@@ -1,0 +1,15 @@
+{
+  "$schema": "@angular-devkit/architect/src/builders-schema.json",
+  "builders": {
+    "nodemon": {
+      "implementation": "./nodemon",
+      "schema": "./nodemon/schema.json",
+      "description": "Run nodemon configuration"
+    },
+    "pm2": {
+      "implementation": "./pm2",
+      "schema": "./pm2/schema.json",
+      "description": "Compile application and run with pm2"
+    }
+  }
+}

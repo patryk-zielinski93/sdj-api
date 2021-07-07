@@ -1,0 +1,19 @@
+<mat-nav-list>
+  <mat-list-item
+    [ngStyle]="
+      channel.id === selectedChannel.id && { backgroundColor: '#b3e5fc' }
+    "
+    (click)="onSelectChannel(channel)"
+    routerLinkActive="list-item-active"
+    *ngFor="let channel of channels$ | async"
+  >
+    <mat-icon mat-list-icon *ngIf="channel.id !== selectedChannel.id"
+      >star_border
+    </mat-icon>
+    <mat-icon mat-list-icon *ngIf="channel.id === selectedChannel.id"
+      >star
+    </mat-icon>
+    <h4 mat-line>{{ channel.name }}</h4>
+    <p mat-line>{{ channel.usersOnline }}</p>
+  </mat-list-item>
+</mat-nav-list>

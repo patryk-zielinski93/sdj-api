@@ -1,0 +1,7 @@
+@import 'apps/ng/src/assets/styles/media-mixins';
+
+@include mobile {
+  .queued-tracks-list {
+    display: none;
+  }
+}

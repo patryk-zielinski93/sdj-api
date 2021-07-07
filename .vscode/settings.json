@@ -1,0 +1,15 @@
+{
+  "sqltools.connections": [
+    {
+      "askForPassword": false,
+      "connectionTimeout": 30,
+      "database": "slack_dj",
+      "dialect": "MySQL",
+      "name": "sdj_db",
+      "password": "sdj123123",
+      "port": 3306,
+      "server": "127.0.0.1",
+      "username": "sdj"
+    }
+  ]
+}

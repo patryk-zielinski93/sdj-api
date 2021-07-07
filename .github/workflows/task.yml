@@ -1,0 +1,109 @@
+name: SDJ TASK CI
+
+on:
+  push:
+    branches-ignore:
+      - master
+      - develop
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: npm ci
+    - name: affected:build
+      run: npm run affected:build -- --base origin/develop
+    env:
+      CI: true
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the stack
+      run: docker-compose -f docker-compose-e2e.yml up -d
+    - name: npm install
+      run: docker exec sdj-e2e-backend bash -c "npm ci"
+    - name: affected:e2e
+      run: docker exec sdj-e2e-backend bash -c "npm run affected:e2e -- --parallel --base origin/develop"
+    env:
+      DB_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_USERNAME: root
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: npm ci
+    - name: affected:lint
+      run: npm run affected:lint -- --base origin/develop
+      env:
+        CI: true
+
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: npm ci
+    - name: affected:test
+      run: npm run affected:test -- --base origin/develop --passWithNoTests
+    env:
+      CI: true
+
+  vaidate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: npm ci
+    - name: validate commits
+      run: npm run validate-commit
+    - name: validate nx tags
+      run: npm run validate-nx-tags
+    - name: prettier check
+      run: node ./node_modules/@valueadd/dev prettier-check `git diff origin/develop  --cached --name-only --diff-filter=AM | tr '\r\n' ','`
+    env:
+      CI: true

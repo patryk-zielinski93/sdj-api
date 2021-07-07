@@ -1,0 +1,24 @@
+<div class="most-played-view-container">
+  <h1>The most played tracks on {{ channel?.name }}</h1>
+  <ng-container *ngIf="(loading$ | async) === false; else loader">
+    <mat-advanced-audio-player
+      *ngIf="(tracks$ | async).length > 2; else nothingToShow"
+      [playlist]="tracks$ | async"
+      [displayTitle]="true"
+      [displayPlaylist]="true"
+      [pageSizeOptions]="[10]"
+      [displayVolumeControls]="true"
+      [expanded]="true"
+      data-test="most-played.player"
+    >
+    </mat-advanced-audio-player>
+  </ng-container>
+</div>
+
+<ng-template #nothingToShow>
+  <h3>There is not enough tracks</h3>
+</ng-template>
+
+<ng-template #loader>
+  <sdj-loader></sdj-loader>
+</ng-template>

@@ -1,0 +1,53 @@
+version: '3.6'
+services:
+
+  slack_dj_backend:
+    command: sleep infinity
+    container_name: sdj-e2e-backend
+    build:
+      dockerfile: ./apps/backend/e2e.dockerfile
+      context: ./
+    volumes:
+      - ./tracks:/app/assets/tracks
+      - ./:/app
+    environment:
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_HOST=${DB_HOST}
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_ROOT_PASSWORD}
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    networks:
+      backend:
+        aliases:
+          - backend
+
+  slack_dj_db:
+    container_name: sdj-e2e-db
+    image: mariadb
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    networks:
+      backend:
+        aliases:
+          - database
+
+  slack_dj_redis:
+    container_name: sdj-e2e-redis
+    image: redis:alpine
+    networks:
+      backend:
+        aliases:
+          - redis
+      streaming:
+        aliases:
+          - redis
+
+networks:
+  streaming:
+    driver: 'bridge'
+
+  backend:
+    driver: 'bridge'

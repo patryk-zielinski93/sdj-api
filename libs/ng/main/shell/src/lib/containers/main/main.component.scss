@@ -1,0 +1,27 @@
+@import 'apps/ng/src/assets/styles/variables';
+::ng-deep {
+  .mat-drawer-inner-container {
+    min-width: 10em;
+  }
+
+  .sidenav-container {
+    height: 100%;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-content {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
