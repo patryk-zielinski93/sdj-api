@@ -46,7 +46,7 @@
     "@types/request": "^2.47.0",
     "@types/request-promise-native": "^1.0.15",
     "body-parser": "^1.18.3",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "mysql": "^2.15.0",
     "parse-iso-duration": "^1.0.0",
     "redis": "^2.8.0",
